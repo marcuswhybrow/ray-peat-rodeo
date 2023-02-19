@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "eleventy --serve",
-    "build": "eleveny"
+    "build": "eleventy"
   },
   "repository": {
     "type": "git",
