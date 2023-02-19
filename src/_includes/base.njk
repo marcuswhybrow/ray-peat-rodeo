@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=width-device, initial-scale=1.0">
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="/public/style.css" />
+  <body>
+    <article>
+      <header style="margin-bottom: 30px">
+        <h1 style="margin-bottom: 5px">{{ title }}</h1>
+        <p>Source: <a href="{{ context.source }}" target="_blank">{{ context.source }}</a></p>
+        <p>Host: {{ context.host }} ({{ context.date }})</p>
+        <p>Transcribed by: {{ transcription.by }} ({{ transcription.date }})</p>
+      </header>
+      <main>
+        {{ content | safe }}
+      </main>
+    </article>
+  </body>
+<html>

@@ -1,0 +1,24 @@
+{
+  "name": "complete-ray-peat",
+  "version": "1.0.0",
+  "description": "My effort to catalogue, compile, and transcribe the public works, speeches and interviews of Ray Peat",
+  "main": "index.js",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleveny"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcuswhybrow/complete-ray-peat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marcuswhybrow/complete-ray-peat/issues"
+  },
+  "homepage": "https://github.com/marcuswhybrow/complete-ray-peat#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.0"
+  }
+}
