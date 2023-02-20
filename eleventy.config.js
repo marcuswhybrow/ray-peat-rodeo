@@ -1,3 +1,5 @@
+const markdownItEmailObfuscator = require('markdown-it-email-obfuscator');
+
 const getLibGenSearchURI = (query) => 'https://libgen.is/search.php?req=' + encodeURIComponent(query);
 const getSciHubSearchURI = (query) => 'https://sci-hub.ru/' + encodeURIComponent(query);
 const getGoogleSearchURI = (query) => 'https://www.google.com/search?q=' + encodeURIComponent(query);
@@ -5,6 +7,8 @@ const getGoogleSearchURI = (query) => 'https://www.google.com/search?q=' + encod
 const renderExternalLink = (href, content) => `<a href="${href}" target="_blank">${content}</a>`;
 
 module.exports = function(eleventyConfig) {
+
+  eleventyConfig.amendLibrary("md", mdLib => mdLib.use(markdownItEmailObfuscator));
 
   eleventyConfig.addPassthroughCopy({ "src/public": "/public" });
 
