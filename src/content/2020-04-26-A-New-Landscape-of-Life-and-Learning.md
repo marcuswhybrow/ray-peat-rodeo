@@ -400,7 +400,7 @@ Did you read the book {% publication "Seeing Red" "Halton Arp" %}Seeing Red{% en
 
 {% ray %} Take away the control of the corporations who are keeping, basically, a culture of secrecy. [Prevent] classified research done at universities, for example. [^classified] But twenty years ago they were, basically, selling the universities to the corporations for funding. Having a lot of the research tied in to the military and corporation-private property idea of knowledge. That whole concept of knowledge is incompatible with knowledge. So I think changing the ownership of the instruments, making them public like they used to be still in 1970.
 
-[^classified]: Transcriber's note: It's unclear whether Ray's saying corporate secrecy prevents classified research. Or that banning classified research would end corporate secrecy.
+[^classified]: Transcriber's note: It's unclear whether Ray means corporate secrecy prevents classified research, or that banning classified research would end corporate secrecy.
 
 {% host %} If the overall values of the decentralized community are that of collaboration and togetherness that probably won't happen? Is what you're saying?
 
