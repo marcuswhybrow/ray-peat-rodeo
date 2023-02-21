@@ -1,7 +1,104 @@
 body {
-    max-width: 800px;
-    padding: 20px;
-    margin: 0 auto;
-    font-family: sans-serif;
-    line-height: 1.5em;
+  max-width: 800px;
+  padding: 20px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  line-height: 1.5em;
+}
+
+.speaker {
+  position: relative;
+  margin: 30px 0;
+}
+.speaker.speaker-ray {
+  /* background-color: greenyellow;
+  border-radius: 20px;
+  padding: 20px; */
+  text-align: left;
+}
+.speaker.speaker-other {
+  /* background-color: gainsboro; */
+  border: 2px dashed gainsboro;
+  border-radius: 20px;
+  padding: 0 20px;
+  /* font-size: 100%;
+  font-style: italic;
+  font-weight: bold; */
+  /* margin-left: 40%; */
+  /* text-align: right; */
+}
+
+img {
+  display: block;
+  margin: 0 auto;
+}
+
+data {
+  display: block;
+  position: absolute;
+  top: -20px;
+  left: -3px;
+  font-size: 0.8em;
+  opacity: 0;
+}
+data span {
+  opacity: 0;
+}
+span::after {
+  content: ' ';
+  /* white-space: pre; */
+}
+
+a {
+  background-color: rgb(192, 221, 246);
+  padding: 2px 5px;
+  border-radius: 1px;
+  text-decoration: none;
+  color: black;
+}
+
+a.person {
+  background-color: rgb(218, 192, 246);
+  padding: 2px 5px;
+  border-radius: 1px;
+  text-decoration: none;
+  color: black;
+}
+
+a.isbn {
+  background-color: rgb(199, 246, 192);
+  padding: 2px 5px;
+  border-radius: 1px;
+  text-decoration: none;
+  color: black;
+}
+
+#top-bar {
+  margin-top: 40px;
+}
+
+#top-bar a {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  text-decoration: none;
+  color: black;
+  font-style: italic;
+  text-transform: lowercase;
+}
+
+article.interview h1 {
+  font-size: 2em;
+  line-height: 1em;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+article.interview header {
+  margin-top: 15px;
+  margin-bottom: 80px;
+}
+
+#transcripts {
+  margin-top: 80px;
+  margin-bottom: 80px;
 }

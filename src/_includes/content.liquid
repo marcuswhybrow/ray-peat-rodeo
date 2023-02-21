@@ -1,0 +1,15 @@
+---
+layout: base.njk
+---
+<article class="interview">
+    <div id="top-bar"><a href="/">← Back</a></div>
+    <header>
+        <h1>{{ title }}</h1>
+        <p>
+            <a href="{{ context.source }}" target="_blank">Convened</a> by {{ context.host }} on {{ context.date | date: "%Y-%m-%d" }}. Transcribed by {{ transcription.by }} on {{ transcription.date | date: "%Y-%m-%d" }}.
+        </p>
+    </header>
+    <main>
+        {{ content }}
+    </main>
+</article>

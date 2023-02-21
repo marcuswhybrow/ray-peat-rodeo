@@ -1,5 +1,5 @@
 {
-    "layout": "base.njk",
+    "layout": "content.liquid",
     "tags": "content",
     "permalink": "{{ title | slugify }}/"
 }
