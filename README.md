@@ -29,6 +29,6 @@ People, books, and URLs should be wrapped in double square brackes (`[[Text]]`) 
 - *People* - Link to people by surrounding their full name with double square brackets `[[William Blake]]`.
 - *Books* - Link to books by their 13 (or 10) digit ISBN number ``[[9780385152136]]``.
 - *URLs* - Link to external URLs ``[[https://www.youtube.com/watch?v=lDr71LHO0Jo]]``.
-- *DOIs* - Link to scientific papers by their DOI ``[[doi:10.5860/choice.37-5129]]``.
+- *DOIs* - Link to scientific papers by their DOI ``[[doi:10.5860/choice.37-5129]]`` The `doi:` prefix is required.
 
 All `[[Links]]` may optionally override the display text with the pipe sufffix `[[William Blake|a poet]]`. Hidden links (that produce no markup) are created with an empty display text string `[[William Blake|]]`. Missing links can be declared by omitting everything before the pipe `[[|text that will eventually link to something]]`.
