@@ -26,6 +26,9 @@ Markdown files in `./src/content/` have additional bespoke template tag shorthan
 
 People, books, and URLs should be wrapped in double square brackes (`[[Text]]`) as below. Doing so feeds these links into Ray Peat Rodeo's site-wide index.
 
-- *People* - Link to people by surrounding their full name with double square brackets `[[William Blake]]`. Override the display text with the pipe suffix `[[William Blake|an important poet]]`. Or link invisibly by defining an empty display text `[[William Blake|]]`.
-- *Books* - Link to books by their 13 (or 10) digit ISBN number ``[[9780385152136|The Complete Poetry & Prose of William Blake]]``. The display text is required. Invisible linking supported.
-- *URLs* - Link to external URLs likewise ``[[https://www.youtube.com/watch?v=lDr71LHO0Jo]]``. Display text is supported. Invisible linking is supported.
+- *People* - Link to people by surrounding their full name with double square brackets `[[William Blake]]`.
+- *Books* - Link to books by their 13 (or 10) digit ISBN number ``[[9780385152136]]``.
+- *URLs* - Link to external URLs ``[[https://www.youtube.com/watch?v=lDr71LHO0Jo]]``.
+- *DOIs* - Link to scientific papers by their DOI ``[[doi:10.5860/choice.37-5129]]``.
+
+All `[[Links]]` may optionally override the display text with the pipe sufffix `[[William Blake|a poet]]`. Hidden links (that produce no markup) are created with an empty display text string `[[William Blake|]]`. Missing links can be declared by omitting everything before the pipe `[[|text that will eventually link to something]]`.
