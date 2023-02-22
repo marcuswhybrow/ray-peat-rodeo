@@ -5,7 +5,7 @@ date: 2013-03-07
 source: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
 transcription:
   source: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
-  author: raypeatinsight.wordpress.com
+  author: Ray Peat Insight
   date: 2013-03-07
 ---
 
