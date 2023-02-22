@@ -14,7 +14,7 @@ layout: base.njk
 
     <ul>
     {% for item in collections.content %}
-        <li>{{ item.data.context.date | date: "%Y-%m-%d" }} <a href="{{ item.url }}">{{ item.data.title }}</a></li>
+        <li>{{ item.data.date | date: "%Y-%m-%d" }} <a href="{{ item.url }}">{{ item.data.title }}</a></li>
     {% endfor %}
     </ul>
 </section>
