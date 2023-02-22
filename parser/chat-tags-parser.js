@@ -33,11 +33,26 @@ chatTagsParser.addRule(/\[\[(\d{13}|\d{10})\|(.*?)\]\]/gi, (tag, isbn, displayTe
     value: book
   }
 });
-chatTagsParser.addRule(/\[\[(([^\|\]]*?)(?:['’]s?)?)(?:\|(.*?))?\]\]/gi, (tag, nameAsWritten, nameWithoutPluralisation, displayText) => {
+chatTagsParser.addRule(/\[\[(https?:\/\/.*?)(\|(.*?))?\]\]/gi, (tag, url, displayText, displayTextSanitised) => {
+  if (displayText && !displayTextSanitised) {
+    // Specifying a blank display text ([[Name|]]) implies an invisible reference.
+    return { type: "text", text: "" };
+  }
+  return {
+    type: "external-link",
+    text: `<a href="${url}" target="_blank" class="external">${displayText ? displayTextSanitised : url}</a>`,
+    value: url
+  }
+});
+chatTagsParser.addRule(/\[\[(([^\|\]]*?)(?:['’]s?)?)(\|(.*?))?\]\]/gi, (tag, nameAsWritten, nameWithoutPluralisation, displayText, displayTextSanitised) => {
+  if (displayText && !displayTextSanitised) {
+    // Specifying a blank display text ([[Name|]]) implies an invisible reference.
+    return { type: "text", text: "" };
+  }
   const person = new Person(nameWithoutPluralisation);
   return {
     type: "person",
-    text: `<a href="${person.libGenURI}" target="_blank" class="person">${displayText || nameAsWritten}</a>`,
+    text: `<a href="${person.libGenURI}" target="_blank" class="person">${displayTextSanitised || nameAsWritten}</a>`,
     value: person
   }
 });
