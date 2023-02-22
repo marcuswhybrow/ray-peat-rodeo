@@ -1,7 +1,9 @@
 const interviewParser = require('./parser');
 const slugify = require('slugify');
+const yaml = require("js-yaml");
 
 module.exports = function(eleventyConfig) {
+  eleventyConfig.addDataExtension("yml", contents => yaml.load(contents));
   eleventyConfig.addExtension("md", {
     compile: (inputContent) => function(data) {
       if (data.page.inputPath.startsWith("./src/content/")) {

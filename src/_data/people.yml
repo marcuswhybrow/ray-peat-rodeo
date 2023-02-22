@@ -1,0 +1,12 @@
+# raypeat.rodeo uses a custom template tag to identify people in content.
+# It looks like this: `[[Full Name|Display Text]]`
+# A site-wide index of names is derived from the full name specified.
+# It should therefore always be the complete, full name of the person.
+#
+# By default, external search queries are will also use the full name.
+# But you can override that behaviour here:
+# 1. Create a YAML key in this file for the person's full name.
+# 2. Define the `searchExternallyAs` key for that person.
+
+Pyotr Demianovich Ouspenskii:
+  searchExternallyAs: P.D. Ouspensky

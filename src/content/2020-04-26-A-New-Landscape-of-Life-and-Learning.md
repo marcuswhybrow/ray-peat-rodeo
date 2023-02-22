@@ -1,15 +1,12 @@
 ---
 title: A New Landscape of Life and Learning
-context:
-  source: https://www.youtube.com/watch?v=CI5xhBtrj6Y
-  host: Butter Living Podcast
-  date: 2020-04-24
+date: 2020-04-24
+series: Butter Living Podcast
+source: https://www.youtube.com/watch?v=CI5xhBtrj6Y
 transcription:
-  by: Marcus Whybrow
+  author: Marcus Whybrow
   date: 2023-02-19
-tags:
-  - Education
-done: false
+tags: [Education]
 ---
 
 ! Hi Ray, how are you doing?

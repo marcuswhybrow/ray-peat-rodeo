@@ -6,7 +6,7 @@ layout: base.njk
     <header>
         <h1>{{ title }}</h1>
         <p>
-            <a href="{{ context.source }}" target="_blank">Convened</a> by {{ context.host }} on {{ context.date | date: "%Y-%m-%d" }}. Transcribed by {{ transcription.by }} on {{ transcription.date | date: "%Y-%m-%d" }}.
+            <a href="{{ source }}" target="_blank">Convened</a> by {{ series }} on {{ date | date: "%Y-%m-%d" }}. {% if transcription.source %}<a href="{{ transcription.source }}" target="_blank">Transcribed</a>{% else %}Transcribed{% endif %} by {{ transcription.author }} on {{ transcription.date | date: "%Y-%m-%d" }}.
         </p>
     </header>
     <main>

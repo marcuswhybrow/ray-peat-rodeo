@@ -102,3 +102,17 @@ article.interview header {
   margin-top: 80px;
   margin-bottom: 80px;
 }
+
+blockquote {
+  border-left: 5px solid gainsboro;
+  margin: 40px 0;
+  padding: 5px 0 5px 40px;
+  font-style: italic;
+  line-height: 2em;
+}
+
+.speaker.speaker-other blockquote {
+  border-left: none;
+  padding: 0 40px;
+  margin: 30px 0;
+}

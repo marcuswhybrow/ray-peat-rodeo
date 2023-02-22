@@ -20,6 +20,7 @@
   "homepage": "https://github.com/marcuswhybrow/complete-ray-peat#readme",
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",
+    "js-yaml": "^4.1.0",
     "markdown-it-container": "^3.0.0",
     "markdown-it-footnote": "^3.0.3",
     "simple-text-parser": "^2.1.1",
