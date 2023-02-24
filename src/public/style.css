@@ -65,7 +65,7 @@ a.person {
   color: black;
 }
 
-a.isbn {
+a.book {
   background-color: rgb(199, 246, 192);
   padding: 2px 5px;
   border-radius: 1px;
@@ -129,4 +129,31 @@ sup.footnote-ref a {
 a.footnote-backref {
   border-radius: 6px;
   padding: px 7px;
+}
+
+a.timecode {
+  position: absolute;
+  /* left: -90px; */
+  right: 104%;
+  background-color: transparent;
+  opacity: 0.3;
+  border-radius: 1000px;
+  padding: 1px 10px;
+}
+a.timecode:hover {
+  background-color: rgb(192, 221, 246);
+  opacity: 1;
+}
+
+@media only screen and (max-width: 1030px) {
+  a.timecode {
+    background-color:aliceblue;
+    position: relative;
+    right: 0;
+    opacity: 1;
+    color: rgb(97, 111, 124);
+  }
+  a.timecode:hover {
+    color: black;
+  }
 }

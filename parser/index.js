@@ -28,4 +28,12 @@ const md = require('markdown-it')({
     }
   });
 
-module.exports = (inputContent, data) => md.render(liquid.parseAndRenderSync(speakerParser(chatTagsParser.render(inputContent)), data))
+module.exports = (inputContent, data) =>
+  md.render(
+    liquid.parseAndRenderSync(
+      speakerParser(
+        chatTagsParser(data).render(inputContent)
+      ),
+      data
+    )
+  );

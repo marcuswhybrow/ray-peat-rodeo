@@ -58,7 +58,7 @@ Many people feel positive emotions in their organ nerve centers, for example the
 
 There are biofeedback gadgets, some very simple, that can easily make the connections between thought and body function clear. Just a stethoscope to listen to intestine sounds is helpful.
 
-! > In [[Fyodor Mikhailovich Dostoevsky|Dostoyevsky’s]] story, [[9780451529558|Dream of an Odd Fellow]], the theme is stated even more clearly—the world is very boring, and everything seems the same as everything else, until you can escape from a certain interpretive framework, to see what opportunities are really present to you  
+! > In [[Fyodor Mikhailovich Dostoevsky|Dostoyevsky’s]] story, [[The Dream of a Ridiculous Man -by- Fyodor Mikhailovich Dostoevsky|Dream of an Odd Fellow]], the theme is stated even more clearly—the world is very boring, and everything seems the same as everything else, until you can escape from a certain interpretive framework, to see what opportunities are really present to you  
 ! > — Dr. Ray Peat
 
 ! What if it’s the same with healing? What activities can we do for our mind and body that will give us another framework to see what opportunities are present to us personally on our journey? Is the framework different for each of us?
