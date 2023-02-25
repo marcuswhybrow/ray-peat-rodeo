@@ -48,6 +48,15 @@ class Index {
       <form name="contact" netlify>
           <p>Suggest a <input type="text" name="url" placeholder="URL" /> I should <button type="submit">Transcribe</button></p>
       </form>
+
+      <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
+      <script src="/_pagefind/pagefind-ui.js" type="text/javascript"></script>
+      <div id="search"></div>
+      <script>
+          window.addEventListener('DOMContentLoaded', (event) => {
+              new PagefindUI({ element: "#search" });
+          });
+      </script>
       
       <section id="transcripts">
         <h2>Transcriptions</h2>

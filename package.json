@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "eleventy --serve",
-    "build": "eleventy"
+    "pagefind": "npx pagefind@latest --source _site",
+    "build": "eleventy & npm run pagefind"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "luxon": "^3.2.1",
     "markdown-it-container": "^3.0.0",
     "markdown-it-footnote": "^3.0.3",
+    "pagefind": "^0.11.0",
     "simple-text-parser": "^2.1.1"
   }
 }

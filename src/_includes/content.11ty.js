@@ -48,7 +48,7 @@ class Content {
             <a href="${data.site.githubEdit}/${data.page.inputPath}" target="_blank">Edit this page on GiHub</a> to contribute corrections of any kind.
           </p>
         </header>
-        <main>
+        <main data-pagefind-body>
           ${data.content}
         </main>
       </article>
