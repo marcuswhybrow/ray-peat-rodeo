@@ -5,7 +5,7 @@ date: 2012-09-26
 source: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
 transcription:
   source: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
-  author: raypeatinsight.wordpress.com
+  author: Ray Peat Insight
   date: 2013-06-06
 ---
 
