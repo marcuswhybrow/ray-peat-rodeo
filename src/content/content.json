@@ -1,5 +1,3 @@
 {
-    "layout": "content.liquid",
-    "tags": "content",
-    "permalink": "{{ title | slugify }}/"
+    "layout": "content.11ty.js"
 }

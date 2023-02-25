@@ -1,6 +1,7 @@
 const { Parser } = require('simple-text-parser');
 const yaml = require("js-yaml");
 const fs = require("fs");
+const eleventyConfig = require('../eleventy.config');
 const getLibGenSearchURL = (query) => 'https://libgen.is/search.php?req=' + encodeURIComponent(query);
 const getSciHubSearchURL = (query) => 'https://sci-hub.ru/' + encodeURIComponent(query);
 const getGoogleSearchURL = (query) => 'https://www.google.com/search?q=' + encodeURIComponent(query);
@@ -13,6 +14,9 @@ class Person {
   constructor(name) {
     this.name = name;
     this.searchExternallyAs = people[this.name] ? people[this.name].searchExternallyAs || this.name : this.name;
+    const names = this.name.split(' ');
+    this.indexKey = names.pop();
+    if (names.length) this.indexKey += `, ${names.join(' ')}`;
     this.libGenURL = getLibGenSearchURL(this.searchExternallyAs);
     this.googleURL = getGoogleSearchURL(this.searchExternallyAs);
   }
@@ -22,13 +26,16 @@ class Book {
   constructor(title, primaryAuthorFullName) {
     this.title = title,
     this.author = primaryAuthorFullName;
+    this.authorLastName = primaryAuthorFullName.split(' ').pop();
+    this.authorFirstNames = primaryAuthorFullName.substring(0, primaryAuthorFullName.lastIndexOf(' '))
+    const bibliographKeyFirstName = this.authorFirstNames ? `, ${this.authorFirstNames}` : '';
+    this.bibliographKey = `${this.authorLastName}${bibliographKeyFirstName}. ${title}`;
     const person = new Person(this.author);
     const query = `${this.title} ${person.searchExternallyAs}`;
     this.libGenURL = getLibGenSearchURL(query);
     this.googleURL = getGoogleSearchURL(query);
 
     const key = `${title} -by- ${primaryAuthorFullName}`;
-    console.log(key, books[key]);
     const book = books[key];
     if (book) {
       this.url = book.openAsURL || this.libGenURL;
@@ -123,5 +130,13 @@ module.exports = (data) => {
       value: timecode
     })
   })
-  return chatTagsParser;
+  // const tree = chatTagsParser.toTree(inputContent);
+  return chatTagsParser
+  
+  // , {
+  //   books: tree
+  //     .filter((node) => node.type === "book")
+  //     .map((node) => node.value)
+  //     .group((book) => book.bibliographKey)
+  // };
 };
