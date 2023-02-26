@@ -82,7 +82,6 @@ module.exports = (inputContent, data) => {
       : line.type === 'Other Speaker'
         ? `speaker ${line.speakerNumber} ${line.speakerName}`
         : null;
-    console.log(sectionName);
     if (sectionName) {
       return  `::: ${sectionName}\n${line.text}\n:::`;
     } else {
