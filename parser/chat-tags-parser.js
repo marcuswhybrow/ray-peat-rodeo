@@ -1,7 +1,7 @@
 const { Parser } = require('simple-text-parser');
 const yaml = require("js-yaml");
 const fs = require("fs");
-const eleventyConfig = require('../eleventy.config');
+const url = require('url');
 const getLibGenSearchURL = (query) => 'https://libgen.is/search.php?req=' + encodeURIComponent(query);
 const getSciHubSearchURL = (query) => 'https://sci-hub.ru/' + encodeURIComponent(query);
 const getGoogleSearchURL = (query) => 'https://www.google.com/search?q=' + encodeURIComponent(query);
@@ -114,29 +114,31 @@ module.exports = (data) => {
     secondsStr = secondsStr.padStart(2, '0');
 
     const youTubeFormat = hoursInt ? `${hoursStr}h${minutesStr}m${secondsStr}s` : `${minutesStr}m${secondsStr}s`;
+    const localFormat = hoursInt ? `${hoursStr}:${minutesStr}:${secondsStr}` : `${minutesStr}:${secondsStr}`;
+
+    // TODO: Don't assume source URL has no hash
+    const sourceUrl = url.parse(data.source, true);
+    let timecodeUrl;
+    if (sourceUrl.host.endsWith("youtube.com") || sourceUrl.host.endsWith("youtu.be")) {
+      timecodeUrl = `${data.source}#t=${youTubeFormat}`
+    } else if (sourceUrl.pathname.endsWith(".mp3")) {
+      timecodeUrl = `${data.source}#t=${localFormat}`;
+    } else {
+      timecodeUrl = `${data.source}#t=${localFormat}`
+    }
+
     const timecode = {
       youTubeFormat,
-      localFormat: hoursInt ? `${hoursStr}:${minutesStr}:${secondsStr}` : `${minutesStr}:${secondsStr}`,
+      localFormat,
       originalURL: data.source,
-
-      // TODO: Don't assume source URL is YouTube
-      // TODO: Don't assume source URL has no hash
-      url: `${data.source}#t=${youTubeFormat}`
+      url: timecodeUrl
     };
 
     return ({
       type: "timecode",
-      text: `<a href="${timecode.url}" target="_blank" class="timecode">${timecode.localFormat}</a>`,
+      text: `<a href="${timecodeUrl}" target="_blank" class="timecode">${timecode.localFormat}</a> `,
       value: timecode
     })
   })
-  // const tree = chatTagsParser.toTree(inputContent);
-  return chatTagsParser
-  
-  // , {
-  //   books: tree
-  //     .filter((node) => node.type === "book")
-  //     .map((node) => node.value)
-  //     .group((book) => book.bibliographKey)
-  // };
+  return chatTagsParser;
 };

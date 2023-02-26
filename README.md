@@ -5,7 +5,7 @@ My effort to catalogue, compile, and transcribe the public works, speeches and i
 
 This repository represents a collection of markdown transcripts built by the static-site generator [11ty](https://www.11ty.dev/).
 
-## Installation
+## Installation 
 
 ```
 npm install
@@ -21,8 +21,8 @@ npm start
 
 Markdown files in `./src/content/` have additional bespoke template tag shorthands for defining who's speaking, and identifying the people, books, and URLs mentioned by the speakers.
 
-- **Interviewer** - Lines prefixed with `! ` (such as `! Good morning Ray, how are you?`) declare paragraphs spoken by the interviewer. (Support for multiple interviewers forthcoming).
-- **Ray Peat** - Lines without the `! ` prefix declare paragraphs spoken by Ray Peat (i.e. `Very well, thank you.`).
+- **Ray Peat** - All paragraphs, by default, are attributed to Ray Peat. See below to attribute a paragraph to another speaker.
+- **Interviewer** - Prefix a paragraph with `!MW ` to reference a speaker defined in `speakers.MW` in the frontmatter. For example: `!MW Good morning Ray`, with `speakers: { MW: Marcus Whybrow }` attributes that paragraph to `Marcus Whybrow`. Ommitting the speaker initials attributes a paragraph to most recently specified speaker above. If the frontmatter specifies one or zero speakers, all paragraphs prefixed with an `!` will be attributed to the single speaker defined, or (if zero speakers are defined) attributed to `Host`.
 
 People, books, and URLs should be wrapped in double square brackes (`[[Text]]`) as below. Doing so feeds these links into Ray Peat Rodeo's site-wide index.
 
@@ -32,6 +32,8 @@ People, books, and URLs should be wrapped in double square brackes (`[[Text]]`) 
 - *DOIs* - Link to scientific papers by their DOI ``[[doi:10.5860/choice.37-5129]]`` The `doi:` prefix is required.
 
 All `[[Links]]` may optionally override the display text with the pipe sufffix `[[William Blake|a poet]]`. Hidden links (that produce no markup) are created with an empty display text string `[[William Blake|]]`. Missing links can be declared by omitting everything before the pipe `[[|text that will eventually link to something]]`.
+
+- *Timecodes* - `[1:20:13]` or `[0:52]`. Surround a colon-separated timecode with single square brackets and Ray Peat Rodeo will generate links directly to that time using `source` URL from the frontmatter.
 
 ## Style Guide
 

@@ -7,6 +7,8 @@ transcription:
   source: https://web.archive.org/web/20180123181651/https://www.beyondtheinterview.com/article/2018/when-western-medicine-isnt-workingdifferent-insights-from-a-leader-in-health
   author: Nicole Behnam
   date: 2018-01-22
+speakers:
+  NB: Nicole Behnam
 tags: [Medicine, Estrogen Conspiracy]
 ---
 ! In what arenas, specifically, do you think our ever-popular Western Medicine is mistaken and why?

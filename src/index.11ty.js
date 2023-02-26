@@ -45,9 +45,6 @@ class Index {
     return `
       <h1>Ray Peat Rodeo</h1>
       <p><em>Roll-up for a round-up of <a href="${data.site.github}" target="_blank">open-source</a> Ray Peat transcripts.</em></p>
-      <form name="contact" netlify>
-          <p>Suggest a <input type="text" name="url" placeholder="URL" /> I should <button type="submit">Transcribe</button></p>
-      </form>
 
       <link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
       <script src="/_pagefind/pagefind-ui.js" type="text/javascript"></script>
@@ -60,6 +57,9 @@ class Index {
       
       <section id="transcripts">
         <h2>Transcriptions</h2>
+        <form name="contact" netlify>
+            <p>Suggest a <input type="text" name="url" placeholder="URL" /> I should <button type="submit">Transcribe</button></p>
+        </form>
         <ul>
           ${transcripts}
         </ul>

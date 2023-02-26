@@ -18,10 +18,19 @@ const md = require('markdown-it')({
   .use(require('markdown-it-footnote'))
   .use(require('markdown-it-container'), 'speaker', {
     render: function (tokens, idx) {
-      var speakerClass = tokens[idx].info.trim().match(/^speaker\s+(.*)$/);
+      var args = tokens[idx].info.trim().match(/^speaker\s+(\d*?)\s+(.*)$/);
   
       if (tokens[idx].nesting === 1) {
-        return `<div class="speaker speaker-${speakerClass[1]}">\n`;
+        return `<div class="speaker speaker-other speaker-other-${args[1]}">\n<span class="speaker-name">${args[2]}:</span>`;
+      } else {
+        return `</div>\n`;
+      }
+    }
+  })
+  .use(require('markdown-it-container'), 'ray', {
+    render: function (tokens, idx) {
+      if (tokens[idx].nesting === 1) {
+        return `<div class="speaker speaker-ray">\n<span class="speaker-name">Ray Peat:</span>`;
       } else {
         return `</div>\n`;
       }
@@ -32,7 +41,8 @@ module.exports = (inputContent, data) =>
   md.render(
     liquid.parseAndRenderSync(
       speakerParser(
-        chatTagsParser(data).render(inputContent)
+        chatTagsParser(data).render(inputContent),
+        data
       ),
       data
     )
