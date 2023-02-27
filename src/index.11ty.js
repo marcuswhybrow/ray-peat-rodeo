@@ -57,7 +57,12 @@ class Index {
       <div id="search"></div>
       <script>
           window.addEventListener('DOMContentLoaded', (event) => {
-              new PagefindUI({ element: "#search" });
+              new PagefindUI({
+                element: "#search",
+                translations: {
+                  placeholder: "Search Ray Peat Rodeo"
+                }
+              });
           });
       </script>
       <div id="transcripts">
