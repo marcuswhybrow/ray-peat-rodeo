@@ -40,10 +40,9 @@ const md = require('markdown-it')({
 module.exports = (inputContent, data) =>
   md.render(
     liquid.parseAndRenderSync(
-      speakerParser(
-        chatTagsParser(data).render(inputContent),
+      chatTagsParser(data).render(
+        speakerParser(inputContent, data),
         data
-      ),
-      data
+      )
     )
   );
