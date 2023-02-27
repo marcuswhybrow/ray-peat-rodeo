@@ -1,6 +1,6 @@
 ---
 title: Endotoxin
-series: Herb Doctors
+series: Ask Your Herb Doctor
 speakers:
   AM: Andrew Murray
   SJM: Sarah Johanason Murray
