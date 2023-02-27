@@ -3,7 +3,7 @@ title: Endotoxin
 series: Ask Your Herb Doctor
 speakers:
   AM: Andrew Murray
-  SJM: Sarah Johanason Murray
+  SJM: Sarah Johansson Murray
   E: Egineer
   C: Caller (Female)
   C2: Second Called (Female)
