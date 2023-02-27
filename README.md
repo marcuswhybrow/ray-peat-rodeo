@@ -121,6 +121,7 @@ Eluv
 - [ ] [2014-01-01 Effects of Stress and Trauma on the Body](https://www.toxinless.com/eluv-140101-effects-of-stress-and-trauma-on-the-body.mp3)
 - [ ] [2008-09-18 Good Fats](https://www.toxinless.com/eluv-080918-fats.mp3)
 
+
 Ask Your Herb Doctor
 - [ ] [2022-11](https://www.toxinless.com/kmud-221118.mp3)
 - [ ] [2022-06](https://www.toxinless.com/kmud-220617.mp3)
@@ -128,7 +129,6 @@ Ask Your Herb Doctor
 - [ ] [2022-04](https://www.toxinless.com/kmud-220415.mp3)
 - [ ] [2022-02](https://www.toxinless.com/kmud-220218.mp3)
 - [ ] [2022-01](https://www.toxinless.com/kmud-220121.mp3)
-
 - [ ] [2021-09](https://www.toxinless.com/kmud-210917.mp3)
 - [ ] [2021-08](https://www.toxinless.com/kmud-210820.mp3)
 - [ ] [2021-07](https://www.toxinless.com/kmud-210716.mp3)
@@ -137,7 +137,6 @@ Ask Your Herb Doctor
 - [ ] [2021-04-16](https://www.toxinless.com/kmud-210416.mp3)
 - [ ] [2021-03-19](https://www.toxinless.com/kmud-210319.mp3)
 - [ ] [2021-01-15](https://www.toxinless.com/kmud-210115.mp3)
-
 - [ ] [2020-12-18](https://www.toxinless.com/kmud-201218.mp3)
 - [ ] [2020-11-20](https://www.toxinless.com/kmud-201120.mp3)
 - [ ] [2020-10-16](https://www.toxinless.com/kmud-201016.mp3)
@@ -145,7 +144,6 @@ Ask Your Herb Doctor
 - [ ] [2020-08-21](https://www.toxinless.com/kmud-200821.mp3)
 - [ ] [2020-07-17](https://www.toxinless.com/kmud-200717.mp3)
 - [ ] [2020-05-15](https://www.toxinless.com/kmud-200515.mp3)
-
 - [ ] [Acidity X Alkalinity](https://www.toxinless.com/kmud-120316-acidity-x-alkalinity.mp3)
 - [ ] [Aging and Energy Reversal](https://www.toxinless.com/kmud-131220-aging-and-energy-reversal.mp3)
 - [ ] [Allergy](https://www.toxinless.com/kmud-160318-allergy.mp3)
