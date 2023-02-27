@@ -3,7 +3,7 @@ title: Endotoxin
 series: Ask Your Herb Doctor
 speakers:
   AM: Andrew Murray
-  SJM: Sarah Johansson Murray
+  SJM: Sarah Johannesen Murray
   E: Egineer
   C: Female Caller
   C2: Female (2nd) Caller
@@ -17,9 +17,9 @@ transcription:
 excerpt: Just thinking stressful thoughts will tend to increase your endotoxin absorption.
 ---
 
-!AM [2:35] Well welcome to this months "Ask Your Herb Doctor", my name's [[Andrew Murray]].
+!AM [2:35] Well welcome to this months "Ask Your Herb Doctor", my name's Andrew Murray.
 
-!SJM My name's [[Sarah Johanason Murray]].
+!SJM My name's Sarah Johannesen Murray.
 
 !AM For those of you, perhaps, have never listened to our shows, which run every third Friday of the month from 7 'till 8 P.M, we're both liscensed medical herbalists who trained in England, and graduated their with a degree in herbal medicine. We've run a clinic in Garberville where we consult with clients about a wide range of conditions, and recommend herbal medicines and dietary advice.
 
