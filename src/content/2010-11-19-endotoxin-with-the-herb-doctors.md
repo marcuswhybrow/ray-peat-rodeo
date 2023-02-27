@@ -5,8 +5,8 @@ speakers:
   AM: Andrew Murray
   SJM: Sarah Johansson Murray
   E: Egineer
-  C: Caller (Female)
-  C2: Second Called (Female)
+  C: Female Caller
+  C2: Female (2nd) Caller
 date: 2010-11-19
 source: https://www.functionalps.com/blog/wp-content/uploads/2011/09/add-Kmud_Endotoxins_kmud_101119_190000fritalk.mp3
 sourceDuration: 58:30
