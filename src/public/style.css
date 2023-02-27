@@ -124,9 +124,42 @@ article.interview header {
 }
 
 #transcripts {
-  margin-top: 80px;
+  margin-top: 40px;
   margin-bottom: 80px;
 }
+#transcripts .transcript {
+  display: inline-block;
+  background-color: rgb(234, 234, 234);
+  padding: 20px;
+  border-radius: 12px;
+  margin: 0 40px 40px 0;
+  width: 180px;
+  height: 180px;
+  vertical-align: top;
+  transition: all .05s;
+  overflow: hidden;
+  
+}
+#transcripts .transcript:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgb(192, 192, 192);
+}
+#transcripts .transcript .transcript-title {
+  font-size: 1.5em;
+  display: block;
+  margin-bottom: 10px;
+}
+#transcripts .transcript .transcript-date {
+  display: block;
+  font-size: 0.9em;
+  line-height: 1.2em;
+}
+#transcripts .transcript .transcript-excerpt {
+  display: block;
+  font-size: 0.9em;
+  line-height: 1em;
+}
+
 
 blockquote {
   border-left: 5px solid gainsboro;

@@ -9,6 +9,7 @@ transcription:
   author: Marcus Whybrow
   date: 2023-02-19
 tags: [Education]
+excerpt: Schooling consists largely in training people to get a little model of the world in themselves, which they can then impose for the rest of their lives as they interact with the world.
 ---
 
 ! [0:02] Hi Ray, how are you doing?

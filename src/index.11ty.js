@@ -39,7 +39,13 @@ class Index {
     }).join('\n');
 
     const transcripts = data.collections.content.map(item => {
-      return `<li>${DateTime.fromJSDate(item.date).toFormat("yyyy LL dd")} <a href="${item.url}">${item.data.title}</a></li>`
+      return `
+        <a href="${item.url}" class="transcript">
+          <span class="transcript-title">${item.data.title}</span>
+          <span class="transcript-date">${DateTime.fromJSDate(item.date).toFormat("yyyy-LL-dd")}</span>
+          <span class="transcript-excerpt">${item.data.excerpt || ""}</span>
+        </a>
+      `;
     }).join('\n');
       
     return `
@@ -54,16 +60,12 @@ class Index {
               new PagefindUI({ element: "#search" });
           });
       </script>
-      
-      <section id="transcripts">
-        <h2>Transcriptions</h2>
-        <form name="contact" netlify>
-            <p>Suggest a <input type="text" name="url" placeholder="URL" /> I should <button type="submit">Transcribe</button></p>
-        </form>
-        <ul>
-          ${transcripts}
-        </ul>
-      </section>
+      <div id="transcripts">
+        ${transcripts}
+      </div>
+      <form name="contact" netlify>
+          <p>Suggest a <input type="text" name="url" placeholder="URL" /> I should <button type="submit">Transcribe</button></p>
+      </form>
 
       <section id="references">
         <h2>People Discussed By Ray Peat</h2>

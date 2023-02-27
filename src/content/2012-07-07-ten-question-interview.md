@@ -7,6 +7,7 @@ transcription:
   source: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
   author: Ray Peat Insight
   date: 2013-06-06
+excerpt: then I realized that some people were willing to discard their old ideas when those conflicted with useful facts, especially when the useful facts could save their life
 ---
 
 ! How long have you been making yourself accessible through emails?

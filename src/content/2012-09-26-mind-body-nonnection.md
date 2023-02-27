@@ -7,6 +7,7 @@ transcription:
   source: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
   author: Ray Peat Insight
   date: 2013-06-06
+excerpt: It’s good to be surrounded by happy people. If you insist on being happy in the presence of authoritarians, you risk losing your job or being considered insane, or worse.
 ---
 
 ! What is good health?

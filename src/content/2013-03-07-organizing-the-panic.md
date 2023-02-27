@@ -7,6 +7,7 @@ transcription:
   source: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
   author: Ray Peat Insight
   date: 2013-03-07
+excerpt: They calculate the billions in profits against the probable cost in legal settlements, and time the drug withdrawal accordingly, when the costs are expected to cancel profits
 ---
 
 ! Vision and Acceptance is excited to present an interview with Dr. Ray Peat, “Organizing the Panic”. This phrase is in reference to a line we quoted from him in one of our previous posts where he said, “Panic isn’t inappropriate when looking at nearly any part of what’s happening in the world, but we have to get the panic organized, so it can be productive.” So V & A conducted this interview with the intention of creating opportunities for awareness and discussion about where our world is headed and why. This will hopefully generate momentum toward action.

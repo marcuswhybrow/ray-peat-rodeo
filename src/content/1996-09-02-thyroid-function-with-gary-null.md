@@ -10,6 +10,7 @@ transcription:
   source: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
   author: ilovethesea
   date: 2014-07-25
+excerpt: they kept the standard idea that only 5% of the population was hypothyroid, even though the test used to establish that concept was proven completely meaningless
 ---
 
 ! [05:42] I'm [[Gary Null]] and I'd like to welcome you to our program. As yo may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.

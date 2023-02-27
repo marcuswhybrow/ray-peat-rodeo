@@ -10,6 +10,7 @@ transcription:
 speakers:
   NB: Nicole Behnam
 tags: [Medicine, Estrogen Conspiracy]
+excerpt: As a profession, psychiatry has gone through several radically different theories of what “mental illness” is, with very little scientific basis
 ---
 ! In what arenas, specifically, do you think our ever-popular Western Medicine is mistaken and why?
 
