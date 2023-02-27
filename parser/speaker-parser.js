@@ -25,15 +25,18 @@ const fillSpeakerKeys = (lines, data) => {
       if (computedSpeakerKey) {
         if (!otherSpeakers.includes(computedSpeakerKey))
           otherSpeakers.push(computedSpeakerKey);
+        const speakerName = speakers[computedSpeakerKey];
+        if (!speakerName)
+          throw new Error(`${data.page.inputPath}: Unknown speaker key "${computedSpeakerKey}" for line:\n${line}`);
         results.push({
           type: 'Other Speaker',
           speakerKey: computedSpeakerKey,
-          speakerName: speakers[computedSpeakerKey],
+          speakerName,
           speakerNumber: otherSpeakers.indexOf(computedSpeakerKey),
           text: paragraph
         });
       } else {
-        throw new Error(`${data.page.inputPath}: Cannot resolve speaker:\n${line}`);
+        throw new Error(`${data.page.inputPath}: Multiple speakers defined, but line is missing speaker key:\n${line}`);
       }
       prevSpeakerKey = computedSpeakerKey;
     } else {
