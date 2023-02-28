@@ -13,7 +13,7 @@ transcription:
 excerpt: they kept the standard idea that only 5% of the population was hypothyroid, even though the test used to establish that concept was proven completely meaningless
 ---
 
-! [05:42] I'm [[Gary Null]] and I'd like to welcome you to our program. As yo may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
+! [05:42] I'm [[Gary Null]] and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
 
 ! Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Nutrition for Women -by- Ray Peat]], [[Progesterone in Orthomolecular Medicine -by- Ray Peat]], and [[Generative Energy -by- Ray Peat]] and [[Mind and Tissue -by- Ray Peat]].
 
