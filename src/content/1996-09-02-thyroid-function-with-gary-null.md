@@ -13,7 +13,7 @@ transcription:
 excerpt: they kept the standard idea that only 5% of the population was hypothyroid, even though the test used to establish that concept was proven completely meaningless
 ---
 
-! [05:42] I'm [[Gary Null]] and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
+! [05:42] I'm Gary Null and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
 
 ! Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Nutrition for Women -by- Ray Peat]], [[Progesterone in Orthomolecular Medicine -by- Ray Peat]], and [[Generative Energy -by- Ray Peat]] and [[Mind and Tissue -by- Ray Peat]].
 
@@ -85,9 +85,9 @@ When it turned out that the protein-bound iodine test was proven invalid—it go
 
 ! [28:15] Dr. Peat, we're coming up to our halfway mark in this segment of our program. We're going to take a 60 second station indentification break, and when we return, let's get into some of the other conditions that a low thyroid can affect— our cholesterol level, arthritis-like symptoms, has melatonin been found to inhibit progesterone and stimulate estradol secretion, and how do we help the thyroid?
 
-! I'm [[Gary Null]], back in 60 seconds.
+! I'm Gary Null, back in 60 seconds.
 
-! [28:44] I'm [[Gary Null]] and I'd like to welcome you to our program. In this segment of our program, we're going to be continuing with a discussion in part about our thyroid. And I've invited a very articulate— he's soft-spoken, you can see the professor in him, and the educator, because he's being very methodical; he's giving us the larger context, he's giving us the cause and effect, and so we're learning an enormous amount about conditions that we didn't know were related to the thyroid gland in all ages and all body types. So let's continue with Dr. Ray Peat, and Dr. Peat, let's continue with our discussion.
+! [28:44] I'm Gary Null and I'd like to welcome you to our program. In this segment of our program, we're going to be continuing with a discussion in part about our thyroid. And I've invited a very articulate— he's soft-spoken, you can see the professor in him, and the educator, because he's being very methodical; he's giving us the larger context, he's giving us the cause and effect, and so we're learning an enormous amount about conditions that we didn't know were related to the thyroid gland in all ages and all body types. So let's continue with Dr. Ray Peat, and Dr. Peat, let's continue with our discussion.
 
 [29:28] Okay, you mentioned the hormones estrogen and how it relates to melatonin. With increasing age, people have made a big thing of the fact that melatonin, which peaks about 3AM in everyone, that this peak is a little bit smaller in old age. But it happens that with aging, as the thyroid decreases, the melatonin decreases, because when thyroid is active, your melatonin comes up as an antioxidant defense against that the high metabolic rate that thyroid can stimulate. So when your thyroid is low, the melatonin is low, when your thyroid is high, the melatonin is high, in a logical adaptation, because it is an antioxidant.
 
