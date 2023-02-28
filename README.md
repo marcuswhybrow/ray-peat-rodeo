@@ -391,6 +391,7 @@ The above list incorporates the following sources. [Open an issue](https://githu
 - [ ] [Expulsia.com/health](https://expulsia.com/health)
 - [x] [Ray Peat Clips](https://www.youtube.com/channel/UCh4kMDfEon-IAlQcbGym9UQ/videos) (as of 2023-02-28)
 - [ ] [Western Botanical Medicine List](https://web.archive.org/web/20160406232157/https://www.westernbotanicalmedicine.com/media.html) (looks like a duplicate)
+- [ ] [Chadnet](https://wiki.chadnet.org/ray-peat)
 
 ## Non-Pertenant Sources
 
