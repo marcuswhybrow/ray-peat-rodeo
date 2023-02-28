@@ -113,14 +113,12 @@ Danny Roddy
 
 Perceive Think Act Films
 - [ ] [2021-02-18 On the Back of a Tiger, Day One](https://www.youtube.com/watch?v=jqhlIOt5sUw) (published dates, not recorded dates)
-- [ ] [2021-02-18 On the Back of a Tiger, Day Two](https://www.youtube.com/watch?v=Z3yVUELD2ZA) (published dates, not recorded dates)
 
 NPR (Gary Null)
 - [x] [1996-09-02 The Thyroid](https://www.youtube.com/watch?v=5fwYK0KISTI) ([mp3](https://www.functionalps.com/blog/wp-content/uploads/2011/09/NPRraypeatinterview1996.mp3))
 
 Bud Weiss
 - [ ] [2010-10-09 The Biology of Carbon Dioxide](https://www.youtube.com/watch?v=r6hYLtFvmw8) ([video](https://www.functionalps.com/blog/wp-content/uploads/2011/09/Video-Bud-Weiss-Ray-Peat-The-Biology-of-Carbon-Dioxide-October-9-2010.mp4), [mp3](https://www.functionalps.com/blog/wp-content/uploads/2011/09/Audio-Bud-Weiss-Ray-Peat-The-Biology-of-Carbon-Dioxide-October-9-2010.mp3))
-- [ ] [2008-09-15 (20 minutes)](https://www.functionalps.com/blog/wp-content/uploads/2011/09/Audio.-Bud-Weiss-Ray-Peat.-September-15-2008.mp3)
 
 Ask Your Herb Doctor
 - [ ] [2017-06-16 Language and Criticism, Estrogen (Part 1)](https://www.youtube.com/watch?v=UsdTznJr6vU) ([mp3](https://www.toxinless.com/kmud-170616-language-criticism-estrogen.mp3))
@@ -220,7 +218,6 @@ Rainmaking Time
 
 Source Nutritional Show
 - [ ] [2012-05-12 Brain and Tissue l](https://www.youtube.com/watch?v=qZiPRYEtVtw) ([mp3](https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-1.mp3))
-- [ ] [2012-05-12 Brain and Tissue ll](https://www.youtube.com/watch?v=rL282hEbYfQ) ([mp3](https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-2.mp3))
 
 World Puja
 - [ ] [2012-11-23 Foundational Hormones](https://www.youtube.com/watch?v=0YjNyy7z4DM) ([mp3](https://www.toxinless.com/wp-121123-foundational-hormones.mp3))
@@ -230,13 +227,10 @@ Eluv
 - [ ] [2008-09-18 Good Fats](https://www.youtube.com/watch?v=Q97Bdov9V9w) ([mp3](https://www.toxinless.com/eluv-080918-fats.mp3))
 
 
-
-
-
-
-
-
 ### Audio/Video Interviews Without Captions
+
+Source Nutritional Show
+- [ ] [2012-05-12 Brain and Tissue ll](https://www.youtube.com/watch?v=rL282hEbYfQ) ([mp3](https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-2.mp3))
 
 Generative Energy
 - [ ] [2016-01-20 #19 Talking with Ray Peat](https://youtu.be/HPrIPVAD6dI)
@@ -263,6 +257,11 @@ Eluv
 - [ ] [2014-01-01 Effects of Stress and Trauma on the Body Part 1 (duplicate?)](https://www.functionalps.com/blog/wp-content/uploads/2011/09/wmnfFPS_000000_000001_ultra1_335FPS1.mp3)
 - [ ] [2014-01-01 Effects of Stress and Trauma on the Body Part 2 (duplicate?)](https://www.functionalps.com/blog/wp-content/uploads/2011/09/wmnfFPS_000000_000002_ultra2_335FPS2.mp3)
 
+Bud Weiss
+- [ ] [2008-09-15 (20 minutes)](https://www.functionalps.com/blog/wp-content/uploads/2011/09/Audio.-Bud-Weiss-Ray-Peat.-September-15-2008.mp3)
+
+Perceive Think Act Films
+- [ ] [2021-02-18 On the Back of a Tiger, Day Two](https://www.youtube.com/watch?v=Z3yVUELD2ZA) (published dates, not recorded dates)
 
 Ask Your Herb Doctor
 - [ ] [2022-11-18](https://www.toxinless.com/kmud-221118.mp3)
@@ -385,7 +384,7 @@ KWAI 1080 AAM
 The above list incorporates the following sources. [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) to suggest more.
 
 - [x] [MarshmalloW's Maaster List](https://www.selftestable.com/ray-peat-stuff/sites) (as of 2023-02-28)
-- [x] [Functional Performance Systems's Master List](https://www.functionalps.com/blog/2011/09/12/ (as of 2023-02-28)master-list-ray-peat-phd-interviews/)
+- [x] [Functional Performance Systems's Master List](https://www.functionalps.com/blog/2011/09/12/) (as of 2023-02-28)master-list-ray-peat-phd-interviews/)
 - [ ] [Ray Peat Forums -> Interviews](https://raypeatforum.com/community/forums/interviews.20/)
 - [ ] [Ray Peat Forums -> Interview Transcripts](https://raypeatforum.com/community/categories/interview-transcripts.317/)
 - [ ] [Ray Peat Forums -> Resources](https://raypeatforum.com/community/forums/resources.233/)
