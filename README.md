@@ -381,7 +381,7 @@ KWAI 1080 AAM
 
 ## Sources
 
-The above list incorporates the following sources. [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) to suggest more.
+The above list incorporates (or will eventually) the following sources. [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) to suggest more.
 
 - [x] [MarshmalloW's Maaster List](https://www.selftestable.com/ray-peat-stuff/sites) (as of 2023-02-28)
 - [x] [Functional Performance Systems's Master List](https://www.functionalps.com/blog/2011/09/12/) (as of 2023-02-28)master-list-ray-peat-phd-interviews/)
@@ -392,6 +392,7 @@ The above list incorporates the following sources. [Open an issue](https://githu
 - [x] [Ray Peat Clips](https://www.youtube.com/channel/UCh4kMDfEon-IAlQcbGym9UQ/videos) (as of 2023-02-28)
 - [ ] [Western Botanical Medicine List](https://web.archive.org/web/20160406232157/https://www.westernbotanicalmedicine.com/media.html) (looks like a duplicate)
 - [ ] [Chadnet](https://wiki.chadnet.org/ray-peat)
+- [ ] [Ray Peat Interview Resources](https://github.com/Ray-Peat/interview/wiki)
 
 ## Non-Pertenant Sources
 
