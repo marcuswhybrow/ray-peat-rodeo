@@ -4,6 +4,7 @@ import Metalsmith from 'metalsmith'
 import layouts from '@metalsmith/layouts'
 import permalinks from '@metalsmith/permalinks'
 import collections from '@metalsmith/collections'
+import defaultValues from '@metalsmith/default-values'
 import frontMatter from 'front-matter'
 import { Parser } from 'simple-text-parser'
 import yaml from 'js-yaml'
@@ -23,9 +24,13 @@ export default async function build() {
   try {
     const __dirname = dirname(fileURLToPath(import.meta.url))
     const files = await Metalsmith(__dirname)
+
       .source('src')
+
       .destination('build')
+
       .clean(true)
+
       .metadata({
         site: {
           domain: "raypeat.rodeo",
@@ -43,91 +48,91 @@ export default async function build() {
         })
       })
 
+      .use(defaultValues([{
+          pattern: 'documents/**',
+          defaults: {
+            speakers: {}
+          }
+        }
+      ]))
+
       // Determine which lines are spoken by whom
       .use(function speakerSyntax(files, metalsmith) {
         metalsmith.match('documents/**/*.md').forEach(filepath => {
           const file = files[filepath]
 
-          const lines = function() {
-            const otherSpeakers = []
+          // Compose each line into an object describing it's metadata
+          const lines = (function() {
+            const speakersObserved = []
             let prevSpeakerKey = null
-            const results = []
-            const lines = file.contents.toString().split(/\r?\n/)
-            const speakers = file.speakers || {}
-            lines.forEach(line => {
+            return file.contents.toString().split(/\r?\n/).map(line => {
               const speakerParagraphRegex = /(?<speakerDefinition>!(?<speakerKey>\S*))?\s*(?<paragraph>.*)$/
-              const { speakerDefinition, speakerKey, paragraph } = speakerParagraphRegex.exec(line).groups
-              if (speakerDefinition) {
-                let computedSpeakerKey = speakerKey || prevSpeakerKey
-                
-                if (!computedSpeakerKey) {
-                  computedSpeakerKey = (function defaultSpeakerKey() {
-                    const speakerEntries = Object.entries(speakers)
-                    switch (speakerEntries.length) {
-                      case 0:
-                        speakers.H = 'Host'
-                        return 'H'
-                      case 1:
-                        return speakerEntries[0][0]
-                      default:
-                        return null
-                    }
-                  })()
-                }
+              const lineData = speakerParagraphRegex.exec(line).groups
 
-                if (computedSpeakerKey) {
-                  if (!otherSpeakers.includes(computedSpeakerKey))
-                    otherSpeakers.push(computedSpeakerKey)
-                  const speakerName = speakers[computedSpeakerKey]
-                  if (!speakerName)
-                    throw new Error(`Unknown speaker key "${computedSpeakerKey}" for line:\n${line}`)
-                  results.push({
-                    type: 'Other Speaker',
-                    speakerKey: computedSpeakerKey,
-                    speakerName,
-                    speakerNumber: otherSpeakers.indexOf(computedSpeakerKey),
-                    text: paragraph
-                  })
-                } else {
-                  throw new Error(`Multiple speakers defined, but line is missing speaker key:\n${line}`)
+              // The simplest lines have no special prefix `!`, or are totally empty
+              if (!lineData.speakerDefinition)
+                return lineData.paragraph
+                  ? { type: 'Ray Peat', text: lineData.paragraph }
+                  : { type: 'Empty', text: line }
+              
+              // Lines may define a speaker key directly `!MW`,
+              // or infer the speaker key from a previous line `!`
+              const speakerKey = (function defaultSpeakerKey() {
+                if (lineData.speakerKey) return lineData.speakerKey
+                if (prevSpeakerKey) return prevSpeakerKey
+                const speakerEntries = Object.entries(file.speakers)
+                switch (speakerEntries.length) {
+                  case 0:
+                    file.speakers.H = 'Host'
+                    return 'H'
+                  case 1:
+                    return speakerEntries[0][0]
+                  default:
+                    throw new Error(`Multiple speakers defined, but line is missing speaker key:\n${line}`)
                 }
-                prevSpeakerKey = computedSpeakerKey
-              } else {
-                if (paragraph) {
-                  results.push({
-                    type: 'Ray Peat',
-                    text: paragraph
-                  })
-                } else {
-                  results.push({
-                    type: 'Empty',
-                    text: line
-                  })
-                }
+              })()
+
+              return {
+                type: 'Other Speaker',
+                speakerKey: (() => {
+                  prevSpeakerKey = speakerKey
+                  return speakerKey
+                })(),
+                speakerName: (() => {
+                  const name = file.speakers[speakerKey]
+                  if (!name) throw new Error(`Unknown speaker key "${speakerKey}" for line:\n${line}`)
+                  return name
+                })(),
+                speakerNumber: (() => {
+                  const index = speakersObserved.indexOf(speakerKey)
+                  return index >= 0 ? index : speakersObserved.push(speakerKey) - 1
+                })(),
+                text: lineData.paragraph
               }
             })
-            return results
-          }()
+          })()
 
           const groupedLines = (function() {
             if (lines.length === 0) return lines
-          
             const results = [lines.shift()]
             lines.forEach(line => {
               const tailIndex = results.length - 1
               const tail = results[tailIndex]
+              const lineLength = line.text.length
               if (
                 line.type === 'Empty' ||
                 (line.type === 'Ray Peat' && tail.type === 'Ray Peat') ||
                 (line.type === 'Other Speaker' && tail.type === "Other Speaker" && line.speakerKey === tail.speakerKey)
               ) {
-                results[tailIndex] = {...tail, text: `${tail.text}\n${line.text}`}
+                results[tailIndex] = {...tail, text: `${tail.text}\n${line.text}`, textLength: line.text.length + tail.textLength}
               } else {
-                results.push(line)
+                results.push({...line, textLength: line.text.length})
               }
             })
             return results
           })()
+
+          file.sections = groupedLines
 
           const sections = groupedLines.map(line => {
             const sectionName = line.type === 'Ray Peat'
@@ -135,11 +140,9 @@ export default async function build() {
               : line.type === 'Other Speaker'
                 ? `speaker ${line.speakerNumber} ${line.speakerName}`
                 : null
-            if (sectionName) {
-              return  `::: ${sectionName}\n${line.text}\n:::`
-            } else {
-              return line.text
-            }
+            return sectionName
+              ? `::: ${sectionName}\n${line.text}\n:::`
+              : line.text
           })
 
           file.contents = Buffer.from(sections.join('\n'), 'utf8')
@@ -385,39 +388,25 @@ export default async function build() {
 
       // Render Markdown to HTML
       .use(function renderMarkdownToHtml(files, metalsmith) {
-        const md = markdownIt({
-          html: true,
-          linkify: true,
-          typographer: true,
-        })
+        const md = markdownIt({html: true, linkify: true, typographer: true})
           .use(markdownItFootnote)
           .use(markdownItContainer, 'speaker', {
             render: function (tokens, idx) {
-              var args = tokens[idx].info.trim().match(/^speaker\s+(\d*?)\s+(.*)$/);
-          
-              if (tokens[idx].nesting === 1) {
-                return `<div class="speaker speaker-other speaker-other-${args[1]}">\n<span class="speaker-name">${args[2]}:</span>`;
-              } else {
-                return `</div>\n`;
-              }
+              if (tokens[idx].nesting !== 1) return  `</div>\n`
+              const speakerData = tokens[idx].info.trim().match(/^speaker\s+(?<number>\d*?)\s+(?<name>.*)$/).groups;
+              return `<div class="speaker speaker-other speaker-other-${speakerData.number}">\n<span class="speaker-name">${speakerData.name}:</span>`
             }
           })
           .use(markdownItContainer, 'ray', {
-            render: function (tokens, idx) {
-              if (tokens[idx].nesting === 1) {
-                return `<div class="speaker speaker-ray">\n<span class="speaker-name">Ray Peat:</span>`;
-              } else {
-                return `</div>\n`;
-              }
-            }
+            render: (tokens, idx) => tokens[idx].nesting === 1
+              ? `<div class="speaker speaker-ray">\n<span class="speaker-name">Ray Peat:</span>`
+              : `</div>\n`
           });
 
         metalsmith.match('**/*.md').forEach(filepath => {
           const file = files[filepath]
-          const contents = file.contents.toString()
-          file.contents = Buffer.from(md.render(contents), 'utf8')
-          const htmlFilepath = replaceExtension(filepath, '.html')
-          files[htmlFilepath] = file
+          file.contents = Buffer.from(md.render(file.contents.toString()), 'utf8')
+          files[replaceExtension(filepath, '.html')] = file
           delete files[filepath]
         })
       })
