@@ -36,6 +36,7 @@
     "markdown-it": "^13.0.1",
     "markdown-it-container": "^3.0.0",
     "markdown-it-footnote": "^3.0.3",
+    "markdown-it-sidenote": "^4.1.0",
     "metalsmith": "^2.5.1",
     "metalsmith-sass": "^2.0.0",
     "node-sass": "^8.0.0",

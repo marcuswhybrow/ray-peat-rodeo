@@ -11,7 +11,7 @@ import yaml from 'js-yaml'
 import fs from 'fs'
 import url from 'url'
 import markdownIt from 'markdown-it'
-import markdownItFootnote from 'markdown-it-footnote'
+import markdownItSidenote from 'markdown-it-sidenote'
 import markdownItContainer from 'markdown-it-container'
 import replaceExtension from 'replace-ext'
 import sass from 'metalsmith-sass'
@@ -389,7 +389,7 @@ export default async function build() {
       // Render Markdown to HTML
       .use(function renderMarkdownToHtml(files, metalsmith) {
         const md = markdownIt({html: true, linkify: true, typographer: true})
-          .use(markdownItFootnote)
+          .use(markdownItSidenote)
           .use(markdownItContainer, 'speaker', {
             render: function (tokens, idx) {
               if (tokens[idx].nesting !== 1) return  `</div>\n`

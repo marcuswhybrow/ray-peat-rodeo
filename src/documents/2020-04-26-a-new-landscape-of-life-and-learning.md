@@ -258,9 +258,7 @@ Oh understanding what a cell is, what an organism is, and what substance is, and
 
 ! At the root of these questions are a deeper exploration of life that will move us into a different way of being, you think?
 
-Yeah. If the present project of the ruling class goes ahead, basically everyone is a mechanical deadness. Dead inside. Because they only have the role set for them by the outside system. If we all start living fully, and realizing that the future is only ours to be lived and created, it should have nothing at all to do with the plans made in Davos [^davos] or Washington or wherever.
-
-[^davos]: Editors note: Davos is the Swiss town which hosts the annual meetings of the World Economic Forum.
+Yeah. If the present project of the ruling class goes ahead, basically everyone is a mechanical deadness. Dead inside. Because they only have the role set for them by the outside system. If we all start living fully, and realizing that the future is only ours to be lived and created, it should have nothing at all to do with the plans made in Davos ^[Editors note: Davos is the Swiss town which hosts the annual meetings of the World Economic Forum.] or Washington or wherever.
 
 ! [1:09:53] Yeah. Yeah. Wherever did that idea of competition come from? Of being needed in life? Or in other words, does competition hurt or does it help in the learning process? What are your thoughts on that?
 
@@ -306,10 +304,9 @@ Not really. Not trustworthy for sure! You have to know that Intelligence organiz
 
 ! [1:18:02] What are some good hardcopy Encyclopedia or books? Would you recommend any?
 
-Oh. After the old Funk & Wagnalls [^funk] that we had at home I've always used the Britannica's. I like to have the 1910 or 1911 edition, or the 1930s and 1950s editions because the 1960-something edition was dumbed down. [^britannica]
+Oh. After the old Funk & Wagnalls ^[Editors note: Funk & Wagnalls first published it's encyclopedia in 1912.] that we had at home I've always used the Britannica's. I like to have the 1910 or 1911 edition, or the 1930s and 1950s editions because the 1960-something edition was dumbed down.
 
-[^funk]: Editors note: Funk & Wagnalls first published it's encyclopedia in 1912.
-[^britannica]: Editors note: The 14th edition of Encyclopedia Britannica was the last published before William Benton took over in 1943.
+^[Editors note: The 14th edition of Encyclopedia Britannica was the last published before William Benton took over in 1943.]
 
 ! Okay. Do they still make the Encyclopedia Britannica, do you know?
 
@@ -401,9 +398,7 @@ No, I've heard people express attitudes that you have to be qualified to have ac
 
 ! [1:36:52] Oh my gosh. That's part of my friend's question. If we get to a more decentralized situation and if a small number of very scientifically inquisitive people want to do Science, is it gonna recreate this small clique of Scientific elites? Where you have to be one of those people to study it?
 
-Take away the control of the corporations who are keeping, basically, a culture of secrecy. [Prevent] classified research done at universities, for example. [^classified] But twenty years ago they were, basically, selling the universities to the corporations for funding. Having a lot of the research tied in to the military and corporation-private property idea of knowledge. That whole concept of knowledge is incompatible with knowledge. So I think changing the ownership of the instruments, making them public like they used to be still in 1970.
-
-[^classified]: Transcriber's note: It's unclear whether Ray means corporate secrecy prevents classified research, or banning classified research would end corporate secrecy.
+Take away the control of the corporations who are keeping, basically, a culture of secrecy. [Prevent] classified research done at universities, for example. ^[Transcriber's note: It's unclear whether Ray means corporate secrecy prevents classified research, or banning classified research would end corporate secrecy.] But twenty years ago they were, basically, selling the universities to the corporations for funding. Having a lot of the research tied in to the military and corporation-private property idea of knowledge. That whole concept of knowledge is incompatible with knowledge. So I think changing the ownership of the instruments, making them public like they used to be still in 1970.
 
 ! If the overall values of the decentralized community are that of collaboration and togetherness that probably won't happen? Is what you're saying?
 
@@ -447,9 +442,9 @@ I still have a lot of copies of that printed on paper at <raypeatsnewsletter@gma
 
 Yeah.
 
-! [1:44:26] Okay great. Are you familiar with [[Charlotte Thomson Iserbyt|Charlotte Iserbyt]]? [^Iserbyt] Have you ever heard of her?
+! [1:44:26] Okay great. Are you familiar with [[Charlotte Thomson Iserbyt|Charlotte Iserbyt]]? ^[Iserbyt wrote [[The Deliberate Dumbing Down of America -by- Charlotte Thomson Iserbyt]] in 1999.]
 
-[^Iserbyt]: Iserbyt wrote [[The Deliberate Dumbing Down of America -by- Charlotte Thomson Iserbyt]] in 1999.
+] Have you ever heard of her?
 
 I don't recognize it.
 

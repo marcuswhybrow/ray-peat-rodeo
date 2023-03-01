@@ -109,9 +109,7 @@ The things that you've done in the last several years contribute to how risky an
 
 The other research shows that endotoxin alone will account for exactly those changes. You inject an animal with endotoxin and its estrogen—even in a male animal—will go up maybe five times higher than normal and the progesterone and testosterone fall sharply.
 
-!AM [23:56] So Dr Peat, in terms of endotoxin production and diet—because I know that you're very keen on the saturated fats and you've got lots of research, and there is plenty of research out there to show that the polyunsaturated fats are actually pretty bad for you—how about endotoxin and PUFA? [^pufa] Is there any increased link between the two?
-
-[^pufa]: Polyunsaturated Fatty Acids
+!AM [23:56] So Dr Peat, in terms of endotoxin production and diet—because I know that you're very keen on the saturated fats and you've got lots of research, and there is plenty of research out there to show that the polyunsaturated fats are actually pretty bad for you—how about endotoxin and PUFA? ^[Polyunsaturated Fatty Acids] Is there any increased link between the two?
 
 Yeah, they do favour the growth of many microorganisms but they also interact at every stage. For example, the permeability of the intestine is increased by the polyunsaturated fats. One of the first reactions when a cell senses the endotoxin is to produce nitric oxide and nitric oxide increases the permeability (leakiness) of the intestine. And if your tissues happen to be well supplied with polyunsaturated fats, the nitric oxide increases the release and amount of free fatty acids in circulation. And so the person who has eaten a lot of polyunsaturated fat, once a stress triggers the absorption of endotoxin, then the reaction can be much more intense. And those same things will trigger the release of serotonin and increase all of the inflammatory mediators and the environment of increased estrogen and decreased progesterone and testosterone will continue that like a cascade of bad effects.
 
@@ -119,11 +117,9 @@ Yeah, they do favour the growth of many microorganisms but they also interact at
 
 !AM [28:04] How about the association of cancer with endotoxin production?
 
-Every level you look at, practically, is a promoting effect. There are a few positive effects of endotoxin. Long exposure to these toxins will build up certain defences, but beyond that very basic kind of immunity, which includes things like HDL [^hdl] cholesterol. The lipoproteins are defences against the endotoxins, largely, so that's one of the defensive effects of high cholesterol. The reactions beyond that very simple level of defence are all pro-inflammatory, tend to stimulate development of fibrosis as a sign of deteriorating tissue function. Fibrosis and atrophy make the tumor harder to get at and more autonomous. The atrophy effect is something that estrogen participates in in many ways.
+Every level you look at, practically, is a promoting effect. There are a few positive effects of endotoxin. Long exposure to these toxins will build up certain defences, but beyond that very basic kind of immunity, which includes things like HDL ^[High Density Lipoproteins] cholesterol. The lipoproteins are defences against the endotoxins, largely, so that's one of the defensive effects of high cholesterol. The reactions beyond that very simple level of defence are all pro-inflammatory, tend to stimulate development of fibrosis as a sign of deteriorating tissue function. Fibrosis and atrophy make the tumor harder to get at and more autonomous. The atrophy effect is something that estrogen participates in in many ways.
 
 The medical establishment has convinced the public that estrogen has some anabolic protective effects, especially through the bone, preventing osteoporosis. But the overall effect of the inflammation produced by endotoxin creates a systemic age-like atrophy of all of the tissues. Osteoporosis, for example, is extremely sensitive to endotoxin. Endotoxin activates all of the factors that stop the bone replacement and accelerate its decomposition. And it's those atrophic processes that weaken the immune system's ability to remove a cancer once it starts. So, atrophy and tumor formation are really very closely connected and endotoxin is pushing on both of those in an unfavourable way.
-
-[^hdl]: High Density Lipoproteins
 
 ! [31:15] Pretty scarey, huh. The whole thing about your food—what you eat and what you shouldn't eat—really should be taken quiet seriously just because it's a very inexpensive way to stay healthy. There's no drugs involved. There's no treatment involved. You're your own doctor, and the more you take of yourself, in terms of what you put into your body, the better off you're gonna be.
 
@@ -141,9 +137,7 @@ Yeah. Generally, they have an estrogen promoting effect and support the growth o
 
 Yeah.
 
-!AM [33:04] That's interesting, I just want to hold it there, very quickly, with what you just mentioned about lignan. Because I was just reminded again that the Dow Chemical were actually trying to incorporate lignans into bread and they were doing some research at a USDA [^usda] lab to see whether or not these lignans could be a viable starch source to be put in bread. And here you have already mentioned lignans as one of the bad foods. So it could possibly be implicated.
-
-[^usda]: The United States Department of Agriculture.
+!AM [33:04] That's interesting, I just want to hold it there, very quickly, with what you just mentioned about lignan. Because I was just reminded again that the Dow Chemical were actually trying to incorporate lignans into bread and they were doing some research at a USDA ^[The United States Department of Agriculture.] lab to see whether or not these lignans could be a viable starch source to be put in bread. And here you have already mentioned lignans as one of the bad foods. So it could possibly be implicated.
 
 I think they've used sawdust for many years. The cellulose is probably the safest fibre, if it's a clean kind of cellulose.
 
