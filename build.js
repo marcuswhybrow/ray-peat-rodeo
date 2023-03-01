@@ -18,7 +18,6 @@ import { DateTime } from 'luxon'
 import inPlace from '@metalsmith/in-place'
 import path from 'node:path'
 import slugify from 'slugify'
-import isUtf8 from 'is-utf8'
 
 export default async function build() {
   try {
@@ -26,7 +25,7 @@ export default async function build() {
     const files = await Metalsmith(__dirname)
       .source('src')
       .destination('build')
-      .clean(false)
+      .clean(tue)
       .metadata({
         site: {
           domain: "raypeat.rodeo",
