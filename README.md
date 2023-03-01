@@ -19,7 +19,7 @@ npm start
 
 ## Interview Syntax
 
-Markdown files in `./src/content/` have additional bespoke template tag shorthands for defining who's speaking, and identifying the people, books, and URLs mentioned by the speakers.
+Markdown files in `./src/documents/` have additional bespoke template tag shorthands for defining who's speaking, and identifying the people, books, and URLs mentioned by the speakers.
 
 - **Ray Peat** - All paragraphs, by default, are attributed to Ray Peat. See below to attribute a paragraph to another speaker.
 - **Interviewer** - Prefix a paragraph with `!MW ` to reference a speaker defined in `speakers.MW` in the frontmatter. For example: `!MW Good morning Ray`, with `speakers: { MW: Marcus Whybrow }` attributes that paragraph to `Marcus Whybrow`. Ommitting the speaker initials attributes a paragraph to most recently specified speaker above. If the frontmatter specifies one or zero speakers, all paragraphs prefixed with an `!` will be attributed to the single speaker defined, or (if zero speakers are defined) attributed to `Host`.
