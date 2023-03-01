@@ -1,0 +1,237 @@
+body
+  max-width: 800px
+  padding: 20px
+  margin: 0 auto
+  font-family: sans-serif
+  line-height: 1.5em
+
+
+.speaker
+  position: relative
+  margin: 30px 0
+
+  &.speaker-ray
+    // background-color: greenyellow
+    // border-radius: 20px
+    // padding: 20px
+    text-align: left
+
+  &.speaker-other
+    /* background-color: gainsboro */
+    /* border: 2px dashed gainsboro */
+    // border-radius: 20px
+    /* padding: 0 20px */
+    /* font-size: 100%
+    // font-style: italic
+    // font-weight: bold
+    /* margin-left: 40% */
+    /* text-align: right */
+  
+    &.speaker-other-1
+      border-color: rgb(229, 205, 205)
+
+    &.speaker-other-2
+      border-color: rgb(229, 228, 205)
+
+    &.speaker-other-3
+      border-color: rgb(205, 229, 209)
+
+    &.speaker-other-4
+      border-color: rgb(205, 229, 228)
+
+    &.speaker-other-5
+      border-color: rgb(205, 209, 229)
+
+    &.speaker-other-6
+      border-color: rgb(220, 205, 229)
+
+  .speaker-name
+    opacity: 0.5
+    font-size: 0.8em
+    position: relative
+    top: 10px
+
+
+
+
+
+img
+  display: block
+  margin: 20px auto
+
+
+data
+  display: block
+  position: absolute
+  top: -20px
+  left: -3px
+  font-size: 0.8em
+  opacity: 0
+
+  span
+    opacity: 0
+
+span::after
+  content: ' '
+  /* white-space: pre */
+
+
+a
+  background-color: rgb(192, 221, 246)
+  padding: 2px 5px
+  border-radius: 1px
+  text-decoration: none
+  color: black
+
+
+  &.person
+    background-color: rgb(218, 192, 246)
+    padding: 2px 5px
+    border-radius: 1px
+    text-decoration: none
+    color: black
+
+
+  &.book
+    background-color: rgb(199, 246, 192)
+    padding: 2px 5px
+    border-radius: 1px
+    text-decoration: none
+    color: black
+
+
+#top-bar
+  margin-top: 40px
+  a
+    background-color: transparent
+    padding: 0
+    border-radius: 0
+    text-decoration: none
+    color: black
+    font-style: italic
+    /* text-transform: lowercase */
+
+
+article
+  &.interview
+    h1
+      font-size: 2em
+      line-height: 1em
+      margin-top: 0
+      margin-bottom: 0
+
+    header
+      margin-top: 15px
+      margin-bottom: 80px
+
+
+#transcripts
+  margin-top: 40px
+  margin-bottom: 80px
+
+  .transcript
+    display: inline-block
+    background-color: rgb(234, 234, 234)
+    padding: 20px
+    border-radius: 12px
+    margin: 0 40px 40px 0
+    width: 180px
+    height: 180px
+    vertical-align: top
+    transition: all .05s
+    overflow: hidden
+
+    &:hover
+      transform: scale(1.02)
+      box-shadow: 0 0 10px rgb(192, 192, 192)
+
+    .transcript-title
+      font-size: 1.5em
+      display: block
+      margin-bottom: 10px
+
+    .transcript-date
+      display: block
+      font-size: 0.9em
+      line-height: 1.2em
+
+    .transcript-excerpt
+      display: block
+      font-size: 0.9em
+      line-height: 1em
+
+blockquote
+  border-left: 5px solid gainsboro
+  margin: 40px 0
+  padding: 5px 0 5px 40px
+  font-style: italic
+  line-height: 2em
+
+
+.speaker.speaker-other blockquote
+  border-left: none
+  padding: 0 40px
+  margin: 30px 0
+
+
+sup.footnote-ref
+  vertical-align: middle
+  a
+    border-radius: 6px
+    padding: 3px 7px
+
+    &.footnote-backref
+      border-radius: 6px
+      padding: px 7px
+
+
+a.timecode
+  position: absolute
+  /* left: -90px */
+  right: 104%
+  background-color: transparent
+  opacity: 0.3
+  border-radius: 1000px
+  padding: 1px 10px
+
+  &:hover
+    background-color: rgb(192, 221, 246)
+    opacity: 1
+
+
+#references
+  font-size: 0.8em
+
+  dt
+    display: inline-block
+    margin-right: 5px;
+
+    .name
+      font-weight: bold
+
+  dd
+    display: inline-block
+    margin: 0
+    margin-right: 5px
+
+  a
+    background-color: transparent
+    padding: 0
+    margin-right: 5px
+
+    &:last-child
+      margin-right: 0
+
+    &:hover
+      background-color: rgb(192, 221, 246)
+
+
+@media only screen and (max-width: 1030px)
+  a.timecode
+    background-color:aliceblue
+    position: relative
+    right: 0
+    opacity: 1
+    color: rgb(97, 111, 124)
+    &:hover
+      color: black

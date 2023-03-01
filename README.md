@@ -3,7 +3,7 @@
 My effort to catalogue, compile, and transcribe the public works, speeches and interviews of Ray Peat.  
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) if there's a Ray Peat interview I'm missing.
 
-This repository represents a collection of markdown transcripts built by the static-site generator [11ty](https://www.11ty.dev/).
+This repository represents a collection of markdown transcripts built by the static-site generator [metalsmith](https://metalsmith.io/).
 
 ## Installation 
 

@@ -1,0 +1,11 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=width-device, initial-scale=1.0')
+    title= title === 'Ray Peat Rodeo' ? title : `${title} • Ray Peat Rodeo`
+    link(rel='stylesheet', href='/style.css')
+  
+  body 
+    block content
+      != contents

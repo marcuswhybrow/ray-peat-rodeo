@@ -487,7 +487,7 @@ Yeah, some of the oppressors are open to change from learning.
 
 ! [1:47:49] Well that's hopeful. Ray, I'd like to close on an [[Albert Einstein|Einstein]] quote. I've seen it on the internet attached to an image and I want to throw this out there. I'll put it up when I post this on Youtube, so viewers can see it, I'm sure other people have seen it.
 
-! <img src="/public/images/2020-04-26-einstein-quote.jfif" />
+! <img src="/images/2020-04-26-einstein-quote.jfif" />
 
 ! But the Einstein quote is "that everybody is a genius. That if you judge a fish by its ability to climb a tree it will live it's whole life believing it is stupid." It reminds me of that story you told me earlier about the kid who came into your college, who by all the testing standards showed that he was basically dumb. When given the chance to craft an education and a way of thinking that was his own he revealed that he was nothing of the sort
 

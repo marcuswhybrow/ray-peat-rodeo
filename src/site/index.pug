@@ -1,0 +1,58 @@
+extends ../../layouts/base.pug
+
+block content
+  h1 Ray Peat Rodeo
+  p
+    em
+      | Roll-up for a round-up of 
+      a(href=global.site.github, target='_blank') open-source
+      |  Ray Peat transcripts.
+
+  link(href='/_pagefind/pagefind-ui.css', rel='stylesheet')
+  script(src='/_pagefind/pagefind-ui.js' type='text/javascript')
+  div#search
+  script.
+    window.addEventListener('DOMContentLoaded', (event) => {
+        new PagefindUI({
+          element: '#search',
+          translations: {
+            placeholder: 'Search Ray Peat Rodeo'
+          }
+        });
+    });
+
+  div#transcripts
+    each transcript, index in global.collections.transcripts
+      a.transcript(href=transcript.permalink)
+        span.transcript-title= transcript.title
+        if transcript.date
+          span.transcript-date= transcript.date.toFormat('yyyy-LL-dd')
+        span.transcript-excerpt= transcript.excerpt || ''
+
+  form(name='contact', netlify)
+    p
+      | Suggest a 
+      input(type='text', name='url', placeholder='URL')
+      |  I should 
+      button(type='submit') Transcribe
+
+  section#references
+    h2 People Discussed By Ray Peat
+    p
+      - const topTen = Object.values(global.references.people).sort((a, b) => b.fileCount - a.fileCount).slice(0, 10)
+      | TOP 10 — 
+      each person, index in topTen
+        span
+          | #{index + 1}. 
+          span.name #{person.friendlyName}
+          sup x#{person.fileCount} 
+    br
+    dl
+      - const allPeople = Object.values(global.references.people).sort((a, b) => a.indexKey.localeCompare(b.indexKey))
+      each person in allPeople
+        dt
+          span.name #{person.indexKey} 
+          sup x#{person.fileCount}
+        dd
+          each file, filepath in person.files
+            a(href=file.permalink) #{file.title}.

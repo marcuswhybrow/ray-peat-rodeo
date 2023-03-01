@@ -1,0 +1,22 @@
+extends base.pug
+
+block content
+  article.interview
+    div#top-bar
+      a(href='/') Ray Peat Rodeo
+    header
+      h1= title
+
+      p
+        a(href=source, target='_blank') Convened
+        = ` by ${series}, ${date.toFormat("LLLL dd, yyyy")}. `
+        if transcription.source
+          a(href=transcription.source, target='_blank') Transcribed
+        else
+          | Transcribed
+        = ` by ${transcription.author}, ${transcription.date.toFormat("LLLL dd, yyyy")}.`
+        br
+        a(href=githubEdit, target='_blank') Edit this page on GiHub
+        |  to contribute corrections of any kind.
+    main(data-pagefind-body)
+      != contents 
