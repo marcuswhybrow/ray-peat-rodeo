@@ -25,7 +25,7 @@ export default async function build() {
     const files = await Metalsmith(__dirname)
       .source('src')
       .destination('build')
-      .clean(tue)
+      .clean(true)
       .metadata({
         site: {
           domain: "raypeat.rodeo",
