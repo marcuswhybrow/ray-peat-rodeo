@@ -48,6 +48,7 @@
                     {{range $citationKey, $externalLink := .Citations.ExternalLinks}}
                         <a class="citation external-link" title="External URL" href="{{$externalLink.Citation.ExternalLink}}" target="_blank">{{$externalLink.Citation.ExternalLink}}</a>
                     {{end}}
+                    with {{range $i, $v := .Speakers }}{{if gt $i 0 }}, {{end}}<span class="speaker">{{$v}}</span>{{end}}.
                 </div>
             {{end}}</div>
         </section>

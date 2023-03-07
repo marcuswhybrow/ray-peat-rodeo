@@ -80,6 +80,7 @@ type DocumentFrontMatter struct {
 	Series         string
 	Source         string
 	SourceDuration string
+	Speakers       map[string]string
 	Transcription  struct {
 		Source string
 		Date   string
@@ -93,6 +94,7 @@ type Document struct {
 	Title      string
 	Series     string
 	Slug       string
+	Speakers   []string
 	Source     struct {
 		Url      string
 		Duration time.Duration
@@ -175,6 +177,13 @@ func main() {
 				document.Title = frontMatter.Title
 				document.Series = frontMatter.Series
 				document.Source.Url = frontMatter.Source
+				document.Speakers = func() []string {
+					values := make([]string, 0, len(frontMatter.Speakers))
+					for _, v := range frontMatter.Speakers {
+						values = append(values, v)
+					}
+					return values
+				}()
 				document.Transcription.Url = frontMatter.Transcription.Source
 				document.Transcription.Author = frontMatter.Transcription.Author
 				document.Transcription.Date = func() *time.Time {
