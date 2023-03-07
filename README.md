@@ -3,18 +3,23 @@
 My effort to catalogue, compile, and transcribe the public works, speeches and interviews of Ray Peat.  
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) if there's a Ray Peat interview I'm missing.
 
-This repository represents a collection of markdown transcripts built by the static-site generator [metalsmith](https://metalsmith.io/).
+This repository represents a collection of markdown transcripts built using Golang.
 
 ## Installation 
 
 ```
-npm install
+go install
 ```
 
 ## Usage
 
 ```
-npm start
+# Builds to build folder
+./build.sh
+
+# Builds to build folder and starts development server
+# Including auto-rebuild and hot-reloading
+./dev.sh
 ```
 
 ## Interview Syntax
