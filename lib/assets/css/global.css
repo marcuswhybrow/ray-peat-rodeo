@@ -1,0 +1,286 @@
+body {
+    max-width: 1300px;
+    margin: 0 auto;
+    font-family: sans-serif;
+    line-height: 1.6em;
+    counter-reset: sidenote-counter;
+}
+article,
+#top-bar {
+    padding: 20px;
+}
+article header,
+article div.speaker,
+article section,
+body footer,
+#top-bar a {
+    width: 60%;
+    margin-left: 5%;
+    transition: width .1s;
+}
+
+body footer {
+    padding: 60px 20px;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+#top-bar {
+    padding-top: 80px;
+}
+#top-bar a {
+    text-decoration: none;
+    color: black;
+    opacity: 0.6;
+    font-size: 1.2em;
+    font-weight: lighter;
+    /* font-style: italic; */
+    font-family: "Times New Roman";
+    /* text-transform: uppercase; */
+}
+
+.sidenote-number {
+    counter-increment: sidenote-counter;
+}
+.sidenote-number:after {
+    content: counter(sidenote-counter);
+    top: -0.2rem;
+    left: 0.0rem;
+}
+.sidenote-number:after, .sidenote:before {
+    font-family: et-book-roman-old-style;
+    font-size: 0.8rem;
+    position: relative;
+    vertical-align: baseline;
+}
+input.sidenote-toggle {
+    display: none;
+}
+.sidenote {
+    font-size: 0.9em;
+    float: right;
+    clear: right;
+    width: 40%;
+    margin-right: -50%;
+    position: relative;
+    padding-bottom: 10px;
+}
+.sidenote:before {
+    content: counter(sidenote-counter) " ";
+    right: 102%;
+    position: absolute;
+}
+.sidenote-meta {
+    padding-top: 60px;
+}
+.sidenote-meta:before {
+    content: "";
+}
+.sidenote-standalone:before {
+    content: "";
+}
+.sidenote img {
+    width: 100%;
+}
+
+.timecode {
+    font-size: 0.8em;
+    float: left;
+    clear: left;
+    margin-left: -10%;
+    position: relative;
+    transition: all .2s;
+}
+.timecode a.external {
+    text-decoration: none;
+    color: black;
+    opacity: 0.4;
+    transition: all .2s;
+}
+.timecode a.external:hover {
+    opacity: 1;
+}
+.timecode a.internal {
+    transform: rotate(90deg);
+    position: absolute;
+    right: 80%;
+    opacity: 0;
+    transition: all .2s;
+    top: -5px;
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    border-radius: 1000px;
+}
+.timecode:hover a.internal {
+    opacity: 0.3;
+}
+.timecode:hover a.internal:hover {
+    opacity: 1;
+}
+
+sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+}
+sub { 
+    top: 0.4em; 
+}
+
+.speaker {
+    margin-top: 40px;
+}
+.speaker .speaker-name {
+    font-size: 0.8em;
+    opacity: 0.6;
+    position: relative;
+    top: 10px;
+}
+
+.citation {
+    font-weight: normal;
+    transition: all .1s;
+    text-decoration: underline;
+    font-weight: bold;
+}
+.citation:hover {
+    text-decoration: underline;
+    filter: brightness(1.5);
+}
+.citation.book { color: #028b0c }
+.citation.person { color: #0057d9 }
+.citation.science-paper { color: #ae00d9 }
+.citation.external-link { color: #444 }
+
+.citation.external-link {
+    word-break: break-all;
+}
+
+blockquote > * {
+    padding-left: 20px;
+    font-style: italic;
+}
+
+#documents .document {
+    margin-bottom: 40px;
+    position: relative;
+}
+#documents .document .document-date {
+    float: left;
+    clear: left;
+    margin-left: -17%;
+    width: 100px;
+    text-align: right;
+    font-family: "Courier New";
+}
+#documents .document a.document-title {
+    text-decoration: underlline;
+    color: #e16800;
+    font-weight: bold;
+
+}
+#documents .document a.document-title:hover {
+    filter: brightness(1.2);
+}
+#documents .document .citation {
+    transition: all .1s;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+#documents .document:hover a.document-title {
+    
+}
+#documents .document .citation:hover {
+    text-decoration: underline;
+}
+
+#people ul,
+#books ul,
+#science-papers ul,
+#external-links ul {
+    margin-left: -60px;
+    list-style: none;
+}
+#people ul li,
+#books ul li,
+#science-papers ul li,
+#external-links ul li {
+    padding-left: 20px;
+}
+
+#contact-form input,
+#contact-form textarea {
+    width: 100%;
+    display: block;
+    margin: 20px 0;
+    padding: 10px 15px;
+    border: 1px solid #999;
+    border-radius: 1px;
+}
+#contact-form textarea {
+    min-height: 350px;
+}
+#contact-form button {
+    padding: 10px 15px;
+    border: none;
+    transition: all .1s;
+}
+#contact-form button:hover {
+    background-color: #888;
+    cursor: pointer;
+    color: white;
+}
+
+@media only screen and (max-width: 732px) {
+    article header,
+    article div.speaker,
+    article section,
+    body footer,
+    #top-bar a {
+        width: 100%;
+        margin-left: 0;
+    }
+    .sidenote {
+        position: relative;
+        display: none;
+        float: left;
+        clear: both;
+        vertical-align: baseline;
+        width: 95%;
+        margin: 30px
+    }
+    .sidenote.sidenote-standalone {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+    }
+    .sidenote:before {
+        right: 101%;
+    }
+    .sidenote-toggle:checked + .sidenote {
+        display: block;
+    }
+    label.sidenote-toggle {
+        cursor: pointer;
+    }
+}
+@media only screen and (max-width: 1400px) {
+    #documents .document .document-date {
+        float: none;
+        clear: none;
+        margin-left: 0;
+        padding-right: 5px;
+        font-family: "Courier New";
+    }
+    .timecode {
+        float: none;
+        clear: nonee;
+        margin-left: 0;
+        top: 0;
+    }
+    .timecode a.internal {
+        top: -10px;
+    }
+}
