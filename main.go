@@ -174,6 +174,7 @@ func main() {
 				}()
 				document.Title = frontMatter.Title
 				document.Series = frontMatter.Series
+				document.Source.Url = frontMatter.Source
 				document.Transcription.Url = frontMatter.Transcription.Source
 				document.Transcription.Author = frontMatter.Transcription.Author
 				document.Transcription.Date = func() *time.Time {
