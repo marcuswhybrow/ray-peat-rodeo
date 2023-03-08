@@ -52,13 +52,13 @@ Marking citations with double square brackets tells Ray Peat Rodeo to include th
 
 ````
 Citing a person such as [[William Blake]] is done with double square brackets. (outputs "William Blake")
-[[William Blake|The text displayed]] can be modified whilst preserving the citation (outputs "The text displayed")
+The text [[William Blake|displayed]] can be modified whilst preserving the citation (outputs "displayed")
 
 Book citations use the from [[Jerusalem -by- William Blake]]. (outputs "Jerusalem")
 Everything to the right of "-by-" is consider the primary author's full name.
 You can [[Jerusalem -by- William Blake|modify]] book's display text too (outputs "modify")
 
-Many scientific papers have "DOI" number such as [[doi:10.5860/choice.37-5129]] (outputs "10.5860/choice.37-5129")
+[[doi:10.5860/choice.37-5129]] cites a scientific papers DOI number (outputs "10.5860/choice.37-5129")
 The "doi:" prefix declares everything to the right of it to be a DOI.
 Again, you can [[doi:10.5860/choice.37-5129|give a pretty name too]] (outputs "give a pretty name too")
 
@@ -66,7 +66,7 @@ For everything else, there's URLs: [[https://raypeat.rodeo]] (outputs "https://r
 Anything beginning with "https://" or "http://" is valid.
 And it can be modified [[https://raypeat.rodeo|like any citation]] (outputs "like any citation")
 
-RP: Citations can be [[https://raypeat.rodeo|combined]] with speaker declarations (see start of line), no problemo.
+RP: Citations can be [[https://raypeat.rodeo|combined]] with speaker declarations (see start of line).
 ````
 
 ## Timecodes
