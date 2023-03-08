@@ -1,19 +1,18 @@
-# https://raypeat.rodeo
+[raypeat.rodeo](https://raypeat.rodeo) is the open-source effort to transcribe the public works of Ray Peat. The transcripts are stored in `./documents` as markdown files. `./main.go` compiles them into static HTML. Netlify hosts, continuously deploying from the `main` branch on GitHub. Once build and hosted, Ray Peat Rodeo has the following stand-out features:
 
-My effort to catalogue, compile, and transcribe the public works, speeches and interviews of Ray Peat.  
-[Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) if there's a Ray Peat interview I'm missing.
+- Full text search — of all transcripts (thanks to [Pagefind](https://pagefind.app/))
+- Citations — scientific papers, books, URLs and people all have direct links (see [Citations](#citations))
+- Index — side-wide lookup of all ``[[citations]]``
+- Timecodes — transcript paragraphs link directly to exact moments in YouTube videos and mp3 source material. (See [Timecodes](#timecodes))
+- Speakers — intelligent separation of paragraphs by who's speaking (see [Speakers](#speakers))
+- Insights — top citations; transcripts at-a-glance; orderd chronologically
 
-This repository represents a collection of markdown transcripts built using Golang.
-
-## Installation 
+# Installation & Usage
 
 ```
+# Installation
 go install
-```
 
-## Usage
-
-```
 # Builds to build folder
 ./build.sh
 
@@ -22,33 +21,72 @@ go install
 ./dev.sh
 ```
 
-## Interview Syntax
+# Contributing Transcripts
 
-Markdown files in `./src/documents/` have additional bespoke template tag shorthands for defining who's speaking, and identifying the people, books, and URLs mentioned by the speakers.
+Add a markdown file to `./documents` with the filename format `YYYY-MM-DD-SLUG.md`, for example `2023-03-08-my-example.md`. Ray Peat Rodeo has three custom markdown extensions that make transcribing easier, and let RPR understand the transcription. Namely [Speakers](#speakers), [Citations](#citations), and [Timecodes](#timecodes).
 
-- **Ray Peat** - All paragraphs, by default, are attributed to Ray Peat. See below to attribute a paragraph to another speaker.
-- **Interviewer** - Prefix a paragraph with `!MW ` to reference a speaker defined in `speakers.MW` in the frontmatter. For example: `!MW Good morning Ray`, with `speakers: { MW: Marcus Whybrow }` attributes that paragraph to `Marcus Whybrow`. Ommitting the speaker initials attributes a paragraph to most recently specified speaker above. If the frontmatter specifies one or zero speakers, all paragraphs prefixed with an `!` will be attributed to the single speaker defined, or (if zero speakers are defined) attributed to `Host`.
+## Speakers
 
-People, books, and URLs should be wrapped in double square brackes (`[[Text]]`) as below. Doing so feeds these links into Ray Peat Rodeo's site-wide index.
+Use a familiar format to define who's speaking. For example, a file called `./documents/2023-03-08-example.md` might contain...
 
-- *People* - Link to people by surrounding their full name with double square brackets `[[William Blake]]`.
-- *Books* - Link to books with the title and the primary author's full name ``[[Jerusalem -by- William Blake]]``. The `-by-` separator, and exactly one author is required. Display text (see below) defaults to Book title.
-- *URLs* - Link to external URLs ``[[https://www.youtube.com/watch?v=lDr71LHO0Jo]]``.
-- *DOIs* - Link to scientific papers by their DOI ``[[doi:10.5860/choice.37-5129]]`` The `doi:` prefix is required.
+````
+---
+speakers:
+  MW: Marcus Whybrow
+---
 
-All `[[Links]]` may optionally override the display text with the pipe sufffix `[[William Blake|a poet]]`. Hidden links (that produce no markup) are created with an empty display text string `[[William Blake|]]`. Missing links can be declared by omitting everything before the pipe `[[|text that will eventually link to something]]`.
+MW: Hello Ray how are you doing?
 
-- *Timecodes* - `[1:20:13]` or `[0:52]`. Surround a colon-separated timecode with single square brackets and Ray Peat Rodeo will generate links directly to that time using `source` URL from the frontmatter.
+RP: Very well, thankyou.
 
-## Style Guide
+Did you know that speaker declarations aren't needed on every line. Only when the speaker changs.
 
-- **Em Dashes** - Long dashses, or em dashes, (Windows ALT code 0151) when used for parenthesis contain no spaces `While I was shopping—wandering aimlessly up and down the aisles, actually—I ran into our old neighbor.
+MW: I see.
+````
 
-## How to Contribute
+`RP` is a reserved shortname that always expands to `Ray Peat`. Custom speakers are defined in the markdown frontmatter as shown. If you don't know the name of the speaker, the reserved shortname `H` that always expands to `Host`.
+
+## Citations
+
+Marking citations with double square brackets tells Ray Peat Rodeo to include them in the lookup index. And automatically provides the reader with a link pertenant to the citation type, as below.
+
+````
+Citing a person such as [[William Blake]] is done with double square brackets. (outputs "William Blake")
+[[William Blake|The text displayed]] can be modified whilst preserving the citation (outputs "The text displayed")
+
+Book citations use the from [[Jerusalem -by- William Blake]]. (outputs "Jerusalem")
+Everything to the right of "-by-" is consider the primary author's full name.
+You can [[Jerusalem -by- William Blake|modify]] book's display text too (outputs "modify")
+
+Many scientific papers have "DOI" number such as [[doi:10.5860/choice.37-5129]] (outputs "10.5860/choice.37-5129")
+The "doi:" prefix declares everything to the right of it to be a DOI.
+Again, you can [[doi:10.5860/choice.37-5129|give a pretty name too]] (outputs "give a pretty name too")
+
+For everything else, there's URLs: [[https://raypeat.rodeo]] (outputs "https://raypeat.rodeo")
+Anything beginning with "https://" or "http://" is valid.
+And it can be modified [[https://raypeat.rodeo|like any citation]] (outputs "like any citation")
+
+RP: Citations can be [[https://raypeat.rodeo|combined]] with speaker declarations (see start of line), no problemo.
+````
+
+## Timecodes
+
+Timecodes can be placed anywhere in a document who's source is a YouTube Video, or an mp3 file.
+
+````
+---
+source: https://www.youtube.com/watch?v=x6bxGBR1Sqs
+---
+
+[00:00:54] is a timecode.  (outputs a link to https://www.youtube.com/watch?v=x6bxGBR1Sqs#t=00h23m54s)
+[00:54] or, even [54], outpus the same thing.
+````
+
+# Master List of Ray Peat Interviews
 
 If you wish to contribute a transcription, I've compilled a list of every Ray Peat interview I'm aware of. Sections are ordered from easiest to the hardest in terms of the work required. I've checked [these sources](#sources).
 
-### Written Articles & Interviews Outside raypeat.com
+## Written Articles & Interviews Outside raypeat.com
 - [ ] [1975-??-?? A Biophysical Approach to Altered Consciousness](http://www.orthomolecular.org/library/jom/1975/pdf/1975-v04n03-p189.pdf)
 - [ ] [2010-01-03 A Physiological Approach to Ovarian Cancer](https://web.archive.org/web/20100103100715/http://www.encognitive.com/node/3675) (wayback machine date)
 - [ ] [1972-??-?? Age-related Oxidative Changes in the Hamster Uterus](https://www.toxinless.com/age-related-oxidative-changes-in-the-hamster-uterus.pdf)
@@ -81,7 +119,7 @@ If you wish to contribute a transcription, I've compilled a list of every Ray Pe
 - [ ] [2014-01-22 Negation](https://web.archive.org/web/20140302004453/http://www.visionandacceptance.com/negation)
 - [ ] [2005-09-19 Thyroid Information](https://web.archive.org/web/20050919235045/http://thyroid.about.com/library/weekly/aa110800c.htm) (wayback machine date)
 
-### Audio/Video With Existing Transcripts
+## Audio/Video With Existing Transcripts
 
 Ask Your Herb Doctor
 - [ ] [Cancer Treatment](https://www.toxinless.com/kmud-120217-cancer-treatment.mp3) ([partial transcript](https://www.toxinless.com/kmud-120217-cancer-treatment-partial-transcript.doc))
@@ -97,7 +135,7 @@ Politics & Science
 Voice of America (Sharon Kleyne)
 - [ ] [Water](https://www.youtube.com/watch?v=sQ8SZ7nrCJo) ([transcript](https://www.toxinless.com/voiceofamerica-140602-water-transcription.pdf), [mp3](https://www.toxinless.com/voiceofamerica-130909-water.mp3))
 
-### Audio/Video Interviews With (Autogenerated?) Captions
+## Audio/Video Interviews With (Autogenerated?) Captions
 
 Generaative Energy Podcast (Danny Roddy & Georgi Dinkov)
 - [ ] [2022-06-25 #85 Protein Restriction. Lidocaine for Hair Loss? Brain Size, Intelligence & Symptom Recognition.](https://www.youtube.com/watch?v=zZCgpw6_sRA)
@@ -232,7 +270,7 @@ Eluv
 - [ ] [2008-09-18 Good Fats](https://www.youtube.com/watch?v=Q97Bdov9V9w) ([mp3](https://www.toxinless.com/eluv-080918-fats.mp3))
 
 
-### Audio/Video Interviews Without Captions
+## Audio/Video Interviews Without Captions
 
 Source Nutritional Show
 - [ ] [2012-05-12 Brain and Tissue ll](https://www.youtube.com/watch?v=rL282hEbYfQ) ([mp3](https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-2.mp3))
@@ -384,7 +422,7 @@ KWAI 1080 AAM
 - [ ] [2012-05-05 Interview 1](https://www.functionalps.com/blog/wp-content/uploads/2019/01/Ray-Peat-5.5.12-edited-version.mp3)
 - [ ] [2012-05-12 Interview 2](https://www.functionalps.com/blog/wp-content/uploads/2019/01/Ray-Peat-5.12.12-edited-version.mp3)
 
-## Sources
+# Sources
 
 The above list incorporates (or will eventually) the following sources. [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues) to suggest more.
 
@@ -399,7 +437,7 @@ The above list incorporates (or will eventually) the following sources. [Open an
 - [ ] [Chadnet](https://wiki.chadnet.org/ray-peat)
 - [ ] [Ray Peat Interview Resources](https://github.com/Ray-Peat/interview/wiki)
 
-## Non-Pertenant Sources
+# Non-Pertenant Sources
 
 Currently focusing on audio/video and written interviews and guest articles. These source currently beyond the scope of this project. Subject to change.
 
