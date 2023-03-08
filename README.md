@@ -1,9 +1,9 @@
-[raypeat.rodeo](https://raypeat.rodeo) is the open-source effort to transcribe the public works of Ray Peat. The transcripts are stored in `./documents` as markdown files. `./main.go` compiles them into static HTML. Netlify hosts, continuously deploying from the `main` branch on GitHub. Once build and hosted, Ray Peat Rodeo has the following stand-out features:
+[raypeat.rodeo](https://raypeat.rodeo) is the open-source effort to transcribe the public works of Ray Peat. The transcripts are stored in `./documents` as markdown files. `./main.go` compiles them into static HTML. Netlify hosts, continuously deploying from the `main` branch on GitHub. Once built and hosted, Ray Peat Rodeo has the following stand-out features:
 
 - Full text search — of all transcripts (thanks to [Pagefind](https://pagefind.app/))
 - Citations — scientific papers, books, URLs and people all have direct links (see [Citations](#citations))
-- Index — side-wide lookup of all ``[[citations]]``
-- Timecodes — transcript paragraphs link directly to exact moments in YouTube videos and mp3 source material. (See [Timecodes](#timecodes))
+- Index — side-wide lookup of all [Citations](#citations)
+- Timecodes — Direct links to exact moments in YouTube videos and mp3 source material. (See [Timecodes](#timecodes))
 - Speakers — intelligent separation of paragraphs by who's speaking (see [Speakers](#speakers))
 - Insights — top citations; transcripts at-a-glance; orderd chronologically
 
@@ -13,17 +13,31 @@
 # Installation
 go install
 
-# Builds to build folder
+# Build to ./build
 ./build.sh
 
-# Builds to build folder and starts development server
-# Including auto-rebuild and hot-reloading
+# Same as ./build.sh, plus starts development server,
+# including auto-rebuild and hot-reloading
 ./dev.sh
 ```
 
 # Contributing Transcripts
 
-Add a markdown file to `./documents` with the filename format `YYYY-MM-DD-SLUG.md`, for example `2023-03-08-my-example.md`. Ray Peat Rodeo has three custom markdown extensions that make transcribing easier, and let RPR understand the transcription. Namely [Speakers](#speakers), [Citations](#citations), and [Timecodes](#timecodes).
+Add a markdown file to `./documents` with the filename format `YYYY-MM-DD-SLUG.md`, for example `2023-03-08-my-example.md`. The esssential frontmatter includes the following, where `series` is the name of the website, podcast, radio show, or indivual who is interviewing Ray. Ommit `transcription.source` if this transcription has not be published elsewhere.
+
+```
+---
+title: Thyroid Function
+source: https://www.youtube.com/watch?v=x6bxGBR1Sqs
+series: Gary Null
+transcription:
+  source: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
+  author: ilovethesea
+  date: 2014-07-25
+---
+```
+
+Ray Peat Rodeo has three custom markdown extensions that make transcribing easier, and let RPR understand the transcription. Namely [Speakers](#speakers), [Citations](#citations), and [Timecodes](#timecodes).
 
 ## Speakers
 
@@ -39,39 +53,40 @@ MW: Hello Ray how are you doing?
 
 RP: Very well, thankyou.
 
-Did you know that speaker declarations aren't needed on every line. Only when the speaker changs.
+Did you know that speaker declarations aren't needed on every line. Only when the speaker changes.
 
 MW: I see.
 ````
 
-`RP` is a reserved shortname that always expands to `Ray Peat`. Custom speakers are defined in the markdown frontmatter as shown. If you don't know the name of the speaker, the reserved shortname `H` that always expands to `Host`.
+`RP` is a reserved shortname that always expands to `Ray Peat`. Custom speakers are defined in the markdown frontmatter as shown. If you don't know the speaker's name, use the reserved shortname `H` that expands to `Host`. Or makeup your own speaker definitions.
 
 ## Citations
 
-Marking citations with double square brackets tells Ray Peat Rodeo to include them in the lookup index. And automatically provides the reader with a link pertenant to the citation type, as below.
+Marking citations with double square brackets tells Ray Peat Rodeo to include them in the lookup index. And automatically provides the reader with a link pertenant to the citation type.
 
 ````
 Citing a person such as [[William Blake]] is done with double square brackets. (outputs "William Blake")
 The text [[William Blake|displayed]] can be modified whilst preserving the citation (outputs "displayed")
 
 Book citations use the from [[Jerusalem -by- William Blake]]. (outputs "Jerusalem")
-Everything to the right of "-by-" is consider the primary author's full name.
-You can [[Jerusalem -by- William Blake|modify]] book's display text too (outputs "modify")
+Everything to the right of "-by-" is considered the primary author's full name.
+You can [[Jerusalem -by- William Blake|modify]] a book's display text too (outputs "modify")
 
-[[doi:10.5860/choice.37-5129]] cites a scientific papers DOI number (outputs "10.5860/choice.37-5129")
+[[doi:10.5860/choice.37-5129]] cites a scientific paper's DOI number (outputs "10.5860/choice.37-5129")
 The "doi:" prefix declares everything to the right of it to be a DOI.
 Again, you can [[doi:10.5860/choice.37-5129|give a pretty name too]] (outputs "give a pretty name too")
 
-For everything else, there's URLs: [[https://raypeat.rodeo]] (outputs "https://raypeat.rodeo")
+Link to URLs with [[https://raypeat.rodeo]] (outputs "https://raypeat.rodeo")
 Anything beginning with "https://" or "http://" is valid.
 And it can be modified [[https://raypeat.rodeo|like any citation]] (outputs "like any citation")
+If a link shouldn't appear in the lookup, index use regular markdown [link](https://google.com) syntax.
 
 RP: Citations can be [[https://raypeat.rodeo|combined]] with speaker declarations (see start of line).
 ````
 
 ## Timecodes
 
-Timecodes can be placed anywhere in a document who's source is a YouTube Video, or an mp3 file.
+Timecodes can be placed anywhere in a document who's source is a YouTube Video, or an mp3 file. Changes in the coversation are good places to specifiy a timecode.
 
 ````
 ---
