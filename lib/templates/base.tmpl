@@ -14,7 +14,7 @@
         {{block "contents" .}}{{end}}
         <footer>
             <p>
-                The copyright of each transcript is owed to the original transcriber, and those speaking. Ray Peat Rodeo is a completely static website build in Go, and hosted by Netlify, and was last updated {{.BuildDate.Format "Jan 2, 2006" }}. If you wish to contribute to the project visit <a href="{{.ProjectLink}}" target="_blank">GitHub</a>, or <a href="{{.ContactLink}}">get in touch</a>.
+                The copyright of each transcript is owed to the original transcriber, and those speaking. Ray Peat Rodeo is a completely static website build in Go, and hosted by Netlify, and was last updated {{.Global.BuildTime.Format "Jan 2, 2006" }}. If you wish to contribute to the project visit <a href="{{.Global.ProjectLink}}" target="_blank">GitHub</a>, or <a href="{{.Global.ContactLink}}">get in touch</a>.
             </p>
         </footer>
     </body>

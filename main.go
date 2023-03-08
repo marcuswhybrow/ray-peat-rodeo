@@ -1,22 +1,14 @@
 package main
 
 import (
-	"archive/tar"
-	"bufio"
 	"bytes"
-	"compress/gzip"
-	"errors"
 	"fmt"
-	"io"
 	"io/fs"
-	"log"
-	"net/http"
 	"os"
-	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
-	"strings"
+	"sort"
 	"sync"
 	"time"
 
@@ -27,6 +19,7 @@ import (
 	"github.com/marcuswhybrow/ray-peat-rodeo/lib/sidenotes"
 	"github.com/marcuswhybrow/ray-peat-rodeo/lib/speakers"
 	"github.com/marcuswhybrow/ray-peat-rodeo/lib/timecodes"
+	"github.com/marcuswhybrow/ray-peat-rodeo/lib/utils"
 	"github.com/mitchellh/mapstructure"
 	"github.com/otiai10/copy"
 	"github.com/yuin/goldmark"
@@ -34,57 +27,13 @@ import (
 	"github.com/yuin/goldmark/parser"
 )
 
-var BUILD_START = time.Now()
-
-func panicOnErr(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
-func returnOrPanic[A any](a A, err error) A {
-	panicOnErr(err)
-	return a
-}
-
-var buildPath = func(buildPath string) string {
-	panicOnErr(os.RemoveAll(buildPath))
-	return buildPath
-}("build")
-
-func writePage(filePath string, contents []byte) string {
-	outputPath := path.Join(buildPath, filePath)
-	{
-		panicOnErr(os.MkdirAll(filepath.Dir(outputPath), os.ModePerm))
-	}
-	{
-		file := returnOrPanic(os.Create(outputPath))
-		defer file.Close()
-		returnOrPanic(file.Write(contents))
-		fmt.Println(outputPath)
-	}
-	return outputPath
-}
-
-var templatesPath = "lib/templates"
-
-func templates(templatePaths ...string) *template.Template {
-	result := make([]string, len(templatePaths))
-	for i, templatePath := range templatePaths {
-		result[i] = path.Join(templatesPath, templatePath+".tmpl")
-	}
-	return returnOrPanic(template.ParseFiles(result...))
-}
-
-var markdown = goldmark.New(
-	goldmark.WithExtensions(
-		meta.New(meta.WithStoresInDocument()),
-		sidenotes.Sidenotes,
-		citations.Citations,
-		timecodes.Timecodes,
-		speakers.Speakers,
-	),
+const (
+	BUILD_DIR     = "build"
+	TEMPLATES_DIR = "lib/templates"
+	DOCUMENTS_DIR = "./documents"
 )
+
+var BUILD_START = time.Now()
 
 type DocumentFrontMatter struct {
 	Title          string
@@ -121,95 +70,24 @@ type Document struct {
 	ProjectLink string
 	Date        time.Time
 	Contents    template.HTML
-	BuildDate   time.Time
+	Global      GlobalData
 }
 
-const CONTACT_LINK = "/contact"
-const PROJECT_LINK = "https://github.com/marcuswhybrow/ray-peat-rodeo"
-const PROJECT_NAME = "Ray Peat Rodeo"
-const BIN_DIR = "./lib/bin"
-const DOCUMENTS_DIR = "./documents"
-
-var BIN_TARGZ_URLS = map[string]string{
-	"modd":     "https://github.com/cortesi/modd/releases/download/v0.8/modd-0.8-linux64.tgz",
-	"devd":     "https://github.com/cortesi/devd/releases/download/v0.9/devd-0.9-linux64.tgz",
-	"pagefind": "https://github.com/CloudCannon/pagefind/releases/download/v0.12.0/pagefind-v0.12.0-x86_64-unknown-linux-musl.tar.gz",
+type Citations struct {
+	Count         int
+	People        map[citations.Person][]Document
+	SciencePapers map[citations.SciencePaper][]Document
+	ExternalLinks map[citations.ExternalLink][]Document
+	Books         map[citations.Book][]Document
 }
 
-func downloadBinaryIfAbsent(binaryName string) bool {
-	fileName := path.Join(BIN_DIR, binaryName)
-	tarGzUrl := BIN_TARGZ_URLS[binaryName]
-	if tarGzUrl == "" {
-		panic(fmt.Sprintf("'%s' has no associated tar.gz download URL defined in BIN_TARGZ_URLS", binaryName))
-	}
-	if _, err := os.Stat(fileName); err == nil {
-		return false
-	} else if errors.Is(err, os.ErrNotExist) {
-		fmt.Printf("Binary %s not installed. Downloading from %s\n", binaryName, tarGzUrl)
-		resp := returnOrPanic(http.Get(tarGzUrl))
-		defer resp.Body.Close()
-		uncompressedStream := returnOrPanic(gzip.NewReader(resp.Body))
-		tarReader := tar.NewReader(uncompressedStream)
-		for true {
-			header, err := tarReader.Next()
-			if err == io.EOF {
-				break
-			}
-			panicOnErr(err)
-			if header.Typeflag == tar.TypeReg && path.Base(header.Name) == path.Base(fileName) {
-				panicOnErr(os.MkdirAll(path.Dir(fileName), 0755))
-				outFile := returnOrPanic(os.Create(fileName))
-				outFile.Chmod(755)
-				returnOrPanic(io.Copy(outFile, tarReader))
-				outFile.Close()
-				fmt.Printf("Binary %s installed to %s\n", binaryName, fileName)
-				return true
-			}
-		}
-		panic(fmt.Sprintf("%s could not be found in %s", fileName, tarGzUrl))
-	} else {
-		panic(err)
-	}
-}
-
-func downloadBinariesIfAbsentAndExecuteLast(commandsWithArgs ...string) {
-	{
-		var wg sync.WaitGroup
-		for _, commandWithArgs := range commandsWithArgs {
-			wg.Add(1)
-			command := strings.Split(commandWithArgs, " ")[0]
-			go func() {
-				defer wg.Done()
-				downloadBinaryIfAbsent(command)
-			}()
-		}
-		wg.Wait()
-	}
-	lastCommandWithArgs := commandsWithArgs[len(commandsWithArgs)-1]
-	lastCommand, lastCommandArgs := func() (string, []string) {
-		lastCommandParts := strings.Split(lastCommandWithArgs, " ")
-		return lastCommandParts[0], func() []string {
-			if len(lastCommandParts) > 1 {
-				return lastCommandParts[1:]
-			}
-			return []string{}
-		}()
-	}()
-	modd := exec.Command(path.Join(BIN_DIR, lastCommand), lastCommandArgs...)
-	stdout := returnOrPanic(modd.StdoutPipe())
-	var wg sync.WaitGroup
-	wg.Add(1)
-	scanner := bufio.NewScanner(stdout)
-	go func() {
-		for scanner.Scan() {
-			log.Print(scanner.Text())
-		}
-		wg.Done()
-	}()
-	fmt.Printf("./%s\n", lastCommandWithArgs)
-	panicOnErr(modd.Start())
-	wg.Wait()
-	panicOnErr(modd.Wait())
+type GlobalData struct {
+	Documents   []Document
+	Citations   Citations
+	ProjectLink string
+	ContactLink string
+	BuildTime   time.Time
+	ProjectName string
 }
 
 func main() {
@@ -217,13 +95,13 @@ func main() {
 		arg := os.Args[1]
 		switch arg {
 		case "dev":
-			downloadBinariesIfAbsentAndExecuteLast("pagefind", "devd", "modd")
+			utils.DownloadBinariesIfAbsentAndExecuteLast("pagefind", "devd", "modd")
 			os.Exit(1)
 		case "clean":
-			panicOnErr(os.RemoveAll(BIN_DIR))
-			fmt.Println("Removed " + BIN_DIR)
-			panicOnErr(os.RemoveAll(buildPath))
-			fmt.Println("Removed " + buildPath)
+			utils.RemoveBinaryDir()
+			fmt.Println("Removed " + utils.BINARY_DIR)
+			utils.PanicOnErr(os.RemoveAll(BUILD_DIR))
+			fmt.Println("Removed " + BUILD_DIR)
 			os.Exit(1)
 		case "build":
 			break
@@ -232,14 +110,24 @@ func main() {
 		}
 	}
 
-	fmt.Printf("Building %s to %s\n", PROJECT_NAME, buildPath)
+	fmt.Printf("Building to ./%s\n", BUILD_DIR)
+	utils.PanicOnErr(os.RemoveAll(BUILD_DIR))
 
-	documentsChannel := func() chan Document {
+	documents := func() []Document {
 		documentRegex := regexp.MustCompile(`(\d{4}-\d{2}-\d{2})-(.*).md`)
+		markdown := goldmark.New(
+			goldmark.WithExtensions(
+				meta.New(meta.WithStoresInDocument()),
+				sidenotes.Sidenotes,
+				citations.Citations,
+				timecodes.Timecodes,
+				speakers.Speakers,
+			),
+		)
 		markdownFiles := func() []string {
 			markdownFiles := []string{}
 			fs.WalkDir(os.DirFS(DOCUMENTS_DIR), ".", func(filePath string, d fs.DirEntry, err error) error {
-				panicOnErr(err)
+				utils.PanicOnErr(err)
 				if !d.IsDir() {
 					markdownFiles = append(markdownFiles, path.Join(DOCUMENTS_DIR, filePath))
 				}
@@ -247,17 +135,13 @@ func main() {
 			})
 			return markdownFiles
 		}()
-		documentsChannel := make(chan Document, len(markdownFiles))
 		var wg sync.WaitGroup
+		documentsChannel := make(chan Document, len(markdownFiles))
 		for _, filePath := range markdownFiles {
 			wg.Add(1)
 			go func(filePath string) {
 				defer wg.Done()
 				document := Document{}
-				document.InputPath = filePath
-				document.EditLink = "https://github.com/marcuswhybrow/ray-peat-rodeo/edit/main/" + document.InputPath
-				document.ContactLink = CONTACT_LINK
-				document.BuildDate = BUILD_START
 				outputFileName, date, slug := func() (string, time.Time, string) {
 					matches := documentRegex.FindStringSubmatch(path.Base(filePath))
 					if len(matches) < 2 {
@@ -265,141 +149,164 @@ func main() {
 					}
 					slug := slug.Make(matches[2])
 					date, err := time.Parse("2006-01-02", matches[1])
-					panicOnErr(err)
+					utils.PanicOnErr(err)
 					return slug + "/index.html", date, slug
 				}()
-				document.OutputPath = outputFileName
-				document.Slug = slug
-				document.Date = date
-				markdownInput := func() []byte {
-					preTemplate, readFileErr := os.ReadFile(filePath)
-					panicOnErr(readFileErr)
-					t, err := template.New("markdown").Parse(string(preTemplate))
-					panicOnErr(err)
-					var postTemplate bytes.Buffer
-					t.Execute(&postTemplate, document)
-					return postTemplate.Bytes()
-				}()
-				finalHtml := func() []byte {
-					documentHtml, documentContext := func() (string, parser.Context) {
-						var html bytes.Buffer
-						context := parser.NewContext()
-						markdownErr := markdown.Convert(markdownInput, &html, parser.WithContext(context))
-						panicOnErr(markdownErr)
-						return html.String(), context
-					}()
+				postMarkdownHtml, frontMatter, citations := func() (string, DocumentFrontMatter, citations.CitationsContext) {
+					var html bytes.Buffer
+					context := parser.NewContext()
+					rawMarkdown := utils.ReturnOrPanic(os.ReadFile(filePath))
+					utils.PanicOnErr(markdown.Convert(rawMarkdown, &html, parser.WithContext(context)))
 					frontMatter := func() DocumentFrontMatter {
 						data := func() map[string]interface{} {
-							if data := meta.Get(documentContext); data != nil {
+							if data := meta.Get(context); data != nil {
 								return data
 							}
 							return map[string]interface{}{}
 						}()
 						var frontMatter DocumentFrontMatter
 						err := mapstructure.Decode(data, &frontMatter)
-						panicOnErr(err)
+						utils.PanicOnErr(err)
 						return frontMatter
 					}()
-					document.Title = frontMatter.Title
-					document.Series = frontMatter.Series
-					document.Source.Url = frontMatter.Source
-					document.Speakers = func() []string {
-						values := make([]string, 0, len(frontMatter.Speakers))
-						for _, v := range frontMatter.Speakers {
-							values = append(values, v)
-						}
-						return values
-					}()
-					document.Transcription.Url = frontMatter.Transcription.Source
-					document.Transcription.Author = frontMatter.Transcription.Author
-					document.Transcription.Date = func() *time.Time {
-						if frontMatter.Transcription.Date == "" {
-							return nil
-						}
-						transcriptionDate, err := time.Parse("2006-01-02", frontMatter.Transcription.Date)
-						panicOnErr(err)
-						return &transcriptionDate
-					}()
-					document.Citations = citations.Get(documentContext)
-					document.Contents = template.HTML(documentHtml)
-					finalHtml := func() []byte {
-						var html bytes.Buffer
-						t := templates("base", "document")
-						panicOnErr(t.ExecuteTemplate(&html, "base", document))
-						return html.Bytes()
-					}()
-					return finalHtml
+					return html.String(), frontMatter, citations.Get(context)
 				}()
-				writePage(outputFileName, finalHtml)
+				document.InputPath = filePath
+				document.EditLink = "https://github.com/marcuswhybrow/ray-peat-rodeo/edit/main/" + document.InputPath
+				document.OutputPath = outputFileName
+				document.Slug = slug
+				document.Date = date
+				document.Title = frontMatter.Title
+				document.Series = frontMatter.Series
+				document.Source.Url = frontMatter.Source
+				document.Speakers = func() []string {
+					values := make([]string, 0, len(frontMatter.Speakers))
+					for _, v := range frontMatter.Speakers {
+						values = append(values, v)
+					}
+					return values
+				}()
+				document.Transcription.Url = frontMatter.Transcription.Source
+				document.Transcription.Author = frontMatter.Transcription.Author
+				document.Transcription.Date = func() *time.Time {
+					if frontMatter.Transcription.Date == "" {
+						return nil
+					}
+					transcriptionDate, err := time.Parse("2006-01-02", frontMatter.Transcription.Date)
+					utils.PanicOnErr(err)
+					return &transcriptionDate
+				}()
+				document.Citations = citations
+				document.Contents = func() template.HTML {
+					var postGoTemplateHtml bytes.Buffer
+					utils.ReturnOrPanic(template.New("markdown").Parse(string(postMarkdownHtml))).Execute(&postGoTemplateHtml, document)
+					return template.HTML(postGoTemplateHtml.String())
+				}()
 				documentsChannel <- document
 			}(filePath)
 		}
 		wg.Wait()
 		close(documentsChannel)
-		return documentsChannel
-	}()
-
-	type Citations struct {
-		Count         int
-		People        map[citations.Person][]Document
-		SciencePapers map[citations.SciencePaper][]Document
-		ExternalLinks map[citations.ExternalLink][]Document
-		Books         map[citations.Book][]Document
-	}
-
-	documents, totalCitations := func() ([]Document, Citations) {
-		c := Citations{
-			Count:         0,
-			People:        map[citations.Person][]Document{},
-			SciencePapers: map[citations.SciencePaper][]Document{},
-			ExternalLinks: map[citations.ExternalLink][]Document{},
-			Books:         map[citations.Book][]Document{},
-		}
-
 		documents := []Document{}
-
 		for document := range documentsChannel {
 			documents = append(documents, document)
-			for _, book := range document.Citations.Books {
-				c.Books[book] = append(c.Books[book], document)
-				c.Count += 1
-			}
-			for _, person := range document.Citations.People {
-				c.People[person] = append(c.People[person], document)
-				c.Count += 1
-			}
-			for _, sciencePaper := range document.Citations.SciencePapers {
-				c.SciencePapers[sciencePaper] = append(c.SciencePapers[sciencePaper], document)
-				c.Count += 1
-			}
-			for _, externalLink := range document.Citations.ExternalLinks {
-				c.ExternalLinks[externalLink] = append(c.ExternalLinks[externalLink], document)
-				c.Count += 1
-			}
 		}
-		return documents, c
+		sort.Slice(documents, func(i, j int) bool {
+			return documents[i].Date.After(documents[j].Date)
+		})
+		return documents
 	}()
 
-	writePageFromTemplate := func(pageOutpuPath, pageTemplateName string) string {
-		return writePage(pageOutpuPath, func() []byte {
-			t := templates("base", pageTemplateName)
-			var html bytes.Buffer
-			panicOnErr(t.ExecuteTemplate(&html, "base", map[string]interface{}{
-				"documents":   documents,
-				"citations":   totalCitations,
-				"ProjectLink": PROJECT_LINK,
-				"ContactLink": CONTACT_LINK,
-				"BuildDate":   BUILD_START,
-			}))
-			return html.Bytes()
-		}())
+	globalData := GlobalData{
+		Documents: documents,
+		Citations: func() Citations {
+			c := Citations{
+				Count:         0,
+				People:        map[citations.Person][]Document{},
+				SciencePapers: map[citations.SciencePaper][]Document{},
+				ExternalLinks: map[citations.ExternalLink][]Document{},
+				Books:         map[citations.Book][]Document{},
+			}
+			for _, document := range documents {
+				for _, book := range document.Citations.Books {
+					c.Books[book] = append(c.Books[book], document)
+					c.Count += 1
+				}
+				for _, person := range document.Citations.People {
+					c.People[person] = append(c.People[person], document)
+					c.Count += 1
+				}
+				for _, sciencePaper := range document.Citations.SciencePapers {
+					c.SciencePapers[sciencePaper] = append(c.SciencePapers[sciencePaper], document)
+					c.Count += 1
+				}
+				for _, externalLink := range document.Citations.ExternalLinks {
+					c.ExternalLinks[externalLink] = append(c.ExternalLinks[externalLink], document)
+					c.Count += 1
+				}
+			}
+			return c
+		}(),
+		ProjectLink: "https://github.com/marcuswhybrow/ray-peat-rodeo",
+		ContactLink: "/contact",
+		BuildTime:   BUILD_START,
+		ProjectName: "Ray Peat Rodeo",
 	}
 
-	writePageFromTemplate("index.html", "home")
-	writePageFromTemplate("contact/index.html", "contact")
-	panicOnErr(copy.Copy("lib/assets", path.Join(buildPath, "assets")))
-	fmt.Printf("Pages built in %s\n", time.Since(BUILD_START))
+	type Page struct {
+		outputPath string
+		data       any
+		template   string
+	}
 
-	downloadBinariesIfAbsentAndExecuteLast("pagefind --source " + buildPath)
-	fmt.Printf("Build completed in %s\n", time.Since(BUILD_START))
+	pageData := struct{ Global GlobalData }{Global: globalData}
+	pages := []Page{
+		{
+			outputPath: "index.html",
+			data:       pageData,
+			template:   "home.tmpl",
+		},
+		{
+			outputPath: "contact/index.html",
+			data:       pageData,
+			template:   "contact.tmpl",
+		},
+	}
+	for _, document := range documents {
+		document.Global = globalData
+		pages = append(pages, Page{
+			outputPath: document.OutputPath,
+			data:       document,
+			template:   "document.tmpl",
+		})
+	}
+
+	var wg sync.WaitGroup
+	for _, page := range pages {
+		wg.Add(1)
+		go func(page Page) {
+			defer wg.Done()
+			templatePath := path.Join(TEMPLATES_DIR, page.template)
+			outputPath := func() string {
+				outputPath := path.Join(BUILD_DIR, page.outputPath)
+				utils.PanicOnErr(os.MkdirAll(filepath.Dir(outputPath), os.ModePerm))
+				return outputPath
+			}()
+			outputFile := utils.ReturnOrPanic(os.Create(outputPath))
+			defer outputFile.Close()
+			utils.ReturnOrPanic(outputFile.WriteString(func() string {
+				templates := utils.ReturnOrPanic(template.ParseFiles("lib/templates/base.tmpl", templatePath))
+				var html bytes.Buffer
+				utils.PanicOnErr(templates.ExecuteTemplate(&html, "base", page.data))
+				return html.String()
+			}()))
+			fmt.Println(outputPath)
+		}(page)
+	}
+	wg.Wait()
+
+	utils.PanicOnErr(copy.Copy("lib/assets", path.Join(BUILD_DIR, "assets")))
+	fmt.Println(time.Since(BUILD_START))
+	utils.DownloadBinariesIfAbsentAndExecuteLast("pagefind --source " + BUILD_DIR)
+	fmt.Println(time.Since(BUILD_START))
 }

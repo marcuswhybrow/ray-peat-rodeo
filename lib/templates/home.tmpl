@@ -22,7 +22,7 @@
         <section>
             <h2>Documents</h2>
             <span class="sidenote sidenote-standalone">
-                Roll up to a round up of transcirpts! Welcome to Ray Peat Rodeo, the <a href="{{.ProjectLink}}" target="_blank">open-source</a> project cataloging the public interviews of Dr. Raymond Peat.
+                Roll up to a round up of transcirpts! Welcome to Ray Peat Rodeo, the <a href="{{.Global.ProjectLink}}" target="_blank">open-source</a> project cataloging the public interviews of Dr. Raymond Peat.
                 <br />
                 <br />
                 The blue, green, purple, and black links summarise each documents mentioned people, books, scientific papers, and external links, respectively.
@@ -33,7 +33,7 @@
                 <br />
                 <b id="roadmap">Roadmap</b>, to add a couple new transcirpts per week. Add section markers for transcripts that don't use timestamps. Improve citation links below to scroll linked document automatically to first occurance. Improve scientific papers below to show article titles. Improve external links below to show page titles.
             </span>
-            <div id="documents">{{range .documents}}
+            <div id="documents">{{range .Global.Documents}}
                 <div class="document">
                     <span class="document-date">{{ .Date.Format "2006-01-02" }}</span><a class="document-title" href="{{.Slug}}">{{.Title}}</a>
                     {{range $citationKey, $person := .Citations.People}}
@@ -56,13 +56,13 @@
         <section>
             <h2>People</h2>
             <span class="sidenote sidenote-standalone">
-                There are {{.citations.Count}} total citations for the {{len .documents}} documents cateloged, including {{len .citations.People}} people.
+                There are {{.Global.Citations.Count}} total citations for the {{len .Global.Documents}} documents cateloged, including {{len .Global.Citations.People}} people.
                 <br/>
                 <br/>
                 Perhaps contentiously, people links search Library Genesis, a large repository of pirated books. Support the author's you can. Linking to LibGen is not necessarily an endorcement.
             </span>
             <div id="people">
-                <ul>{{ range $person, $documents := .citations.People}}
+                <ul>{{ range $person, $documents := .Global.Citations.People}}
                     <li>
                         <a class="citation person" href="{{$person.Citation.ExternalLink}}" target="_blank">{{$person.Citation.CitationKey}}</a> <sup>x{{len $documents}}</sup>
                         {{range $documents}}
@@ -75,13 +75,13 @@
         <section>
             <h2>Books</h2>
             <span class="sidenote sidenote-standalone">
-                {{len .citations.Books}} books, ordered by the authors last name.
+                {{len .Global.Citations.Books}} books, ordered by the authors last name.
                 <!-- <br/>
                 <br/> -->
                 As above, book links search Library Genesis.
             </span>
             <div id="books">
-                <ul>{{ range $book, $documents := .citations.Books}}
+                <ul>{{ range $book, $documents := .Global.Citations.Books}}
                     <li>
                         {{$book.PrimaryAuthor.CitationKey}}. <a class="citation book" href="{{$book.Citation.ExternalLink}}" target="_blank">{{$book.Title}}</a> — {{len $documents}}
                         {{range $documents}}
@@ -94,10 +94,10 @@
         <section>
             <h2>External Links</h2>
             <span class="sidenote sidenote-standalone">
-                {{len .citations.ExternalLinks}} mentions of other websites.
+                {{len .Global.Citations.ExternalLinks}} mentions of other websites.
             </span>
             <div id="external-links">
-                <ul>{{ range $externalLink, $documents := .citations.ExternalLinks}}
+                <ul>{{ range $externalLink, $documents := .Global.Citations.ExternalLinks}}
                     <li>
                         <a class="citation external-link" href="{{$externalLink.Citation.ExternalLink}}" target="_blank">{{$externalLink.Citation.ExternalLink}}</a> — {{len $documents}}
                         {{range $documents}}
@@ -110,7 +110,7 @@
         <section>
             <h3>Scientific Papers</h3>
             <span class="sidenote sidenote-standalone">
-                {{len .citations.SciencePapers}} scientific papers linked directly to Sci-Hub PDFs.
+                {{len .Global.Citations.SciencePapers}} scientific papers linked directly to Sci-Hub PDFs.
                 <br/>
                 <br/>
                 Sci-Hub is a repository of pirated scientific papers. As with Library Genesis, linking to Sci-Hub is not necessarily an endorsment. Pay for the content you can afford.
@@ -119,7 +119,7 @@
                 If Sci-Hub is blocked in your country, a <a href="https://protonvpn.com/" target="_blank">free VPN</a> can sort you out. 
             </span>
             <div id="science-papers">
-                <ul>{{ range $sciencePaper, $documents := .citations.SciencePapers}}
+                <ul>{{ range $sciencePaper, $documents := .Global.Citations.SciencePapers}}
                     <li>
                         <a class="citation science-paper" href="{{$sciencePaper.Citation.ExternalLink}}" target="_blank">{{$sciencePaper.Doi}}</a> — {{len $documents}}
                         {{range $documents}}
