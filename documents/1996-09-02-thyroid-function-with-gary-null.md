@@ -3,7 +3,6 @@ title: Thyroid Function
 series: Gary Null
 speakers:
   GN: Gary Null
-date: 1996-09-02
 source: https://www.youtube.com/watch?v=x6bxGBR1Sqs
 sourceDuration: 58:30
 transcription:
