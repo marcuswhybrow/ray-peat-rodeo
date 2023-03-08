@@ -64,7 +64,7 @@ type Document struct {
 		Date   *time.Time
 		Author string
 	}
-	Citations   citations.CitationsContext
+	Citations   citations.AggregatedCitations
 	EditLink    string
 	ContactLink string
 	ProjectLink string
@@ -152,7 +152,7 @@ func main() {
 					utils.PanicOnErr(err)
 					return slug + "/index.html", date, slug
 				}()
-				postMarkdownHtml, frontMatter, citations := func() (string, DocumentFrontMatter, citations.CitationsContext) {
+				postMarkdownHtml, frontMatter, citations := func() (string, DocumentFrontMatter, citations.AggregatedCitations) {
 					var html bytes.Buffer
 					context := parser.NewContext()
 					rawMarkdown := utils.ReturnOrPanic(os.ReadFile(filePath))

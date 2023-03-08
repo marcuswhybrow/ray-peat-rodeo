@@ -70,11 +70,11 @@ Book citations use the from [[Jerusalem -by- William Blake]]. (outputs "Jerusale
 Everything to the right of "-by-" is considered the primary author's full name.
 You can [[Jerusalem -by- William Blake|modify]] a book's display text too (outputs "modify")
 
-[[doi:10.5860/choice.37-5129]] cites a scientific paper's DOI number (outputs "10.5860/choice.37-5129")
+[[doi:10.5860/choice.37-5129]] cites a scientific paper's DOI number (outputs full title of paper)
 The "doi:" prefix declares everything to the right of it to be a DOI.
 Again, you can [[doi:10.5860/choice.37-5129|give a pretty name too]] (outputs "give a pretty name too")
 
-Link to URLs with [[https://raypeat.rodeo]] (outputs "https://raypeat.rodeo")
+Link to URLs with [[https://raypeat.rodeo]] (outputs full title of web page)
 Anything beginning with "https://" or "http://" is valid.
 And it can be modified [[https://raypeat.rodeo|like any citation]] (outputs "like any citation")
 If a link shouldn't appear in the lookup, index use regular markdown [link](https://google.com) syntax.

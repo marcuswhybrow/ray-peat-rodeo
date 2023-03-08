@@ -99,7 +99,7 @@
             <div id="external-links">
                 <ul>{{ range $externalLink, $documents := .Global.Citations.ExternalLinks}}
                     <li>
-                        <a class="citation external-link" href="{{$externalLink.Citation.ExternalLink}}" target="_blank">{{$externalLink.Citation.ExternalLink}}</a> — {{len $documents}}
+                        <a class="citation external-link" href="{{$externalLink.Citation.ExternalLink}}" target="_blank">{{$externalLink.Title}}</a> — {{len $documents}}
                         {{range $documents}}
                             <a href="{{.Slug}}">{{.Title}}</a>
                         {{end}}
@@ -121,7 +121,7 @@
             <div id="science-papers">
                 <ul>{{ range $sciencePaper, $documents := .Global.Citations.SciencePapers}}
                     <li>
-                        <a class="citation science-paper" href="{{$sciencePaper.Citation.ExternalLink}}" target="_blank">{{$sciencePaper.Doi}}</a> — {{len $documents}}
+                        <a class="citation science-paper" href="{{$sciencePaper.Citation.ExternalLink}}" target="_blank">{{$sciencePaper.Title}}</a> — {{len $documents}}
                         {{range $documents}}
                             <a href="{{.Slug}}">{{.Title}}</a>
                         {{end}}

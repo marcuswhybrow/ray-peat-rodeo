@@ -194,10 +194,10 @@ func New() goldmark.Extender {
 }
 
 func (e *timecodes) Extend(m goldmark.Markdown) {
-	m.Parser().AddOptions(parser.WithInlineParsers(
-		util.Prioritized(NewParser(), 100),
-	))
-	m.Renderer().AddOptions(renderer.WithNodeRenderers(
-		util.Prioritized(NewTimecodeHTMLRenderer(), 100),
-	))
+	m.Parser().AddOptions(
+		parser.WithInlineParsers(util.Prioritized(NewParser(), 100)),
+	)
+	m.Renderer().AddOptions(
+		renderer.WithNodeRenderers(util.Prioritized(NewTimecodeHTMLRenderer(), 100)),
+	)
 }
