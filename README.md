@@ -10,16 +10,14 @@
 # Installation & Usage
 
 ```
-# Installation
-go install
-
-# Build to ./build
-./build.sh
-
-# Same as ./build.sh, plus starts development server,
-# including auto-rebuild and hot-reloading
-./dev.sh
+go install             # Installs dependencies
+go run main.go build   # Builds website to ./build
+go run main.go dev     # Auto-builds to ./build on sourcecode changes
+                       # and launches dev server with hot-reloading
+go run main.go clean   # Deletes ./build and other ./lib/bin (see below)
 ```
+
+[Pagefind](https://pagefind.app/), [Modd](https://github.com/cortesi/modd), and [Devd](https://github.com/cortesi/devd) are external binaries used to build the project or run the dev server. The first time you run `go run main.go build`, or `go run main.go dev`, the relevent binaries will be downloaded to `./lib/bin` and remain there for future use. `go run main.go clean` removes this directory.
 
 # Contributing Transcripts
 
