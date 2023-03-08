@@ -93,7 +93,7 @@ Timecodes can be placed anywhere in a document who's source is a YouTube Video, 
 source: https://www.youtube.com/watch?v=x6bxGBR1Sqs
 ---
 
-[00:00:54] is a timecode.  (outputs a link to https://www.youtube.com/watch?v=x6bxGBR1Sqs#t=00h23m54s)
+[00:00:54] is a timecode.  (outputs a link to https://www.youtube.com/watch?v=x6bxGBR1Sqs#t=00h00m54s)
 [00:54] or, even [54], outpus the same thing.
 ````
 
