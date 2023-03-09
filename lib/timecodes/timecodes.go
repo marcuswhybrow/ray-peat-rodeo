@@ -143,10 +143,8 @@ func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, n
 			hostname := sourceUrl.Hostname()
 			if strings.Contains(hostname, "youtube.com") || strings.Contains(hostname, "youtu.be") {
 				sourceUrl.Fragment = fmt.Sprintf("t=%02dh%02dm%02ds", timecode.hours, timecode.minutes, timecode.seconds)
-			} else if strings.HasSuffix(sourceUrl.Path, "mp3") {
-				sourceUrl.Fragment = fmt.Sprintf("t=%02d:%02d:%02d", timecode.hours, timecode.minutes, timecode.seconds)
 			} else {
-				panic(fmt.Sprintf("Invalid timecode 'source'  defined in frontmatter: %s", sourceUrl.String()))
+				sourceUrl.Fragment = fmt.Sprintf("t=%02d:%02d:%02d", timecode.hours, timecode.minutes, timecode.seconds)
 			}
 			return sourceUrl.String()
 		}()
