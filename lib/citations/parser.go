@@ -340,7 +340,7 @@ func (w *citationsParser) Parse(parent ast.Node, block text.Reader, pc parser.Co
 			}
 
 			return map[string]string{
-				"class": "citation book",
+				"class": "citation person",
 				"href":  externalLink,
 				"text":  displayText(nil),
 			}
