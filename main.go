@@ -4,16 +4,22 @@ import (
 	"bytes"
 	"fmt"
 	"io/fs"
+	"net/url"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"regexp"
+	"runtime"
 	"sort"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
 	"html/template"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/gosimple/slug"
 	"github.com/marcuswhybrow/ray-peat-rodeo/lib/citations"
 	"github.com/marcuswhybrow/ray-peat-rodeo/lib/sidenotes"
@@ -90,6 +96,32 @@ type GlobalData struct {
 	ProjectName string
 }
 
+func getFilePathsInDir(directory string) []string {
+	filePaths := []string{}
+	fs.WalkDir(os.DirFS(directory), ".", func(filePath string, d fs.DirEntry, err error) error {
+		utils.PanicOnErr(err)
+		if !d.IsDir() {
+			filePaths = append(filePaths, path.Join(directory, filePath))
+		}
+		return nil
+	})
+	return filePaths
+}
+
+func parseMarkdownAndGetContext(filePath string, gm goldmark.Markdown) (string, parser.Context) {
+	var html bytes.Buffer
+	context := parser.NewContext()
+	rawMarkdown := utils.ReturnOrPanic(os.ReadFile(filePath))
+	utils.PanicOnErr(gm.Convert(rawMarkdown, &html, parser.WithContext(context)))
+	return html.String(), context
+}
+
+func decodeFrontmatter(context parser.Context) DocumentFrontMatter {
+	var frontMatter DocumentFrontMatter
+	utils.PanicOnErr(mapstructure.Decode(meta.Get(context), &frontMatter))
+	return frontMatter
+}
+
 func main() {
 	if len(os.Args) >= 2 {
 		arg := os.Args[1]
@@ -105,6 +137,114 @@ func main() {
 			os.Exit(1)
 		case "build":
 			break
+		case "check":
+			const RPF_URL = "https://raypeatforum.com"
+			RPF_AUDIO_INTERVIEW_TRANSCRIPTS_URL := utils.ReturnOrPanic(url.JoinPath(RPF_URL, "/community/forums/audio-interview-transcripts.73"))
+
+			fmt.Println("Scraping ", RPF_AUDIO_INTERVIEW_TRANSCRIPTS_URL, "to determine the number of pages in this forum category...")
+
+			pageOne := utils.ReturnOrPanic(goquery.NewDocument(RPF_AUDIO_INTERVIEW_TRANSCRIPTS_URL))
+			totalPages := utils.ReturnOrPanic(strconv.Atoi(pageOne.Find(".pageNav-main .pageNav-page a").Last().Text()))
+
+			fmt.Println(totalPages, " pages found. Scraping all thread details...")
+
+			forumThreadPages := make(chan goquery.Document, totalPages)
+			forumThreadPages <- *pageOne
+
+			for n := 2; n <= totalPages; n++ {
+				rpfUrl := utils.ReturnOrPanic(url.JoinPath(RPF_AUDIO_INTERVIEW_TRANSCRIPTS_URL, fmt.Sprint("page-", n)))
+				go func() {
+					forumThreadPages <- *utils.ReturnOrPanic(goquery.NewDocument(rpfUrl))
+				}()
+			}
+
+			transcriptionSourcesOnRayPeatRodeo := func() map[string]bool {
+				sources := map[string]bool{}
+				gm := goldmark.New(
+					goldmark.WithExtensions(
+						meta.New(meta.WithStoresInDocument()),
+					),
+				)
+				filePaths := getFilePathsInDir(DOCUMENTS_DIR)
+				for _, filePath := range filePaths {
+					_, context := parseMarkdownAndGetContext(filePath, gm)
+					frontMatter := decodeFrontmatter(context)
+					sources[frontMatter.Transcription.Source] = true
+				}
+				return sources
+			}()
+
+			type ForumThread struct {
+				Title              string
+				Url                string
+				StartDate          time.Time
+				IsFoundInDocuments bool
+			}
+
+			forumThreads := []ForumThread{}
+			numberOnRayPeatRodeo := 0
+			var oldestThreadNotInDocuments *ForumThread = nil
+			for i := 0; i < totalPages; i++ {
+				(<-forumThreadPages).Find(".structItem-cell.structItem-cell--main").Each(func(i int, s *goquery.Selection) {
+					titleElem := s.Find(".structItem-title a")
+					threadPath := titleElem.AttrOr("href", "")
+					startDateStr, _ := s.Find(".structItem-startDate a time").Attr("datetime")
+					threadUrl := utils.ReturnOrPanic(url.JoinPath(RPF_URL, threadPath))
+					isFoundInDocuments := transcriptionSourcesOnRayPeatRodeo[threadUrl]
+					startDate := utils.ReturnOrPanic(time.Parse("2006-01-02T15:04:05", startDateStr[:19]))
+					forumThread := ForumThread{
+						Title:              titleElem.Text(),
+						Url:                threadUrl,
+						StartDate:          startDate,
+						IsFoundInDocuments: isFoundInDocuments,
+					}
+					forumThreads = append(forumThreads, forumThread)
+					if isFoundInDocuments {
+						numberOnRayPeatRodeo++
+					} else if oldestThreadNotInDocuments == nil || oldestThreadNotInDocuments.StartDate.After(startDate) {
+						oldestThreadNotInDocuments = &forumThread
+					}
+				})
+			}
+
+			sort.Slice(forumThreads, func(i, j int) bool {
+				return forumThreads[i].StartDate.After(forumThreads[j].StartDate)
+			})
+
+			fmt.Println()
+
+			for _, forumThread := range forumThreads {
+				if forumThread.IsFoundInDocuments {
+					fmt.Print("[x] ")
+				} else {
+					fmt.Print("[ ] ")
+				}
+				fmt.Println(forumThread.Title, "(", forumThread.StartDate.Format("2006-01-02"), ")")
+				fmt.Println("   ", forumThread.Url+"\n")
+			}
+
+			percent := fmt.Sprintf("%00d", (numberOnRayPeatRodeo/len(forumThreads))*100)
+
+			fmt.Println("Success! Found", len(forumThreads), "forum threads, the number found in", DOCUMENTS_DIR, "was", numberOnRayPeatRodeo, "("+percent+"%)")
+			if oldestThreadNotInDocuments != nil {
+				fmt.Print("Open oldest thread not in ", DOCUMENTS_DIR, " in your web browser? [Y/n]: ")
+				var answer string
+				fmt.Scanln(&answer)
+				answer = strings.ToLower(answer)
+				if answer == "y" || answer == "" {
+					switch runtime.GOOS {
+					case "linux":
+						utils.PanicOnErr(exec.Command("xdg-open", oldestThreadNotInDocuments.Url).Start())
+					case "windows":
+						utils.PanicOnErr(exec.Command("rundll32", "url.dll,FileProtocolHandler", oldestThreadNotInDocuments.Url).Start())
+					case "darwin":
+						utils.PanicOnErr(exec.Command("open", oldestThreadNotInDocuments.Url).Start())
+					default:
+						panic("unsupported platform")
+					}
+				}
+			}
+			os.Exit(1)
 		default:
 			panic(fmt.Sprintf("Unrecognised argument '%s' options are 'build', 'dev', or'clean'", arg))
 		}
@@ -124,17 +264,7 @@ func main() {
 				speakers.Speakers,
 			),
 		)
-		markdownFiles := func() []string {
-			markdownFiles := []string{}
-			fs.WalkDir(os.DirFS(DOCUMENTS_DIR), ".", func(filePath string, d fs.DirEntry, err error) error {
-				utils.PanicOnErr(err)
-				if !d.IsDir() {
-					markdownFiles = append(markdownFiles, path.Join(DOCUMENTS_DIR, filePath))
-				}
-				return nil
-			})
-			return markdownFiles
-		}()
+		markdownFiles := getFilePathsInDir(DOCUMENTS_DIR)
 		var wg sync.WaitGroup
 		documentsChannel := make(chan Document, len(markdownFiles))
 		for _, filePath := range markdownFiles {
@@ -152,25 +282,9 @@ func main() {
 					utils.PanicOnErr(err)
 					return slug + "/index.html", date, slug
 				}()
-				postMarkdownHtml, frontMatter, citations := func() (string, DocumentFrontMatter, citations.AggregatedCitations) {
-					var html bytes.Buffer
-					context := parser.NewContext()
-					rawMarkdown := utils.ReturnOrPanic(os.ReadFile(filePath))
-					utils.PanicOnErr(markdown.Convert(rawMarkdown, &html, parser.WithContext(context)))
-					frontMatter := func() DocumentFrontMatter {
-						data := func() map[string]interface{} {
-							if data := meta.Get(context); data != nil {
-								return data
-							}
-							return map[string]interface{}{}
-						}()
-						var frontMatter DocumentFrontMatter
-						err := mapstructure.Decode(data, &frontMatter)
-						utils.PanicOnErr(err)
-						return frontMatter
-					}()
-					return html.String(), frontMatter, citations.Get(context)
-				}()
+				postMarkdownHtml, context := parseMarkdownAndGetContext(filePath, markdown)
+				frontMatter := decodeFrontmatter(context)
+				citations := citations.Get(context)
 				document.InputPath = filePath
 				document.EditLink = "https://github.com/marcuswhybrow/ray-peat-rodeo/edit/main/" + document.InputPath
 				document.OutputPath = outputFileName
