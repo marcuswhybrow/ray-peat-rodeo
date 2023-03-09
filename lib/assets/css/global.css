@@ -81,6 +81,7 @@ input.sidenote-toggle {
 }
 .sidenote img {
     width: 100%;
+    margin: 10px 0;
 }
 
 .timecode {
@@ -129,13 +130,13 @@ sub {
 }
 
 .speaker {
-    margin-top: 40px;
+    margin-top: 20px;
 }
 .speaker .speaker-name {
     font-size: 0.8em;
     opacity: 0.6;
     position: relative;
-    top: 10px;
+    top: 15px;
 }
 
 .citation {
