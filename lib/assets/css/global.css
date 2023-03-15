@@ -86,11 +86,10 @@ input.sidenote-toggle {
 
 .timecode {
     font-size: 0.8em;
-    float: left;
-    clear: left;
     margin-left: -10%;
-    position: relative;
-    transition: all .2s;
+    position: absolute;
+    right: 103%;
+    transition: opacity .2s;
 }
 .timecode a.external {
     text-decoration: none;
@@ -131,6 +130,7 @@ sub {
 
 .speaker {
     margin-top: 20px;
+    position: relative;
 }
 .speaker .speaker-name {
     font-size: 0.8em;
@@ -176,7 +176,7 @@ blockquote > * {
     font-family: "Courier New";
 }
 #documents .document a.document-title {
-    text-decoration: underlline;
+    text-decoration: underline;
     color: #e16800;
     font-weight: bold;
 
@@ -276,10 +276,11 @@ blockquote > * {
         font-family: "Courier New";
     }
     .timecode {
-        float: none;
-        clear: nonee;
+        position: relative;
+        right: 0;
         margin-left: 0;
         top: 0;
+        margin-right: 3px;
     }
     .timecode a.internal {
         top: -10px;
