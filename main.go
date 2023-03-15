@@ -30,6 +30,7 @@ import (
 	"github.com/otiai10/copy"
 	"github.com/yuin/goldmark"
 	meta "github.com/yuin/goldmark-meta"
+	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
 )
 
@@ -257,6 +258,7 @@ func main() {
 		documentRegex := regexp.MustCompile(`(\d{4}-\d{2}-\d{2})-(.*).md`)
 		markdown := goldmark.New(
 			goldmark.WithExtensions(
+				extension.Typographer,
 				meta.New(meta.WithStoresInDocument()),
 				sidenotes.Sidenotes,
 				citations.Citations,
