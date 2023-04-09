@@ -2,7 +2,7 @@
   description = "Markdown transcripts of Ray Peat interviews. Built to html with Golang.";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -10,7 +10,7 @@
     pkgs = import nixpkgs { inherit system; };
     inherit (builtins) fetchTarball;
 
-    pagefind = { stdenv, lib, extended ? false }: stdenv.mkDerivation rec {
+    pagefind = pkgs.callPackage ({ stdenv, lib, extended ? false }: stdenv.mkDerivation rec {
       pname = "pagefind";
       version = "0.12.0";
       src = ./.;
@@ -51,24 +51,44 @@
         mkdir -p $out/bin;
         cp ${binary} $out/bin/pagefind
       '';
-    };
+    }) {};
 
     # https://nixos.wiki/wiki/Development_environment_with_nix-shell
-    rayPeatRodeo = { buildGoModule, pkgs }: buildGoModule {
-      pname = "ray-peat-rodeo";
+    rayPeatRodeoBuildTool = pkgs.callPackage ({ buildGoModule, pkgs }: buildGoModule {
+      pname = "ray-peat-rodeo-build-tool";
       version = "unstable";
       src = ./.;
       vendorHash = "sha256-kaPEqLnKSwNfyQ4quDbqoccaq3y2INezxAZOY/BFj30=";
+    }) {};
+
+    rayPeatRodeo = pkgs.callPackage ({ stdenv, pkgs }: stdenv.mkDerivation {
+      pname = "ray-peat-rodeo";
+      version = "unstable";
+      src = ./.;
 
       nativeBuildInputs = with pkgs; [
+        go
         modd
         devd
-        (pkgs.callPackage pagefind {})
+        rayPeatRodeoBuildTool
+        pagefind
       ];
-    };
+
+      buildPhase = ''
+        ${rayPeatRodeoBuildTool}/bin/ray-peat-rodeo build
+        ${pagefind}/bin/pagefind --source ./build
+      '';
+
+      installPhase = ''
+        mkdir $out;
+        cp -r ./build/* $out
+      '';
+    }) {};
+
+
   in {
     packages = rec {
-      ray-peat-rodeo = pkgs.callPackage rayPeatRodeo {};
+      ray-peat-rodeo = rayPeatRodeo;
       default = ray-peat-rodeo;
     };
   });

@@ -2,6 +2,7 @@ package citations
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io/ioutil"
 	"net/http"
@@ -210,16 +211,23 @@ func (w *citationsParser) Parse(parent ast.Node, block text.Reader, pc parser.Co
 		externalLink := NewSciHubUrl(doi)
 		title := make(chan string, 1)
 		go func() {
-			req := utils.ReturnOrPanic(http.NewRequest("GET", "https://doi.org/"+doi, nil))
+			doiUrl := "https://doi.org/" + doi
+			req := utils.ReturnOrPanic(http.NewRequest("GET", doiUrl, nil))
 			req.Header.Set("Accept", "application/json; charset=utf-8")
-			res := utils.ReturnOrPanic(http.DefaultClient.Do(req))
+			res, err := http.DefaultClient.Do(req)
 
-			data := utils.ReturnOrPanic(ioutil.ReadAll(res.Body))
-			res.Body.Close()
+			if err != nil {
+				fmt.Println("Could not get title for url:", doiUrl)
+				fmt.Println(err)
+				title <- doi
+			} else {
+				data := utils.ReturnOrPanic(ioutil.ReadAll(res.Body))
+				res.Body.Close()
 
-			doiJson := map[string]interface{}{}
-			json.Unmarshal(data, &doiJson)
-			title <- doiJson["title"].(string)
+				doiJson := map[string]interface{}{}
+				json.Unmarshal(data, &doiJson)
+				title <- doiJson["title"].(string)
+			}
 		}()
 		block.Advance(bytesConsumed)
 		return NewCitationNode(withLinkRenderer(func() map[string]string {
@@ -292,8 +300,14 @@ func (w *citationsParser) Parse(parent ast.Node, block text.Reader, pc parser.Co
 		block.Advance(bytesConsumed)
 		title := make(chan string, 1)
 		go func() {
-			doc := utils.ReturnOrPanic(goquery.NewDocument(externalLink))
-			title <- strings.Trim(doc.Find("title").Text(), " \n")
+			doc, err := goquery.NewDocument(externalLink)
+			if err != nil {
+				fmt.Println("Could not extract title from url:", externalLink)
+				fmt.Println(err)
+				title <- externalLink
+			} else {
+				title <- strings.Trim(doc.Find("title").Text(), " \n")
+			}
 		}()
 		return NewCitationNode(withLinkRenderer(func() map[string]string {
 			t := <-title

@@ -127,15 +127,6 @@ func main() {
 	if len(os.Args) >= 2 {
 		arg := os.Args[1]
 		switch arg {
-		case "dev":
-			utils.DownloadBinariesIfAbsentAndExecuteLast("pagefind", "devd", "modd")
-			os.Exit(1)
-		case "clean":
-			utils.RemoveBinaryDir()
-			fmt.Println("Removed " + utils.BINARY_DIR)
-			utils.PanicOnErr(os.RemoveAll(BUILD_DIR))
-			fmt.Println("Removed " + BUILD_DIR)
-			os.Exit(1)
 		case "build":
 			break
 		case "check":
@@ -423,6 +414,6 @@ func main() {
 
 	utils.PanicOnErr(copy.Copy("lib/assets", path.Join(BUILD_DIR, "assets")))
 	fmt.Println(time.Since(BUILD_START))
-	utils.DownloadBinariesIfAbsentAndExecuteLast("pagefind --source " + BUILD_DIR)
+	exec.Command("pagefind --source " + BUILD_DIR)
 	fmt.Println(time.Since(BUILD_START))
 }
