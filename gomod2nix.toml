@@ -1,0 +1,45 @@
+schema = 3
+
+[mod]
+  [mod."github.com/PuerkitoBio/goquery"]
+    version = "v1.8.1"
+    hash = "sha256-z2RaB8PVPEzSJdMUfkfNjT616yXWTjW2gkhNOh989ZU="
+  [mod."github.com/andybalholm/cascadia"]
+    version = "v1.3.1"
+    hash = "sha256-M0u22DXSeXUaYtl1KoW1qWL46niFpycFkraCEQ/luYA="
+  [mod."github.com/badoux/goscraper"]
+    version = "v0.0.0-20190827161153-36995ce6b19f"
+    hash = "sha256-fdg7X6P+5itKCiUxkUE85ob/z4Nu6PmFuySkbNVbCsY="
+  [mod."github.com/google/uuid"]
+    version = "v1.3.0"
+    hash = "sha256-QoR55eBtA94T2tBszyxfDtO7/pjZZSGb5vm7U0Xhs0Y="
+  [mod."github.com/gosimple/slug"]
+    version = "v1.13.1"
+    hash = "sha256-+PBC4QOfBJt3w9BH3yRc61yTVFeJGTjrUMCEV65xTgM="
+  [mod."github.com/gosimple/unidecode"]
+    version = "v1.0.1"
+    hash = "sha256-/Tf2+eYHUuf0YWHMIVHHhgswiRLaAJBp0IAScmxrrbc="
+  [mod."github.com/mitchellh/mapstructure"]
+    version = "v1.5.0"
+    hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="
+  [mod."github.com/otiai10/copy"]
+    version = "v1.9.0"
+    hash = "sha256-JKRqb4hfnYjglrsF9WikEZup8zIcV7Au854Sn+nJagU="
+  [mod."github.com/yuin/goldmark"]
+    version = "v1.5.4"
+    hash = "sha256-4he5sGi0uj1LogdqvgpvN8b7p6qlKMGuWXRFzh+FK8s="
+  [mod."github.com/yuin/goldmark-meta"]
+    version = "v1.1.0"
+    hash = "sha256-Q/kRP4rpS3r24HYBvPTiuKNbf+PUMVsEp2m6yOblth0="
+  [mod."golang.org/x/net"]
+    version = "v0.8.0"
+    hash = "sha256-2cOtqa7aJ5mn64kZ+8+PVjJ4uGbhpXTpC1vm/+iaZzM="
+  [mod."golang.org/x/sys"]
+    version = "v0.6.0"
+    hash = "sha256-zAgxiTuL24sGhbXrna9R1UYqLQh46ldztpumOScmduY="
+  [mod."golang.org/x/text"]
+    version = "v0.8.0"
+    hash = "sha256-hgWFnT01DRmywBEXKYEVaOee7i6z8Ydz7zGbjcWwOgI="
+  [mod."gopkg.in/yaml.v2"]
+    version = "v2.3.0"
+    hash = "sha256-8tPC5nMGvUFs97W6+JXsxJLjU6EpDmPG9tXo1DyFoNU="

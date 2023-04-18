@@ -128,6 +128,7 @@ func main() {
 		arg := os.Args[1]
 		switch arg {
 		case "build":
+			fmt.Println("Build")
 			break
 		case "check":
 			const RPF_URL = "https://raypeatforum.com"

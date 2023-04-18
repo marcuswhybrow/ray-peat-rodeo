@@ -1,37 +1,60 @@
-[raypeat.rodeo](https://raypeat.rodeo) is the open-source effort to transcribe the public works of Ray Peat. The transcripts are stored in `./documents` as markdown files. `./main.go` compiles them into static HTML. Netlify hosts, continuously deploying from the `main` branch on GitHub. Once built and hosted, Ray Peat Rodeo has the following stand-out features:
+[raypeat.rodeo](https://raypeat.rodeo) is the open-source effort to transcribe
+the public works of Ray Peat. The transcripts are stored in `./documents` as
+markdown files. `./main.go` compiles them into static HTML. Netlify hosts,
+continuously deploying from the `main` branch on GitHub. Once built and hosted,
+Ray Peat Rodeo has the following stand-out features:
 
-- Full text search — of all transcripts (thanks to [Pagefind](https://pagefind.app/))
-- Citations — scientific papers, books, URLs and people all have direct links (see [Citations](#citations))
+- Full text search — of all transcripts (thanks to
+  [Pagefind](https://pagefind.app/))
+- Citations — scientific papers, books, URLs and people all have direct links
+  (see [Citations](#citations))
 - Index — side-wide lookup of all [Citations](#citations)
-- Timecodes — Direct links to exact moments in YouTube videos and mp3 source material. (See [Timecodes](#timecodes))
-- Speakers — intelligent separation of paragraphs by who's speaking (see [Speakers](#speakers))
+- Timecodes — Direct links to exact moments in YouTube videos and mp3 source
+  material. (See [Timecodes](#timecodes))
+- Speakers — intelligent separation of paragraphs by who's speaking (see
+  [Speakers](#speakers))
 - Insights — top citations; transcripts at-a-glance; orderd chronologically
 
 # Usage
 
-I'm using [Nix](https://nixos.org) (with [flakes enabled](https://nixos.wiki/wiki/Flakes#Enable_flakes)) to manage project dependencies. 
+[Nix](https://nixos.org) (with flakes
+[enabled](https://nixos.wiki/wiki/Flakes#Enable_flakes)) manage project
+dependencies. With `nix` installed 
 
-```
-nix develop -c modd   # Launch dev server with live-reloading
-```
-
-`nix develop` drops you into a bash shell with access to the following commands:
-
-```
-go run main.go build   # Builds website to ./build
-go run main.go dev     # Auto-builds to ./build on sourcecode changes
-                       # and launches dev server with hot-reloading
-go run main.go clean   # Deletes ./build and other ./lib/bin (see below)
-devd -l build          # Serves contents of ./build as live-reloading HTTP server
-modd                   # Auto rebuilds ./build when ./documents or *.go files change,
-                       # and runs devd automatically
+```bash
+nix develop -c modd # Uses github.com/cortesi/modd to hot-load-live-rebuild
 ```
 
-[Pagefind](https://pagefind.app/), [Modd](https://github.com/cortesi/modd), and [Devd](https://github.com/cortesi/devd) are external binaries used to build the project or run the dev server. The first time you run `go run main.go build`, or `go run main.go dev`, the relevent binaries will be downloaded to `./lib/bin` and remain there for future use. `go run main.go clean` removes this directory.
+`nix develop` starts an interactive bash shell environment containing all
+project dependencies and tools. Exit the shell with `Ctrl + D`. The following
+commands are available inside the shell, and can be run from outside the shell
+with `nix develop -c <command> <command args>`
+
+```bash
+# Builds website to ./build
+go run main.go build
+
+# Check's which transcripts on Ray Peat Forum we'vedocumented
+go run main.go check
+
+# Serves contents of ./build as live-reloading HTTP server
+devd build
+
+# Auto rebuilds ./build when ./documents or *.go files change, and runs devd
+modd
+
+# Add's website static search functionality to ./build
+pagefind --source ./build
+```
+
 
 # Contributing Transcripts
 
-Add a markdown file to `./documents` with the filename format `YYYY-MM-DD-SLUG.md`, for example `2023-03-08-my-example.md`. The esssential frontmatter includes the following, where `series` is the name of the website, podcast, radio show, or indivual who is interviewing Ray. Ommit `transcription.source` if this transcription has not be published elsewhere.
+Add a markdown file to `./documents` with the filename format
+`YYYY-MM-DD-SLUG.md`, for example `2023-03-08-my-example.md`. The esssential
+frontmatter includes the following, where `series` is the name of the website,
+podcast, radio show, or indivual who is interviewing Ray. Ommit
+`transcription.source` if this transcription has not be published elsewhere.
 
 ```
 ---
@@ -45,11 +68,14 @@ transcription:
 ---
 ```
 
-Ray Peat Rodeo has three custom markdown extensions that make transcribing easier, and let RPR understand the transcription. Namely [Speakers](#speakers), [Citations](#citations), and [Timecodes](#timecodes).
+Ray Peat Rodeo has three custom markdown extensions that make transcribing
+easier, and let RPR understand the transcription. Namely [Speakers](#speakers),
+[Citations](#citations), and [Timecodes](#timecodes).
 
 ## Speakers
 
-Use a familiar format to define who's speaking. For example, a file called `./documents/2023-03-08-example.md` might contain...
+Use a familiar format to define who's speaking. For example, a file called
+`./documents/2023-03-08-example.md` might contain...
 
 ````
 ---
@@ -61,16 +87,22 @@ MW: Hello Ray how are you doing?
 
 RP: Very well, thankyou.
 
-Did you know that speaker declarations aren't needed on every line. Only when the speaker changes.
+Did you know that speaker declarations aren't needed on every line. Only when
+the speaker changes.
 
 MW: I see.
 ````
 
-`RP` is a reserved shortname that always expands to `Ray Peat`. Custom speakers are defined in the markdown frontmatter as shown. If you don't know the speaker's name, use the reserved shortname `H` that expands to `Host`. Or makeup your own speaker definitions.
+`RP` is a reserved shortname that always expands to `Ray Peat`. Custom speakers
+are defined in the markdown frontmatter as shown. If you don't know the
+speaker's name, use the reserved shortname `H` that expands to `Host`. Or
+makeup your own speaker definitions.
 
 ## Citations
 
-Marking citations with double square brackets tells Ray Peat Rodeo to include them in the lookup index. And automatically provides the reader with a link pertenant to the citation type.
+Marking citations with double square brackets tells Ray Peat Rodeo to include
+them in the lookup index. And automatically provides the reader with a link
+pertenant to the citation type.
 
 ````
 Citing a person such as [[William Blake]] is done with double square brackets. (outputs "William Blake")
@@ -94,7 +126,9 @@ RP: Citations can be [[https://raypeat.rodeo|combined]] with speaker declaration
 
 ## Timecodes
 
-Timecodes can be placed anywhere in a document who's source is a YouTube Video, or an mp3 file. Changes in the coversation are good places to specifiy a timecode.
+Timecodes can be placed anywhere in a document who's source is a YouTube Video,
+or an mp3 file. Changes in the coversation are good places to specifiy a
+timecode.
 
 ````
 ---
