@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Ray Peat Rodeo{% endblock title %}</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+  <div id="top-bar">
+    <a href="/">Ray Peat Rodeo</a>
+  </div>
+
+  {% block contents %}{% endblock contents %}
+
+  <footer>
+    {% block footer %}
+    <p>
+      The copyright of each transcript is owed to the original transcriber, and those speaking. Ray Peat Rodeo is a
+      static website which was last generated on {{ now() | date(format="%b %d, %Y") }}. It's coded in Rust and hosted
+      by GitHub pages. If you wish to contribute to the project visit <a href="{{ global_project_link }}"
+        target="_blank">GitHub</a>, or
+      <a href="{{ global_contact_link }}">get in
+        touch</a>.
+    </p>
+    {% endblock footer %}
+  </footer>
+</body>
+
+</html>

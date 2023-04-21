@@ -7,6 +7,8 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.2.4", features = ["derive"] }
+lazy_static = "1.4.0"
+tera = "1"
 
 [[bin]]
 name = "engine"
