@@ -29,6 +29,7 @@
     packages.default = inputs.self.packages.${system}.engine;
 
     devShell = rustPkgs.workspaceShell {
+      name = "ray-peat-rodeo";
       packages = with pkgs; [
         cargo-watch
         devd
@@ -38,12 +39,13 @@
             cargo watch \
               --workdir engine \
               --ignore build \
-              --exec run \; \
+              --exec "run -- ../build --clean" \
+          \; \
           split-window -h \
           devd \
             --open \
             --livewatch \
-            engine/build \
+            ./build \
           \; attach
         '')
       ];
