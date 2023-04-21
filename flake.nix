@@ -38,8 +38,9 @@
           tmux new-session -d \
             cargo watch \
               --workdir engine \
-              --ignore build \
-              --exec "run -- ../build --clean" \
+              --watch . \
+              --watch ../content \
+              --exec "run -- --input ../content --output ../build" \
           \; \
           split-window -h \
           devd \
@@ -47,6 +48,11 @@
             --livewatch \
             ./build \
           \; attach
+        '')
+        (pkgs.writeScriptBin "deps" ''
+          cd ./engine
+          cargo generate-lockfile
+          nix run github:cargo2nix/cargo2nix
         '')
       ];
     };

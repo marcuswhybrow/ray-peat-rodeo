@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block contents %}
+<article class="interview">
+  <header>
+    <h1>Title</h1>
+
+    {#
+    <span class="sidenote sidenote-meta">
+      {{.Series}} <a href="{{.Source.Url}}" target="_blank">originally published</a> this interview on {{.Date.Format
+      "Jan 2, 2006"}}.
+      {{ if .Transcription.Author }}
+      {{if .Transcription.Url}}Thank you to {{else}}Transcribed by {{end}}{{.Transcription.Author}}{{if
+      .Transcription.Date}}{{if .Transcription.Url}} who <a href="{{.Transcription.Url}}" target="_blank">published</a>
+      this transcript {{else}},{{end}} {{.Transcription.Date.Format "Jan 2, 2006" }}{{end}}.
+      {{ end }}
+      <a href="{{.EditLink}}" target="_blank">Edit</a> this page on GitHub.
+    </span>
+    #}
+  </header>
+
+  <main data-pagefind-body>
+    {{ contents | safe }}
+  </main>
+</article>
+{% endblock contents %}
