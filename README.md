@@ -7,7 +7,7 @@ the Ray Peat Rodeo golang codebase in Rust.
 # Reimplement
 
 - [x] modd/devd development environment
-- [ ] HTML Templating
+- [x] HTML Templating
 - [ ] Parse transcripts from Markdown to HTML
   - [ ] Standard Markdown parsing
   - [ ] Block interview syntax 
@@ -24,4 +24,5 @@ the Ray Peat Rodeo golang codebase in Rust.
 
 ```bash
 nix develop -c serve   # build and serve site over HTTP (auto-reloads)
+nix run                # build Ray Peat Rodeo to ./build
 ```
