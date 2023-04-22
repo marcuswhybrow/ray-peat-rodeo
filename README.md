@@ -17,7 +17,7 @@ the Ray Peat Rodeo golang codebase in Rust.
     - [ ] ISBN
     - [ ] External Links
   - [ ] Citation metadata scraping
-  - [ ] Timecodes
+  - [x] Timecodes
 - [ ] Pagefind static search
 
 # Usage

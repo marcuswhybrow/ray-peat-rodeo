@@ -40,9 +40,9 @@
               --workdir engine \
               --watch . \
               --watch ../content \
-              --exec "run -- --input ../content --output ../build" \
+              --exec "run -- --input ../content --output ../build --templates ./templates" \
           \; \
-          split-window -h \
+          split-window \
           devd \
             --open \
             --livewatch \
