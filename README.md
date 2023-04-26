@@ -10,7 +10,7 @@ the Ray Peat Rodeo golang codebase in Rust.
 - [x] HTML Templating
 - [ ] Parse transcripts from Markdown to HTML
   - [x] Standard Markdown parsing
-  - [ ] Block interview syntax 
+  - [x] Block interview syntax 
   - [ ] Inline citations
     - [ ] People
     - [ ] Books
