@@ -6,13 +6,11 @@ use clap::Parser;
 use serde::{Serialize, Deserialize};
 use std::collections::BTreeMap;
 use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
-use crate::markdown::timecode::{TempInlineTimecode, InlineTimecode};
-use crate::markdown::speaker::{SpeakerSection, TempSpeakerSection};
 
 
 #[derive(Parser, Debug)]
 #[command(name = "Ray Peat Rodeo Engine")]
-#[command(author = "Marcus Whybrow <marcus@whybrow.uk>")]
+#[command(author = "Marcus Whybrow <marcus@whybrow.ustatusListk>")]
 #[command(about = "Builds Ray Peat Rodeo into HTML from source")]
 #[command(long_about = None)]
 struct Args {
@@ -136,31 +134,16 @@ fn main() {
             Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
         };
 
-        let mut ast = markdown_parser.parse(markdown);
+        let source = match url::Url::parse(frontmatter.source.as_str()) {
+            Ok(s) => s,
+            Err(e) => panic!("Invalid `source` URL in YAML frontmatter in {:?}\n{e}", path),
+        };
 
-        ast.walk_post_mut(|node, _depth| {
-            if let Some(temp_timecode) = node.cast::<TempInlineTimecode>() {
-                node.replace(InlineTimecode {
-                    url: match url::Url::parse(frontmatter.source.as_str()) {
-                        Ok(url) => url,
-                        Err(e) => panic!("Malformed `source` field in YAML frontmatter in {:?}\n{e}", path),
-                    },
-                    hours: temp_timecode.hours,
-                    minutes: temp_timecode.minutes,
-                    seconds: temp_timecode.seconds,
-                });
-            } else if let Some(temp_speaker_section) = node.cast::<TempSpeakerSection>() {
-                node.replace(SpeakerSection {
-                    shortname: temp_speaker_section.shortname.clone(),
-                    longname: match frontmatter.speakers.get(&temp_speaker_section.shortname) {
-                        Some(ln) => ln.clone(),
-                        None => panic!("Speaker shortname \"{}\" not found in \"speakers\" in YAML frontmatter in {:?}", temp_speaker_section.shortname, path),
-                    },
-                });
-            }
-        });
+        markdown_parser.ext.insert(markdown::Path(path.clone()));
+        markdown_parser.ext.insert(markdown::Source(source));
+        markdown_parser.ext.insert(markdown::Speakers(frontmatter.speakers));
+        let html = markdown_parser.parse(markdown).render();
 
-        let html = ast.render();
         let (_, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
         let out_name = &format!("{}/index.html", &slug);
 

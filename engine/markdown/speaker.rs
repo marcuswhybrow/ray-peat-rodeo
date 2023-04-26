@@ -1,17 +1,7 @@
 use markdown_it::{MarkdownIt, Node, NodeValue, Renderer};
 use markdown_it::parser::block::{BlockRule, BlockState};
 use markdown_it::common::sourcemap::SourcePos;
-
-#[derive(Debug)]
-pub struct TempSpeakerSection {
-    pub shortname: String,
-}
-
-impl NodeValue for TempSpeakerSection {
-    fn render(&self, _: &Node, _: &mut dyn Renderer) {
-        panic!("TempSpeakerSection must be replace with SpeakerSection before rendering");
-    }
-}
+use crate::markdown::{Speakers, Path};
 
 #[derive(Debug)]
 pub struct SpeakerSection {
@@ -97,8 +87,14 @@ impl BlockRule for SpeakerSectionBlockScanner {
         }
 
         let mut node = state.md.parse(content.join("\n").as_str());
-        node.replace(TempSpeakerSection {
+        node.replace(SpeakerSection {
             shortname: shortname.to_string(),
+            longname: state.md.ext.get::<Speakers>().unwrap().0.get(&shortname.to_string())
+                .expect({
+                    let path = state.md.ext.get::<Path>().unwrap().0.to_str().unwrap();
+                    format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {}", path).as_str()
+                })
+                .to_string(),
         });
         node.srcmap = Some(SourcePos::new(start_line, next_line));
 

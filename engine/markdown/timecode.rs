@@ -1,18 +1,6 @@
 use markdown_it::{MarkdownIt, Node, NodeValue, Renderer};
 use markdown_it::parser::inline::{InlineRule, InlineState};
-
-#[derive(Debug)]
-pub struct TempInlineTimecode {
-    pub hours: u8,
-    pub minutes: u8,
-    pub seconds: u8,
-}
-
-impl NodeValue for TempInlineTimecode {
-    fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
-        panic!("TempInlineTimecode must be replaced with InlineTimecode before rendering");
-    }
-}
+use crate::markdown::Source;
 
 #[derive(Debug)]
 pub struct InlineTimecode {
@@ -104,7 +92,8 @@ impl InlineRule for TimecodeInlineScanner {
             } else if char == ']' {
                 if sections.len() < 2 || sections.len() > 3 { return None };
                 return Some((
-                    Node::new(TempInlineTimecode {
+                    Node::new(InlineTimecode {
+                        url: state.md.ext.get::<Source>().unwrap().0.clone(),
                         seconds: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
                         minutes: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
                         hours: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
