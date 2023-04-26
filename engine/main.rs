@@ -6,7 +6,7 @@ use clap::Parser;
 use serde::{Serialize, Deserialize};
 use std::collections::BTreeMap;
 use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
-use crate::markdown::timecode::InlineTimecode;
+use crate::markdown::timecode::{TempInlineTimecode, InlineTimecode};
 use crate::markdown::speaker::{SpeakerSection, TempSpeakerSection};
 
 
@@ -139,11 +139,16 @@ fn main() {
         let mut ast = markdown_parser.parse(markdown);
 
         ast.walk_post_mut(|node, _depth| {
-            if let Some(timecode) = node.cast_mut::<InlineTimecode>() {
-                timecode.url = match url::Url::parse(frontmatter.source.as_str()) {
-                    Ok(url) => Some(url),
-                    Err(e) => panic!("Malformed `source` field in YAML frontmatter in {:?}\n{e}", path),
-                };
+            if let Some(temp_timecode) = node.cast::<TempInlineTimecode>() {
+                node.replace(InlineTimecode {
+                    url: match url::Url::parse(frontmatter.source.as_str()) {
+                        Ok(url) => url,
+                        Err(e) => panic!("Malformed `source` field in YAML frontmatter in {:?}\n{e}", path),
+                    },
+                    hours: temp_timecode.hours,
+                    minutes: temp_timecode.minutes,
+                    seconds: temp_timecode.seconds,
+                });
             } else if let Some(temp_speaker_section) = node.cast::<TempSpeakerSection>() {
                 node.replace(SpeakerSection {
                     shortname: temp_speaker_section.shortname.clone(),

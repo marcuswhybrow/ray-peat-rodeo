@@ -2,11 +2,24 @@ use markdown_it::{MarkdownIt, Node, NodeValue, Renderer};
 use markdown_it::parser::inline::{InlineRule, InlineState};
 
 #[derive(Debug)]
+pub struct TempInlineTimecode {
+    pub hours: u8,
+    pub minutes: u8,
+    pub seconds: u8,
+}
+
+impl NodeValue for TempInlineTimecode {
+    fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
+        panic!("TempInlineTimecode must be replaced with InlineTimecode before rendering");
+    }
+}
+
+#[derive(Debug)]
 pub struct InlineTimecode {
-    pub url: Option<url::Url>,
-    hours: u8,
-    minutes: u8,
-    seconds: u8,
+    pub url: url::Url,
+    pub hours: u8,
+    pub minutes: u8,
+    pub seconds: u8,
 }
 
 impl NodeValue for InlineTimecode {
@@ -21,17 +34,9 @@ impl NodeValue for InlineTimecode {
         }
 
         let href = {
-            let url = match self.url.as_ref() {
-                Some(url) => url,
-                None => panic!("InlineTimecode links to a particular point in time in the video or audio transcribed in this markdown document. \
-                    The pertenant URL is defined outside of the markdown (in the YAML frontmatter last I checked) \
-                    so the calling code must set each InlineTimecode's url field by operating on the parsed AST returned by \
-                    markdown_it::MarkdownIt::new().parse()"),
-            };
-
             let url_timecode = {
-                if url.has_host() {
-                    let host = url.host().unwrap().to_string();
+                if self.url.has_host() {
+                    let host = self.url.host().unwrap().to_string();
 
                     if host.ends_with("youtube.com") || host.ends_with("youtu.be") {
                         format!("{:0>2}h{:0>2}m{:0>2}s", self.hours, self.minutes, self.seconds)
@@ -43,7 +48,7 @@ impl NodeValue for InlineTimecode {
                 }
             };
 
-            format!("{url}#t={url_timecode}")
+            format!("{}#t={url_timecode}", self.url)
         };
 
         fmt.open("span", &attrs);
@@ -99,8 +104,7 @@ impl InlineRule for TimecodeInlineScanner {
             } else if char == ']' {
                 if sections.len() < 2 || sections.len() > 3 { return None };
                 return Some((
-                    Node::new(InlineTimecode {
-                        url: None,
+                    Node::new(TempInlineTimecode {
                         seconds: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
                         minutes: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
                         hours: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
