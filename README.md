@@ -11,6 +11,7 @@ the Ray Peat Rodeo golang codebase in Rust.
 - [ ] Parse transcripts from Markdown to HTML
   - [x] Standard Markdown parsing
   - [x] Block interview syntax 
+  - [ ] Sidenotes
   - [ ] Inline citations
     - [ ] People
     - [ ] Books
