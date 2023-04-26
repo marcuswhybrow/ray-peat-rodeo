@@ -34,20 +34,25 @@
         cargo-watch
         devd
         tmux
+        (pkgs.writeScriptBin "watch" ''
+          cargo watch \
+            --workdir engine \
+            --watch . \
+            --watch ../content \
+            --exec "run -- --input ../content --output ../build --templates ./templates" \
+        '')
         (pkgs.writeScriptBin "serve" ''
-          tmux new-session -d \
-            cargo watch \
-              --workdir engine \
-              --watch . \
-              --watch ../content \
-              --exec "run -- --input ../content --output ../build --templates ./templates" \
-          \; \
-          split-window \
           devd \
             --open \
             --livewatch \
             ./build \
-          \; attach
+        '')
+        (pkgs.writeScriptBin "watch-and-serve" ''
+          tmux new-session -d \
+            watch \; \
+            split-window \
+            serve \; \
+            attach
         '')
         (pkgs.writeScriptBin "deps" ''
           cd ./engine
