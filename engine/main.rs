@@ -165,7 +165,8 @@ fn main() {
         let out_name = &format!("{}/index.html", &slug);
 
         let mut cx = tera::Context::new();
-        cx.insert("contents", html.as_str());
+        cx.insert("title", &frontmatter.title);
+        cx.insert("contents", &html);
         cx.extend(gcx.clone());
 
         render("page.html", &cx, out_name);
