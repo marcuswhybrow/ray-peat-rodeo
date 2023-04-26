@@ -4,6 +4,7 @@ series: Beyond The Interview
 source: https://web.archive.org/web/20180123181651/https://www.beyondtheinterview.com/article/2018/when-western-medicine-isnt-workingdifferent-insights-from-a-leader-in-health
 speakers:
   NB: Nicole Behnam
+  RP: Ray Peat
 ---
 NB: In what arenas, specifically, do you think our ever-popular Western Medicine is mistaken and why?
 

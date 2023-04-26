@@ -5,6 +5,10 @@ use std::path::Path;
 use clap::Parser;
 use serde::{Serialize, Deserialize};
 use std::collections::BTreeMap;
+use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
+use crate::markdown::timecode::InlineTimecode;
+use crate::markdown::speaker::{SpeakerSection, TempSpeakerSection};
+
 
 #[derive(Parser, Debug)]
 #[command(name = "Ray Peat Rodeo Engine")]
@@ -96,8 +100,6 @@ fn main() {
 
     // Render Content
 
-
-    use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
     let frontmatter_extractor = Extractor::new(EnclosingLines("---"));
 
     #[derive(Serialize, Deserialize, Debug)]
@@ -120,8 +122,7 @@ fn main() {
     let markdown_parser = &mut markdown_it::MarkdownIt::new();
     markdown_it::plugins::cmark::add(markdown_parser);
     markdown::timecode::add(markdown_parser);
-
-    use crate::markdown::timecode::InlineTimecode;
+    markdown::speaker::add(markdown_parser);
 
     for entry in fs::read_dir(input).unwrap() {
         let entry = entry.unwrap();
@@ -137,14 +138,20 @@ fn main() {
 
         let mut ast = markdown_parser.parse(markdown);
 
-        ast.walk_post_mut(|node, _| {
-            if node.is::<InlineTimecode>() {
-                let url = match url::Url::parse(frontmatter.source.as_str()) {
-                    Ok(url) => url,
+        ast.walk_post_mut(|node, _depth| {
+            if let Some(timecode) = node.cast_mut::<InlineTimecode>() {
+                timecode.url = match url::Url::parse(frontmatter.source.as_str()) {
+                    Ok(url) => Some(url),
                     Err(e) => panic!("Malformed `source` field in YAML frontmatter in {:?}\n{e}", path),
                 };
-
-                node.cast_mut::<InlineTimecode>().unwrap().url = Some(url);
+            } else if let Some(temp_speaker_section) = node.cast::<TempSpeakerSection>() {
+                node.replace(SpeakerSection {
+                    shortname: temp_speaker_section.shortname.clone(),
+                    longname: match frontmatter.speakers.get(&temp_speaker_section.shortname) {
+                        Some(ln) => ln.clone(),
+                        None => panic!("Speaker shortname \"{}\" not found in \"speakers\" in YAML frontmatter in {:?}", temp_speaker_section.shortname, path),
+                    },
+                });
             }
         });
 

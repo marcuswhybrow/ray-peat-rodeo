@@ -4,6 +4,7 @@ series: Ray Peat Insight
 source: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
 speakers:
   KM: Karen Mcc
+  RP: Ray Peat
 ---
 
 KM: What is good health? {Editor's note: Although the source material doesn't mention the name of the interviewer, [this](https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii) article says it "was conducted by the amazing Karen Mcc with help from Matt Labosco" and also thanks "Heath Kurra, Greg Waitt, Wayde Curran, and Mariam." Please [edit this page]({{.EditLink}}) or [get in touch]({{.ContactLink}}) if you know more.}

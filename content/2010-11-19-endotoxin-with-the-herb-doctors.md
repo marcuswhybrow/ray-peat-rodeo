@@ -4,6 +4,7 @@ series: Ask Your Herb Doctor
 speakers:
   AM: Andrew Murray
   SJM: Sarah Johannesen Murray
+  RP: Ray Peat
   E: Egineer
   C: Female Caller
   C2: Female (2nd) Caller
