@@ -22,7 +22,6 @@ pub struct InlineSidenote {
 impl NodeValue for InlineSidenote {
     fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
         let id = format!("sidenote-{}", self.position);
-        println!("position: {}", id);
 
         let mut attrs = node.attrs.clone();
         attrs.push(("for", id.clone()));
@@ -103,15 +102,11 @@ impl CoreRule for SidenoteCalcPositionRule {
     fn run(root: &mut Node, _: &MarkdownIt) {
         let mut counter = 1u32;
 
-        println!("beginning SidenoteCalcPositionRule");
-
         root.walk_mut(|node, _depth| {
             if node.is::<InlineSidenoteWithoutPosition>() {
-                println!("Found InlineSidenoteWithoutPosition. Assigning position {}", counter);
                 node.replace(InlineSidenote {
                     position: counter,
                 });
-                println!("Incrementing counter from {} to {}", counter, counter + 1);
                 counter = counter + 1;
             }
         });
