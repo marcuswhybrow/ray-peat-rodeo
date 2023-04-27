@@ -28,6 +28,7 @@ impl NodeValue for SpeakerSection {
     }
 }
 
+/// Retrieves the path for this markdown document
 fn path<'a>(state: &'a BlockState<'a, 'a>) -> &'a str {
     state.md.ext.get::<Path>().unwrap().0.to_str().unwrap()
 }
@@ -55,6 +56,7 @@ fn get_speaker_shortname(line: &str) -> Option<&str> {
     }
     return None; 
 }
+
 
 #[derive(Debug)]
 struct InsideSpeakerSection(String);
