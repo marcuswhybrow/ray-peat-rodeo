@@ -121,6 +121,7 @@ fn main() {
     markdown_it::plugins::cmark::add(markdown_parser);
     markdown::timecode::add(markdown_parser);
     markdown::speaker::add(markdown_parser);
+    markdown::sidenote::add(markdown_parser);
 
     for entry in fs::read_dir(input).unwrap() {
         let entry = entry.unwrap();

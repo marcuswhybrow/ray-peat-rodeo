@@ -35,7 +35,7 @@
         devd
         tmux
         (pkgs.writeScriptBin "watch" ''
-          cargo watch \
+          RUST_BACKTRACE=1 cargo watch \
             --workdir engine \
             --watch . \
             --watch ../content \
