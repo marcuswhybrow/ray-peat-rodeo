@@ -2,17 +2,9 @@ use markdown_it::{
     MarkdownIt, Node, NodeValue, Renderer,
     parser::inline::{InlineRule, InlineState},
     parser::core::CoreRule,
+    parser::extset::RootExt,
 };
 
-
-#[derive(Debug)]
-pub struct InlineSidenoteWithoutPosition;
-
-impl NodeValue for InlineSidenoteWithoutPosition {
-    fn render(&self, _: &Node, _: &mut dyn Renderer) {
-        panic!("TempInlineSidenote must be replaced with InlineSidenote before rendering");
-    }
-}
 
 #[derive(Debug)]
 pub struct InlineSidenote {
@@ -39,6 +31,11 @@ impl NodeValue for InlineSidenote {
         fmt.close("span");
     }
 }
+
+#[derive(Debug)]
+struct Position(u32);
+
+impl RootExt for Position {}
 
 struct SidenodeInlineScanner;
 
@@ -76,7 +73,13 @@ impl InlineRule for SidenodeInlineScanner {
 
             // Inspiration: https://github.com/rlidwka/markdown-it.rs/blob/eb5459039685d19cefd0361859422118d08d35d4/src/generics/inline/full_link.rs#L124-L136
             let node = {
-                let original_node = std::mem::replace(&mut state.node, Node::new(InlineSidenoteWithoutPosition));
+                let original_node = std::mem::replace(&mut state.node, Node::new(InlineSidenote {
+                    position: {
+                        let position = state.root_ext.get_or_insert(Position(0));
+                        position.0 += 1;
+                        position.0
+                    }
+                }));
 
                 let original_pos_max = state.pos_max;
                 state.pos_max = state.pos;
@@ -96,24 +99,6 @@ impl InlineRule for SidenodeInlineScanner {
     }
 }
 
-struct SidenoteCalcPositionRule;
-
-impl CoreRule for SidenoteCalcPositionRule {
-    fn run(root: &mut Node, _: &MarkdownIt) {
-        let mut counter = 1u32;
-
-        root.walk_mut(|node, _depth| {
-            if node.is::<InlineSidenoteWithoutPosition>() {
-                node.replace(InlineSidenote {
-                    position: counter,
-                });
-                counter = counter + 1;
-            }
-        });
-    }
-}
-
 pub fn add(md: &mut MarkdownIt) {
     md.inline.add_rule::<SidenodeInlineScanner>();
-    md.add_rule::<SidenoteCalcPositionRule>();
 }
