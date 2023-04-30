@@ -22,11 +22,11 @@
     rustPkgs = pkgs.rustBuilder.makePackageSet {
       rustVersion = "1.68.2";
       rustChannel = "stable";
-      packageFun = import ./engine/Cargo.nix;
+      packageFun = import ./Cargo.nix;
     };
   in {
-    packages.engine = (rustPkgs.workspace.engine {}).bin;
-    packages.default = inputs.self.packages.${system}.engine;
+    packages.ray-peat-rodeo = (rustPkgs.workspace.ray-peat-rodeo {}).bin;
+    packages.default = inputs.self.packages.${system}.ray-peat-rodeo;
 
     devShell = rustPkgs.workspaceShell {
       name = "ray-peat-rodeo";
@@ -35,27 +35,14 @@
         devd
         tmux
         (pkgs.writeScriptBin "watch" ''
-          RUST_BACKTRACE=1 cargo watch \
-            --workdir engine \
-            --watch . \
-            --watch ../content \
-            --exec "run -- --input ../content --output ../build --templates ./templates" \
+          RUST_BACKTRACE=full cargo watch \
+            --watch src \
+            --watch content \
+            --exec "run" \
         '')
-        (pkgs.writeScriptBin "serve" ''
-          devd \
-            --open \
-            --livewatch \
-            ./build \
-        '')
-        (pkgs.writeScriptBin "watch-and-serve" ''
-          tmux new-session -d \
-            watch \; \
-            split-window \
-            serve \; \
-            attach
-        '')
+        (pkgs.writeScriptBin "serve" ''devd --open --livewatch ./build '')
+        (pkgs.writeScriptBin "watch-and-serve" ''tmux new-session -d watch \; split-window serve \; attach'')
         (pkgs.writeScriptBin "deps" ''
-          cd ./engine
           cargo generate-lockfile
           nix run github:cargo2nix/cargo2nix
         '')

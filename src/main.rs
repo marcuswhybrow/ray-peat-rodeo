@@ -1,10 +1,8 @@
 mod markdown;
 
-use std::fs;
-use std::path::Path;
+use std::{fs, include_str, path::Path, collections::BTreeMap};
 use clap::Parser;
 use serde::{Serialize, Deserialize};
-use std::collections::BTreeMap;
 use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
 
 
@@ -26,12 +24,7 @@ struct Args {
     /// before building
     #[arg(short, long, default_value_t = false)]
     clean: bool,
-
-
-    #[arg(short, long, default_value_t = String::from("./engine/templates"))]
-    templates: String,
 }
-
 
 fn main() {
 
@@ -39,12 +32,10 @@ fn main() {
 
     let args = Args::parse();
     let input = &Path::new(&args.input).canonicalize().unwrap();
-    let templates = format!("{}/**/*", Path::new(&args.templates).canonicalize().unwrap().to_string_lossy());
     let output = &Path::new(&args.output).canonicalize().unwrap();
 
     println!("Building Ray Peat Rodeo");
     println!("Input: {:?}", input);
-    println!("Templates: {:?}", templates);
     println!("Output: {:?}", output);
 
     if !output.exists() {
@@ -70,10 +61,16 @@ fn main() {
     }
 
     // Templating
-
-    let tera = match tera::Tera::new(templates.as_str()) {
-        Ok(t) => t,
-        Err(e) => panic!("Could not establish templates at {:?}\n{e}", templates),
+    
+    let tera = {
+        let mut tera = tera::Tera::default();
+        tera.add_raw_templates(vec![
+            ("base.html", include_str!("./templates/base.html")),
+            ("page.html", include_str!("./templates/page.html")),
+            ("index.html", include_str!("./templates/index.html")),
+            ("style.css", include_str!("./templates/style.css")),
+        ]).expect("Unable to load template");
+        tera
     };
     
     let mut gcx = tera::Context::new();

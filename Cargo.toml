@@ -1,5 +1,5 @@
 [package]
-name = "engine"
+name = "ray-peat-rodeo"
 version = "0.1.0"
 edition = "2021"
 
@@ -15,7 +15,3 @@ serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.9"
 url = "2.3.1"
 maud = "0.25.0"
-
-[[bin]]
-name = "engine"
-path = "main.rs"

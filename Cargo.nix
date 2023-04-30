@@ -4,7 +4,7 @@
 args@{
   release ? true,
   rootFeatures ? [
-    "engine/default"
+    "ray-peat-rodeo/default"
   ],
   rustPackages,
   buildRustPackages,
@@ -37,7 +37,7 @@ in
 {
   cargo2nixVersion = "0.11.0";
   workspace = {
-    engine = rustPackages.unknown.engine."0.1.0";
+    ray-peat-rodeo = rustPackages.unknown.ray-peat-rodeo."0.1.0";
   };
   "registry+https://github.com/rust-lang/crates.io-index".adler."1.0.2" = overridableMkRustCrate (profileName: rec {
     name = "adler";
@@ -576,24 +576,6 @@ in
       [ "default" ]
       [ "std" ]
     ];
-  });
-  
-  "unknown".engine."0.1.0" = overridableMkRustCrate (profileName: rec {
-    name = "engine";
-    version = "0.1.0";
-    registry = "unknown";
-    src = fetchCrateLocal workspaceSrc;
-    dependencies = {
-      clap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".clap."4.2.5" { inherit profileName; };
-      extract_frontmatter = rustPackages."registry+https://github.com/rust-lang/crates.io-index".extract-frontmatter."4.1.1" { inherit profileName; };
-      lazy_static = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" { inherit profileName; };
-      markdown_it = rustPackages."registry+https://github.com/rust-lang/crates.io-index".markdown-it."0.4.0" { inherit profileName; };
-      maud = rustPackages."registry+https://github.com/rust-lang/crates.io-index".maud."0.25.0" { inherit profileName; };
-      serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.160" { inherit profileName; };
-      serde_yaml = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_yaml."0.9.21" { inherit profileName; };
-      tera = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tera."1.18.1" { inherit profileName; };
-      url = rustPackages."registry+https://github.com/rust-lang/crates.io-index".url."2.3.1" { inherit profileName; };
-    };
   });
   
   "registry+https://github.com/rust-lang/crates.io-index".entities."1.0.1" = overridableMkRustCrate (profileName: rec {
@@ -1441,6 +1423,24 @@ in
     ];
     dependencies = {
       getrandom = rustPackages."registry+https://github.com/rust-lang/crates.io-index".getrandom."0.2.9" { inherit profileName; };
+    };
+  });
+  
+  "unknown".ray-peat-rodeo."0.1.0" = overridableMkRustCrate (profileName: rec {
+    name = "ray-peat-rodeo";
+    version = "0.1.0";
+    registry = "unknown";
+    src = fetchCrateLocal workspaceSrc;
+    dependencies = {
+      clap = rustPackages."registry+https://github.com/rust-lang/crates.io-index".clap."4.2.5" { inherit profileName; };
+      extract_frontmatter = rustPackages."registry+https://github.com/rust-lang/crates.io-index".extract-frontmatter."4.1.1" { inherit profileName; };
+      lazy_static = rustPackages."registry+https://github.com/rust-lang/crates.io-index".lazy_static."1.4.0" { inherit profileName; };
+      markdown_it = rustPackages."registry+https://github.com/rust-lang/crates.io-index".markdown-it."0.4.0" { inherit profileName; };
+      maud = rustPackages."registry+https://github.com/rust-lang/crates.io-index".maud."0.25.0" { inherit profileName; };
+      serde = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde."1.0.160" { inherit profileName; };
+      serde_yaml = rustPackages."registry+https://github.com/rust-lang/crates.io-index".serde_yaml."0.9.21" { inherit profileName; };
+      tera = rustPackages."registry+https://github.com/rust-lang/crates.io-index".tera."1.18.1" { inherit profileName; };
+      url = rustPackages."registry+https://github.com/rust-lang/crates.io-index".url."2.3.1" { inherit profileName; };
     };
   });
   
