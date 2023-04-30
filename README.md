@@ -12,13 +12,14 @@ the Ray Peat Rodeo golang codebase in Rust.
   - [x] Standard Markdown parsing
   - [x] Block interview syntax 
   - [x] Sidenotes
-  - [ ] Inline citations
-    - [ ] People
-    - [ ] Books
-    - [ ] ISBN
-    - [ ] External Links
+  - [x] Inline citations
+    - [x] People
+    - [x] Books
+    - [x] ISBN
+    - [x] External Links
   - [ ] Citation metadata scraping
   - [x] Timecodes
+- [ ] Images and assets
 - [ ] Pagefind static search
 
 # Usage

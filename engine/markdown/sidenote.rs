@@ -1,7 +1,6 @@
 use markdown_it::{
     MarkdownIt, Node, NodeValue, Renderer,
     parser::inline::{InlineRule, InlineState},
-    parser::core::CoreRule,
     parser::extset::RootExt,
 };
 

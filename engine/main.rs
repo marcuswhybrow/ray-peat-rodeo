@@ -122,6 +122,7 @@ fn main() {
     markdown::timecode::add(markdown_parser);
     markdown::speaker::add(markdown_parser);
     markdown::sidenote::add(markdown_parser);
+    markdown::mention::add(markdown_parser);
 
     for entry in fs::read_dir(input).unwrap() {
         let entry = entry.unwrap();
@@ -144,6 +145,7 @@ fn main() {
         markdown_parser.ext.insert(markdown::Source(source));
         markdown_parser.ext.insert(markdown::Speakers(frontmatter.speakers));
         let html = markdown_parser.parse(markdown).render();
+        let _mentions = markdown_parser.ext.get::<markdown::Mentions>();
 
         let (_, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
         let out_name = &format!("{}/index.html", &slug);
