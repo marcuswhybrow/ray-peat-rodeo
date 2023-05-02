@@ -1,28 +1,54 @@
 use std::fmt::Debug;
+use std::hash::{Hash, Hasher};
+use std::collections::{BTreeMap, hash_map::DefaultHasher};
+use base64::{Engine, engine::general_purpose};
 use markdown_it::{
     MarkdownIt, Node, NodeValue, Renderer,
     parser::inline::{InlineRule, InlineState, Text},
+    parser::extset::RootExt
 
 };
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone, Hash)]
 pub enum Mention {
-    Placeholder(Fragment),
-    Hidden(Mentionable),
-    Normal(Mentionable, Option<Fragment>),
+    Placeholder {
+        fragment: Fragment
+    },
+    Hidden {
+        mentionable: Mentionable,
+        occurance: u32,
+    },
+    Normal {
+        mentionable: Mentionable,
+        occurance: u32,
+        fragment: Option<Fragment>,
+    },
 }
 
 impl Mention {
-    fn new(signature: MentionSignature, alt_text: AltText) -> Option<Mention> {
+    fn new(state: &mut InlineState, signature: MentionSignature, alt_text: AltText) -> Option<Mention> {
         use MentionSignature::*;
         use Mention::*;
 
         match (signature, alt_text) {
-            (SignifiedButNotProvided, AltText::SignifiedAndProvided(fragment)) => Some(Placeholder(fragment)),
-            (SignifiedAndProvided(signature), AltText::NotSignified|AltText::SignifiedButNotProvided) => Some(Hidden(Mentionable::new(signature))),
-            (SignifiedAndProvided(signature), alt_text) => Some(Normal(Mentionable::new(signature), Some(alt_text.to_fragment()?))),
+            (SignifiedButNotProvided, AltText::SignifiedAndProvided(fragment)) => Some(Placeholder { fragment }),
+            (SignifiedAndProvided(signature), AltText::NotSignified|AltText::SignifiedButNotProvided) => {
+                let (mentionable, occurance) = Mentionable::new(state, signature);
+                Some(Hidden { mentionable, occurance })
+            },
+            (SignifiedAndProvided(signature), alt_text) => {
+                let (mentionable, occurance) = Mentionable::new(state, signature);
+                let fragment = Some(alt_text.to_fragment()?);
+                Some(Normal { mentionable, occurance, fragment })
+            },
             (_, _) => None,
         }
+    }
+
+    fn base64_hash(&self) -> String {
+        let mut hasher = DefaultHasher::new();
+        self.hash(&mut hasher);
+        general_purpose::URL_SAFE_NO_PAD.encode(hasher.finish().to_ne_bytes())
     }
 
     fn into_node(self, state: &mut InlineState) -> Option<Node> {
@@ -31,10 +57,16 @@ impl Mention {
         let mut node = Node::new(self.clone());
 
         match self {
-            Hidden(_) => (),
-            Normal(mentionable, None) => node.children.push(Node::new(Text { content: mentionable.default_display_text() })),
-            Placeholder(fragment) |
-            Normal(_, Some(fragment)) => {
+            Hidden { mentionable: _, occurance: _ } => (),
+            Normal { mentionable, occurance: _, fragment: None } => {
+                node.children.push(
+                    Node::new(Text {
+                        content: mentionable.default_display_text()
+                    })
+                );
+            },
+            Placeholder { fragment } |
+            Normal { mentionable: _, occurance: _, fragment: Some(fragment) } => {
                 let node = std::mem::replace(&mut state.node, node);
                 let pos = std::mem::replace(&mut state.pos, fragment.start);
                 let pos_max = std::mem::replace(&mut state.pos_max, fragment.end);
@@ -45,7 +77,7 @@ impl Mention {
                 state.pos_max = pos_max;
                 return Some(std::mem::replace(&mut state.node, node));
             }
-        }
+        };
 
         Some(node)
     }
@@ -53,10 +85,12 @@ impl Mention {
 
 impl NodeValue for Mention {
     fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
+        use Mention::*;
+
         match self {
-            Mention::Hidden(_) => return,
-            Mention::Placeholder(_) => fmt.contents(&node.children),
-            Mention::Normal(mentionable, _) => {
+            Hidden { mentionable: _, occurance: _ } => return,
+            Placeholder { fragment: _ } => fmt.contents(&node.children),
+            Normal { mentionable, occurance: _, fragment: _ } => {
                 let mut attrs = node.attrs.clone();
 
                 use Mentionable::*;
@@ -67,6 +101,9 @@ impl NodeValue for Mention {
                     Paper { doi: _ } => "paper",
                     Link { url: _ } => "link",
                 };
+
+                // Purposfully unfriendly id to indicate they're unreliable
+                attrs.push(("id", self.base64_hash()));
 
                 attrs.push(("class", vec!["citation", class].join(" ")));
                 attrs.push(("target", "_blank".into()));
@@ -85,8 +122,13 @@ impl NodeValue for Mention {
     }
 }
 
+#[derive(Debug, Default)]
+struct MentionableOccurances(BTreeMap<Mentionable, u32>);
 
-#[derive(Debug,Clone)]
+impl RootExt for MentionableOccurances {}
+
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum Mentionable {
     Person {
         first_names: String,
@@ -105,24 +147,34 @@ pub enum Mentionable {
 }
 
 impl Mentionable {
-    fn new(mention_signature: String) -> Mentionable {
-        if let Some(doi) = mention_signature.strip_prefix("doi:") {
-            return Mentionable::Paper { doi: doi.to_string() };
-        } else if let Ok(url) = url::Url::parse(mention_signature.as_str()) {
-            return Mentionable::Link { url };
-        } else if mention_signature.contains("-by-") {
-            let mut segments: Vec<&str> = mention_signature.split("-by-").map(|x| x.trim()).collect();
-            return Mentionable::Book {
-                primary_author: segments.pop().unwrap().to_string(),
-                title: segments.join(" "),
-            };
-        } else {
-            let mut names = mention_signature.split(' ').map(|x| x.trim()).collect::<Vec<&str>>();
-            return Mentionable::Person {
-                last_name: names.pop().unwrap_or("").to_string(),
-                first_names: names.join(" "),
-            };
-        }
+    fn new(state: &mut InlineState, mention_signature: String) -> (Mentionable, u32) {
+        let mentionable = { 
+            if let Some(doi) = mention_signature.strip_prefix("doi:") {
+                Mentionable::Paper { doi: doi.to_string() }
+            } else if let Ok(url) = url::Url::parse(mention_signature.as_str()) {
+                Mentionable::Link { url }
+            } else if mention_signature.contains("-by-") {
+                let mut segments: Vec<&str> = mention_signature.split("-by-").map(|x| x.trim()).collect();
+                Mentionable::Book {
+                    primary_author: segments.pop().unwrap().to_string(),
+                    title: segments.join(" "),
+                }
+            } else {
+                let mut names = mention_signature.split(' ').map(|x| x.trim()).collect::<Vec<&str>>();
+                Mentionable::Person {
+                    last_name: names.pop().unwrap_or("").to_string(),
+                    first_names: names.join(" "),
+                }
+            }
+        };
+
+        let occurance = *state.root_ext
+            .get_or_insert_default::<MentionableOccurances>().0
+            .entry(mentionable.clone())
+            .and_modify(|occurances| *occurances += 1)
+            .or_insert(1u32);
+
+        (mentionable, occurance)
     }
 
     fn default_display_text(&self) -> String {
@@ -212,7 +264,7 @@ impl AltText {
     }
 }
 
-#[derive(Debug,Copy,Clone)]
+#[derive(Debug, Copy, Clone, Hash)]
 pub struct Fragment {
     start: usize,
     end: usize,
@@ -229,11 +281,13 @@ impl InlineRule for MentionInlineScanner{
         if state.src.get(state.pos..state.pos+2)? != "[[" { return None; }
         state.pos += 2;
 
+        let mention_signature = MentionSignature::new(state)?;
+        let alt_text = AltText::new(state)?;
+
+        let mention = Mention::new(state, mention_signature, alt_text)?;
+
         Some((
-            Mention::new(
-                MentionSignature::new(state)?,
-                AltText::new(state)?,
-            )?.into_node(state)?,
+            mention.into_node(state)?,
             std::mem::replace(&mut state.pos, start) - start,
         ))
     }
