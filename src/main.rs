@@ -31,8 +31,8 @@ fn main() {
     // CLI Arguments and Options
 
     let args = Args::parse();
-    let input = &Path::new(&args.input).canonicalize().unwrap();
-    let output = &Path::new(&args.output).canonicalize().unwrap();
+    let input = &Path::new(&args.input).canonicalize().expect("Input path not found");
+    let output = &Path::new(&args.output).canonicalize().expect("Output path not found");
 
     println!("Building Ray Peat Rodeo");
     println!("Input: {:?}", input);
