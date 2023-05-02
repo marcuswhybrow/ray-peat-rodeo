@@ -184,11 +184,11 @@ DB: [47:05] Do you feel that the winds have changed? Be it if they go into a mor
 
 RP: Yeah. I started getting discouraged in the late 1960s following the Blake thing. And I started seeing that the U.S. was being treated as on a course to becoming just more of the third world. That the masses of the U.S. weren't on a course of democracy. I think that is what we've been seeing progressively. And I think this current thing of the pandemic—or the "plandemic"—is a late stage of the process of shaking down small businesses. Getting them out of the way.
 
-Like the Gates Foundation and the United Nations Agriculture Organization are—right now—in process in Africa of destroying small subsistence agriculture and replacing it with giant industrial soybean farms. And the same thing— do you know [The Corbett Report](https://www.corbettreport.com/)?
+Like the Gates Foundation and the United Nations Agriculture Organization are—right now—in process in Africa of destroying small subsistence agriculture and replacing it with giant industrial soybean farms. And the same thing— do you know [[https://www.corbettreport.com|The Corbett Report]]?
 
 DB: I've heard of it, I haven't watched any of it.
 
-RP: They have a good episode, it's called [Was There Foreknowledge of the Plandemic?](https://www.corbettreport.com/was-there-foreknowledge-of-the-plandemic-qfc-059/). It shows that the Federal Reserve was doing drastic, historically novel stuff already in September of last year that looked like the beginning of what was only announced several weeks ago as the multi-trillion-dollar bailout. They were starting on this multi-trillion-dollar _pre_ bailout already in September.
+RP: They have a good episode, it's called [[https://www.corbettreport.com/was-there-foreknowledge-of-the-plandemic-qfc-059|Was There Foreknowledge of the Plandemic?]]. It shows that the Federal Reserve was doing drastic, historically novel stuff already in September of last year that looked like the beginning of what was only announced several weeks ago as the multi-trillion-dollar bailout. They were starting on this multi-trillion-dollar _pre_ bailout already in September.
 
 RP: And an Agency of the Defence Intelligence Agency, according to an ABC news item that was multiply confirmed—many sources confirmed it—that this Medical Intelligence Branch reported that around the end of November a virus was on the move in Wuhan. But China didn't mention it until late December and didn't start taking action until, I think, the 23rd of January. But our Defence Intelligence Agency already reported it before the Chinese knew about it.
 
