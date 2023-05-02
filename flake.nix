@@ -38,7 +38,7 @@
           RUST_BACKTRACE=full cargo watch \
             --watch src \
             --watch content \
-            --exec "run" \
+            --exec "run --bin ray-peat-rodeo" \
         '')
         (pkgs.writeScriptBin "serve" ''devd --open --livewatch ./build '')
         (pkgs.writeScriptBin "watch-and-serve" ''tmux new-session -d watch \; split-window serve \; attach'')
