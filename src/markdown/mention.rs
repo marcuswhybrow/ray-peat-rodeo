@@ -9,7 +9,7 @@ use markdown_it::{
 
 };
 
-#[derive(Debug, Clone, Hash)]
+#[derive(Debug, Clone, Hash, serde::Serialize)]
 pub enum Mention {
     Placeholder {
         fragment: Fragment
@@ -45,7 +45,7 @@ impl Mention {
         }
     }
 
-    fn base64_hash(&self) -> String {
+    pub fn base64_hash(&self) -> String {
         let mut hasher = DefaultHasher::new();
         self.hash(&mut hasher);
         general_purpose::URL_SAFE_NO_PAD.encode(hasher.finish().to_ne_bytes())
@@ -96,10 +96,10 @@ impl NodeValue for Mention {
                 use Mentionable::*;
 
                 let class = match mentionable {
-                    Book { title: _, primary_author: _ } => "book",
-                    Person { first_names: _, last_name: _ } => "person",
-                    Paper { doi: _ } => "paper",
-                    Link { url: _ } => "link",
+                    Book(_) => "book",
+                    Person(_) => "person",
+                    Paper(_) => "paper",
+                    Link(_) => "link",
                 };
 
                 // Purposfully unfriendly id to indicate they're unreliable
@@ -108,10 +108,10 @@ impl NodeValue for Mention {
                 attrs.push(("class", vec!["citation", class].join(" ")));
                 attrs.push(("target", "_blank".into()));
                 attrs.push(("href", match mentionable {
-                    Book { title, primary_author } => format!("https://google.com/search?q={} {}", title, primary_author), 
-                    Person { first_names, last_name } => format!("https://google.com/search?q={} {}", first_names, last_name),
-                    Paper { doi } => format!("https://doi.org/{}", doi),
-                    Link { url } => url.to_string(),
+                    Book(b) => format!("https://google.com/search?q={} {}", b.title, b.primary_author), 
+                    Person(p) => format!("https://google.com/search?q={} {}", p.first_names, p.last_name),
+                    Paper(p) => format!("https://doi.org/{}", p.doi),
+                    Link(l) => l.url.to_string(),
                 }));
 
                 fmt.open("a", &attrs);
@@ -127,44 +127,55 @@ struct MentionableOccurances(BTreeMap<Mentionable, u32>);
 
 impl RootExt for MentionableOccurances {}
 
+#[derive(Debug, Clone, Eq, PartialEq, PartialOrd, Ord, Hash, serde::Serialize)]
+pub struct Person {
+    first_names: String,
+    last_name: String,
+}
 
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, PartialOrd, Ord, Hash, serde::Serialize)]
+pub struct Book {
+    title: String,
+    primary_author: String,
+}
+
+#[derive(Debug, Clone, Eq, PartialEq, PartialOrd, Ord, Hash, serde::Serialize)]
+pub struct Paper {
+    doi: String,
+}
+
+#[derive(Debug, Clone, Eq, PartialEq, PartialOrd, Ord, Hash, serde::Serialize)]
+pub struct Link {
+    url: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, serde::Serialize)]
 pub enum Mentionable {
-    Person {
-        first_names: String,
-        last_name: String,
-    },
-    Book {
-        title: String,
-        primary_author: String,
-    },
-    Paper {
-        doi: String,
-    },
-    Link {
-        url: url::Url,
-    },
+    Person(Person),
+    Book(Book),
+    Paper(Paper),
+    Link(Link),
 }
 
 impl Mentionable {
     fn new(state: &mut InlineState, mention_signature: String) -> (Mentionable, u32) {
         let mentionable = { 
             if let Some(doi) = mention_signature.strip_prefix("doi:") {
-                Mentionable::Paper { doi: doi.to_string() }
+                Mentionable::Paper(Paper { doi: doi.to_string() })
             } else if let Ok(url) = url::Url::parse(mention_signature.as_str()) {
-                Mentionable::Link { url }
+                Mentionable::Link(Link { url: mention_signature })
             } else if mention_signature.contains("-by-") {
                 let mut segments: Vec<&str> = mention_signature.split("-by-").map(|x| x.trim()).collect();
-                Mentionable::Book {
+                Mentionable::Book(Book {
                     primary_author: segments.pop().unwrap().to_string(),
                     title: segments.join(" "),
-                }
+                })
             } else {
                 let mut names = mention_signature.split(' ').map(|x| x.trim()).collect::<Vec<&str>>();
-                Mentionable::Person {
+                Mentionable::Person(Person {
                     last_name: names.pop().unwrap_or("").to_string(),
                     first_names: names.join(" "),
-                }
+                })
             }
         };
 
@@ -181,10 +192,10 @@ impl Mentionable {
         use Mentionable::*;
 
         match self {
-            Person { first_names, last_name } => vec![first_names.clone(), last_name.clone()].join(" "),
-            Book { title, primary_author: _ } => title.clone(),
-            Paper { doi } => doi.clone(),
-            Link { url } => url.to_string(),
+            Person(person) => vec![person.first_names.clone(), person.last_name.clone()].join(" "),
+            Book(book) => book.title.clone(),
+            Paper(paper) => paper.doi.clone(),
+            Link(link)=> link.url.to_string(),
         }
     }
 }
@@ -264,7 +275,7 @@ impl AltText {
     }
 }
 
-#[derive(Debug, Copy, Clone, Hash)]
+#[derive(Debug, Copy, Clone, Hash, serde::Serialize)]
 pub struct Fragment {
     start: usize,
     end: usize,

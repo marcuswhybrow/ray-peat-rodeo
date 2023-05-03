@@ -1,6 +1,6 @@
 use markdown_it::{MarkdownIt, Node, NodeValue, Renderer};
 use markdown_it::parser::inline::{InlineRule, InlineState};
-use crate::markdown::Source;
+use crate::MarkdownFile;
 use maud::html;
 
 const LINK_SVG: maud::PreEscaped<&str> = maud::PreEscaped(r#"
@@ -94,7 +94,9 @@ impl InlineRule for TimecodeInlineScanner {
                 if sections.len() < 2 || sections.len() > 3 { return None };
                 return Some((
                     Node::new(InlineTimecode {
-                        url: state.md.ext.get::<Source>().unwrap().0.clone(),
+                        url: url::Url::parse(
+                            state.md.ext.get::<MarkdownFile>().unwrap().frontmatter.source.as_str()
+                        ).unwrap(),
                         seconds: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
                         minutes: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),
                         hours: sections.pop().unwrap_or(Vec::new()).iter().collect::<String>().parse().unwrap_or(0),

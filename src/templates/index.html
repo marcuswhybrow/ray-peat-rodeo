@@ -74,7 +74,6 @@
     <h2>People</h2>
 
     {#
-
     <span class="sidenote sidenote-standalone">
       There are {{.Global.Citations.Count}} total citations for the {{len .Global.Documents}} documents cateloged,
       including {{len .Global.Citations.People}} people.
@@ -96,34 +95,34 @@
         {{end}}
       </ul>
     </div>
-
-    #}
   </section>
+  #}
 
   <section>
     <h2>Books</h2>
 
-    {#
-
     <span class="sidenote sidenote-standalone">
-      {{len .Global.Citations.Books}} books, ordered by the authors last name.
+      {{ books | length }} books, ordered by the authors last name.
       As above, book links search Library Genesis.
     </span>
 
     <div id="books">
-      <ul>{{ range $book, $documents := .Global.Citations.Books}}
+      <ul>{% for book, markdown_files in books %}
         <li>
-          {{$book.PrimaryAuthor.CitationKey}}. <a class="citation book" href="{{$book.Citation.ExternalLink}}"
-            target="_blank">{{$book.Title}}</a> — {{len $documents}}
-          {{range $documents}}
-          <a href="{{.Slug}}">{{.Title}}</a>
-          {{end}}
+          {{ book.title }} by {{ book.primary_author }}
+          {% for markdown_file, mentions in markdown_files %}
+            {{ markdown_file.frontmatter.title }}
+            {% for mention in mentions %}
+              {{ markdown_file.slug }}
+              {#
+              <a href="/{{ markdown_file.slug }}#{{ mention.base64_hash() }}">{{ mention.base64_hash() }}</a> 
+              #}
+            {% endfor %}
+          {% endfor %}
         </li>
-        {{end}}
+        {% endfor %}
       </ul>
     </div>
-
-    #}
   </section>
 
   <section>

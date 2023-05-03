@@ -5,7 +5,7 @@ use markdown_it::{
     parser::extset::RootExt,
     plugins::cmark::block::paragraph::Paragraph,
 };
-use crate::markdown::{Speakers, Path};
+use crate::MarkdownFile;
 
 #[derive(Debug)]
 pub struct SpeakerSection {
@@ -30,7 +30,7 @@ impl NodeValue for SpeakerSection {
 
 /// Retrieves the path for this markdown document
 fn path<'a>(state: &'a BlockState<'a, 'a>) -> &'a str {
-    state.md.ext.get::<Path>().unwrap().0.to_str().unwrap()
+    state.md.ext.get::<MarkdownFile>().unwrap().path.to_str().unwrap()
 }
 
 
@@ -158,8 +158,10 @@ impl BlockRule for SpeakerSectionBlockScanner {
             let Some(shortname) = get_speaker_shortname(state.get_line(start_line)) else { return None };
             shortname.to_string()
         };
+
+        let speakers = state.md.ext.get::<MarkdownFile>().unwrap().frontmatter.speakers.clone();
         
-        let longname = state.md.ext.get::<Speakers>().unwrap().0.get(&shortname.to_string())
+        let longname = speakers.get(&shortname.to_string())
             .expect(format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {}", path(state)).as_str())
             .to_string();
 
