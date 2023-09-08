@@ -116,9 +116,9 @@ fn main() {
 
     let markdown_parser = &mut markdown_it::MarkdownIt::new();
     markdown_it::plugins::cmark::add(markdown_parser);
-    //markdown::timecode::add(markdown_parser);
-    //markdown::speaker::add(markdown_parser);
-    //markdown::sidenote::add(markdown_parser);
+    markdown::timecode::add(markdown_parser);
+    markdown::speaker::add(markdown_parser);
+    markdown::sidenote::add(markdown_parser);
     markdown::mention::add(markdown_parser);
 
     for entry in fs::read_dir(input).unwrap() {

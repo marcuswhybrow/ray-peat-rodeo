@@ -110,13 +110,16 @@ pub enum Mentionable {
         first_names: String,
         last_name: String,
     },
+
     Book {
         title: String,
         primary_author: String,
     },
+
     Paper {
         doi: String,
     },
+
     Link {
         url: url::Url,
     },
@@ -233,10 +236,23 @@ fn consume_mention_signature(state: &mut InlineState) -> Option<String> {
     let start = state.pos;
 
     while state.pos < state.pos_max {
-        if state.src.get(state.pos..state.pos+1)? == "|" || state.src.get(state.pos..state.pos+2)? == "]]" {
+        if state.pos + 2 > state.pos_max {
+            return None;
+        }
+
+        let Some(ultimate) = state.src.get(state.pos..state.pos+2) else {
+            // Non UTF-8 characters cause `get` to return None,
+            // If this happens, ignore it, and carry on searching.
+            state.pos += 1;
+            continue;
+        };
+
+        if ultimate.starts_with("|") || ultimate.starts_with("]]") {
             if state.pos <= start {
+                println!("EMPTY {}", state.src.get(start..state.pos)?.to_string());
                 return None;
             } else {
+                println!("FOUND {}", state.src.get(start..state.pos)?.to_string());
                 return Some(state.src.get(start..state.pos)?.to_string());
             }
         }
@@ -244,6 +260,7 @@ fn consume_mention_signature(state: &mut InlineState) -> Option<String> {
         state.pos += 1;
     }
 
+    println!("EXCEDED {}", state.src.get(start..state.pos_max)?);
     return None;
 }
 
@@ -256,12 +273,23 @@ impl InlineRule for MentionInlineScanner{
     fn run(state: &mut InlineState) -> Option<(Node, usize)> {
         let start = state.pos;
 
-        if state.src.get(state.pos..state.pos+2)? != "[[" { return None; }
+        if state.src.get(state.pos..state.pos+2)? != "[[" {
+            return None;
+        }
         state.pos += 2;
 
-        let mention_signature = consume_mention_signature(state)?;
-        let alt_text = AltText::new(state)?;
-        let mention = Mention::new(state, mention_signature, alt_text)?;
+        let Some(mention_signature) = consume_mention_signature(state) else {
+            state.pos = start;
+            return None;
+        };
+        let Some(alt_text) = AltText::new(state) else {
+            state.pos = start;
+            return None;
+        };
+        let Some(mention) = Mention::new(state, mention_signature, alt_text) else {
+            state.pos = start;
+            return None;
+        };
 
         let mut node = Node::new(mention.clone());
 

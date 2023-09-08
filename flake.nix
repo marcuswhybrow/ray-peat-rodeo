@@ -20,7 +20,7 @@
 
     # https://github.com/cargo2nix/cargo2nix#arguments-to-makepackageset
     rustPkgs = pkgs.rustBuilder.makePackageSet {
-      rustVersion = "1.68.2";
+      rustVersion = "1.72.0";
       rustChannel = "stable";
       packageFun = import ./Cargo.nix;
     };
