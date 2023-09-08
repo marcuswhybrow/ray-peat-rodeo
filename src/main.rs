@@ -8,7 +8,7 @@ use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
 
 #[derive(Parser, Debug)]
 #[command(name = "Ray Peat Rodeo Engine")]
-#[command(author = "Marcus Whybrow <marcus@whybrow.ustatusListk>")]
+#[command(author = "Marcus Whybrow <marcus@whybrow.uk>")]
 #[command(about = "Builds Ray Peat Rodeo into HTML from source")]
 #[command(long_about = None)]
 struct Args {
@@ -116,9 +116,9 @@ fn main() {
 
     let markdown_parser = &mut markdown_it::MarkdownIt::new();
     markdown_it::plugins::cmark::add(markdown_parser);
-    markdown::timecode::add(markdown_parser);
-    markdown::speaker::add(markdown_parser);
-    markdown::sidenote::add(markdown_parser);
+    //markdown::timecode::add(markdown_parser);
+    //markdown::speaker::add(markdown_parser);
+    //markdown::sidenote::add(markdown_parser);
     markdown::mention::add(markdown_parser);
 
     for entry in fs::read_dir(input).unwrap() {
