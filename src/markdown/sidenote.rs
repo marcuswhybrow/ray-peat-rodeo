@@ -65,8 +65,9 @@ impl InlineRule for SidenodeInlineScanner {
 
             if char != '}' { continue }
 
-            let Some(next_char) = state.src.chars().nth(state.pos + 1) else { return None };
-            if !next_char.is_whitespace() { return None }
+            if let Some(next_char) = state.src.chars().nth(state.pos + 1) {
+                if !next_char.is_whitespace() { return None }
+            }
 
             let consumed = state.pos + 1 - starting_pos;
 
