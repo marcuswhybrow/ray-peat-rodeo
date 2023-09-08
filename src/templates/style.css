@@ -138,6 +138,9 @@ sub {
     position: relative;
     top: 15px;
 }
+.speaker p {
+    margin: 20px 0;
+}
 
 .citation {
     font-weight: normal;
