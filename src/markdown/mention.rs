@@ -33,8 +33,6 @@ impl Mention {
             },
 
             (MentionSignature::SignifiedAndProvided(signature), AltText::SignifiedButNotProvided) => {
-                println!("Mention::Hidden {}", signature.as_str());
-
                 let (mentionable, occurance) = Mentionable::new(state, signature);
                 Some(Mention::Hidden { mentionable, occurance })
             },
