@@ -9,42 +9,52 @@ use markdown_it::{
 
 };
 
+// A Mention is the data structure describing a bespoke markdown inline element
+// consumed by InlineMentionScanner, which looks like this:
+//
+// [[Mentionable Signature|Alternative Display Text]]
+//
+// The mention signature is the name of a person, the title of a book, a URL,
+// or the DOI of a scientific paper. This string is the key by which this
+// particular Mention will be grouped with other Mentions in other documents
+// that refer to the same Mentionable Signature. By this means a global lookup
+// table can be constructed with links to, say, all mentions of "William Blake"
+// should that be the "mention signature".
+//
+// The "alternative display text" is anthing to the right of an (optional) pipe
+// character, and allows the document author to customise the link text of this
+// particular mention. If not provided, then a sensible default is used.
+//
+// Both the mentionable signature, and the alternative display text are 
+// fields of the Mention struct, and both are derived from the text explicitly
+// defined by the author of the markdown document. It's also useful to know if 
+// this is the first, second, or nth, mention of a particular mentionable
+// signature within this document.
+//
+// The mention "occurance" field is implicity determined by the number of 
+// preceding mentions with the same mention signature. Thus, the first 
+// occurance may be directly linked to, or indeed, any occurance.
+//
 #[derive(Debug, Clone, Hash)]
-pub enum Mention {
-    Placeholder {
-        fragment: Fragment
-    },
-    Hidden {
-        mentionable: Mentionable,
-        occurance: u32,
-    },
-    Normal {
-        mentionable: Mentionable,
-        occurance: u32,
-        fragment: Option<Fragment>,
-    },
+pub struct Mention {
+    // The person, book, URL, or DOI derrived from the mention signature
+    mentionable: Mentionable,
+
+    // The position of this mention relative to other metions in the same 
+    // document that have the same mention signature.
+    occurance: u32,
+
+    // In order to support markdown foratting of the alternative display text,
+    // the alt_text must first be captured and consumed by InlineMentionScanner
+    // and later explicitly resubmitted to the parser to evince the less greedy
+    // rules such as bold, italic, underline, etc.
+    alt_text_fragment: Option<Fragment>,
 }
 
 impl Mention {
-    fn new(state: &mut InlineState, signature: MentionSignature, alt_text: AltText) -> Option<Mention> {
-        match (signature, alt_text) {
-            (MentionSignature::SignifiedButNotProvided, AltText::SignifiedAndProvided(fragment)) => {
-                Some(Mention::Placeholder { fragment })
-            },
-
-            (MentionSignature::SignifiedAndProvided(signature), AltText::SignifiedButNotProvided) => {
-                let (mentionable, occurance) = Mentionable::new(state, signature);
-                Some(Mention::Hidden { mentionable, occurance })
-            },
-
-            (MentionSignature::SignifiedAndProvided(signature), alt_text) => {
-                let (mentionable, occurance) = Mentionable::new(state, signature);
-                let fragment = alt_text.to_fragment();
-                Some(Mention::Normal { mentionable, occurance, fragment })
-            },
-
-            (_, _) => None,
-        }
+    fn new(state: &mut InlineState, signature: String, alt_text: AltText) -> Option<Mention> {
+        let (mentionable, occurance) = Mentionable::new(state, signature);
+        Some(Mention { mentionable, occurance, alt_text_fragment: alt_text.to_fragment() })
     }
 
     fn base64_hash(&self) -> String {
@@ -52,77 +62,39 @@ impl Mention {
         self.hash(&mut hasher);
         general_purpose::URL_SAFE_NO_PAD.encode(hasher.finish().to_ne_bytes())
     }
-
-    fn into_node(self, state: &mut InlineState) -> Option<Node> {
-        use Mention::*;
-
-        let mut node = Node::new(self.clone());
-
-        match self {
-            Hidden { mentionable: _, occurance: _ } => (),
-            Normal { mentionable, occurance: _, fragment: None } => {
-                node.children.push(
-                    Node::new(Text {
-                        content: mentionable.default_display_text()
-                    })
-                );
-            },
-            Placeholder { fragment } |
-            Normal { mentionable: _, occurance: _, fragment: Some(fragment) } => {
-                let node = std::mem::replace(&mut state.node, node);
-                let pos = std::mem::replace(&mut state.pos, fragment.start);
-                let pos_max = std::mem::replace(&mut state.pos_max, fragment.end);
-
-                state.md.inline.tokenize(state);
-
-                state.pos = pos;
-                state.pos_max = pos_max;
-                return Some(std::mem::replace(&mut state.node, node));
-            }
-        };
-
-        Some(node)
-    }
 }
 
 impl NodeValue for Mention {
     fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
-        use Mention::*;
+        let mut attrs = node.attrs.clone();
 
-        match self {
-            Hidden { mentionable: _, occurance: _ } => return,
+        use Mentionable::*;
 
-            Placeholder { fragment: _ } => fmt.contents(&node.children),
-
-            Normal { mentionable, occurance: _, fragment: _ } => {
-                let mut attrs = node.attrs.clone();
-
-                use Mentionable::*;
-
-                let class = match mentionable {
-                    Book { title: _, primary_author: _ } => "book",
-                    Person { first_names: _, last_name: _ } => "person",
-                    Paper { doi: _ } => "paper",
-                    Link { url: _ } => "link",
-                };
-
-                // Purposfully unfriendly id to indicate they're unreliable
-                attrs.push(("id", self.base64_hash()));
-
-                attrs.push(("class", vec!["citation", class].join(" ")));
-                attrs.push(("target", "_blank".into()));
-                attrs.push(("href", match mentionable {
-                    Book { title, primary_author } => format!("https://google.com/search?q={} {}", title, primary_author), 
-                    Person { first_names, last_name } => format!("https://google.com/search?q={} {}", first_names, last_name),
-                    Paper { doi } => format!("https://doi.org/{}", doi),
-                    Link { url } => url.to_string(),
-                }));
-
-                fmt.open("a", &attrs);
-                fmt.contents(&node.children);
-                fmt.close("a");
-            },
+        let class = match self.mentionable {
+            Book { title: _, primary_author: _ } => "book",
+            Person { first_names: _, last_name: _ } => "person",
+            Paper { doi: _ } => "paper",
+            Link { url: _ } => "link",
         };
+
+        // Purposfully unfriendly id to indicate they're unreliable
+        attrs.push(("id", self.base64_hash()));
+
+        attrs.push(("class", vec!["citation", class].join(" ")));
+        attrs.push(("target", "_blank".into()));
+
+        let href = match self.mentionable.clone() {
+            Book { title, primary_author } => format!("https://google.com/search?q={} {}", title, primary_author), 
+            Person { first_names, last_name } => format!("https://google.com/search?q={} {}", first_names, last_name),
+            Paper { doi } => format!("https://doi.org/{}", doi),
+            Link { url } => url.to_string(),
+        };
+
+        attrs.push(("href", href));
+
+        fmt.open("a", &attrs);
+        fmt.contents(&node.children);
+        fmt.close("a");
     }
 }
 
@@ -193,37 +165,11 @@ impl Mentionable {
     }
 }
 
-#[derive(Debug)]
-enum MentionSignature {
-    SignifiedAndProvided(String),
-    SignifiedButNotProvided,
-}
-
-impl MentionSignature {
-    fn new(state: &mut InlineState) -> Option<MentionSignature> {
-        let start = state.pos;
-
-        while state.pos < state.pos_max {
-            if state.src.get(state.pos..state.pos+1)? == "|" || state.src.get(state.pos..state.pos+2)? == "]]" {
-                if state.pos <= start {
-                    return Some(MentionSignature::SignifiedButNotProvided);
-                } else {
-                    return Some(MentionSignature::SignifiedAndProvided(state.src.get(start..state.pos)?.to_string()));
-                }
-            }
-
-            state.pos += 1;
-        }
-
-        return None;
-    }
-}
 
 #[derive(Debug)]
 enum AltText {
-    SignifiedAndProvided(Fragment),
-    SignifiedButNotProvided,
-    NotSignified,
+    Provided(Fragment),
+    NotProvided,
 }
 
 impl AltText {
@@ -235,7 +181,7 @@ impl AltText {
                 state.pos += 2;
             }
 
-            return Some(AltText::NotSignified);
+            return Some(AltText::NotProvided);
         } else {
             state.pos += 1;
         }
@@ -244,14 +190,8 @@ impl AltText {
 
         while state.pos < state.pos_max {
             if state.src.get(state.pos-1..state.pos+1)? == "]]" {
-                let final_pos = state.pos;
                 state.pos += 1;
-
-                if final_pos <= start + 2 {
-                    return Some(AltText::SignifiedButNotProvided);
-                } else {
-                    return Some(AltText::SignifiedAndProvided(Fragment { start, end: state.pos - 2 }));
-                }
+                return Some(AltText::Provided(Fragment { start, end: state.pos - 2 }));
             }
 
             state.md.inline.skip_token(state);
@@ -262,7 +202,7 @@ impl AltText {
 
     fn to_fragment(self) -> Option<Fragment> {
         match self {
-            AltText::SignifiedAndProvided(fragment) => Some(fragment.clone()),
+            AltText::Provided(fragment) => Some(fragment.clone()),
             _ => None,
         }
     }
@@ -273,6 +213,40 @@ pub struct Fragment {
     start: usize,
     end: usize,
 }
+
+impl Fragment {
+    fn parse(self, state: &mut InlineState, node: Node) -> Node {
+        let node = std::mem::replace(&mut state.node, node);
+        let pos = std::mem::replace(&mut state.pos, self.start);
+        let pos_max = std::mem::replace(&mut state.pos_max, self.end);
+
+        state.md.inline.tokenize(state);
+
+        state.pos = pos;
+        state.pos_max = pos_max;
+        std::mem::replace(&mut state.node, node)
+    }
+}
+
+
+fn consume_mention_signature(state: &mut InlineState) -> Option<String> {
+    let start = state.pos;
+
+    while state.pos < state.pos_max {
+        if state.src.get(state.pos..state.pos+1)? == "|" || state.src.get(state.pos..state.pos+2)? == "]]" {
+            if state.pos <= start {
+                return None;
+            } else {
+                return Some(state.src.get(start..state.pos)?.to_string());
+            }
+        }
+
+        state.pos += 1;
+    }
+
+    return None;
+}
+
 
 struct MentionInlineScanner;
 
@@ -285,15 +259,19 @@ impl InlineRule for MentionInlineScanner{
         if state.src.get(state.pos..state.pos+2)? != "[[" { return None; }
         state.pos += 2;
 
-        let mention_signature = MentionSignature::new(state)?;
+        let mention_signature = consume_mention_signature(state)?;
         let alt_text = AltText::new(state)?;
-
         let mention = Mention::new(state, mention_signature, alt_text)?;
 
-        Some((
-            mention.into_node(state)?,
-            std::mem::replace(&mut state.pos, start) - start,
-        ))
+        let mut node = Node::new(mention.clone());
+
+        if let Some(fragment) = mention.alt_text_fragment {
+            node = fragment.parse(state, node);
+        } else {
+            node.children.push(Node::new(Text { content: mention.mentionable.default_display_text() }));
+        }
+
+        Some((node, std::mem::replace(&mut state.pos, start) - start))
     }
 }
 
