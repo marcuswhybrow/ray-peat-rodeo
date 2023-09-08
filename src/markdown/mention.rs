@@ -27,20 +27,24 @@ pub enum Mention {
 
 impl Mention {
     fn new(state: &mut InlineState, signature: MentionSignature, alt_text: AltText) -> Option<Mention> {
-        use MentionSignature::*;
-        use Mention::*;
-
         match (signature, alt_text) {
-            (SignifiedButNotProvided, AltText::SignifiedAndProvided(fragment)) => Some(Placeholder { fragment }),
-            (SignifiedAndProvided(signature), AltText::NotSignified|AltText::SignifiedButNotProvided) => {
-                let (mentionable, occurance) = Mentionable::new(state, signature);
-                Some(Hidden { mentionable, occurance })
+            (MentionSignature::SignifiedButNotProvided, AltText::SignifiedAndProvided(fragment)) => {
+                Some(Mention::Placeholder { fragment })
             },
-            (SignifiedAndProvided(signature), alt_text) => {
+
+            (MentionSignature::SignifiedAndProvided(signature), AltText::SignifiedButNotProvided) => {
+                println!("Mention::Hidden {}", signature.as_str());
+
                 let (mentionable, occurance) = Mentionable::new(state, signature);
-                let fragment = Some(alt_text.to_fragment()?);
-                Some(Normal { mentionable, occurance, fragment })
+                Some(Mention::Hidden { mentionable, occurance })
             },
+
+            (MentionSignature::SignifiedAndProvided(signature), alt_text) => {
+                let (mentionable, occurance) = Mentionable::new(state, signature);
+                let fragment = alt_text.to_fragment();
+                Some(Mention::Normal { mentionable, occurance, fragment })
+            },
+
             (_, _) => None,
         }
     }
@@ -89,7 +93,9 @@ impl NodeValue for Mention {
 
         match self {
             Hidden { mentionable: _, occurance: _ } => return,
+
             Placeholder { fragment: _ } => fmt.contents(&node.children),
+
             Normal { mentionable, occurance: _, fragment: _ } => {
                 let mut attrs = node.attrs.clone();
 
