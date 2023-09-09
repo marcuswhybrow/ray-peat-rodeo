@@ -10,6 +10,17 @@ pub struct InlineSidenote {
     position: u32,
 }
 
+impl InlineSidenote {
+    // Create a new InlineSidenote with the correct position relative to 
+    // other extant InlineSidenote's for this document
+    pub fn new(current_position: &mut Position) -> InlineSidenote {
+        current_position.0 += 1;
+        InlineSidenote {
+            position: current_position.0,
+        }
+    }
+}
+
 impl NodeValue for InlineSidenote {
     fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
         let id = format!("sidenote-{}", self.position);
@@ -32,9 +43,10 @@ impl NodeValue for InlineSidenote {
 }
 
 #[derive(Debug)]
-struct Position(u32);
+pub struct Position(pub u32);
 
 impl RootExt for Position {}
+
 
 struct SidenodeInlineScanner;
 
@@ -64,13 +76,9 @@ impl InlineRule for SidenodeInlineScanner {
             // Create a new InlineSidenote node, and use the existing parser 
             // state to tokenize the body.
             let node = {
-                let node = std::mem::replace(&mut state.node, Node::new(InlineSidenote {
-                    position: {
-                        let position = state.root_ext.get_or_insert(Position(0));
-                        position.0 += 1;
-                        position.0
-                    }
-                }));
+                let node = std::mem::replace(&mut state.node, Node::new(
+                    InlineSidenote::new(state.root_ext.get_or_insert(Position(0)))
+                ));
                 let pos = std::mem::replace(&mut state.pos, starting_pos + 1);
                 let pos_max = std::mem::replace(&mut state.pos_max, pos);
 

@@ -10,7 +10,7 @@ NB: In what arenas, specifically, do you think our ever-popular Western Medicine
 
 RP: It would be much easier to name the things that they do right, and why. On average, they are competent at mechanical things, such as setting broken bones, suturing wounds, and even replacing severed appendages. They do that well, because they understand the simple mechanics of the body; they are taught to understand the body as a mechanism.
 
-Unfortunately, that mechanical thinking is extended to other areas, such as the circulation of blood. A good plumber could identify with the standard medical approaches to treating circulatory problems. Beyond the mechanical properties of the body, everything is physiological, and most doctors learned physiology from an absurdly bad textbook by [[Arthur Clifton Guyton|A.C. Guyton]], that I discussed in [[|one of my newsletters]].
+Unfortunately, that mechanical thinking is extended to other areas, such as the circulation of blood. A good plumber could identify with the standard medical approaches to treating circulatory problems. Beyond the mechanical properties of the body, everything is physiological, and most doctors learned physiology from an absurdly bad textbook by [[Arthur Clifton Guyton|A.C. Guyton]], that I discussed in one of my newsletters. {#17}
 
 In 1944, [[Charles Sidney Burwell|Charles Burwell]], dean of the Harvard Medical School, told the new students "half of what we are going to teach you is wrong, and half of it is right. Our problem is that we don't know which half is which.”
 

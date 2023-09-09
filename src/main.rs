@@ -118,6 +118,7 @@ fn main() {
     markdown_it::plugins::cmark::add(markdown_parser);
     markdown::timecode::add(markdown_parser);
     markdown::speaker::add(markdown_parser);
+    markdown::github::add(markdown_parser); // must apply before sidenote rules
     markdown::sidenote::add(markdown_parser);
     markdown::mention::add(markdown_parser);
 

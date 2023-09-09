@@ -7,6 +7,7 @@ pub mod timecode;
 pub mod speaker;
 pub mod sidenote;
 pub mod mention;
+pub mod github;
 
 #[derive(Debug)]
 pub struct Speakers(pub BTreeMap<String, String>);
