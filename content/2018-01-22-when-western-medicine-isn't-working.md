@@ -23,7 +23,7 @@ A very small percentage of the articles on sleep apnea (the periodic cessation o
 > It involves removing and repositioning excess tissue in the throat to make the airway wider. The surgeon can trim down your soft palate and uvula, remove your tonsils, and reposition some of the muscles of the soft palate. UPPP [uvulopalatopharyngoplasty] and other soft palate procedures are the most common type of surgery for sleep apnea.
 — [[https://web.archive.org/web/20180319082440/https://www.webmd.com/sleep-disorders/sleep-apnea/uvulopalatopharyngoplasty-for-obstructive-sleep-apnea|webmd.com]] 
 
-The most popular treatment is to use an apparatus that forces air into the lungs during sleep. {[[https://web.archive.org/web/20180204063334/http://www.sleepeducation.org/treatment-therapy/surgery/surgical-procedures|sleepeducation.org]]}{This paragraph, and the preceding paragraph, may be attributable to Nicole Behnam. The original formatting makes attribution unclear.}
+The most popular treatment is to use an apparatus that forces air into the lungs during sleep. {[[https://web.archive.org/web/20180204063334/http://www.sleepeducation.org/treatment-therapy/surgery/surgical-procedures|sleepeducation.org]]} {Editors Note: This paragraph, and the preceding paragraph, may be attributable to Nicole Behnam. The original formatting makes attribution unclear.}
 
 Besides a mechanistic philosophy, the medical culture has been massively influenced by economic interests, especially the drug industry, and their influence through advertising, subsidizing research and continuing medical education, and their influence on government.
 
