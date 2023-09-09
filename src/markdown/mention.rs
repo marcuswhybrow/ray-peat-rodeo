@@ -249,10 +249,8 @@ fn consume_mention_signature(state: &mut InlineState) -> Option<String> {
 
         if ultimate.starts_with("|") || ultimate.starts_with("]]") {
             if state.pos <= start {
-                println!("EMPTY {}", state.src.get(start..state.pos)?.to_string());
                 return None;
             } else {
-                println!("FOUND {}", state.src.get(start..state.pos)?.to_string());
                 return Some(state.src.get(start..state.pos)?.to_string());
             }
         }
@@ -260,7 +258,6 @@ fn consume_mention_signature(state: &mut InlineState) -> Option<String> {
         state.pos += 1;
     }
 
-    println!("EXCEDED {}", state.src.get(start..state.pos_max)?);
     return None;
 }
 
