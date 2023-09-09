@@ -8,7 +8,7 @@ speakers:
 
 ---
 
-KM: How long have you been making yourself accessible through emails? {Editor's note: The source material doesn't mention the author of the quetions. However [this article](https://web.archive.org/web/20130612080631/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat) describes Karen Mcc as the primary author, also thanking Heath Kurra, Greg Waitt, and the Ray Peat Fans Facebook group. Please [edit this page]({{.EditLink}}) or [get in touch]({{.ContactLink}}) if you think this incorrect.}
+KM: How long have you been making yourself accessible through emails? {Editor's note: The source material doesn't mention the author of the questions. However [this article](https://web.archive.org/web/20130612080631/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat) describes Karen Mcc as the primary author, also thanking Heath Kurra, Greg Waitt, and the Ray Peat Fans Facebook group. Please [edit this page]({{.EditLink}}) or [get in touch]({{.ContactLink}}) if you think this incorrect.}
 
 RP: Since getting email, about ten years.
 
