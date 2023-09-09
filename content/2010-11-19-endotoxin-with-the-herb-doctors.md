@@ -1,6 +1,9 @@
 ---
-title: Endotoxin
-series: Ask Your Herb Doctor
+source:
+  title: Endotoxin
+  series: Ask Your Herb Doctor
+  url: https://www.functionalps.com/blog/wp-content/uploads/2011/09/add-Kmud_Endotoxins_kmud_101119_190000fritalk.mp3
+  duration: 58:30
 speakers:
   AM: Andrew Murray
   SJM: Sarah Johannesen Murray
@@ -8,8 +11,6 @@ speakers:
   E: Egineer
   C: Female Caller
   C2: Female (2nd) Caller
-source: https://www.functionalps.com/blog/wp-content/uploads/2011/09/add-Kmud_Endotoxins_kmud_101119_190000fritalk.mp3
-sourceDuration: 58:30
 transcription:
   source: https://raypeatforum.com/community/threads/endotoxin-kmud-november-19-2010.5151/
   author: dd99

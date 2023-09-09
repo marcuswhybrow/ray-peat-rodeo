@@ -88,10 +88,6 @@ fn main() {
         println!("Wrote {:?}", final_path);
     };
 
-    // Render Specific Pages
-
-    render("index.html", &gcx, "index.html");
-    render("style.css", &gcx, "style.css");
 
     // Render Content
 
@@ -105,12 +101,17 @@ fn main() {
     }
 
     #[derive(Serialize, Deserialize, Debug)]
-    struct Frontmatter {
+    struct FrontmatterSource {
         title: String,
         series: Option<String>,
+        url: String,
+        duration: Option<String>,
+    }
+
+    #[derive(Serialize, Deserialize, Debug)]
+    struct Frontmatter {
+        source: FrontmatterSource,
         speakers: BTreeMap<String, String>, 
-        source: String,
-        source_duration: Option<String>,
         transcription: Option<Transcription>,
     }
 
@@ -134,7 +135,7 @@ fn main() {
             Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
         };
 
-        let source = match url::Url::parse(frontmatter.source.as_str()) {
+        let source = match url::Url::parse(frontmatter.source.url.as_str()) {
             Ok(s) => s,
             Err(e) => panic!("Invalid `source` URL in YAML frontmatter in {:?}\n{e}", path),
         };
@@ -149,12 +150,17 @@ fn main() {
         let out_name = &format!("{}/index.html", &slug);
 
         let mut cx = tera::Context::new();
-        cx.insert("title", &frontmatter.title);
+        cx.insert("title", &frontmatter.source.title);
         cx.insert("contents", &html);
         cx.extend(gcx.clone());
 
         render("page.html", &cx, out_name);
     }
+
+    // Render Specific Pages
+
+    render("index.html", &gcx, "index.html");
+    render("style.css", &gcx, "style.css");
 
     println!("Done");
 }

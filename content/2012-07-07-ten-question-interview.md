@@ -1,7 +1,8 @@
 ---
-title: Ten Question Interview
-series: Ray Peat Insight
-source: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
+source:
+  title: Ten Question Interview
+  series: Ray Peat Insight
+  url: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
 speakers:
   KM: Karen Mcc
   RP: Ray Peat

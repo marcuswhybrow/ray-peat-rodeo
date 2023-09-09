@@ -1,7 +1,8 @@
 ---
-title: Organizing the Panic
-series: Ray Peat Insight
-source: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
+source:
+  title: Organizing the Panic
+  series: Ray Peat Insight
+  url: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
 speakers:
     KM: Karen Mcc
     RP: Ray Peat

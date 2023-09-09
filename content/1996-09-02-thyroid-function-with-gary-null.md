@@ -1,11 +1,12 @@
 ---
-title: Thyroid Function
-series: Gary Null
+source:
+  title: Thyroid Function
+  series: Gary Null
+  url: https://www.youtube.com/watch?v=x6bxGBR1Sqs
+  duration: 58:30
 speakers:
   GN: Gary Null
   RP: Ray Peat
-source: https://www.youtube.com/watch?v=x6bxGBR1Sqs
-sourceDuration: 58:30
 transcription:
   source: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
   author: ilovethesea
