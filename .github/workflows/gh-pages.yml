@@ -28,7 +28,7 @@ jobs:
        extra_nix_config: experimental-features = nix-command flakes
     - uses: actions/checkout@v3
     - uses: actions/configure-pages@v3
-    - run: nix develop -c go run main.go build
+    - run: nix run
     - uses: actions/upload-pages-artifact@v1.0.8
       with:
         path: build
