@@ -9,7 +9,7 @@ speakers:
 
 ---
 
-KM: How long have you been making yourself accessible through emails? {Editor's note: The source material doesn't mention the author of the questions. However [this article](https://web.archive.org/web/20130612080631/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat) describes Karen Mcc as the primary author, also thanking Heath Kurra, Greg Waitt, and the Ray Peat Fans Facebook group. Please [edit this page]({{.EditLink}}) or [get in touch]({{.ContactLink}}) if you think this incorrect.}
+KM: How long have you been making yourself accessible through emails? {Editor's note: The source material doesn't mention the author of the questions. However [[Roddy, Danny [url] https://web.archive.org/web/20130612080631/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat | this article]] describes [[Mcc, Karen]] as the primary author, also thanking [[Kurra, Heath]], [[Waitt, Greg]], and the [[Ray Peat Fans Facebook Group [url] https://web.archive.org/web/20130612080631/https://www.facebook.com/pages/Ray-Peat-Fans/179593648758146 | Ray Peat Fans Facebook Group]].}
 
 RP: Since getting email, about ten years.
 
@@ -19,7 +19,7 @@ RP: In a recent week, 140, many just yes or no, or a couple of words, and a few 
 
 KM: When you started answering emails, did you foresee that this would involve so many questions from people and be your primary method of interacting with the public rather than formal consultations? Was it something that evolved for you or was it an intentional revolution of redefining how scientists interact with society by being so accessible and not being motivated by money? 
 
-RP: Knowledge isn’t a commodity, especially not a fungible commodity, as the medical business sees it. Consciousness and culture are part of the life process. It is exactly the commoditization of medical knowledge that makes it dangerous, and generally stupid. Doctors buy their knowledge, and then resell it over and over; it’s valuable as a commodity, so its value has to be protected by the equivalent of a copyright, the system of laws establishing the profession. Without its special status, its worthlessness would be quickly demonstrated. When [[Arthur Clifton Guyton|A.C. Guyton]] wrote his [[Textbook of Medical Physiology -by- Arthur Clifton Guyton|textbook of medical physiology]] (the most widely used text in the world) in the 1950s, it was trash; as it was studied and applied by generations of physicians, it was still trash. The most compliant patients who bought their treatment from the most authoritative, [[Arthur Clifton Guyton|Guytonesque]], doctors were buying their own disability and death.
+RP: Knowledge isn’t a commodity, especially not a fungible commodity, as the medical business sees it. Consciousness and culture are part of the life process. It is exactly the commoditization of medical knowledge that makes it dangerous, and generally stupid. Doctors buy their knowledge, and then resell it over and over; it’s valuable as a commodity, so its value has to be protected by the equivalent of a copyright, the system of laws establishing the profession. Without its special status, its worthlessness would be quickly demonstrated. When [[Guyton, Arthur Clifton|A.C. Guyton]] wrote his [[Guyton, Arthur Clifton [book] Textbook of Medical Physiology]] (the most widely used text in the world) in the 1950s, it was trash; as it was studied and applied by generations of physicians, it was still trash. The most compliant patients who bought their treatment from the most authoritative, [[Guyton, Arthur Clifton|Guytonesque]], doctors were buying their own disability and death.
 
 Each time you learn something, your consciousness becomes something different, and the questions you ask will be different; you don’t know what the next appropriate question will be when you haven’t assimilated the earlier answers. Until you see something as the answer to an urgent question, you can’t see that it has any value. The unexpected can’t be a commodity. When people buy professional knowledge they get what they pay for, a commodity in a system that sustains ignorance.
 
@@ -37,7 +37,7 @@ RP: In classes, where the subject matter is an area of knowledge, I look for asp
 
 KM: What impact would you like to see your research make on society? Reaching the largest amount of people? or a certain type of person? Or are you completely detached from the outcome?
 
-RP: I’d like to see it lead to the disestablishment of medicine. The same general outcomes [[Ivan Illich]] worked for. {[[Nicole Foss|]][[http://www.youtube.com/watch?v=lDr71LHO0Jo|Foss on Degrowth]]}
+RP: I’d like to see it lead to the disestablishment of medicine. The same general outcomes [[Illich, Ivan]] worked for. {[[Foss, Nicole [url] http://www.youtube.com/watch?v=lDr71LHO0Jo]]}
 
 KM: You put your research out there for free while others use it to make money, how do you feel about this?
 

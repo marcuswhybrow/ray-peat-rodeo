@@ -21,7 +21,7 @@ DB: Great, well I feel just thrilled to be speaking with you today. I love that 
 
 RP: Oh I actually started thinking about education when I was about eight years old. We moved to Oregon from San Diego and I had a couple of years at a very tiny school. I think there were a dozen students in eighth grade, and so as a third grader I got to listen to the lessons for all of the grades. And when I got to the junior high I realized I had already heard the lessons for a couple years previously.
 
-We had a little encyclopedia, published about 1930, and it had an article about experimental schools, and I heard about [[Bertrand Russell]]'s private school he started with his wife, and that really got me thinking how good the experience was in that tiny country school, and then when I got to the the city schools, how regimented and deadening it was.
+We had a little encyclopedia, published about 1930, and it had an article about experimental schools, and I heard about [[Russell, Bertrand|Bertrand Russell's]] private school he started with his wife, and that really got me thinking how good the experience was in that tiny country school, and then when I got to the the city schools, how regimented and deadening it was.
 
 So all the way through high school I experienced that stifling effect of most of the classes. For example the biology teacher at tenth grade biology refused to talk about evolution. Most of the teachers were similarly backward. There were two or three very good people and I realized that getting to know enlightened people was the thing, not taking their courses.
 
@@ -31,7 +31,7 @@ But I accidentally I heard about a literature professor who had a reputation for
 
 [5:04] So I had the expectation that graduate school might have other people like that and found that they were even scarcer in graduate school than in that little State College. So first I got a General Studies Master's Degree in which I was able to pick out professors that I thought were sane and then do a one-to-one reading and conference, sort of, tutorial with them and went on to specialize in linguistics and found a couple of professors for similar one-to-one tutorials.
 
-But that was in 1959 and 1960. The Masters was 1956, 1957. And at that time the best of the professors had to be extremely cautious. For example the atmospheric bomb tests were going on and if anyone criticized militarism, or the dangers of dumping radioactive fallout onto populations, they were fired from their government jobs and cut off from all sorts of communication. If a professor signed a petition opposing war, or bomb testing, they lost their tenure or got fired. The atmosphere was probably just about as bad as the 1930's under [[Adolf Hitler|Hitler]] but no one really talked about it in the US because it was defined as "how democracy works."
+But that was in 1959 and 1960. The Masters was 1956, 1957. And at that time the best of the professors had to be extremely cautious. For example the atmospheric bomb tests were going on and if anyone criticized militarism, or the dangers of dumping radioactive fallout onto populations, they were fired from their government jobs and cut off from all sorts of communication. If a professor signed a petition opposing war, or bomb testing, they lost their tenure or got fired. The atmosphere was probably just about as bad as the 1930's under [[Hitler, Adolf|Hitler]] but no one really talked about it in the US because it was defined as "how democracy works."
 
 DB: [7:30] So it sounds like it's not just that these teachers, so many of your teachers, so many of the teachers that we probably have all had, were just doing their job and doing what they had learned to do, collecting a paycheck, but it was also that they were afraid in some ways. It took a lot of guts to teach differently, perhaps?
 
@@ -43,7 +43,7 @@ RP: I got a job of teaching college that year and was assigned to teach "Introdu
 
 And it happened that in the spring term a visitor from The University of Illinois came to give a lecture. He was invited without assigning a topic. And when he got there he lectured on the Biological effects of radioactive isotopes. Just what I had been talking my students about. And he was, that week, fired from his job at The University of Illinois without mentioning his anti-war, anti-bomb test position, but accusing him of supporting sexual freedom among college students.
 
-But the effect of his lecture on radiation was disturbing to the administrators at my college, and it ended up with me getting fired, and that immediately led me to think about the general issue of *College* education, modelling it, for example, on [[Bertrand Russell]]'s school and the other experimental schools I had read about in the early part of the century.
+But the effect of his lecture on radiation was disturbing to the administrators at my college, and it ended up with me getting fired, and that immediately led me to think about the general issue of *College* education, modelling it, for example, on [[Russell, Bertrand|Bertrand Russell's]] school and the other experimental schools I had read about in the early part of the century.
 
 So I decided to start my own college. The professor from Illinois was going on a lecture tour about academic freedom. He was in the news about suing The University of Illinois, and in his lectures he mentioned that we were starting a college that would be free from intervention by trustees.
 
@@ -55,9 +55,9 @@ RP: Yeah. That was in California. I went to Oregon thinking they might have a di
 
 DB: I'm not surprised because I've been reading a lot of various viewpoints, and listening to some of the things you said, but it really troubles me. It's deeply disconcerting.
 
-[14:15] Back to Blake College. You said [[Bertrand Russell]] was an early influence of yours, and you talked about the experimental school that he and his wife had built. What were some of the educational practices or some of the educational philosophy that they had going that worked its way into what you did with Blake College?
+[14:15] Back to Blake College. You said [[Russell, Bertrand]] was an early influence of yours, and you talked about the experimental school that he and his wife had built. What were some of the educational practices or some of the educational philosophy that they had going that worked its way into what you did with Blake College?
 
-RP: Just to recognize that each student was an individual. Pretty much the same thing that [[Alexander Sutherland Neill|A.S. Neill]] did at Summerhill. Just to recognize that everyone is in the world wanting to understand it. They dealt with that: whatever the individual wanted to know or needed to know.
+RP: Just to recognize that each student was an individual. Pretty much the same thing that [[Neill, Alexander Sutherland|A.S. Neill]] did at Summerhill. Just to recognize that everyone is in the world wanting to understand it. They dealt with that: whatever the individual wanted to know or needed to know.
 
 DB: [15:09] What did you do at Blake with with students that allows them to get to know themselves better and to get to form opinions without outside influence?
 
@@ -79,27 +79,27 @@ RP: One of our people, he had been a TV whizz-kid on one of the TV shows, where 
 
 DB: That's awesome that you're giving opportunities to people like that, who maybe were labelled as smart. Labelled as people who received the information out of a book well and they can spit it out, they can regurgitate information, but that had nothing to do with thinking. It's cool that even the individual recognized the importance of that.
 
-[20:11] One of the things you said reminded me of [[Alexander Sutherland Neill|A.S. Neill]]. He said once that a good teacher does not "draw out" he "gives out" and what he gives out is _love_. And by love I mean approval or, if you like, friendliness, good nature. The good teacher not only understands the child he approves of the child. Did you care to add anything to that?
+[20:11] One of the things you said reminded me of [[Neill, Alexander Sutherland|A.S. Neill]]. He said once that a good teacher does not "draw out" he "gives out" and what he gives out is _love_. And by love I mean approval or, if you like, friendliness, good nature. The good teacher not only understands the child he approves of the child. Did you care to add anything to that?
 
-RP: Yeah, do you know [[Carl Rogers]] and his client-centered therapy?
+RP: Yeah, do you know [[Rogers, Carl]] and his client-centered therapy?
 
 DB: I've read a little bit of his stuff now, yeah.
 
-RP: Yeah. While I was a Psychology major in graduate school for a while, I had a professor that introduced me to people like [[Carl Rogers]]. And his thing was unconditional positive regard was therapeutic in the treatment situation, but it's also educational. It's essential for learning and teaching just as much as for Psychotherapy.
+RP: Yeah. While I was a Psychology major in graduate school for a while, I had a professor that introduced me to people like [[Rogers, Carl]]. And his thing was unconditional positive regard was therapeutic in the treatment situation, but it's also educational. It's essential for learning and teaching just as much as for Psychotherapy.
 
-DB: [22:21] I love that. It reminded me of, and I don't know how familiar you are with [[Friedrich Nietzsche|Nietzsche]] or what you think of [[Friedrich Nietzsche|Nietzsche]], but he, apparently, from my understanding there's this thing called "Amor Fati" and in one of his translations I thought that he said "my formula for greatness in a human being is Amor Fati, that one wants nothing to be different, not forward, not backward, not in all eternity, not merely bearing what is necessary, and still less concealing it, but rather loving it." And, I don't know, to me that speaks a little bit to that in order to change something, or to see challenges and come up with new solutions, you kinda got to start where you areDB: Do you have anything to add to that?
+DB: [22:21] I love that. It reminded me of, and I don't know how familiar you are with [[Nietzsche, Friedrich|Nietzsche]] or what you think of [[Nietzsche, Friedrich|Nietzsche]], but he, apparently, from my understanding there's this thing called "Amor Fati" and in one of his translations I thought that he said "my formula for greatness in a human being is Amor Fati, that one wants nothing to be different, not forward, not backward, not in all eternity, not merely bearing what is necessary, and still less concealing it, but rather loving it." And, I don't know, to me that speaks a little bit to that in order to change something, or to see challenges and come up with new solutions, you kinda got to start where you areDB: Do you have anything to add to that?
 
-RP: Yeah, you know [[John Dewey]]'s famous phrase that "education isn't preparation for life, it is life itself."
+RP: Yeah, you know [[Dewey, John|John Dewey's]] famous phrase that "education isn't preparation for life, it is life itself."
 
 DB: [23:23] Oh I like that, I like that.
 
-RP: Another philosopher-psychologist that I think was very insightful and useful was [[Ernest George Schachtel|Eric Schachtel]] who wrote the book [[Metamorphosis -by- Ernest George Schachtel]] and in that he has the ideas of "Allocentric Perception" starting in infancy in which you learn to see—empathy basically—to see that there are other beings and to learn to let your involvement go out, and have them participate in a personal way. But the way things are set up people start, what he called, "Secondary Autocentric Perception" in which things are understood and valued only as they are useful in your little, self-contained world: you don't go out of yourself, you bring everything useful in to your control.
+RP: Another philosopher-psychologist that I think was very insightful and useful was [[Schachtel, Ernest George|Eric Schachtel]] who wrote the book [[Schachtel, Eric Ernest George [book] Metamorphosis]] and in that he has the ideas of "Allocentric Perception" starting in infancy in which you learn to see—empathy basically—to see that there are other beings and to learn to let your involvement go out, and have them participate in a personal way. But the way things are set up people start, what he called, "Secondary Autocentric Perception" in which things are understood and valued only as they are useful in your little, self-contained world: you don't go out of yourself, you bring everything useful in to your control.
 
 DB: [24:52] Why do you think it is that we learn to do that?
 
 RP: The attitude towards language of the parents and the schools. It usually gets built in by the time a kid starts school with the parents telling them what to believe, basically. Not introducing them to the richness and possibilities of each thing as a complexity that remains to be understood, but giving finished answers. Giving them a world ready to use but not to get too involved in personally.
 
-DB: [25:51] Oh I like that. [[Alexander Sutherland Neill|A.S. Neill]] in his writing on Summerhill talked about how he didn't even know if his own children were able to be self regulated and develop their own way of looking at things, it just was such a challenge for him.
+DB: [25:51] Oh I like that. [[Neill, Alexander Sutherland|A.S. Neill]] in his writing on Summerhill talked about how he didn't even know if his own children were able to be self regulated and develop their own way of looking at things, it just was such a challenge for him.
 
 RP: Yeah, the teacher really can't do anything more than be enthusiastic about living and discovering. And that can't avoid being communicated if the teacher is really living his life that way.
 
@@ -109,23 +109,23 @@ RP: Oh, everyone has accumulated lots of experiences and so sharing your perspec
 
 DB: [28:32] Yeah I like that, and when I got to share my version of what we talked about it gonna be another creation.
 
-RP: Yeah, and [[Alfred North Whitehead]] made that very explicit when he said no sentence is complete and explicit in itself, it always implies _everything_.
+RP: Yeah, and [[Whitehead, Alfred North]] made that very explicit when he said no sentence is complete and explicit in itself, it always implies _everything_.
 
 DB: [28:55] I think that's great. Is that part of his fundamental stages of learning: romance, precision, and generalization? Is that part of the generalization?
 
 RP: Yeah. What is most _personal_ is also most _general_ and universal. If you really are involved in something and share that involvement it involves the whole world as you understand it. So personal and universal can't be separated.
 
-DB: [29:36] Wow. Didn't [[Ralph Waldo Emerson]] in his [[Self-Reliance -by- Ralph Waldo Emerson|essay on self-reliance]] say something like "that whatever is felt by me, is true for everyone." I think he describes it differently but is that kind of what you was getting at?
+DB: [29:36] Wow. Didn't [[Emerson, Ralph Waldo]] in his [[Emerson, Ralph Waldo [book] Self-Reliance|essay on self-reliance]] say something like "that whatever is felt by me, is true for everyone." I think he describes it differently but is that kind of what you was getting at?
 
-RP: Yeah [[Ralph Waldo Emerson|Emerson]] was very good.
+RP: Yeah [[Emerson, Ralph Waldo|Emerson]] was very good.
 
-DB: [29:58] One of my buddies is a philosophy PhD, and he became fluent in German so he could study [[Georg Wilhelm Friedrich Hegel|Hegel]] and [[Friedrich Nietzsche|Nietzsche]] and one of the stories he told me about [[Friedrich Nietzsche|Nietzsche]] was that he carried around a bookbag with him a lot wherever he went and it had his favourite books. And my buddy was telling me that he abhorred American writers with the exception of [[Ralph Waldo Emerson|Emerson]]. He carried around essays of [[Ralph Waldo Emerson|Emerson's]]. He loved reading [[Ralph Waldo Emerson|Emerson]] it always made him happy and helped his thinking, I guess.
+DB: [29:58] One of my buddies is a philosophy PhD, and he became fluent in German so he could study [[Hegel, Georg Wilhelm Friedrich|Hegel]] and [[Nietzsche, Friedrich|Nietzsche]] and one of the stories he told me about [[Nietzsche, Friedrich|Nietzsche]] was that he carried around a bookbag with him a lot wherever he went and it had his favourite books. And my buddy was telling me that he abhorred American writers with the exception of [[Emerson, Ralph Waldo|Emerson]]. He carried around essays of [[Emerson, Ralph Waldo|Emerson's]]. He loved reading [[Emerson, Ralph Waldo|Emerson]] it always made him happy and helped his thinking, I guess.
 
-RP: Yeah [[Ralph Waldo Emerson|Emerson]] was really much more radical than people think.
+RP: Yeah [[Emerson, Ralph Waldo|Emerson]] was really much more radical than people think.
 
-DB: [30:42] One of the things you said earlier, Ray, which I thought was interesting, was about literature from different periods giving us a window into that time period. And then you said later that when you share stories, when we talk about what we're excited about, that that might be a window for someone else into some new world. And it got me thinking about [[Leo Tolstoy|Tolstoy]] for some reason. Because I remember reading somewhere that [[Leo Tolstoy|Tolstoy]] started an experimental school and he apparently didn't teach writing in any kind of traditional way. He just wanted people to _write_. He wanted people's stories to come out. He wanted the content to come out. And he didn't grade or look at punctuation or grammar. Because he thought that eventually that would just correct itself. What he really wanted was the story. What someone was trying to say. Just write that.
+DB: [30:42] One of the things you said earlier, Ray, which I thought was interesting, was about literature from different periods giving us a window into that time period. And then you said later that when you share stories, when we talk about what we're excited about, that that might be a window for someone else into some new world. And it got me thinking about [[Tolstoy, Leo|Tolstoy]] for some reason. Because I remember reading somewhere that [[Tolstoy, Leo|Tolstoy]] started an experimental school and he apparently didn't teach writing in any kind of traditional way. He just wanted people to _write_. He wanted people's stories to come out. He wanted the content to come out. And he didn't grade or look at punctuation or grammar. Because he thought that eventually that would just correct itself. What he really wanted was the story. What someone was trying to say. Just write that.
 
-RP: Yeah I didn't know that about [[Leo Tolstoy|Tolstoy]]. But at Montana State I was given two or three writing courses every term. And the department had instructions on how to grade papers. The policy, I think, was to fail 50% of the first term students. They had an absolute weighted grade: spelling and commas, semicolons and so on. And my first few weeks my students were doing the standard 50% absolute horrible grammar and punctuation. And they were they were writing idiotic stuff.
+RP: Yeah I didn't know that about [[Tolstoy, Leo|Tolstoy]]. But at Montana State I was given two or three writing courses every term. And the department had instructions on how to grade papers. The policy, I think, was to fail 50% of the first term students. They had an absolute weighted grade: spelling and commas, semicolons and so on. And my first few weeks my students were doing the standard 50% absolute horrible grammar and punctuation. And they were they were writing idiotic stuff.
 
 After about five or six weeks I told the classes that I just couldn't stand reading any more of that kind of junk. That from then on I was going to ignore the mechanics, and grade them totally on whether they said something sensible that I could stand to read. Immediately their language became fluid and they all, from that point on, failed to fail.
 
@@ -137,7 +137,7 @@ DB: A deck of cards, so to speak, almost. It reminds me of Biology.
 
 RP: Yeah in 1968 when students were rebelling against University formalism and such, one of our Biology professors said "students have to be treated with authority and firmness. They want to learn to speak a language before they learn the alphabet or the rules." She wanted to teach Science the same way she conceived that people learn language. But in fact you learn the language before you learn the alphabet.
 
-DB: [34:59] Right. I remember reading in one of [[Alexander Sutherland Neill|A.S. Neill's]] accounts of Summerhill about a boy who couldn't read. Didn't want to read. Had no interest in reading. He was 16 years old, 17 years old, still didn't want to read. And then he decided he wanted to pass some state exam to prove he had done the high school equivalent. He studied for a couple months. Basically taught himself how to read. Became a carpenter, I think [[Alexander Sutherland Neill|A.S. Neill]] said, and had three wonderful boys and made a living the rest of his life and had his own business and just did so well. It kind of made me think of that.
+DB: [34:59] Right. I remember reading in one of [[Neill, Alexander Sutherland|A.S. Neill's]] accounts of Summerhill about a boy who couldn't read. Didn't want to read. Had no interest in reading. He was 16 years old, 17 years old, still didn't want to read. And then he decided he wanted to pass some state exam to prove he had done the high school equivalent. He studied for a couple months. Basically taught himself how to read. Became a carpenter, I think [[Neill, Alexander Sutherland|A.S. Neill]] said, and had three wonderful boys and made a living the rest of his life and had his own business and just did so well. It kind of made me think of that.
 
 RP: Yeah, I think that applies to everything. You learn the language before you learn the alphabet and how to punctuate. Every five or six year old has thousands of words of vocabulary and can use them to communicate. When you begin studying Physics or Chemistry or Biology you should start with the language and learn the punctuation later.
 
@@ -155,11 +155,11 @@ The reason it came to an end was the Vietnam War was going on. First we had a vi
 
 Then a couple of years later a guy in an army uniform—which was illegal in Mexico at that time, to wear a foreign uniform—he came way out to Valle de Bravo and introduced himself as the _military_ Attaché of the embassy and said he wanted to interview us. I assume he asked each of us similar questions. But he did it in private. He spent half an hour in my bedroom asking me what my view of the war was. What it's purpose was. And I told him I thought it's basic motivation was economic.
 
-It was several months after that that a series of events that could only have been organized by some higher powers took place in which they organized several levels: including newspaper reporters and [[Madalyn Murray O'Hair|Madalyn Murray]], and [[Richard O'Hair|a guy]] who had identified himself as from Chicago. He had clippings showing that he was a janitor posing as a communist for the FBI. And, in Valle de Bravo, he ingratiated himself as an expatriate American. My father got acquainted with him. Got him drunk several afternoons. Learned his story. He showed credentials from both FBI Marine Corps retired and CIA. And that guy married [[Madalyn Murray O'Hair|Madalyn Murray]]. She had the project of becoming president of Blake College, and the outcome basically was that she fed her stories to the embassy and the the local police and the newspapers that the school is a front for [[Fidel Castro]] and for drug production and smuggling.
+It was several months after that that a series of events that could only have been organized by some higher powers took place in which they organized several levels: including newspaper reporters and [[O'Hair, Madalyn Murray|Madalyn Murray]], and [[O'Hair, Richard|a guy]] who had identified himself as from Chicago. He had clippings showing that he was a janitor posing as a communist for the FBI. And, in Valle de Bravo, he ingratiated himself as an expatriate American. My father got acquainted with him. Got him drunk several afternoons. Learned his story. He showed credentials from both FBI Marine Corps retired and CIA. And that guy married [[O'Hair, Madalyn Murray|Madalyn Murray]]. She had the project of becoming president of Blake College, and the outcome basically was that she fed her stories to the embassy and the the local police and the newspapers that the school is a front for [[Castro, Fidel]] and for drug production and smuggling.
 
-DB: [41:53] My gosh. So when [[Madalyn Murray O'Hair|Madalyn Murray]] got involved you thought her motivations were pretty benign, didn't you?
+DB: [41:53] My gosh. So when [[O'Hair, Madalyn Murray|Madalyn Murray]] got involved you thought her motivations were pretty benign, didn't you?
 
-RP: Yeah. It started in Maryland. She was accused of beating up two policeman causing one to have a heart attack. And was wanted for assault among other things and went to Hawaii. And so it looked like she had been persecuted for her Atheism, and she claimed to be a Lawyer and Sociology Professor. And so she came to teach Sociology. But even before she got there it came out that her plan was to have me removed and take over the school. After she got there she married this embassy contact [[Richard O'Hair|Dick O'Hair]].
+RP: Yeah. It started in Maryland. She was accused of beating up two policeman causing one to have a heart attack. And was wanted for assault among other things and went to Hawaii. And so it looked like she had been persecuted for her Atheism, and she claimed to be a Lawyer and Sociology Professor. And so she came to teach Sociology. But even before she got there it came out that her plan was to have me removed and take over the school. After she got there she married this embassy contact [[O'Hair, Richard|Dick O'Hair]].
 
 DB: Okay. So this happened after her campaign against the schools in America? With the Pledge of Allegiance being got out of the classrooms and so on and so forth?
 
@@ -185,11 +185,11 @@ DB: [47:05] Do you feel that the winds have changed? Be it if they go into a mor
 
 RP: Yeah. I started getting discouraged in the late 1960s following the Blake thing. And I started seeing that the U.S. was being treated as on a course to becoming just more of the third world. That the masses of the U.S. weren't on a course of democracy. I think that is what we've been seeing progressively. And I think this current thing of the pandemic—or the "plandemic"—is a late stage of the process of shaking down small businesses. Getting them out of the way.
 
-Like the Gates Foundation and the United Nations Agriculture Organization are—right now—in process in Africa of destroying small subsistence agriculture and replacing it with giant industrial soybean farms. And the same thing— do you know [[https://www.corbettreport.com|The Corbett Report]]?
+Like the Gates Foundation and the United Nations Agriculture Organization are—right now—in process in Africa of destroying small subsistence agriculture and replacing it with giant industrial soybean farms. And the same thing— do you know [[Corbett, James [url] https://www.corbettreport.com|The Corbett Report]]?
 
 DB: I've heard of it, I haven't watched any of it.
 
-RP: They have a good episode, it's called [[https://www.corbettreport.com/was-there-foreknowledge-of-the-plandemic-qfc-059|Was There Foreknowledge of the Plandemic?]]. It shows that the Federal Reserve was doing drastic, historically novel stuff already in September of last year that looked like the beginning of what was only announced several weeks ago as the multi-trillion-dollar bailout. They were starting on this multi-trillion-dollar _pre_ bailout already in September.
+RP: They have a good episode, it's called [[Corbett, James [url] https://www.corbettreport.com/was-there-foreknowledge-of-the-plandemic-qfc-059|Was There Foreknowledge of the Plandemic?]]. It shows that the Federal Reserve was doing drastic, historically novel stuff already in September of last year that looked like the beginning of what was only announced several weeks ago as the multi-trillion-dollar bailout. They were starting on this multi-trillion-dollar _pre_ bailout already in September.
 
 RP: And an Agency of the Defence Intelligence Agency, according to an ABC news item that was multiply confirmed—many sources confirmed it—that this Medical Intelligence Branch reported that around the end of November a virus was on the move in Wuhan. But China didn't mention it until late December and didn't start taking action until, I think, the 23rd of January. But our Defence Intelligence Agency already reported it before the Chinese knew about it.
 
@@ -211,23 +211,23 @@ DB: [55:24] Wow. You seem so insightful to me. Information is inspiring. And you
 
 RP: Oh, years ago I stopped doing personal consultations because the medical people were sending spies. Ridiculous people who didn't even know how to dress appropriately. They looked like they were going to a doctor's office.
 
-DB: [56:13] Wow. Do you know who [[David Icke]] is?
+DB: [56:13] Wow. Do you know who [[Icke, David]] is?
 
 RP: Oh yeah.
 
-DB: [[David Icke]] did an interview, with [[Brian Rose]] I think is his name. He has a podcast called London real in the UK. And he's been gaining popularity over the years—
+DB: [[Icke, David]] did an interview, with [[Rose, Brian]] (I think is his name). He has a podcast called London real in the UK. And he's been gaining popularity over the years—
 
 RP: Yeah, I think I saw that very one on the Coronavirus?
 
-DB: Yeah, yeah. So the people at YouTube, the people at LinkedIn, the people at Facebook, the people at all the major places where this could be listed or put on a platform: they banned it. They took it down. They completely obliterated this video. So [[Brian Rose]] is going to put out a Part Three with [[David Icke]]. He's hoping more people than in the history of any internet thing will watch it. But he had to build his own platform so that it could be shown.
+DB: Yeah, yeah. So the people at YouTube, the people at LinkedIn, the people at Facebook, the people at all the major places where this could be listed or put on a platform: they banned it. They took it down. They completely obliterated this video. So [[Rose, Brian ]] is going to put out a Part Three with [[Icke, David]]. He's hoping more people than in the history of any internet thing will watch it. But he had to build his own platform so that it could be shown.
 
-RP: I think it was probably Part One that I saw. But i watched the whole thing and I didn't see anything that i didn't agree with. He has the ability to be so far outside the system that he doesn't swallow any of the propaganda.
+RP: I think it was probably Part One that I saw. But I watched the whole thing and I didn't see anything that I didn't agree with. He has the ability to be so far outside the system that he doesn't swallow any of the propaganda.
 
 DB: That's cool to know, and hear your thoughts on that. I guess the Part Three is going to be in eight days or something. So I'm curious to see how that goes. And how long it stays on the internet.
 
 [57:54] So, Ray, this idea that learning is important to life. I want to bring it back here. I just think it's the whole reason we're doing this and I want to come back to it. The idea that learning is an inherent desire. An inherent part of life. A part of evolution. A part of development. Can you talk a little bit about that? Where does that come from? It doesn't have to be taught. You don't have to force someone to learn, right? Where does learning come from?
 
-RP: Oh it's something that starts with amoebas, maybe—probably—bacteria. Everything is organized and cognitive all the way down to the molecular level. As soon as it's definable as _life_ cognition is there. Few biologists are actually able to feel empathy towards a situation, an organism. But those who look with empathy, with a [[Carl Rogers]] attitude towards life, listening rather than imposing belief, see that cognition and learning are the basic reflex of life.
+RP: Oh it's something that starts with amoebas, maybe—probably—bacteria. Everything is organized and cognitive all the way down to the molecular level. As soon as it's definable as _life_ cognition is there. Few biologists are actually able to feel empathy towards a situation, an organism. But those who look with empathy, with a [[Rogers, Carl]] attitude towards life, listening rather than imposing belief, see that cognition and learning are the basic reflex of life.
 
 Where there's the ability to metabolize and move there is understanding and adaptation. You wouldn't have life without adaptation, and there's always intelligence involved in adapting. Every day you wake up you're going to have to adapt to a whole new world. Everything has changed while you were asleep. And the process of breathing, of your heart beating, it all is cognitive. And so you have to listen to yourself while listening to things you're understanding. Otherwise you will mistake what's happening in yourself for what exists in the world.
 
@@ -235,11 +235,11 @@ Schooling consists largely in training people to get a little model of the world
 
 DB: [1:01:34] Wow, that's powerful. A lot of people think rocks and pieces of plastic, for example, are inanimate. But even rocks and plastic are sensitive and can listen and can learn, right?
 
-RP: Yeah. That little Encyclopedia I mentioned before; when I was seven or eight I started looking at that because the school books weren't at all interesting. I found [[Jagadish Chandra Bose|J.C. Bose]] described in the Encyclopedia and got interested in his experiments. He called one of his devices a "Crescometer". He could amplify the growth of a, seemingly inert, vegetable or plant ten thousand times or so, so that you could see it projected on a screen as it grew. He would provide stimulus of various sorts, and show that the plant was reacting with emotion in response. He said that everything shows emotion—or a "reaction"—to stimulation, even minerals.
+RP: Yeah. That little Encyclopedia I mentioned before; when I was seven or eight I started looking at that because the school books weren't at all interesting. I found [[Bose, Jagadish Chandra|J.C. Bose]] described in the Encyclopedia and got interested in his experiments. He called one of his devices a "Crescometer". He could amplify the growth of a, seemingly inert, vegetable or plant ten thousand times or so, so that you could see it projected on a screen as it grew. He would provide stimulus of various sorts, and show that the plant was reacting with emotion in response. He said that everything shows emotion—or a "reaction"—to stimulation, even minerals.
 
-And at that time [there was] a physicist [[Michael Polanyi]] who later became a philosopher. I don't think he knew he was following in [[Jagadish Chandra Bose|Bose's]] footsteps. [[Jagadish Chandra Bose|Bose]] said that all substances displayed the same properties that life does, just in a different form. Including learning and fatigue and so on. [[Michael Polanyi|Polanyi]] demonstrated that over and over through the 1920s working with metal crystals and metallurgy. That the mechanistic idea of inert so-called material substance was very far off of reality. It wasn't a matter of atom-to-atom organization. Energy was spread out over a wide area. And the structure went below the surface.
+And at that time [there was] a physicist [[Polanyi, Michael]] who later became a philosopher. I don't think he knew he was following in [[Jagadish Chandra Bose|Bose's]] footsteps. [[Bose, Jagadish Chandra|Bose]] said that all substances displayed the same properties that life does, just in a different form. Including learning and fatigue and so on. [[Polanyi, Michael|Polanyi]] demonstrated that over and over through the 1920s working with metal crystals and metallurgy. {#23} That the mechanistic idea of inert so-called material substance was very far off of reality. It wasn't a matter of atom-to-atom organization. Energy was spread out over a wide area. And the structure went below the surface.
 
-That explains why aeroplanes have to be finely polished if they're going to be supersonic. Because the stresses of a microscopic scratch on the surface will spread the influence over a great range. [[Michael Polanyi|Polanyi]] demonstrated that working the surface of a crystal changed the whole depths properties of resistance and memory of the crystal.
+That explains why aeroplanes have to be finely polished if they're going to be supersonic. Because the stresses of a microscopic scratch on the surface will spread the influence over a great range. [[Polanyi, Michael|Polanyi]] demonstrated that working the surface of a crystal changed the whole depths properties of resistance and memory of the crystal.
 
 DB: Oh my gosh. Wow. I wonder sometimes how more people don't hear these things or learn these things. It seems so many of us ravage the Earth as if we came _into_ it, instead of that we came _out_ of it. _From_ it. And it's organic just like us. It literally _is_ us in some way. It's crazy to me to think that so many people blindly steal from that which gives us our life.
 
@@ -325,7 +325,7 @@ DB: That's really cool. And I like how you said it doesn't matter where it is. I
 
 RP: Right! Backyard nature.
 
-DB: Ray, [[Henry David Thoreau|Thoreau]] once wrote "the primal act of mobility connects us with our essential wildness, and brings us to a spring of spiritual vitality that would otherwise be methodically dried out by our sedentary civilization." And I contrast this with the classroom. Most classrooms are in four walls. Some of them don't even have windows. And you're just stuck in these desks. And it really befuddles me that kids are asked to sit at a desk for 60 minutes and listen to someone lecture. [[Aristotle]], allegedly, had the habit of strolling while giving lectures.
+DB: Ray, [[Thoreau, Henry David|Thoreau]] once wrote "the primal act of mobility connects us with our essential wildness, and brings us to a spring of spiritual vitality that would otherwise be methodically dried out by our sedentary civilization." And I contrast this with the classroom. Most classrooms are in four walls. Some of them don't even have windows. And you're just stuck in these desks. And it really befuddles me that kids are asked to sit at a desk for 60 minutes and listen to someone lecture. [[Aristotle]], allegedly, had the habit of strolling while giving lectures.
 
 [1:22:43] Do you think the wandering, or strolling, or just getting out for a walk every day, is important?
 
@@ -337,7 +337,7 @@ DB: So it goes right along with the dogmatic forcing of ideas into young people'
 
 RP: Yeah. Like the Superintendent of Public Instruction who said "education doesn't have anything to do with what students know." It's the obedience that is the essence of education according to the understanding of the people who control it.
 
-DB: Yeah. And din't [[Ivan Illich]] have a lot to say about that? He has an interesting quote. It's related to medicine but I think it's really all institutions. He says "Modern medicine's a negation of health. It is not organized to serve human health but only itself." Which reminds me of Education as an institution. It makes more people sick than it heals.
+DB: Yeah. And din't [[Illich, Ivan]] have a lot to say about that? He has an interesting quote. It's related to medicine but I think it's really all institutions. He says "Modern medicine's a negation of health. It is not organized to serve human health but only itself." Which reminds me of Education as an institution. It makes more people sick than it heals.
 
 [1:24:47] So, Ray, do you think a more self-directed educational experience for more people could eventually flip the industry of medicine and medical culture on it's head? And Educational culture?
 
@@ -351,7 +351,7 @@ RP: Yeah. And that's why medicine is killing people. The official studies show m
 
 DB: [1:28:39] That's insane. I recently was hearing some commentary on heart stroke. Heart disease patients have been not coming in recently because they're afraid to go into an environment where all these people are going in with the COVID symptoms. And this commentary was saying they think a lot of people are dying at home, alone, because they're not getting the medical attention. But I'm wondering if the reverse of that is also true. That some people are not going in and actually it's saving their lives not getting medical attention, in some way.
 
-RP: Yeah. From that observation in Germany of the two hospitals with different approaches, that was [[Luciano Gattinoni]] who mentioned that. If that sort of thing is true then you're saving your life by lightening the hospital.
+RP: Yeah. From that observation in Germany of the two hospitals with different approaches, that was [[Gattinoni, Luciano]] who mentioned that. If that sort of thing is true then you're saving your life by lightening the hospital.
 
 DB: [1:29:45] You know that idea that habits take a while to cement themselves: human behaviour is hard to change. I wonder if some things as basic as not wanting to go to the hospital will last in people? Or do you think people will just go right back to their ways, as before?
 
@@ -363,13 +363,13 @@ RP: A very big part of the work done in the U.S. currently is just, basically, t
 
 DB: And it's stops people from thinking about what they're really interested in. Then when they go home they're so tired that we just turn on the old TV. It just eliminates the time for thinking.
 
-It kind of reminds me of a [[Noam Chomsky]] line. I think you said once that, similarly, students who go to college and then pay these massive debt they put themselves through school and they're unlikely to think about changing _society_. Because when they get trapped in these systems of debt they can't afford, anymore, the time to think.
+It kind of reminds me of a [[Chomsky, Noam]] line. I think you said once that, similarly, students who go to college and then pay these massive debt they put themselves through school and they're unlikely to think about changing _society_. Because when they get trapped in these systems of debt they can't afford, anymore, the time to think.
 
-[1:32:01] Ray. I had a question that's related to [[Murray Bookchin]] have you—
+[1:32:01] Ray. I had a question that's related to [[Bookchin, Murray]] have you—
 
 RP: Yeah I read several of his pamphlets and little things in the 70s, I guess it was.
 
-DB: Okay. He talks about a more decentralized, almost anarchist, society similar to [[Ivan Illich]], correct?
+DB: Okay. He talks about a more decentralized, almost anarchist, society similar to [[Illich, Ivan]], correct?
 
 RP: Yeah. That kind of decentralization, I think, is the only way a large population can make a society work without destroying people's health and mentality. A consumer co-op, for example, should be an organizing principle. If consumers demand that products change, that can be a big pressure. And then the people can have various kinds of cooperative ways of meeting those consumer demands.
 
@@ -387,11 +387,11 @@ DB: Interesting. But now do you think the same opportunities would be had by peo
 
 RP: No, I've heard people express attitudes that you have to be qualified to have access to certain instruments.
 
-[1:35:40] Did you read the book [[Seeing Red -by- Halton Arp]]?
+[1:35:40] Did you read the book [[Arp, Halton, [book] Seeing Red]]?
 
 DB: No, I have not.
 
-RP: [[Halton Arp|An astronomer]] observed galaxies that were receding, approaching the speed of light, connected with a string of matter to a galaxy that wasn't receding at the speed of light. He collected pictures of a lot of those. And people started realizing that was a challenge to the basic dogma about the redshift representing expansion of the universe. If you see galaxies that are connected with a continuous stream of matter but with different redshifts, that makes it impossible to explain the redshift in the conventional way. So what they did was not let him use the big telescopes any more.
+RP: [[Arp, Halton|An astronomer]] observed galaxies that were receding, approaching the speed of light, connected with a string of matter to a galaxy that wasn't receding at the speed of light. He collected pictures of a lot of those. And people started realizing that was a challenge to the basic dogma about the redshift representing expansion of the universe. If you see galaxies that are connected with a continuous stream of matter but with different redshifts, that makes it impossible to explain the redshift in the conventional way. So what they did was not let him use the big telescopes any more.
 
 DB: [1:36:52] Oh my gosh. That's part of my friend's question. If we get to a more decentralized situation and if a small number of very scientifically inquisitive people want to do Science, is it gonna recreate this small clique of Scientific elites? Where you have to be one of those people to study it?
 
@@ -409,7 +409,7 @@ DB: Yep. Yeah.
 
 RP: Blake College accepted the pre-existing Graduate Record Exams and didn't offer any organized survey of knowledge. But just by being themselves they, for some reason, we're able to, in very short lengths of time, master the conventionally accepted knowledge. And I think if you ask "why" they're in school, then you say "well they have to know these things." Then when you're ready to go to Medical School, for example, say "here's the test that you have to take." For whatever you do, driving a taxi, and reading the encyclopedia, or whatever, that's adequate preparation. So you can save thousands of hours of sitting in classrooms.
 
-The University of Chicago under [[Robert Maynard Hutchins|Robert Hutchins]] for 1929 for 10 or 12 years that was their policy. Some people could get their bachelor's degree in half a year or so.
+The University of Chicago under [[Hutchins, Robert Maynard|Robert Hutchins]] for 1929 for 10 or 12 years that was their policy. Some people could get their bachelor's degree in half a year or so.
 
 DB: I mean it makes so much sense in terms of the humanitarian side of it and being a happy person and living a satisfied life. It makes so much sense. Not creating this apathetic situation for years and years and years, just so that people can become a "worker bee" in the system.
 
@@ -417,17 +417,17 @@ RP: And not only for gaining entrance to the Medical School or Law School or wha
 
 DB: So in a decentralized state these professions will look totally different, yeah?
 
-RP: Yeah. [[Milton Friedman]] himself, the Chicago School conservative Economist, he described licensing as something destroying civilization.
+RP: Yeah. [[Friedman, Milton]] himself, the Chicago School conservative Economist, he described licensing as something destroying civilization.
 
 DB: [1:42:26] Wow. Ray, did 20th century Soviet-bloc countries experiment with some of these things? And can we learn anything from that?
 
-RP: Yeah. For a time in the twenties there was tremendous experimentation. And then as soon as [[Adolf Hitler|Hitler]] came to power with his project for dealing with the Slavs, starting right in 1933, experiment ended and they got engaged in the business of not being taken over by [[Adolf Hitler|Hitler]].
+RP: Yeah. For a time in the twenties there was tremendous experimentation. And then as soon as [[Hitler, Adolf|Hitler]] came to power with his project for dealing with the Slavs, starting right in 1933, experiment ended and they got engaged in the business of not being taken over by [[Hitler, Adolf|Hitler]].
 
 DB: Geez. So are there other examples of things we can learn from what they were doing?
 
 RP: Oh. Yeah. A lot of good Science was really developing in those early years with between wars. Psychology, Philosophy, Education ideas, learning ideas, therapeutic ideas.
 
-DB: Did you write about some of that stuff in your book on [[Mind and Tissue -by- Ray Peat]]?
+DB: Did you write about some of that stuff in your book on [[Peat, Ray [book] Mind and Tissue]]?
 
 RP: Yeah.
 
@@ -439,11 +439,11 @@ DB: Okay, so someone could just email you at <raypeatsnewsletter@gmail.com> and 
 
 RP: Yeah.
 
-DB: [1:44:26] Okay great. Are you familiar with [[Charlotte Thomson Iserbyt|Charlotte Iserbyt]]? {Editor's note: [[Charlotte Thomson Iserbyt]] wrote [[The Deliberate Dumbing Down of America -by- Charlotte Thomson Iserbyt]] in 1999.} Have you ever heard of her?
+DB: [1:44:26] Okay great. Are you familiar with [[Iserbyt, Charlotte Thomson|Charlotte Iserbyt]]? {Editor's note: [[Iserbyt, Charlotte Thomson]] wrote [[Iserbyt, Charlotte Thomson [book] The Deliberate Dumbing Down of America]] in 1999.} Have you ever heard of her?
 
 RP: I don't recognize it.
 
-DB: Okay. I guess she did some critique on the foundational works of modern education. But it really just piggybacks on the stuff that you've said and I wanted to hear if you had any more thoughts to it. She said the foundational works of modern education were very open in their design end-goal worldwide scientific socialism, where all decisions are in fact to be made by the experts and not by the citizens. A thinking, questioning citizen may be desirable for Republic, but it is very dangerous to the scientific dictatorship. I think scientific dictatorship is the opposite of what would be good according to [[Ivan Illich|Illich's]] stuff and [[Murray Bookchin|Bookchin's]] idea of decentralization, right?
+DB: Okay. I guess she did some critique on the foundational works of modern education. But it really just piggybacks on the stuff that you've said and I wanted to hear if you had any more thoughts to it. She said the foundational works of modern education were very open in their design end-goal worldwide scientific socialism, where all decisions are in fact to be made by the experts and not by the citizens. A thinking, questioning citizen may be desirable for Republic, but it is very dangerous to the scientific dictatorship. I think scientific dictatorship is the opposite of what would be good according to [[Illich, Ivan|Illich's]] stuff and [[Bookchin, Murray|Bookchin's]] idea of decentralization, right?
 
 RP: Starting about 1950 there were people subsidized by the CIA basically laying out the blueprint for exactly that.
 
@@ -475,7 +475,7 @@ DB: Yeah play the game in subversive ways, right?
 
 RP: Yeah, some of the oppressors are open to change from learning.
 
-DB: [1:47:49] Well that's hopeful. Ray, I'd like to close on an [[Albert Einstein|Einstein]] quote. I've seen it on the internet attached to an image and I want to throw this out there. {![Einstein Quote](/assets/images/2020-04-26-einstein-quote.jfif)} I'll put it up when I post this on Youtube, so viewers can see it, I'm sure other people have seen it. 
+DB: [1:47:49] Well that's hopeful. Ray, I'd like to close on an [[Einstein, Albert|Einstein]] quote. I've seen it on the internet attached to an image and I want to throw this out there. {![Einstein Quote](/assets/images/2020-04-26-einstein-quote.jfif)} I'll put it up when I post this on Youtube, so viewers can see it, I'm sure other people have seen it. 
 
 But the Einstein quote is "that everybody is a genius. That if you judge a fish by its ability to climb a tree it will live it's whole life believing it is stupid." It reminds me of that story you told me earlier about the kid who came into your college, who by all the testing standards showed that he was basically dumb. When given the chance to craft an education and a way of thinking that was his own he revealed that he was nothing of the sort
 

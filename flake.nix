@@ -31,6 +31,8 @@
     devShell = rustPkgs.workspaceShell {
       name = "ray-peat-rodeo";
       packages = with pkgs; [
+        openssl
+        pkg-config
         cargo-watch
         devd
         tmux

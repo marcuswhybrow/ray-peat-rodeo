@@ -12,7 +12,7 @@ speakers:
   C: Female Caller
   C2: Female (2nd) Caller
 transcription:
-  source: https://raypeatforum.com/community/threads/endotoxin-kmud-november-19-2010.5151/
+  url: https://raypeatforum.com/community/threads/endotoxin-kmud-november-19-2010.5151/
   author: dd99
   date: 2014-11-05
 ---
@@ -185,7 +185,7 @@ C: [38:13] I have a couple questions:
 
 One was regarding the carrots not being juiced. I used that a lot for someone who has— maybe not cancer, we don't know yet— but any of those cancer diets really call for a lot of vegetable juices and carrot juice is a big one.
 
-The other thing is, I don't know if you've heard of the Budwig diet? But [[Johanna Budwig|Dr Budwig]], a German woman, she discovered or introduced combining flaxseed oil with organic cottage cheese and blending them so that they would bond and that bond would help cells form a stronger electrical charge so they could break away and form new cells and not form cancerous or abnormal cell structure.
+The other thing is, I don't know if you've heard of the Budwig diet? But [[Budwig, Johanna|Dr Budwig]], a German woman, she discovered or introduced combining flaxseed oil with organic cottage cheese and blending them so that they would bond and that bond would help cells form a stronger electrical charge so they could break away and form new cells and not form cancerous or abnormal cell structure.
 
 So, one is on the carrot juice and the other is for the flaxseed oil. Of course, not the lignan flaxseed oil. But does it change that bacteria when it's combined and bonded with something like cottage cheese? And I can take my answer off the air, that's fine.
 
@@ -197,15 +197,15 @@ AM: [39:35] So, Dr. Peat. Carrot juice?
 
 RP: One of the oldest treatments for cancer was enemas. Thousands of years ago, doctors were recommending regular enemas to treat cancer and a few hundred years ago laxatives became a standard feature of cancer treatment, as well as many others.
 
-Just about 60 or 70 years ago [[Max Gerson]] cured his own migraines with a change of diet. In the 20th century, he was the most famous advocate of a mostly vegetable diet, but he did use liver—liver juice was one of his components—and typically a good dose of thyroid was part of his program. And so it was a nutritionally rational program, but twice in his book, in capital letters, said 'absolutely no oils'.
+Just about 60 or 70 years ago [[Gerson, Max]] cured his own migraines with a change of diet. In the 20th century, he was the most famous advocate of a mostly vegetable diet, but he did use liver—liver juice was one of his components—and typically a good dose of thyroid was part of his program. And so it was a nutritionally rational program, but twice in his book, in capital letters, said 'absolutely no oils'.
 
-His followers have changed the book. I think they were influenced by [[Johanna Budwig]] and her flax oil and cottage cheese diet.
+His followers have changed the book. I think they were influenced by [[Budwig, Johanna]] and her flax oil and cottage cheese diet
 
-In 1954, before [[Johanna Budwig|Budwig]] had started writing about cancer, a Mexican professor had an article in Prevention magazine {#22} advocating—I think it was—a cup of linseed oil per day, as a purge, in the tradition of getting the intestine as clean as possible. And when you drink that much of a highly unsaturated oil, the unsaturated fatty acids are converted to prostaglandins and cause intense contraction and secretion of the intestine. So it's a very quick thorough kind of laxative.
+In 1954, before [[Budwig, Johanna|Budwig]] had started writing about cancer, a Mexican professor had an article in Prevention magazine {#22} advocating—I think it was—a cup of linseed oil per day, as a purge, in the tradition of getting the intestine as clean as possible. And when you drink that much of a highly unsaturated oil, the unsaturated fatty acids are converted to prostaglandins and cause intense contraction and secretion of the intestine. So it's a very quick thorough kind of laxative.
 
-But that was changed in [[Johanna Budwig|Budwig's]] writing several years later, to think of the linseed oil as a _nutritional factor_ rather than as a laxative. And to the extent that it works as a laxative, it's very likely helpful. But the rest of her program was curds—cottage cheese, basically—and that's a very soothing, safe diet that happens to be less able to promote endotoxin than other proteins.
+But that was changed in [[Budwig, Johanna|Budwig's]] writing several years later, to think of the linseed oil as a _nutritional factor_ rather than as a laxative. And to the extent that it works as a laxative, it's very likely helpful. But the rest of her program was curds—cottage cheese, basically—and that's a very soothing, safe diet that happens to be less able to promote endotoxin than other proteins.
 
-I think there are reasons that when you juice vegetables you get lots of minerals that allow you to assimilate the sugars that are present in leafy and other vegetables. So the [[Max Gerson|Gerson]] diet and the [[Johanna Budwig|Budwig]] diet had some very rational factors. Basically, keeping the intestine clean and keeping the thyroid function up I think were the most important.
+I think there are reasons that when you juice vegetables you get lots of minerals that allow you to assimilate the sugars that are present in leafy and other vegetables. So the [[Gerson, Max|Gerson]] diet and the [[Budwig, Johanna|Budwig]] diet had some very rational factors. Basically, keeping the intestine clean and keeping the thyroid function up I think were the most important.
 
 SJM: [43:28] And, Dr Peat, can you explain to our listeners why the carrot juice in particular would be lowering your good hormones?
 
@@ -279,9 +279,9 @@ SJM: [54:35] In case some of our listeners don't know what tetracycline is, it's
 
 And Dr Peat, you were talking to me about a decoction, a boiled wine and tabebuia/pau d'arco compound. Can you tell me a little bit more about the doctor who used that?
 
-RP: [[William Frederick Koch|W.F. Koch]] was a Michigan chemistry professor who went into medicine. He was at the University of Michigan at the time [[Moses Gomberg]] had discovered free radicals. It was 20 or 30 years before chemists would believe that such a thing existed. But Koch was there at the university and saw the stuff, understood its properties, and started thinking about what that kind of reaction would mean in the body. And he proposed that we have free radicals in the form of quinones in our mitochondria handling energy, creating all of these functions (anti-inflammatory, antiviral, anti-tumour, and so on).
+RP: [[Koch, William Frederick|W.F. Koch]] was a Michigan chemistry professor who went into medicine. He was at the University of Michigan at the time [[Gomberg, Moses]] had discovered free radicals. It was 20 or 30 years before chemists would believe that such a thing existed. But Koch was there at the university and saw the stuff, understood its properties, and started thinking about what that kind of reaction would mean in the body. And he proposed that we have free radicals in the form of quinones in our mitochondria handling energy, creating all of these functions (anti-inflammatory, antiviral, anti-tumour, and so on).
 
-And he created a whole range of substances, some more powerful than others, and began giving them to cancer patients and allergy patients and even infected cows. There was a study in California in which they cured various animal diseases with his so-called anti-cancer reagent. The famous [[Albert Imre Szent-Györgyi|Albert Szent-Györgyi]], who got a Nobel prize related to respiration and vitamin C research, based practically his whole career on working out the meaning of [[William Frederick Koch|Koch's]] work with the quinones. The vitamin K— ubiquinone is the substance that came much later to be discovered in the mitochondria. The government twice tried to put [[William Frederick Koch|Koch]] in jail, saying that it was inconceivable that people could have free radicals in their cells and that it would be toxic if they did. But then it turned out that exactly the type of chemical, the quinone, that [[William Frederick Koch|Koch]] had postulated turned out to be the essence of how human life creates energy.
+And he created a whole range of substances, some more powerful than others, and began giving them to cancer patients and allergy patients and even infected cows. There was a study in California in which they cured various animal diseases with his so-called anti-cancer reagent. The famous [[Szent-Györgyi, Albert Imre|Albert Szent-Györgyi]], who got a Nobel prize related to respiration and vitamin C research, based practically his whole career on working out the meaning of [[Koch, William Frederick|Koch's]] work with the quinones. The vitamin K— ubiquinone is the substance that came much later to be discovered in the mitochondria. The government twice tried to put [[Koch, William Frederick|Koch]] in jail, saying that it was inconceivable that people could have free radicals in their cells and that it would be toxic if they did. But then it turned out that exactly the type of chemical, the quinone, that [[Koch, William Frederick|Koch]] had postulated turned out to be the essence of how human life creates energy.
 
 AM: [58:27] Wow. Well, Dr. Peat, sorry for cutting you short. I know that people who are listening would love to hear more of what you have to offer. Sarah?
 
@@ -289,7 +289,7 @@ SJM: We're running out of time here. But I do want to mention some herbs and als
 
 RP: So sock up on your raw carrot salad, and some cascara powder, tabebuia, like I mentioned, pau d’arco, another good herb to use is echinacea, also goldenseal, barberry [sic?], oregon grape root [sic?] those also are anti-microbial if you come down with a nasty bug in your intestine.
 
-AM: [59:20] For people who'd like to hear more of Dr. Ray Peat, or read his articles, please go to his website [www.raypeat.com](https://raypeat.com). Lot's of good information.
+AM: [59:20] For people who'd like to hear more of Dr. Ray Peat, or read his articles, please go to his website [[Peat, Ray [url] https://raypeat.com | raypeat.com]]. Lot's of good information.
 
 Well, thank you so much for listening. And thank you for the callers. We really enjoy doing the show. We're so pleased to hear that people want to ask questions and are into it as well.
 

@@ -142,24 +142,20 @@ sub {
     margin: 20px 0;
 }
 
-.citation {
+.mention {
     font-weight: normal;
     transition: all .1s;
     text-decoration: underline;
     font-weight: bold;
 }
-.citation:hover {
+.mention:hover {
     text-decoration: underline;
     filter: brightness(1.5);
 }
-.citation.book { color: #028b0c }
-.citation.person { color: #0057d9 }
-.citation.science-paper { color: #ae00d9 }
-.citation.external-link { color: #444 }
-
-.citation.external-link {
-    word-break: break-all;
-}
+.mention.author { color: #0057d9 }
+.mention.book { color: #028b0c }
+.mention.paper { color: #ae00d9 }
+.mention.url { color: #444 }
 
 blockquote > * {
     padding-left: 20px;
@@ -193,9 +189,8 @@ blockquote > * {
     font-weight: normal;
 }
 
-#documents .document:hover a.document-title {
-    
-}
+/* #documents .document:hover a.document-title { } */
+
 #documents .document .citation:hover {
     text-decoration: underline;
 }

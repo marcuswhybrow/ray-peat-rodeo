@@ -1,9 +1,225 @@
 mod markdown;
+mod scraper;
 
-use std::{fs, include_str, path::Path, collections::BTreeMap};
+use std::{
+    fs,
+    path::{Path, PathBuf}, collections::HashMap,
+};
 use clap::Parser;
-use serde::{Serialize, Deserialize};
+use fs_extra::dir::CopyOptions;
+use markdown::{
+    Frontmatter,
+    mention::{MentionDeclaration, Mention, Author}, github::{GitHubIssueDeclaration, GitHubIssue}
+};
+use markdown_it::{MarkdownIt, parser::extset::MarkdownItExt, Node};
+use markup::DynRender;
 use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
+use scraper::Scraper;
+
+extern crate fs_extra;
+
+const GITHUB_LINK: &str = "https://github.com/marcuswhybrow/ray-peat-rodeo";
+
+markup::define! {
+    Base<'a>(title: Option<&'a str>, content: DynRender<'a>) {
+        @markup::doctype()
+        html {
+            head {
+                title { 
+                    @if let Some(title) = title {
+                        @title " - Ray Peat Rodeo"
+                    } else {
+                        "Ray Peat Rodeo"
+                    }
+                }
+                meta[charset = "UTF-8"] {}
+                meta[name = "viewport", 
+                    content = "width=device-width, initial-scale=1.0"] {}
+                link[rel = "stylesheet", href = "/assets/style.css"] {}
+                // script[src="https://unpkg.com/htmx.org@1.9.6"] {}
+            }
+            body {
+                div #"top-bar" {
+                    a [href="/"] { "Ray Peat Rodeo" }
+                }
+
+                @content
+
+                footer {
+                    p {
+                        "Ray Peat Rodeo is an "
+                        a[href = GITHUB_LINK] { "open source" }
+                        " website written in Rust. Last updated "
+                        @chrono::offset::Local::now().format("%Y-%m-%d").to_string()
+                        "."
+                    }
+                }
+            }
+        }
+    }
+
+    PageFind() {
+        link[href = "/_pagefind/pagefind-ui.css", rel = "stylesheet"] {}
+        script[src = "/_pagefind/pagefind-ui.js", type = "text/javascript"] {}
+        div #search {}
+        script { r#"
+            window.addEventListener('DOMContentLoaded', (event) => {
+                new PagefindUI({
+                    element: '#search',
+                    translations: {
+                        placeholder: 'Search Ray Peat Rodeo'
+                    }
+                });
+            });
+        "# }
+    }
+
+    Sidenote<'a>(content: DynRender<'a>) {
+        span .sidenote."sidenote-standalone" {
+            @content
+        }
+    }
+
+    Homepage<'a>(input_files: Vec<(InputFile, Vec<&'a Mention>)>) {
+        @Base {
+            title: Some("Ray Peat Rodeo"),
+            content: markup::new! {
+                article {
+                    section { @PageFind {} }
+
+                    section {
+                        @Sidenote {
+                            content: markup::new! {
+                                r#"Ray Peat Rodeo offers accurate, referenced 
+                                transcripts of Ray Peat interviews that can be 
+                                easily searched or surveyed."#
+                                br {}
+                                r#"Transcripts are accessibly written in markdown, 
+                                and leverage a pleasant custom syntax to describe 
+                                who's speaking, mark referenced works and authors, 
+                                insert sidenotes, and even to add callouts to 
+                                GitHub issues discussing textual improvements."#
+                                br {}
+                                r#"Project longevity, flexibility and simplicity 
+                                is undergirded by a beskpoke engine written in 
+                                Rust. Ease of development and deployment are 
+                                guaranteed by the excellent nix package manager. 
+                                The project is maintained, discussed, and deployed
+                                via "#
+                                a [href = GITHUB_LINK] { "GitHub" } "."
+                            }
+                        }
+
+                        div #documents {
+                            @for (input_file, mentions) in input_files {
+                                div .document {
+                                    // TODO fake date
+                                    span ."document-date" { @input_file.date }
+                                    a ."document-title" [href = input_file.slug.clone()] {
+                                        @input_file.frontmatter.source.title
+                                    }
+
+                                    " : "
+
+                                    @for mention in mentions.iter() {
+                                        a .mention.{ mention.kind() } [
+                                            href = mention.slug(), 
+                                            title = mention.display_text(),
+                                        ] {
+                                            @mention.display_text()
+                                        }
+
+                                        " "
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    AuthorPage(author: Author, mentions: Vec<Mention>) {
+        @Base {
+            title: Some(author.display_text().as_str()),
+            content: markup::new! {
+                article {
+                    section {
+                        h1 { @author.display_text() }
+
+                        p {
+                            "This author is mentioned on the following pages."
+                        }
+
+                        ul {
+                            @for mention in mentions {
+                                li {
+                                    a[href = format!("/{}", mention.slug())] {
+                                        @mention.input_file.frontmatter.source.title
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        }
+    }
+
+    Page<'a>(input_file: &'a InputFile, html: String) {
+        @Base {
+            title: Some(input_file.frontmatter.source.title.as_str()),
+            content: markup::new! {
+                article .interview {
+                    header {
+                        h1 { @input_file.frontmatter.source.title }
+
+                        span .sidenote."sidenote-meta" {
+                            { input_file.frontmatter.source.series.clone().unwrap_or("Someone".into()) }
+                            a [href = input_file.frontmatter.source.url.clone(), target = "_bank"] {
+                                " originally published "
+                            }
+
+                            " this interview on " @input_file.date "."
+
+                            @if let Some(transcription) = input_file.frontmatter.transcription.clone()  {
+                                @if let Some(author) = transcription.author.clone() {
+                                    @if let Some(url) = transcription.url.clone() {
+                                        " Thank you to " @author " who "
+                                        a[href = url] {
+                                            "published"
+                                        }
+                                        " this transcript "
+                                    } else {
+                                        " Transcribed by " @author ", "
+                                    }
+
+                                    @ if let Some(date) = transcription.date.clone() {
+                                        @date "."
+                                    }
+
+                                }
+                            } 
+
+                            " "
+
+                            a[href = format!("{GITHUB_LINK}/edit/main/content/{}", input_file.path), target="_blank"] {
+                                "Edit"
+                            }
+
+                            " this page on GitHub."
+                        }
+                    }
+
+                    main ["data-pagefind-body"] {
+                        @markup::raw(html)
+                    }
+                }
+            },
+        }
+    }
+}
 
 
 #[derive(Parser, Debug)]
@@ -20,147 +236,224 @@ struct Args {
     #[arg(short, long, default_value_t = String::from("./build"))]
     output: String,
 
+    #[arg(long, default_value_t = String::from("./src/cache.yml"))]
+    cache_path: String,
+
+    #[arg(long, default_value_t = false)]
+    build_cache: bool,
+
     /// Whether files and directories inside of OUT_PATH should be deleted
     /// before building
-    #[arg(short, long, default_value_t = false)]
+    #[arg(long, default_value_t = false)]
     clean: bool,
 }
 
-fn main() {
+/// An input markdownfile from ./content
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+pub struct InputFile {
+    date: String,
+    path: String,
+    slug: String,
+    frontmatter: Frontmatter,
+    markdown: String,
+}
 
-    // CLI Arguments and Options
+#[derive(Debug)]
+pub struct InputFileBeingParsed(InputFile);
+impl MarkdownItExt for InputFileBeingParsed {}
 
+
+fn render(path: &PathBuf, content: DynRender) {
+    let dir = path.parent()
+        .expect(format!("Failed to determine directory for {:?}", path).as_str());
+    std::fs::create_dir_all(dir)
+        .expect(format!("Failed to create directories for {:?}", dir).as_str());
+    std::fs::write(&path, content.to_string())
+        .expect(format!("Failed to write {:?}", path).as_str());
+    println!("  Wrote {:?}", path);
+}
+
+#[allow(dead_code)]
+fn copy_file(input_path: &PathBuf, output_path: &PathBuf) {
+    std::fs::copy(input_path, output_path)
+        .expect(format!("Failed to copy {:?} to {:?}", input_path, output_path).as_str());
+    println!("  Copied file {:?} to {:?}", input_path, output_path); 
+}
+
+fn copy_dir(input_path: &PathBuf, output_path: &PathBuf) {
+    fs_extra::dir::copy(
+        input_path, 
+        output_path, 
+        &CopyOptions::new()
+            .overwrite(true)
+            .content_only(true)
+    ).expect(format!("Failed to copy directory {:?} to {:?}", input_path, output_path).as_str());
+    println!("  Copied directory {:?} to {:?}", input_path, output_path); 
+}
+
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
-    let input = &Path::new(&args.input).canonicalize().expect("Input path not found");
-    let output = &Path::new(&args.output).canonicalize().expect("Output path not found");
 
-    println!("Building Ray Peat Rodeo");
-    println!("Input: {:?}", input);
-    println!("Output: {:?}", output);
+    let input = Path::new(&args.input)
+        .canonicalize()
+        .expect("Input path not found");
+
+    let output = Path::new(&args.output)
+        .canonicalize()
+        .expect("Output path not found");
+
+    let cache_path = Path::new(&args.cache_path);
+
+    println!("Ray Peat Rodeo");
+    println!("  Input:  {:?}", input);
+    println!("  Output: {:?}", output);
+    println!("  Cache:  {:?}", cache_path);
+
+    if args.build_cache {
+        println!("  Building cache of web scraped data...");
+        let mut scraper = Scraper::new_scraper(cache_path.to_path_buf());
+        parse_input_files(input, &mut scraper);
+        scraper.into_cache().await;
+        println!("  Built cache at {:?}", cache_path);
+        return Ok(())
+    }
 
     if !output.exists() {
-        println!("Creating directory");
-        fs::create_dir(output).unwrap();
-    } else {
-        if args.clean {
-            println!("Clean option enabled. \
-                Deleting files and directories inside {:?}",
-                output);
+        println!("  Creating output directory.");
+        fs::create_dir(output.clone()).unwrap();
+    }
 
-            for entry in fs::read_dir(output).unwrap() {
-                let entry = entry.unwrap();
-                let path = entry.path();
+    if args.clean {
+        println!(
+            "  Clean option enabled. Deleting files and directories inside {:?}",
+            output
+        );
 
-                if entry.file_type().unwrap().is_dir() {
-                    fs::remove_dir_all(path).unwrap();
-                } else {
-                    fs::remove_file(path).unwrap();
-                }
+        for entry in fs::read_dir(output.clone()).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+
+            if entry.file_type().unwrap().is_dir() {
+                fs::remove_dir_all(path.clone())
+                    .expect(format!("Could not remove directory {:?}", path).as_str());
+            } else {
+                fs::remove_file(path.clone())
+                    .expect(format!("Could note remove file {:?}", path).as_str());
             }
         }
     }
 
-    // Templating
-    
-    let tera = {
-        let mut tera = tera::Tera::default();
-        tera.add_raw_templates(vec![
-            ("base.html", include_str!("./templates/base.html")),
-            ("page.html", include_str!("./templates/page.html")),
-            ("index.html", include_str!("./templates/index.html")),
-            ("style.css", include_str!("./templates/style.css")),
-        ]).expect("Unable to load template");
-        tera
-    };
-    
-    let mut gcx = tera::Context::new();
-    gcx.insert("global_project_link", "https://github.com/marcuswhybrow/ray-peat-rodeo");
-    gcx.insert("global_contact_link", "https://raypeat.rodeo/contact");
+    println!("\nWriting Files");
 
-    let render = |template, context: &tera::Context, path: &str| {
-        let final_path = output.join(path);
-        std::fs::create_dir_all(&final_path.parent().unwrap()).unwrap();
-        tera.render_to(
-            template,
-            &context,
-            std::fs::File::create(&final_path).unwrap(),
-        ).unwrap();
-        println!("Wrote {:?}", final_path);
-    };
+    let input_file_results = parse_input_files(input, &mut Scraper::new_fulfiller(cache_path.to_path_buf()));
 
-
-    // Render Content
-
-    let frontmatter_extractor = Extractor::new(EnclosingLines("---"));
-
-    #[derive(Serialize, Deserialize, Debug)]
-    struct Transcription {
-        source: Option<String>,
-        author: Option<String>,
-        date: Option<String>,
+    for (input_file, ast, _mentions, _issues) in input_file_results.iter() {
+        render(&output.join(format!("{}/index.html", input_file.slug)), markup::new! {
+            @Page { input_file: &input_file, html: ast.render() }
+        });
     }
 
-    #[derive(Serialize, Deserialize, Debug)]
-    struct FrontmatterSource {
-        title: String,
-        series: Option<String>,
-        url: String,
-        duration: Option<String>,
+    let mut authors: HashMap<Author, Vec<Mention>> = HashMap::new();
+    for (_, _, mentions, _) in input_file_results.iter() {
+        for mention in mentions {
+            authors.entry(mention.author.clone()).or_insert(vec![]).push(mention.clone());
+        }
     }
 
-    #[derive(Serialize, Deserialize, Debug)]
-    struct Frontmatter {
-        source: FrontmatterSource,
-        speakers: BTreeMap<String, String>, 
-        transcription: Option<Transcription>,
+    for (author, author_mentions) in authors {
+        render(&output.join(format!("authors/{}/index.html", author.id())), markup::new! {
+            @AuthorPage {
+                author: author.clone(),
+                mentions: author_mentions.clone(),
+            }
+        });
     }
 
-    let markdown_parser = &mut markdown_it::MarkdownIt::new();
-    markdown_it::plugins::cmark::add(markdown_parser);
-    markdown::timecode::add(markdown_parser);
-    markdown::speaker::add(markdown_parser);
-    markdown::github::add(markdown_parser); // must apply before sidenote rules
-    markdown::sidenote::add(markdown_parser);
-    markdown::mention::add(markdown_parser);
 
-    for entry in fs::read_dir(input).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
+    render(&output.join("index.html"), markup::new! {
+        @Homepage { 
+            input_files: input_file_results
+                .iter()
+                .map(|(input_file, _ast, mentions, _issues)| {
+                    (
+                        input_file.clone(), 
+                        mentions.iter()
+                        .filter(|mention| mention.position == 1)
+                        .collect()
+                    )
+                })
+                .collect() 
+        }
+    });
+
+    copy_dir(&PathBuf::from("./src/assets"), &output.join("assets"));
+
+    println!("\nDone");
+
+    Ok(())
+}
+
+fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<(InputFile, Node, Vec<Mention>, Vec<GitHubIssue>)> {
+    let parser = &mut MarkdownIt::new();
+
+    // Standard markdown parsing rules
+    markdown_it::plugins::cmark::add(parser);
+
+    // Custom markdown parsing rules
+    markdown::timecode::add(parser);
+    markdown::speaker::add(parser);
+    markdown::github::add(parser); // must apply before sidenote rules
+    markdown::sidenote::add(parser);
+    markdown::mention::add(parser);
+
+    fs::read_dir(input.clone()).unwrap().map(|entry| {
+        let path = entry.unwrap().path();
         let text = std::fs::read_to_string(&path).unwrap();
 
-        let (frontmatter_text, markdown) = frontmatter_extractor.extract(text.as_str());
+        let (raw_frontmatter, markdown) = Extractor::new(EnclosingLines("---"))
+            .extract(text.as_str());
 
-        let frontmatter: Frontmatter = match serde_yaml::from_str(&frontmatter_text) {
-            Ok(f) => f,
-            Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
+        let (date, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
+
+        let input_file = InputFile {
+            date: date.split_at(10).0.into(),
+            path: path.strip_prefix(input.as_path()).unwrap().to_str().unwrap().into(),
+            markdown: markdown.into(),
+            slug: slug.into(),
+            frontmatter: match serde_yaml::from_str(&raw_frontmatter) {
+                Ok(f) => f,
+                Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
+            },
         };
 
-        let source = match url::Url::parse(frontmatter.source.url.as_str()) {
-            Ok(s) => s,
-            Err(e) => panic!("Invalid `source` URL in YAML frontmatter in {:?}\n{e}", path),
-        };
+        parser.ext.insert(InputFileBeingParsed(input_file.clone()));
+        let mut ast = parser.parse(input_file.markdown.as_str());
 
-        markdown_parser.ext.insert(markdown::Path(path.clone()));
-        markdown_parser.ext.insert(markdown::Source(source));
-        markdown_parser.ext.insert(markdown::Speakers(frontmatter.speakers));
-        let html = markdown_parser.parse(markdown).render();
-        let _mentions = markdown_parser.ext.get::<markdown::Mentions>();
+        let mut mention_count: HashMap<MentionDeclaration, u32> = HashMap::new();
+        let mut mentions = vec![];
+        let mut issues = vec![];
 
-        let (_, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
-        let out_name = &format!("{}/index.html", &slug);
+        ast.walk_mut(|node, _depth| {
+            if let Some(mention_declaration) = node.cast::<MentionDeclaration>() {
+                *mention_count.entry((*mention_declaration).clone()).or_insert(0) += 1;
+                let count = mention_count.get(mention_declaration).unwrap();
+                let mention = mention_declaration.as_mention(input_file.clone(), count.clone(), scraper);
+                node.replace(mention.clone());
+                mentions.push(mention);
 
-        let mut cx = tera::Context::new();
-        cx.insert("title", &frontmatter.source.title);
-        cx.insert("contents", &html);
-        cx.extend(gcx.clone());
+            } else if let Some(github_issue_declaration) = node.cast::<GitHubIssueDeclaration>() {
+                let issue = github_issue_declaration.as_github_issue(scraper);
+                node.replace(issue.clone());
+                issues.push(issue);
+            }
+        });
 
-        render("page.html", &cx, out_name);
-    }
-
-    // Render Specific Pages
-
-    render("index.html", &gcx, "index.html");
-    render("style.css", &gcx, "style.css");
-
-    println!("Done");
+        (input_file, ast, mentions, issues)
+    }).collect()
 }
+
+#[derive(Debug)]
+struct GlobalScraper(Scraper);
+impl MarkdownItExt for GlobalScraper {}

@@ -1,38 +1,30 @@
-use std::collections::BTreeMap;
-use markdown_it::parser::extset::MarkdownItExt;
-use url::Url;
-use crate::markdown::mention::Mentionable;
-
 pub mod timecode;
 pub mod speaker;
 pub mod sidenote;
 pub mod mention;
 pub mod github;
 
-#[derive(Debug)]
-pub struct Speakers(pub BTreeMap<String, String>);
+use std::collections::BTreeMap;
+use serde::{Serialize, Deserialize};
 
-impl MarkdownItExt for Speakers {}
-
-
-#[derive(Debug)]
-pub struct Source(pub Url);
-
-impl MarkdownItExt for Source {}
-
-
-#[derive(Debug)]
-pub struct Path(pub std::path::PathBuf);
-
-impl MarkdownItExt for Path {}
-
-
-#[derive(Debug)]
-pub struct Mentions {
-    pub people: BTreeMap<Mentionable, u32>,
-    pub books: BTreeMap<Mentionable, u32>,
-    pub papers: BTreeMap<Mentionable, u32>,
-    pub links: BTreeMap<Mentionable, u32>,
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Transcription {
+    pub url: Option<String>,
+    pub author: Option<String>,
+    pub date: Option<String>,
 }
 
-impl MarkdownItExt for Mentions {}
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Source {
+    pub title: String,
+    pub series: Option<String>,
+    pub url: String,
+    pub duration: Option<String>,
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Frontmatter {
+    pub source: Source,
+    pub speakers: BTreeMap<String, String>, 
+    pub transcription: Option<Transcription>,
+}

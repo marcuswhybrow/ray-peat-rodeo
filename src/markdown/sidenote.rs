@@ -4,6 +4,21 @@ use markdown_it::{
     parser::extset::RootExt,
 };
 
+pub fn render_sidenote_label(position: u32, node: &Node, fmt: &mut dyn Renderer) {
+    let id = format!("sidenote-{}", position);
+
+    let mut attrs = node.attrs.clone();
+    attrs.push(("for", id.clone()));
+    attrs.push(("class", "sidenote-toggle sidenote-number".into()));
+
+    fmt.open("label", &attrs);
+    fmt.close("label");
+    fmt.self_close("input", &[
+        ("type", "checkbox".into()),
+        ("id", id),
+        ("class", "sidenote-toggle".into()),
+    ]);
+}
 
 #[derive(Debug)]
 pub struct InlineSidenote {
@@ -23,19 +38,7 @@ impl InlineSidenote {
 
 impl NodeValue for InlineSidenote {
     fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
-        let id = format!("sidenote-{}", self.position);
-
-        let mut attrs = node.attrs.clone();
-        attrs.push(("for", id.clone()));
-        attrs.push(("class", "sidenote-toggle sidenote-number".into()));
-
-        fmt.open("label", &attrs);
-        fmt.close("label");
-        fmt.self_close("input", &[
-            ("type", "checkbox".into()),
-            ("id", id),
-            ("class", "sidenote-toggle".into()),
-        ]);
+        render_sidenote_label(self.position, node, fmt);
         fmt.open("span", &[("class", "sidenote".into())]);
         fmt.contents(&node.children);
         fmt.close("span");
@@ -76,7 +79,7 @@ impl InlineRule for SidenodeInlineScanner {
             // Create a new InlineSidenote node, and use the existing parser 
             // state to tokenize the body.
             let node = {
-                let node = std::mem::replace(&mut state.node, Node::new(
+                let orig_node = std::mem::replace(&mut state.node, Node::new(
                     InlineSidenote::new(state.root_ext.get_or_insert(Position(0)))
                 ));
                 let pos = std::mem::replace(&mut state.pos, starting_pos + 1);
@@ -86,7 +89,7 @@ impl InlineRule for SidenodeInlineScanner {
 
                 state.pos = starting_pos;
                 state.pos_max = pos_max;
-                std::mem::replace(&mut state.node, node)
+                std::mem::replace(&mut state.node, orig_node)
             };
 
             return Some((node, consumed));

@@ -1,66 +1,147 @@
 use std::fmt::Debug;
-use std::hash::{Hash, Hasher};
-use std::collections::{BTreeMap, hash_map::DefaultHasher};
-use base64::{Engine, engine::general_purpose};
 use markdown_it::{
     MarkdownIt, Node, NodeValue, Renderer,
-    parser::inline::{InlineRule, InlineState, Text},
-    parser::extset::RootExt
-
+    parser::inline::{InlineRule, InlineState},
 };
+use scraper::{Html, Selector};
+use crate::{InputFile, scraper::Scraper};
+use serde::{Serialize, Deserialize};
 
-// A Mention is the data structure describing a bespoke markdown inline element
-// consumed by InlineMentionScanner, which looks like this:
-//
-// [[Mentionable Signature|Alternative Display Text]]
-//
-// The mention signature is the name of a person, the title of a book, a URL,
-// or the DOI of a scientific paper. This string is the key by which this
-// particular Mention will be grouped with other Mentions in other documents
-// that refer to the same Mentionable Signature. By this means a global lookup
-// table can be constructed with links to, say, all mentions of "William Blake"
-// should that be the "mention signature".
-//
-// The "alternative display text" is anthing to the right of an (optional) pipe
-// character, and allows the document author to customise the link text of this
-// particular mention. If not provided, then a sensible default is used.
-//
-// Both the mentionable signature, and the alternative display text are 
-// fields of the Mention struct, and both are derived from the text explicitly
-// defined by the author of the markdown document. It's also useful to know if 
-// this is the first, second, or nth, mention of a particular mentionable
-// signature within this document.
-//
-// The mention "occurance" field is implicity determined by the number of 
-// preceding mentions with the same mention signature. Thus, the first 
-// occurance may be directly linked to, or indeed, any occurance.
-//
-#[derive(Debug, Clone, Hash)]
+#[derive(PartialEq)]
+pub enum Phase {
+    Author,
+    MentioableKind,
+    MentionableDefinition,
+    DisplayText,
+    Done,
+}
+
+fn get_chunk<'a>(state: &'a InlineState) -> Option<&'a str> {
+    for x in state.pos+1..state.pos_max {
+        if let Some(chunk) = state.src.get(state.pos..x) {
+            return Some(chunk);
+        }
+    }
+    None
+}
+
+fn is_closer(state: &InlineState) -> bool {
+    if let Some(s) = state.src.get(state.pos..state.pos+2) {
+        if s.starts_with("]]") {
+            return true;
+        }
+    }
+    false
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct Author {
+    pub cardinal: String,
+    pub prefix: Option<String>,
+}
+
+impl Author {
+    pub fn id(&self) -> String {
+        if let Some(prefix) = &self.prefix {
+            format!("{}-{}", prefix, self.cardinal)
+                .to_lowercase()
+        } else {
+            self.cardinal.clone()
+        }.to_lowercase().replace(" ", "-")
+    }
+
+    pub fn display_text(&self) -> String  {
+        if let Some(prefix) = &self.prefix {
+            format!("{} {}", prefix, self.cardinal)
+        } else {
+            self.cardinal.clone()
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub enum WorkKind {
+    Book,
+    Paper,
+    Url,
+}
+
+impl WorkKind {
+    fn id(&self) -> String {
+        match self {
+            WorkKind::Book => "book",
+            WorkKind::Url => "url",
+            WorkKind::Paper => "paper",
+        }.into()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Work {
+    pub kind: WorkKind,
+    pub signature: String,
+    pub title: String,
+}
+
+impl Work {
+    fn id(&self) -> String {
+        format!("{}-{}", self.signature, self.kind.id())
+            .to_lowercase()
+            .replace(" ", "-")
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct Mention {
-    // The person, book, URL, or DOI derrived from the mention signature
-    mentionable: Mentionable,
-
-    // The position of this mention relative to other metions in the same 
-    // document that have the same mention signature.
-    occurance: u32,
-
-    // In order to support markdown foratting of the alternative display text,
-    // the alt_text must first be captured and consumed by InlineMentionScanner
-    // and later explicitly resubmitted to the parser to evince the less greedy
-    // rules such as bold, italic, underline, etc.
-    alt_text_fragment: Option<Fragment>,
+    pub input_file: InputFile,
+    pub position: u32,
+    pub author: Author,
+    pub work: Option<Work>,
 }
 
 impl Mention {
-    fn new(state: &mut InlineState, signature: String, alt_text: AltText) -> Option<Mention> {
-        let (mentionable, occurance) = Mentionable::new(state, signature);
-        Some(Mention { mentionable, occurance, alt_text_fragment: alt_text.to_fragment() })
+    pub fn id(&self) -> String {
+        let id = {
+            if let Some(work) = &self.work {
+                format!("{}-{}", self.author.id(), work.id())
+            } else {
+                self.author.id()
+            }
+        };
+
+        if self.position > 1 {
+            format!("{}-{}", id, self.position)
+        } else {
+            id
+        }
     }
 
-    fn base64_hash(&self) -> String {
-        let mut hasher = DefaultHasher::new();
-        self.hash(&mut hasher);
-        general_purpose::URL_SAFE_NO_PAD.encode(hasher.finish().to_ne_bytes())
+    pub fn slug(&self) -> String {
+        format!("{}#{}", self.input_file.slug, self.id())
+    }
+
+    pub fn more_details_slug(&self) -> String {
+        if let Some(work) = &self.work {
+            format!("/authors/{}#{}", self.author.id(), work.id())
+        } else {
+            format!("/authors/{}", self.author.id())
+        }
+    }
+
+    pub fn kind(&self) -> String {
+        if let Some(work) = &self.work {
+            work.kind.id()
+        } else {
+            "author".into()
+        }
+    }
+
+    pub fn display_text(&self) -> String {
+        if let Some(work) = &self.work {
+            work.title.clone()
+        } else {
+            self.author.display_text()
+        }
     }
 }
 
@@ -68,235 +149,247 @@ impl NodeValue for Mention {
     fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
         let mut attrs = node.attrs.clone();
 
-        use Mentionable::*;
-
-        let class = match self.mentionable {
-            Book { title: _, primary_author: _ } => "book",
-            Person { first_names: _, last_name: _ } => "person",
-            Paper { doi: _ } => "paper",
-            Link { url: _ } => "link",
-        };
-
-        // Purposfully unfriendly id to indicate they're unreliable
-        attrs.push(("id", self.base64_hash()));
-
-        attrs.push(("class", vec!["citation", class].join(" ")));
-        attrs.push(("target", "_blank".into()));
-
-        let href = match self.mentionable.clone() {
-            Book { title, primary_author } => format!("https://google.com/search?q={} {}", title, primary_author), 
-            Person { first_names, last_name } => format!("https://google.com/search?q={} {}", first_names, last_name),
-            Paper { doi } => format!("https://doi.org/{}", doi),
-            Link { url } => url.to_string(),
-        };
-
-        attrs.push(("href", href));
+        attrs.push(("id", self.id().to_string()));
+        attrs.push(("class", format!("mention {}", self.kind())));
+        attrs.push(("href", self.more_details_slug()));
+        attrs.push(("data-position", self.position.to_string()));
+        attrs.push(("data-display-text", self.display_text()));
 
         fmt.open("a", &attrs);
-        fmt.contents(&node.children);
+
+        if node.children.is_empty() {
+            fmt.text(self.display_text().as_str());
+        } else {
+            fmt.contents(&node.children);
+        }
+
         fmt.close("a");
     }
 }
 
-#[derive(Debug, Default)]
-struct MentionableOccurances(BTreeMap<Mentionable, u32>);
-
-impl RootExt for MentionableOccurances {}
-
-
-#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub enum Mentionable {
-    Person {
-        first_names: String,
-        last_name: String,
-    },
-
-    Book {
-        title: String,
-        primary_author: String,
-    },
-
-    Paper {
-        doi: String,
-    },
-
-    Link {
-        url: url::Url,
-    },
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DoiData {
+    pub title: String,
 }
 
-impl Mentionable {
-    fn new(state: &mut InlineState, mention_signature: String) -> (Mentionable, u32) {
-        let mentionable = { 
-            if let Some(doi) = mention_signature.strip_prefix("doi:") {
-                Mentionable::Paper { doi: doi.to_string() }
-            } else if let Ok(url) = url::Url::parse(mention_signature.as_str()) {
-                Mentionable::Link { url }
-            } else if mention_signature.contains("-by-") {
-                let mut segments: Vec<&str> = mention_signature.split("-by-").map(|x| x.trim()).collect();
-                Mentionable::Book {
-                    primary_author: segments.pop().unwrap().to_string(),
-                    title: segments.join(" "),
-                }
-            } else {
-                let mut names = mention_signature.split(' ').map(|x| x.trim()).collect::<Vec<&str>>();
-                Mentionable::Person {
-                    last_name: names.pop().unwrap_or("").to_string(),
-                    first_names: names.join(" "),
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+pub struct MentionDeclaration {
+    author_cardinal: String,
+    author_prefix: String,
+    work_kind: Option<WorkKind>,
+    work_signature: String,
+}
+
+impl MentionDeclaration {
+    pub fn as_mention(&self, input_file: InputFile, position: u32, scraper: &mut Scraper) -> Mention {
+        let author = Author {
+            cardinal: self.author_cardinal.clone(),
+            prefix: {
+                if self.author_prefix.is_empty() {
+                    None
+                } else {
+                    Some(self.author_prefix.clone())
                 }
             }
         };
-
-        let occurance = *state.root_ext
-            .get_or_insert_default::<MentionableOccurances>().0
-            .entry(mentionable.clone())
-            .and_modify(|occurances| *occurances += 1)
-            .or_insert(1u32);
-
-        (mentionable, occurance)
-    }
-
-    fn default_display_text(&self) -> String {
-        use Mentionable::*;
-
-        match self {
-            Person { first_names, last_name } => vec![first_names.clone(), last_name.clone()].join(" "),
-            Book { title, primary_author: _ } => title.clone(),
-            Paper { doi } => doi.clone(),
-            Link { url } => url.to_string(),
-        }
-    }
-}
-
-
-#[derive(Debug)]
-enum AltText {
-    Provided(Fragment),
-    NotProvided,
-}
-
-impl AltText {
-    fn new(state: &mut InlineState) -> Option<AltText> {
-        if state.src.get(state.pos..state.pos+1)? != "|" {
-            if state.src.get(state.pos..state.pos+2)? != "]]" {
-                panic!("AltText must only be called whilst state.pos is pointing to '|' or the beginning of ']]'");
-            } else {
-                state.pos += 2;
+        Mention {
+            input_file,
+            position,
+            author,
+            work: match &self.work_kind {
+                None => None,
+                Some(work_kind) => Some(Work {
+                    kind: work_kind.clone(),
+                    signature: self.work_signature.clone(),
+                    title: {
+                        match work_kind {
+                            WorkKind::Url => scraper.get(
+                                "title", 
+                                |client| client.get(self.work_signature.clone()).build().unwrap(), 
+                                |url, text| {
+                                    Html::parse_document(text.as_str())
+                                        .select(&Selector::parse("head title").unwrap())
+                                        .next()
+                                        .expect(format!("Failed to find title in HTTP response for {}", url).as_str())
+                                        .inner_html().clone().trim().to_string()
+                                }
+                            ),
+                            WorkKind::Paper => scraper.get(
+                                "title",
+                                |client| client
+                                    .get(format!("https://doi.org/{}", self.work_signature.clone()))
+                                    .header("Accept", "application/json; charset=utf-8")
+                                    .build()
+                                    .expect(format!("Failed to build HTTP request for {}", self.work_signature).as_str()),
+                                |url, text| serde_json::from_str::<DoiData>(text.as_str())
+                                    .expect(format!("Failed to deserialize JSON HTTP response for {}", url).as_str())
+                                    .title.trim().to_string(),
+                            ),
+                            WorkKind::Book => self.work_signature.clone(),
+                        }
+                    }
+                })
             }
-
-            return Some(AltText::NotProvided);
-        } else {
-            state.pos += 1;
-        }
-
-        let start = state.pos;
-
-        while state.pos < state.pos_max {
-            if state.src.get(state.pos-1..state.pos+1)? == "]]" {
-                state.pos += 1;
-                return Some(AltText::Provided(Fragment { start, end: state.pos - 2 }));
-            }
-
-            state.md.inline.skip_token(state);
-        }
-
-        return None;
-    }
-
-    fn to_fragment(self) -> Option<Fragment> {
-        match self {
-            AltText::Provided(fragment) => Some(fragment.clone()),
-            _ => None,
         }
     }
 }
 
-#[derive(Debug, Copy, Clone, Hash)]
-pub struct Fragment {
-    start: usize,
-    end: usize,
-}
-
-impl Fragment {
-    fn parse(self, state: &mut InlineState, node: Node) -> Node {
-        let node = std::mem::replace(&mut state.node, node);
-        let pos = std::mem::replace(&mut state.pos, self.start);
-        let pos_max = std::mem::replace(&mut state.pos_max, self.end);
-
-        state.md.inline.tokenize(state);
-
-        state.pos = pos;
-        state.pos_max = pos_max;
-        std::mem::replace(&mut state.node, node)
-    }
-}
+impl NodeValue for MentionDeclaration {}
 
 
-fn consume_mention_signature(state: &mut InlineState) -> Option<String> {
-    let start = state.pos;
+struct MentionInlineScanner {}
 
-    while state.pos < state.pos_max {
-        if state.pos + 2 > state.pos_max {
+impl MentionInlineScanner {
+    fn consume_mention(state: &mut InlineState) -> Option<Node> {
+        if !state.src.get(state.pos..state.pos_max)?.starts_with("[[") {
             return None;
         }
 
-        let Some(ultimate) = state.src.get(state.pos..state.pos+2) else {
-            // Non UTF-8 characters cause `get` to return None,
-            // If this happens, ignore it, and carry on searching.
-            state.pos += 1;
-            continue;
-        };
+        state.pos += 2;
 
-        if ultimate.starts_with("|") || ultimate.starts_with("]]") {
-            if state.pos <= start {
-                return None;
-            } else {
-                return Some(state.src.get(start..state.pos)?.to_string());
+        let mut phase = Phase::Author;
+
+        let mut author_cardinal = String::new();
+        let mut author_comma_found = false;
+        let mut author_prefix = String::new();
+
+        let mut work_kind = String::new();
+        let mut work_signature = String::new();
+
+        let mut display_text_start: Option<usize> = None;
+        let mut display_text_end: Option<usize> = None;
+
+        while state.pos < state.pos_max {
+            let chunk = get_chunk(state)?;
+
+            match phase {
+                Phase::Author => {
+                    // [["Quoted Authors, Ignore Commas"...
+                    if chunk.starts_with('"') {
+                        let closer = state.src.get(state.pos+1..state.pos_max)?.find('"')? + 1;
+                        let quoted_text = state.src.get(state.pos+1..state.pos+closer)?;
+                        if author_comma_found {
+                            author_prefix.push_str(quoted_text)
+                        } else {
+                            author_cardinal.push_str(quoted_text)
+                        }
+                        state.pos += closer + 1;
+                    } else if chunk.starts_with("[") {
+                        phase = Phase::MentioableKind;
+                    } else if chunk.starts_with("|") {
+                        phase = Phase::DisplayText;
+                    } else if is_closer(state) {
+                        phase = Phase::Done;
+                    } else if chunk.starts_with(",") {
+                        author_comma_found = true;
+                        state.pos += chunk.len();
+
+                    // [[Whybrow, Marcus...
+                    } else {
+                        if author_comma_found {
+                            author_prefix.push_str(chunk);
+                        } else {
+                            author_cardinal.push_str(chunk);
+                        }
+                        state.pos += chunk.len();
+                    }
+                },
+
+                Phase::MentioableKind => {
+                    // [[Whybrow, Marcus, [KIND]..
+                    if chunk.starts_with("[") && work_kind.is_empty() {
+                        let closer = state.src.get(state.pos+1..state.pos_max)?.find("]")? + 1;
+                        work_kind = state.src.get(state.pos+1..state.pos+closer)?.to_string();
+                        state.pos += closer + 1;
+                        phase = Phase::MentionableDefinition;
+                    } else {
+                        return None;
+                    }
+                },
+
+                Phase::MentionableDefinition => {
+                    if chunk.starts_with('"') {
+                        let closer = state.src.get(state.pos+1..state.pos_max)?.find('"')? + 1;
+                        let quoted_text = state.src.get(state.pos+1..state.pos+closer)?;
+                        work_signature.push_str(quoted_text);
+                        state.pos += closer + 1;
+
+                    } else if chunk.starts_with("|") {
+                        phase = Phase::DisplayText;
+
+                    } else if is_closer(state) {
+                        phase = Phase::Done;
+
+                    } else {
+                        work_signature.push_str(chunk.get(0..1)?);
+                        state.pos += 1;
+                    }
+                },
+
+                Phase::DisplayText => {
+                    if chunk.starts_with("|") {
+                        display_text_start = Some(state.pos+1);
+                        state.pos += chunk.len();
+                    } else if is_closer(state) {
+                        display_text_end = Some(state.pos);
+                        phase = Phase::Done;
+                    } else {
+                        state.md.inline.skip_token(state)
+                    }
+                },
+
+                Phase::Done => {
+                    if is_closer(state) {
+                        state.pos += 2;
+                        break;
+                    }
+                }
             }
         }
 
-        state.pos += 1;
-    }
+        let mut node = Node::new(MentionDeclaration {
+            author_cardinal: author_cardinal.trim().to_string(),
+            author_prefix: author_prefix.trim().to_string(),
+            work_kind: match work_kind.trim() {
+                "url" => Some(WorkKind::Url),
+                "book" => Some(WorkKind::Book),
+                "paper" => Some(WorkKind::Paper),
+                _ => None,
+            },
+            work_signature: work_signature.trim().to_string(),
+        });
 
-    return None;
+        if let (Some(start), Some(end)) = (display_text_start, display_text_end) {
+            let orig_node = std::mem::replace(&mut state.node, node);
+            let pos = std::mem::replace(&mut state.pos, start);
+            let pos_max = std::mem::replace(&mut state.pos_max, end);
+
+            state.md.inline.tokenize(state);
+
+            state.pos = pos;
+            state.pos_max = pos_max;
+            node = std::mem::replace(&mut state.node, orig_node);
+        }
+
+
+        Some(node)
+    }
 }
 
-
-struct MentionInlineScanner;
-
-impl InlineRule for MentionInlineScanner{
+impl InlineRule for MentionInlineScanner {
     const MARKER: char = '[';
 
     fn run(state: &mut InlineState) -> Option<(Node, usize)> {
         let start = state.pos;
 
-        if state.src.get(state.pos..state.pos+2)? != "[[" {
-            return None;
-        }
-        state.pos += 2;
-
-        let Some(mention_signature) = consume_mention_signature(state) else {
+        if let Some(node) = MentionInlineScanner::consume_mention(state) {
+            let consumed = state.pos - start;
             state.pos = start;
-            return None;
-        };
-        let Some(alt_text) = AltText::new(state) else {
-            state.pos = start;
-            return None;
-        };
-        let Some(mention) = Mention::new(state, mention_signature, alt_text) else {
-            state.pos = start;
-            return None;
-        };
-
-        let mut node = Node::new(mention.clone());
-
-        if let Some(fragment) = mention.alt_text_fragment {
-            node = fragment.parse(state, node);
-        } else {
-            node.children.push(Node::new(Text { content: mention.mentionable.default_display_text() }));
+            return Some((node, consumed))
         }
 
-        Some((node, std::mem::replace(&mut state.pos, start) - start))
+        state.pos = start;
+        return None
     }
 }
 

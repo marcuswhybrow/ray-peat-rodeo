@@ -8,14 +8,14 @@ speakers:
   GN: Gary Null
   RP: Ray Peat
 transcription:
-  source: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
+  url: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
   author: ilovethesea
   date: 2014-07-25
 ---
 
 GN: [05:42] I'm Gary Null and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
 
-Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Nutrition for Women -by- Ray Peat]], [[Progesterone in Orthomolecular Medicine -by- Ray Peat]], and [[Generative Energy -by- Ray Peat]] and [[Mind and Tissue -by- Ray Peat]].
+Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Peat, Ray [book] Nutrition for Women]], [[Peat, Ray [book] Progesterone in Orthomolecular Medicine]], and [[Peat, Ray [book] Generative Energy]] and [[Peat, Ray [book] Mind and Tissue]].
 
 [06:32] So let's go to our conference call and welcome him onboard. Nice to have you with us, Dr. Peat.
 
@@ -51,7 +51,7 @@ But this also happens in very young people who have low thyroid. And when it get
 
 [15:10] One of the common stereotypes about low thyroid people is that they are just lethargic and sluggish. But a very large group of low thyroid people become hyperactive because of this very high adrenaline compensating for the low blood sugar.
 
-[[Broda Otto Barnes|Broda Barnes]], who was one of the best thyroid researchers in the '30s and '40s wrote a book called [[Hope for Hypoglycemia -by- Broda Barnes|Hypoglyceamia: It's Your Liver, not Your Mind]] because he found that almost all hypoglycemics were low thyroid, and that the liver simply wasn't able to store enough glycogen to keep their blood sugar steady.
+[[Barnes, Broda Otto|Broda Barnes]], who was one of the best thyroid researchers in the '30s and '40s wrote a book called [[Barnes, Broda [book] Hope for Hypoglycemia|Hypoglyceamia: It's Your Liver, not Your Mind]] because he found that almost all hypoglycemics were low thyroid, and that the liver simply wasn't able to store enough glycogen to keep their blood sugar steady.
 
 [15:59] The high cholesterol that develops in most people as they age is another thing that, in the '30s and '40s, many researchers recognized that high cholesterol was nothing but an indicator of low thyroid, the same way low blood sugar was mostly an indicator of low thyroid. There were published studies in the middle 1930's which showed that when you took out someone's thyroid gland, immediately the cholesterol went up, and when you gave them a thyroid supplement, immediately the cholesterol goes down.
 
@@ -91,7 +91,7 @@ I'm Gary Null, back in 60 seconds.
 
 RP: [29:28] Okay, you mentioned the hormones estrogen and how it relates to melatonin. With increasing age, people have made a big thing of the fact that melatonin, which peaks about 3AM in everyone, that this peak is a little bit smaller in old age. But it happens that with aging, as the thyroid decreases, the melatonin decreases, because when thyroid is active, your melatonin comes up as an antioxidant defense against that the high metabolic rate that thyroid can stimulate. So when your thyroid is low, the melatonin is low, when your thyroid is high, the melatonin is high, in a logical adaptation, because it is an antioxidant.
 
-But the function of melatonin all by itself, when it isn't surrounded by the appropriate other conditions, melatonin, in studies done in pig tissue, {#19} {Editor's note: Pertinant studies perhaps include [[doi:10.1111/j.1600-079X.1994.tb00121.x|Direct influence of melatonin ... isolated from porcine ovaries]], and [[doi:10.1677/joe.0.1540001|Direct regulation of ... reproductive organs by ... melatonin]]} by a man named [[Alexander V. Sirotkin|Sirotkin]], pigs are relatively close to humans in having daytime habits, nighttime sleep and so on—which is very important for melatonin because it's a nighttime dominant hormone—in pigs, he found that melatonin suppresses progesterone and raises estrogen, and this happens to be the same thing that low thyroid does.
+But the function of melatonin all by itself, when it isn't surrounded by the appropriate other conditions, melatonin, in studies done in pig tissue, {#19} by a man named [[Sirotkin, Alexander V.|Sirotkin]], pigs are relatively close to humans in having daytime habits, nighttime sleep and so on—which is very important for melatonin because it's a nighttime dominant hormone—in pigs, he found that melatonin suppresses progesterone and raises estrogen, and this happens to be the same thing that low thyroid does.
 
 So if the melatonin rises in proportion to your thyroid, it doesn't matter that it is having these pro-estrogen, anti-progesterone effects, because the thyroid is doing exactly the opposite to those hormones and is taking care of the situation, because thyroid gets rid of the excess estrogen while being totally responsible for producing progesterone. But if you take melatonin out of context, as he did in the pig study, you're going to get an exactly an anti-thyroid effect, deranging those hormones in the direction of stress and aging.
 

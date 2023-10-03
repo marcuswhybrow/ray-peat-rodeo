@@ -5,7 +5,8 @@ use markdown_it::{
     parser::extset::RootExt,
     plugins::cmark::block::paragraph::Paragraph,
 };
-use crate::markdown::{Speakers, Path};
+
+use crate::InputFileBeingParsed;
 
 #[derive(Debug)]
 pub struct SpeakerSection {
@@ -27,12 +28,6 @@ impl NodeValue for SpeakerSection {
         fmt.cr();
     }
 }
-
-/// Retrieves the path for this markdown document
-fn path<'a>(state: &'a BlockState<'a, 'a>) -> &'a str {
-    state.md.ext.get::<Path>().unwrap().0.to_str().unwrap()
-}
-
 
 fn get_speaker_shortname(line: &str) -> Option<&str> {
     let mut chars = line.chars().enumerate();
@@ -109,7 +104,8 @@ impl BlockRule for SpeakerParagraphScanner {
                 let Some(shortname) = get_speaker_shortname(content.as_str()) else { return None };
 
                 if shortname != section_shortname {
-                    panic!("Speaker shortname {shortname} found within speaker section {section_shortname} in {}", path(state));
+                    let path = state.md.ext.get::<InputFileBeingParsed>().unwrap().0.path.clone();
+                    panic!("Speaker shortname {shortname} found within speaker section {section_shortname} in {}", path);
                 }
 
                 shortname
@@ -158,9 +154,11 @@ impl BlockRule for SpeakerSectionBlockScanner {
             let Some(shortname) = get_speaker_shortname(state.get_line(start_line)) else { return None };
             shortname.to_string()
         };
-        
-        let longname = state.md.ext.get::<Speakers>().unwrap().0.get(&shortname.to_string())
-            .expect(format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {}", path(state)).as_str())
+       
+        let input_file = state.md.ext.get::<InputFileBeingParsed>().unwrap().0.clone();
+
+        let longname = input_file.frontmatter.speakers.get(&shortname.to_string())
+            .expect(format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {}", input_file.path).as_str())
             .to_string();
 
         loop {

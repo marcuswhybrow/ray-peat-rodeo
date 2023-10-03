@@ -1,14 +1,76 @@
 use markdown_it::{
     MarkdownIt, Node,
     parser::inline::{InlineRule, InlineState},
-    plugins::cmark::inline::link::Link,
-    parser::inline::Text,
-    plugins::html::html_inline::HtmlInline,
+    NodeValue,
+};
+use scraper::{Html, Selector};
+
+use crate::{
+    markdown::sidenote::Position, 
+    scraper::Scraper, 
+    GITHUB_LINK
 };
 
-use crate::markdown::sidenote::{
-    InlineSidenote, Position,
-};
+use super::sidenote::render_sidenote_label;
+
+
+#[derive(Debug)]
+pub struct GitHubIssueDeclaration {
+    position: u32,
+    id: String,
+}
+
+impl GitHubIssueDeclaration {
+    pub fn url(&self) -> String {
+        format!("{GITHUB_LINK}/issues/{}", self.id)
+    }
+
+    pub fn as_github_issue(&self, scraper: &mut Scraper) -> GitHubIssue {
+        GitHubIssue {
+            position: self.position,
+            id: self.id.clone(),
+            title: scraper.get(
+                "title",
+                |client| client.get(self.url()).build().expect(""),
+                |url, text| {
+                    let selector = "#partial-discussion-header h1 bdi";
+                    Html::parse_document(text.as_str())
+                        .select(&Selector::parse(selector).unwrap())
+                        .next()
+                        .expect(format!("Failed to find \"{}\" in HTTP response for {}", selector, url).as_str())
+                        .inner_html().clone().trim().to_string()
+                }
+            ),
+        }
+    }
+}
+
+impl NodeValue for GitHubIssueDeclaration {}
+
+#[derive(Debug, Clone)]
+pub struct GitHubIssue {
+    position: u32,
+    id: String,
+    title: String,
+}
+
+impl NodeValue for GitHubIssue {
+    fn render(&self, node: &Node, fmt: &mut dyn markdown_it::Renderer) {
+        render_sidenote_label(self.position, node, fmt);
+
+        fmt.open("span", &[("class", "sidenote".into())]);
+
+        fmt.text(format!("Issue #{}. ", self.id).as_str());
+
+        fmt.open("a", &[
+            ("href", format!("{GITHUB_LINK}/issues/{}", self.id)), 
+        ]);
+        fmt.text(self.title.as_str());
+        fmt.close("a");
+
+        fmt.close("span");
+    }
+}
 
 struct GitHubIssueInlineScanner;
 
@@ -30,34 +92,16 @@ impl InlineRule for GitHubIssueInlineScanner {
                 continue;
             }
 
-            let consumed = state.pos + 1 - start;
-
-            let id = state.src.get(start+2..state.pos)?;
-
-            let mut link = Node::new(Link {
-                url: String::from(
-                    std::format!("https://github.com/marcuswhybrow/ray-peat-rodeo/issues/{}", id)
-                ),
-                title: Some(String::from("GitHub Issue")),
+            let node = Node::new(GitHubIssueDeclaration {
+                id: state.src.get(start+2..state.pos)?.to_string(),
+                position: {
+                    let mut position = state.root_ext.get_or_insert(Position(0)).0;
+                    position += 1;
+                    position
+                }
             });
 
-            link.children.push(Node::new(Text {
-                content: String::from(format!("GitHub Issue #{}", id)),
-            }));
-
-            let mut node = Node::new(
-                InlineSidenote::new(
-                    state.root_ext.get_or_insert(Position(0))
-                )
-            );
-            node.children.push(Node::new(Text {
-                content: String::from("This mention needs indentifying. If you know more, let us know on "),
-            }));
-            node.children.push(link);
-            node.children.push(Node::new(Text {
-                content: String::from("."),
-            }));
-
+            let consumed = state.pos + 1 - start;
             state.pos = start;
 
             return Some((node, consumed));
