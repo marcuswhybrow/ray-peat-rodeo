@@ -23,11 +23,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
+    - uses: actions/configure-pages@v3
     - uses: cachix/install-nix-action@v20
       with:
        extra_nix_config: experimental-features = nix-command flakes
-    - uses: actions/checkout@v3
-    - uses: actions/configure-pages@v3
+    - uses: DeterminateSystems/magic-nix-cache-action@v2
     - run: nix run
     - uses: actions/upload-pages-artifact@v1.0.8
       with:

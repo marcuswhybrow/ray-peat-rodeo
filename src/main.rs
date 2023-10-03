@@ -296,13 +296,8 @@ fn copy_dir(input_path: &PathBuf, output_path: &PathBuf) {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
-    let input = Path::new(&args.input)
-        .canonicalize()
-        .expect("Input path not found");
-
-    let output = Path::new(&args.output)
-        .canonicalize()
-        .expect("Output path not found");
+    let input = Path::new(&args.input);
+    let output = Path::new(&args.output);
 
     let cache_path = Path::new(&args.cache_path);
 
@@ -314,7 +309,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if args.build_cache {
         println!("  Building cache of web scraped data...");
         let mut scraper = Scraper::new_scraper(cache_path.to_path_buf());
-        parse_input_files(input, &mut scraper);
+        parse_input_files(input.to_path_buf(), &mut scraper);
         scraper.into_cache().await;
         println!("  Built cache at {:?}", cache_path);
         return Ok(())
@@ -347,7 +342,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\nWriting Files");
 
-    let input_file_results = parse_input_files(input, &mut Scraper::new_fulfiller(cache_path.to_path_buf()));
+    let input_file_results = parse_input_files(input.to_path_buf(), &mut Scraper::new_fulfiller(cache_path.to_path_buf()));
 
     for (input_file, ast, _mentions, _issues) in input_file_results.iter() {
         render(&output.join(format!("{}/index.html", input_file.slug)), markup::new! {
