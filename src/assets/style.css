@@ -154,6 +154,7 @@ sub {
 }
 .mention.author { color: #0057d9 }
 .mention.book { color: #028b0c }
+.mention.article { color: #028b0c } /* same as book */
 .mention.paper { color: #ae00d9 }
 .mention.url { color: #444 }
 

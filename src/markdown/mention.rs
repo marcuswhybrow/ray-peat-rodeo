@@ -62,6 +62,7 @@ impl Author {
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum WorkKind {
     Book,
+    Article,
     Paper,
     Url,
 }
@@ -70,6 +71,7 @@ impl WorkKind {
     fn id(&self) -> String {
         match self {
             WorkKind::Book => "book",
+            WorkKind::Article => "article",
             WorkKind::Url => "url",
             WorkKind::Paper => "paper",
         }.into()
@@ -207,11 +209,15 @@ impl MentionDeclaration {
                                 "title", 
                                 |client| client.get(self.work_signature.clone()).build().unwrap(), 
                                 |url, text| {
-                                    Html::parse_document(text.as_str())
+                                    let html = Html::parse_document(text.as_str());
+                                    let title = html
                                         .select(&Selector::parse("head title").unwrap())
-                                        .next()
-                                        .expect(format!("Failed to find title in HTTP response for {}", url).as_str())
-                                        .inner_html().clone().trim().to_string()
+                                        .next();
+
+                                    match title {
+                                        Some(title) => title.inner_html().clone().trim().to_string(),
+                                        None => url,
+                                    }
                                 }
                             ),
                             WorkKind::Paper => scraper.get(
@@ -225,7 +231,7 @@ impl MentionDeclaration {
                                     .expect(format!("Failed to deserialize JSON HTTP response for {}", url).as_str())
                                     .title.trim().to_string(),
                             ),
-                            WorkKind::Book => self.work_signature.clone(),
+                            WorkKind::Book|WorkKind::Article => self.work_signature.clone(),
                         }
                     }
                 })
@@ -353,8 +359,10 @@ impl MentionInlineScanner {
             work_kind: match work_kind.trim() {
                 "url" => Some(WorkKind::Url),
                 "book" => Some(WorkKind::Book),
+                "article" => Some(WorkKind::Article),
                 "paper" => Some(WorkKind::Paper),
-                _ => None,
+                "" => None,
+                _ => return None,
             },
             work_signature: work_signature.trim().to_string(),
         });

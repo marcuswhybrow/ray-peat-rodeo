@@ -88,25 +88,28 @@ impl Scraper {
         for (request, (attribute, response_handler)) in self.pending_requests.into_iter() {
             join_set.spawn(async move {
                 let url = request.url().to_string();
-                let resp = reqwest::Client::new()
-                    .execute(request).await
-                    .expect("");
 
-                let status = resp.status();
+                match reqwest::Client::new().execute(request).await {
+                    Ok(resp) => {
+                        let status = resp.status();
 
-                if !(status.is_success() || status.is_redirection()) {
-                    eprintln!("    {} for {}", status, url);
+                        if !(status.is_success() || status.is_redirection()) {
+                            eprintln!("    {status} for {url} seeking \"{attribute}\"");
+                        }
+
+                        let body = resp.text().await
+                            .expect(format!("Failed to extract body from HTTP response from {}", url).as_str());
+
+                        (url.clone(), attribute, response_handler(url.clone(), body))
+                    },
+                    Err(e) => {
+                        // TODO returning URL on error does always make sense
+                        // Consider adding an error_handler closure argument.
+                        eprintln!("    Bad request for {url} seeking \"{attribute}\". Returning \"{url}\" instead. The error was:");
+                        eprintln!("      {e}");
+                        (url.clone(), attribute, url.clone())
+                    }
                 }
-
-                (
-                    url.clone(),
-                    attribute,
-                    response_handler(
-                        url,
-                        resp.text().await
-                        .expect("")
-                    )
-                )
             });
         }
 
