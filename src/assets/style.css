@@ -31,12 +31,16 @@ body footer {
 #top-bar a {
     text-decoration: none;
     color: black;
-    opacity: 0.6;
-    font-size: 1.2em;
+    opacity: 0.3;
+    font-size: 3em;
     font-weight: lighter;
-    /* font-style: italic; */
     font-family: "Times New Roman";
-    /* text-transform: uppercase; */
+    text-transform: uppercase;
+    letter-spacing: 10px;
+}
+#top-bar a:hover {
+    color: black;
+    opacity: 0.6;
 }
 
 .sidenote-number {
@@ -119,6 +123,21 @@ input.sidenote-toggle {
     opacity: 1;
 }
 
+.title {
+    margin-bottom: 0;
+}
+.hud {
+    font-size: 0.9em;
+    color: #666;
+}
+.hud a.series {
+    color: #666;
+}
+.hud a.series:hover {
+    color: black;
+    text-decoration: underline;
+}
+
 sup, sub {
     vertical-align: baseline;
     position: relative;
@@ -164,30 +183,61 @@ blockquote > * {
 }
 
 #documents .document {
-    margin-bottom: 40px;
+    margin-bottom: 50px;
     position: relative;
 }
-#documents .document .document-date {
+#documents .document a.document-title {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 1.5em;
+    display: block;
+    margin-bottom: 5px;
+}
+#documents .document a.document-title:hover {
+    text-decoration: underline;
+    filter: brightness(1.2);
+}
+#documents .document .document-hud {
+    margin-bottom: 1px;
+}
+#documents .document .document-hud .document-date {
+    position: relative;
+    top: 30px;
     float: left;
     clear: left;
     margin-left: -17%;
     width: 100px;
     text-align: right;
     font-family: "Courier New";
+    color: #999;
+    font-size: 0.9em;
 }
-#documents .document a.document-title {
+#documents .document .document-hud a.document-series {
+    font-size: 0.9em;
+    color: #444;
+}
+#documents .document a.document-series:hover {
+    color: black;
     text-decoration: underline;
-    color: #e16800;
-    font-weight: bold;
-
-}
-#documents .document a.document-title:hover {
-    filter: brightness(1.2);
 }
 #documents .document .citation {
     transition: all .1s;
     text-decoration: none;
     font-weight: normal;
+}
+
+#documents .document-body .mention {
+    font-size: 1em;
+    border-radius: 10px;
+    filter: saturate(0);
+    text-decoration: none;
+    margin-right: 2px;
+    font-weight: normal;
+}
+#documents .document-body .mention:hover {
+    text-decoration: underline;
+    filter: saturate(1.5);
 }
 
 /* #documents .document:hover a.document-title { } */
@@ -267,12 +317,17 @@ blockquote > * {
     }
 }
 @media only screen and (max-width: 1400px) {
-    #documents .document .document-date {
+    #documents .document .document-hud .document-date {
         float: none;
         clear: none;
         margin-left: 0;
         padding-right: 5px;
-        font-family: "Courier New";
+        font-family: inherit;
+        top: 0;
+
+    }
+    #documents .document .document-hud .document-date:after {
+        content: " /";
     }
     .timecode {
         position: relative;
