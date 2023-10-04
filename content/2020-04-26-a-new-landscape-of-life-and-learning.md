@@ -427,7 +427,7 @@ DB: Geez. So are there other examples of things we can learn from what they were
 
 RP: Oh. Yeah. A lot of good Science was really developing in those early years with between wars. Psychology, Philosophy, Education ideas, learning ideas, therapeutic ideas.
 
-DB: Did you write about some of that stuff in your book on [[Peat, Ray [book] Mind and Tissue]]?
+DB: Did you write about some of that stuff in your book on [[Peat, Raymond [book] Mind and Tissue]]?
 
 RP: Yeah.
 

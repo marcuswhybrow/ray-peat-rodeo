@@ -15,7 +15,7 @@ transcription:
 
 GN: [05:42] I'm Gary Null and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
 
-Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Peat, Ray [book] Nutrition for Women]], [[Peat, Ray [book] Progesterone in Orthomolecular Medicine]], and [[Peat, Ray [book] Generative Energy]] and [[Peat, Ray [book] Mind and Tissue]].
+Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Peat, Raymond [book] Nutrition for Women]], [[Peat, Raymond [book] Progesterone in Orthomolecular Medicine]], and [[Peat, Raymond [book] Generative Energy]] and [[Peat, Raymond [book] Mind and Tissue]].
 
 [06:32] So let's go to our conference call and welcome him onboard. Nice to have you with us, Dr. Peat.
 

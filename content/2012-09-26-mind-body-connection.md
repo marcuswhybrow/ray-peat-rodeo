@@ -18,7 +18,7 @@ KM: In an ideal environment in all aspects of the word ideal (mind, body, spirit
 
 RP: I have never seen evidence that they contain any principle of mortality, and in recent years the suspicion that we contain all the equipment needed for perpetual renewal, given the right circumstances, is seeming to be increasingly plausible.
 
-KM: Finance and energy analyst [[Foss, Nicole]] said “unmet expectations are dangerous”.
+KM: Finance and energy analyst [[Foss, Nicole M.]] said “unmet expectations are dangerous”.
 
 Is optimal health from a cellular metabolic perspective achievable in today’s society with the lack of availability of optimal foods and with all the toxins and pollution in the environment?
 
@@ -56,7 +56,7 @@ RP: There are biofeedback gadgets, some very simple, that can easily make the co
 
 KM: 
 
-> In [[Dostoevsky, Fyodor Mikhailovich|Dostoyevsky’s]] story, [[Dostoevsky, Fyodor Mikhailovich [book] The Dream of a Ridiculous Man|Dream of an Odd Fellow]], the theme is stated even more clearly—the world is very boring, and everything seems the same as everything else, until you can escape from a certain interpretive framework, to see what opportunities are really present to you. — [[Peat, Ray|Dr. Ray Peat]]
+> In [[Dostoevsky, Fyodor Mikhailovich|Dostoyevsky’s]] story, [[Dostoevsky, Fyodor Mikhailovich [book] The Dream of a Ridiculous Man|Dream of an Odd Fellow]], the theme is stated even more clearly—the world is very boring, and everything seems the same as everything else, until you can escape from a certain interpretive framework, to see what opportunities are really present to you. — [[Peat, Raymond|Dr. Ray Peat]]
 
 What if it’s the same with healing? What activities can we do for our mind and body that will give us another framework to see what opportunities are present to us personally on our journey? Is the framework different for each of us?
 
@@ -78,7 +78,7 @@ RP: I think he was probably thinking of a certain kind of objectification or rei
 
 KM: 
 
-> During a lecture, [[Korzybski, Alfred Habdank Skarbek|Alfred Korzybski]] offered his students some cookies, which they seemed to enjoy, then he showed them a label on the bag, ‘dog cookies,’ and some of them felt sick. ‘I have just demonstrated that people don’t just eat food, but also words, and that the taste of the former is often outdone by the taste of the latter.’ Hypnotists have often demonstrated that words can have physiological effects. — [[Peat, Ray|Dr. Ray Peat]]
+> During a lecture, [[Korzybski, Alfred Habdank Skarbek|Alfred Korzybski]] offered his students some cookies, which they seemed to enjoy, then he showed them a label on the bag, ‘dog cookies,’ and some of them felt sick. ‘I have just demonstrated that people don’t just eat food, but also words, and that the taste of the former is often outdone by the taste of the latter.’ Hypnotists have often demonstrated that words can have physiological effects. — [[Peat, Raymond|Dr. Ray Peat]]
 
 What is your take on the Placebo effect?
 

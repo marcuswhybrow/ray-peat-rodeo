@@ -37,7 +37,7 @@ RP: In classes, where the subject matter is an area of knowledge, I look for asp
 
 KM: What impact would you like to see your research make on society? Reaching the largest amount of people? or a certain type of person? Or are you completely detached from the outcome?
 
-RP: I’d like to see it lead to the disestablishment of medicine. The same general outcomes [[Illich, Ivan]] worked for. {[[Foss, Nicole [url] http://www.youtube.com/watch?v=lDr71LHO0Jo]]}
+RP: I’d like to see it lead to the disestablishment of medicine. The same general outcomes [[Illich, Ivan]] worked for. {[[Foss, Nicole M. [url] http://www.youtube.com/watch?v=lDr71LHO0Jo]]}
 
 KM: You put your research out there for free while others use it to make money, how do you feel about this?
 
