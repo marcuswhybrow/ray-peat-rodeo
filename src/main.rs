@@ -18,7 +18,8 @@ use scraper::Scraper;
 
 extern crate fs_extra;
 
-const GITHUB_LINK: &str = "https://github.com/marcuswhybrow/ray-peat-rodeo";
+pub const GITHUB_LINK: &str = "https://github.com/marcuswhybrow/ray-peat-rodeo";
+pub const MENTION_SLUG: &str = "mentions";
 
 markup::define! {
     Base<'a>(title: Option<&'a str>, content: DynRender<'a>) {
@@ -358,7 +359,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     for (author, author_mentions) in authors {
-        render(&output.join(format!("authors/{}/index.html", author.id())), markup::new! {
+        render(&output.join(format!("{MENTION_SLUG}/{}/index.html", author.id())), markup::new! {
             @AuthorPage {
                 author: author.clone(),
                 mentions: author_mentions.clone(),

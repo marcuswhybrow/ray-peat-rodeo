@@ -4,7 +4,7 @@ use markdown_it::{
     parser::inline::{InlineRule, InlineState},
 };
 use scraper::{Html, Selector};
-use crate::{InputFile, scraper::Scraper};
+use crate::{InputFile, scraper::Scraper, MENTION_SLUG};
 use serde::{Serialize, Deserialize};
 
 #[derive(PartialEq)]
@@ -122,9 +122,9 @@ impl Mention {
 
     pub fn more_details_slug(&self) -> String {
         if let Some(work) = &self.work {
-            format!("/authors/{}#{}", self.author.id(), work.id())
+            format!("/{MENTION_SLUG}/{}#{}", self.author.id(), work.id())
         } else {
-            format!("/authors/{}", self.author.id())
+            format!("/{MENTION_SLUG}/{}", self.author.id())
         }
     }
 
