@@ -6,7 +6,7 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
     cargo2nix = {
-      url = "github:cargo2nix/cargo2nix";
+      url = "github:marcuswhybrow/cargo2nix";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "rust-overlay";
     };
