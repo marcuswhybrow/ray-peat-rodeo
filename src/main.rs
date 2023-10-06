@@ -225,8 +225,16 @@ fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<(InputFile, N
     markdown::sidenote::add(parser);
     markdown::mention::add(parser);
 
-    fs::read_dir(input.clone()).unwrap().map(|entry| {
-        let path = entry.unwrap().path();
+    let mut input_file_results = vec![];
+    for entry in fs::read_dir(input.clone()).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+
+        let extension = path.extension();
+        if path.is_dir() || extension.is_none() || extension.is_some_and(|ext| ext != "md") {
+            continue;
+        }
+
         let text = std::fs::read_to_string(&path).unwrap();
 
         let (raw_frontmatter, markdown) = Extractor::new(EnclosingLines("---"))
@@ -267,8 +275,10 @@ fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<(InputFile, N
             }
         });
 
-        (input_file, ast, mentions, issues)
-    }).collect()
+        input_file_results.push((input_file, ast, mentions, issues));
+    }
+
+    input_file_results
 }
 
 
