@@ -5,7 +5,7 @@ source:
     url: https://www.toxinless.com/kmud-130215-weight-gain.mp3
     kind: audio
 
-transcript: 
+transcription:
     url: https://www.toxinless.com/kmud-130215-weight-gain-transcription.doc
     kind: text
 

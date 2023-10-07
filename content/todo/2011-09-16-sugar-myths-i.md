@@ -5,7 +5,7 @@ source:
     url: https://www.toxinless.com/kmud-110916-sugar-myths.mp3
     kind: audio
 
-transcript: 
+transcription:
     url: https://www.toxinless.com/kmud-110916-sugar-myths.docx
     kind: text
 

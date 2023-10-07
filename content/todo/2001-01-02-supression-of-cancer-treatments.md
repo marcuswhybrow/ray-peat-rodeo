@@ -5,7 +5,7 @@ source:
     url: https://www.toxinless.com/polsci-010102-suppression-of-cancer.mp3
     kind: audio
 
-transcript:
+transcription:
     url: https://www.toxinless.com/polsci-suppression-of-cancer-treatments-transcription.pdf
     kind: text
 

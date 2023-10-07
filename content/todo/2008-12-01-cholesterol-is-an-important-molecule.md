@@ -6,7 +6,7 @@ source:
     # also https://www.toxinless.com/kmud-081201-cholesterol-is-an-important-molecule.mp3
     kind: audio
 
-transcript:
+transcription:
     url: https://www.youtube.com/watch?v=HaSjxiuqKI4
     kind: auto-generated
 

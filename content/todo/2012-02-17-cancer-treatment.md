@@ -6,7 +6,7 @@ source:
     # also  https://www.toxinless.com/kmud-120217-cancer-treatment.mp3
     kind: audio
 
-transcript: 
+transcription:
     url: https://www.toxinless.com/kmud-120217-cancer-treatment-partial-transcript.doc
     # only a partial transcript
     # auto-generated https://www.youtube.com/watch?v=4RzhS1pHs8c

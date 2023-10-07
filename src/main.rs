@@ -548,6 +548,7 @@ markup::define! {
                         h1.title { @output_page.input_file.frontmatter.source.title }
 
                         div.hud {
+                            span.date { @output_page.input_file.date }
                             a.series [
                                 href = format!("/series/{}", output_page.input_file.frontmatter.source.series.to_lowercase().replace(" ", "-"))
                             ] {
@@ -600,6 +601,13 @@ markup::define! {
                                 p {
                                     br {}
                                     "A transcript for this interview doesn't yet exist." 
+
+                                    @if let Some(t) = &output_page.input_file.frontmatter.transcription {
+                                        @if let Some (url) = &t.url {
+                                            " However an external transcript is available here:\n"
+                                            a [href = url] { @url }
+                                        }
+                                    }
                                 }
                             }
                         }

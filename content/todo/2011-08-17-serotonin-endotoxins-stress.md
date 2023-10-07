@@ -5,7 +5,7 @@ source:
     url: https://www.toxinless.com/kmud-110617-serotonin-endotoxins-stress.mp3
     kind: audio
 
-transcript:
+transcription:
     url: https://www.toxinless.com/kmud-serotonin-endotoxins-stress-110617.doc
     kind: text
 

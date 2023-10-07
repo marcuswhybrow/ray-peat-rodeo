@@ -5,7 +5,7 @@ source:
     url: https://www.toxinless.com/kmud-120817-hot-flashes-night-sweats-relationship-to-stress-aging-p-m-sand-sugar-metabolism.mp3
     kind: audio
 
-transcript:
+transcription:
     url: https://www.toxinless.com/kmud-120817-hot-flashes-night-sweats-relationship-to-stress-aging-p-m-sand-sugar-metabolism-transcript.doc
     kind: text
 
