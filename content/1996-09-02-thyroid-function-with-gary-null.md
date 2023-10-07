@@ -3,7 +3,8 @@ source:
   title: Thyroid Function
   series: Gary Null
   url: https://www.youtube.com/watch?v=x6bxGBR1Sqs
-  # Also available here https://www.functionalps.com/blog/wp-content/uploads/2011/09/NPRraypeatinterview1996.mp3
+  # also https://www.functionalps.com/blog/wp-content/uploads/2011/09/NPRraypeatinterview1996.mp3
+  # also https://180degreehealth.com/thyroid-deficiency-and-common-health-problems/
   duration: 58:30
   notes:
 transcription:

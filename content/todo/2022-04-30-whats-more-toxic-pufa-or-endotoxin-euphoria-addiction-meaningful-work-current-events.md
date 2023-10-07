@@ -1,8 +1,8 @@
 ---
 source:
-    title: "What's More Toxic: PUFA or Endotoxin? Euphoria. Addiction. Meaningful Work. Current Events"
     series: Generative Energy Podcast
     episode: 82
+    title: "What's More Toxic: PUFA or Endotoxin? Euphoria. Addiction. Meaningful Work. Current Events"
     url: https://www.youtube.com/watch?v=U2f0WOaTmu4
     kind: video
 
