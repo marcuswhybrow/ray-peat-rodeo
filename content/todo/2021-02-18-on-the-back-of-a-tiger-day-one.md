@@ -3,6 +3,7 @@ source:
     series: Perceive Think Act Films
     title: On the Back of a Tiger, Day One
     url: https://www.youtube.com/watch?v=jqhlIOt5sUw
+    kind: video
 
 transcription:
     url: https://www.youtube.com/watch?v=jqhlIOt5sUw

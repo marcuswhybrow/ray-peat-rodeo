@@ -157,7 +157,9 @@ impl BlockRule for SpeakerSectionBlockScanner {
        
         let input_file = state.md.ext.get::<InputFileBeingParsed>().unwrap().0.clone();
 
-        let longname = input_file.frontmatter.speakers.get(&shortname.to_string())
+        let longname = input_file.frontmatter.speakers
+            .expect("Attribute \"speakers\" must be provided in the YAML frontmatter of content that refers to speakers.")
+            .get(&shortname.to_string())
             .expect(format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {}", input_file.path).as_str())
             .to_string();
 

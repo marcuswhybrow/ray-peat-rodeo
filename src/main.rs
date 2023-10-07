@@ -97,19 +97,63 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\nWriting Files");
 
-    let input_file_results = parse_input_files(input.to_path_buf(), &mut Scraper::new_fulfiller(cache_path.to_path_buf()));
+    let mut todo_output_pages = vec![];
+    for entry in fs::read_dir(input.join("todo")).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
 
-    for (input_file, ast, _mentions, _issues) in input_file_results.iter() {
-        render(&output.join(format!("{}/index.html", input_file.slug)), markup::new! {
-            @Page { input_file: &input_file, html: ast.render() }
+        let extension = path.extension();
+        if path.is_dir() || 
+            extension.is_none() || 
+            extension.is_some_and(|ext| ext != "md") || 
+            path.file_stem().unwrap().to_ascii_uppercase() == "README" {
+            continue;
+        }
+
+        let text = std::fs::read_to_string(&path).unwrap();
+
+        let (raw_frontmatter, markdown) = Extractor::new(EnclosingLines("---"))
+            .extract(text.as_str());
+
+        let (date, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
+
+        let input_file = InputFile {
+            todo: true,
+            date: date[..10].into(),
+            path: path.strip_prefix(input).unwrap().to_str().unwrap().into(),
+            markdown: markdown.into(),
+            slug: slug.into(),
+            frontmatter: match serde_yaml::from_str(&raw_frontmatter) {
+                Ok(f) => f,
+                Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
+            },
+        };
+
+        todo_output_pages.push(OutputPage {
+            input_file,
+            html_ast: None,
+            mentions: None,
+            issues: None,
+        });
+    }
+
+    let mut output_pages = parse_input_files(input.to_path_buf(), &mut Scraper::new_fulfiller(cache_path.to_path_buf()));
+    output_pages.extend(todo_output_pages.into_iter());
+
+
+    for output_page in output_pages.iter() {
+        render(&output.join(format!("{}/index.html", output_page.input_file.slug)), markup::new! {
+            @Page { output_page }
         });
     }
 
     {
         let mut authors: HashMap<Author, Vec<Mention>> = HashMap::new();
-        for (_, _, mentions, _) in input_file_results.iter() {
-            for mention in mentions {
-                authors.entry(mention.author.clone()).or_insert(vec![]).push(mention.clone());
+        for output_page in output_pages.iter() {
+            if let Some(mentions) = &output_page.mentions {
+                for mention in mentions {
+                    authors.entry(mention.author.clone()).or_insert(vec![]).push(mention.clone());
+                }
             }
         }
 
@@ -125,10 +169,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     {
         let mut series_map: HashMap<&String, Vec<&InputFile>> = HashMap::new();
-        for (input_file, _, _, _) in input_file_results.iter() {
-            if let Some(series) = &input_file.frontmatter.source.series {
-                series_map.entry(series).or_insert(vec![]).push(input_file);
-            }
+        for output_page in output_pages.iter() {
+            series_map
+                .entry(&output_page.input_file.frontmatter.source.series)
+                .or_insert(vec![])
+                .push(&output_page.input_file);
         }
         for (series, input_files) in series_map.iter() {
             render(
@@ -144,19 +189,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 
     render(&output.join("index.html"), markup::new! {
-        @Homepage { 
-            input_files: input_file_results
-                .iter()
-                .map(|(input_file, _ast, mentions, _issues)| {
-                    (
-                        input_file.clone(), 
-                        mentions.iter()
-                        .filter(|mention| mention.position == 1)
-                        .collect()
-                    )
-                })
-                .collect() 
-        }
+        @Homepage { output_pages: &output_pages }
     });
 
     copy_dir(&PathBuf::from("./src/assets"), &output.join("assets"));
@@ -166,14 +199,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-/// An input markdownfile from ./content
+/// An input markdownfile from ./content 
 #[derive(Debug, Hash, PartialEq, Eq, Clone)]
 pub struct InputFile {
+    todo: bool,
     date: String,
     path: String,
     slug: String,
     frontmatter: Frontmatter,
     markdown: String,
+}
+
+pub struct OutputPage {
+    input_file: InputFile,
+    html_ast: Option<Node>,
+    mentions: Option<Vec<Mention>>,
+    issues: Option<Vec<GitHubIssue>>,
 }
 
 
@@ -212,7 +253,7 @@ fn copy_dir(input_path: &PathBuf, output_path: &PathBuf) {
 
 
 
-fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<(InputFile, Node, Vec<Mention>, Vec<GitHubIssue>)> {
+fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<OutputPage> {
     let parser = &mut MarkdownIt::new();
 
     // Standard markdown parsing rules
@@ -243,6 +284,7 @@ fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<(InputFile, N
         let (date, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
 
         let input_file = InputFile {
+            todo: false,
             date: date.split_at(10).0.into(),
             path: path.strip_prefix(input.as_path()).unwrap().to_str().unwrap().into(),
             markdown: markdown.into(),
@@ -275,7 +317,12 @@ fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<(InputFile, N
             }
         });
 
-        input_file_results.push((input_file, ast, mentions, issues));
+        input_file_results.push(OutputPage {
+            input_file, 
+            html_ast: Some(ast), 
+            mentions: Some(mentions),
+            issues: Some(issues),
+        });
     }
 
     input_file_results
@@ -347,7 +394,7 @@ markup::define! {
         }
     }
 
-    Homepage<'a>(input_files: Vec<(InputFile, Vec<&'a Mention>)>) {
+    Homepage<'a>(output_pages: &'a Vec<OutputPage>) {
         @Base {
             title: Some("Ray Peat Rodeo"),
             content: markup::new! {
@@ -378,36 +425,42 @@ markup::define! {
                         }
 
                         div #documents {
-                            @for (input_file, mentions) in input_files {
+                            @for output_page in output_pages.iter() {
                                 div .document {
                                     div ."document-header" {
                                         div ."document-hud" {
-                                            span ."document-date" { @input_file.date }
-                                            @if let Some(series) = &input_file.frontmatter.source.series {
-                                                a ."document-series" [
-                                                    href = format!("/series/{}", series.to_lowercase().replace(" ", "-"))
-                                                ] {
-                                                    @series
-                                                }
+                                            span ."document-date" { @output_page.input_file.date }
+                                            a ."document-series" [
+                                                href = format!("/series/{}", output_page.input_file.frontmatter.source.series.to_lowercase().replace(" ", "-"))
+                                            ] {
+                                                @output_page.input_file.frontmatter.source.series
                                             }
                                         }
 
-                                        a ."document-title" [href = input_file.slug.clone()] {
-                                            @input_file.frontmatter.source.title
+                                        @if output_page.input_file.todo {
+                                            a .todo."document-title" [href = output_page.input_file.slug.clone()] {
+                                                @output_page.input_file.frontmatter.source.title
+                                            }
+                                        } else {
+                                            a ."document-title" [href = output_page.input_file.slug.clone()] {
+                                                @output_page.input_file.frontmatter.source.title
+                                            }
                                         }
 
                                     }
 
-                                    div ."document-body" {
-                                        @for mention in mentions.iter() {
-                                            a .mention.{ mention.kind() } [
-                                                href = mention.slug(), 
-                                                title = mention.display_text(),
-                                            ] {
-                                                @mention.display_text()
-                                            }
+                                    @if let Some(mentions) = &output_page.mentions {
+                                        div ."document-body" {
+                                            @for mention in mentions.iter().filter(|m| m.position == 1) {
+                                                a .mention.{ mention.kind() } [
+                                                    href = mention.slug(), 
+                                                    title = mention.display_text(),
+                                                ] {
+                                                    @mention.display_text()
+                                                }
 
-                                            " "
+                                                " "
+                                            }
                                         }
                                     }
                                 }
@@ -462,8 +515,15 @@ markup::define! {
                         ul {
                             @for input_file in input_files.iter() {
                                 li {
-                                    a[href = format!("/{}", input_file.slug)] {
-                                        @input_file.frontmatter.source.title.clone()
+                                    @if input_file.todo {
+                                        a.todo[href = format!("/{}", input_file.slug)] {
+                                            @input_file.frontmatter.source.title.clone()
+                                        }
+                                    } else {
+                                        a[href = format!("/{}", input_file.slug)] {
+                                            @input_file.frontmatter.source.title.clone()
+                                        }
+
                                     }
 
                                     " ("
@@ -479,33 +539,31 @@ markup::define! {
             },
         }
     }
-    Page<'a>(input_file: &'a InputFile, html: String) {
+    Page<'a>(output_page: &'a OutputPage) {
         @Base {
-            title: Some(input_file.frontmatter.source.title.as_str()),
+            title: Some(output_page.input_file.frontmatter.source.title.as_str()),
             content: markup::new! {
                 article .interview {
                     header {
-                        h1.title { @input_file.frontmatter.source.title }
+                        h1.title { @output_page.input_file.frontmatter.source.title }
 
                         div.hud {
-                            @if let Some(series) = &input_file.frontmatter.source.series {
-                                a.series [
-                                    href = format!("/series/{}", series.to_lowercase().replace(" ", "-"))
-                                ] {
-                                    @series
-                                }
+                            a.series [
+                                href = format!("/series/{}", output_page.input_file.frontmatter.source.series.to_lowercase().replace(" ", "-"))
+                            ] {
+                                @output_page.input_file.frontmatter.source.series
                             }
                         }
 
                         span .sidenote."sidenote-meta" {
-                            { input_file.frontmatter.source.series.clone().unwrap_or("Someone".into()) }
-                            a [href = input_file.frontmatter.source.url.clone(), target = "_bank"] {
+                            { output_page.input_file.frontmatter.source.series.clone() }
+                            a [href = output_page.input_file.frontmatter.source.url.clone(), target = "_bank"] {
                                 " originally published "
                             }
 
-                            " this interview on " @input_file.date "."
+                            " this interview on " @output_page.input_file.date "."
 
-                            @if let Some(transcription) = input_file.frontmatter.transcription.clone()  {
+                            @if let Some(transcription) = output_page.input_file.frontmatter.transcription.clone()  {
                                 @if let Some(author) = transcription.author.clone() {
                                     @if let Some(url) = transcription.url.clone() {
                                         " Thank you to " @author " who "
@@ -526,7 +584,7 @@ markup::define! {
 
                             " "
 
-                            a[href = format!("{GITHUB_LINK}/edit/main/content/{}", input_file.path), target="_blank"] {
+                            a[href = format!("{GITHUB_LINK}/edit/main/content/{}", output_page.input_file.path), target="_blank"] {
                                 "Edit"
                             }
 
@@ -535,7 +593,16 @@ markup::define! {
                     }
 
                     main ["data-pagefind-body"] {
-                        @markup::raw(html)
+                        @if let Some(html_ast) = &output_page.html_ast {
+                            @markup::raw(html_ast.render())
+                        } else if output_page.input_file.todo {
+                            section {
+                                p {
+                                    br {}
+                                    "A transcript for this interview doesn't yet exist." 
+                                }
+                            }
+                        }
                     }
                 }
             },

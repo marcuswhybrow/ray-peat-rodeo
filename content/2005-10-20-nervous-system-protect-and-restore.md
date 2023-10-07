@@ -1,44 +1,48 @@
 ---
 source: 
-    title: Nervous System Protect & Restore
     series: Silicon Valley Health Institute
+    title: Nervous System Protect & Restore
     url: https://www.youtube.com/watch?v=mdLHWFJI2y0
+    kind: audio
+
 transcription:
-  url: https://raypeatforum.com/community/threads/protection-and-restoration-of-the-nervous-system-2005-conference.11318/
-  author: burtlancast
+    url: https://raypeatforum.com/community/threads/protection-and-restoration-of-the-nervous-system-2005-conference.11318/
+    author: burtlancast
+    date: 2016-06-02
+
 speakers:
-  H: Host
-  RP: Ray Peat
-  A1: First Audience Member (Male)
-  A2: Second Audience Member (Male)
-  A3: Third Audience Member (Male)
-  A4: Fourth Audience Member (Male)
-  A5: Fith Audience Member (Male)
-  A6: Sixth Audience Member (Male)
-  A7: Seventh Audience Member (Female)
-  A8: Eighth Audience Member (Male)
-  A9: Ninth Audience Member (Male)
-  A10: Tenth Audience Member (Male)
-  A11: Eleventh Audience Member (Male)
-  A12: Twelth Audience Member (Male)
-  A13: Thirteenth Audience Member (Male)
-  A14: Fourteenth Audience Member (Male)
-  A15: Fifteenth Audience Member (Male)
-  A16: Sixteenth Audience Member (Male)
-  A17: Seventeenth Audience Member (Male)
-  A18: Eighteenth Audience Member (Male)
-  A19: Nineteenth Audience Member (Female)
-  A20: Twentieth Audience Member (Male)
-  A21: Twenty-First Audience Member (Male)
-  A22: Twenty-Second Audience Member (Male)
-  A23: Twenty-Third Audience Member (Female)
-  A24: Twenty-Forth Audience Member (Male)
-  A25: Male
-  A26: Male
-  A27: Male
-  A28: (Female)
-  A29: Unknown
-  A30: Unknown
+    H: Host
+    RP: Ray Peat
+    A1: First Audience Member (Male)
+    A2: Second Audience Member (Male)
+    A3: Third Audience Member (Male)
+    A4: Fourth Audience Member (Male)
+    A5: Fith Audience Member (Male)
+    A6: Sixth Audience Member (Male)
+    A7: Seventh Audience Member (Female)
+    A8: Eighth Audience Member (Male)
+    A9: Ninth Audience Member (Male)
+    A10: Tenth Audience Member (Male)
+    A11: Eleventh Audience Member (Male)
+    A12: Twelth Audience Member (Male)
+    A13: Thirteenth Audience Member (Male)
+    A14: Fourteenth Audience Member (Male)
+    A15: Fifteenth Audience Member (Male)
+    A16: Sixteenth Audience Member (Male)
+    A17: Seventeenth Audience Member (Male)
+    A18: Eighteenth Audience Member (Male)
+    A19: Nineteenth Audience Member (Female)
+    A20: Twentieth Audience Member (Male)
+    A21: Twenty-First Audience Member (Male)
+    A22: Twenty-Second Audience Member (Male)
+    A23: Twenty-Third Audience Member (Female)
+    A24: Twenty-Forth Audience Member (Male)
+    A25: Male
+    A26: Male
+    A27: Male
+    A28: (Female)
+    A29: Unknown
+    A30: Unknown
 ---
 
 H: [0:12] I just want ot point out that Ray has a PhD in Biology and Biochemistry with a specialisation in Physiology from the the University of Oregon. From '59 to the early 80's he taught courses in Anthropology, Biology, Physics, Nutrition, Immunology, Metabolism, and Psychology, and colledged in Oregon and Mexico, and he also conducts private nutritional counciling.

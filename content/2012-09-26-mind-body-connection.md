@@ -1,8 +1,10 @@
 ---
 source:
-  title: Mind-Body Connection
   series: Ray Peat Insight
+  title: Mind-Body Connection
   url: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
+  kind: text
+
 speakers:
   KM: Karen Mcc
   RP: Ray Peat

@@ -1,16 +1,18 @@
 ---
 source:
-  title: Thyroid Function
   series: Gary Null
+  title: Thyroid Function
   url: https://www.youtube.com/watch?v=x6bxGBR1Sqs
   # also https://www.functionalps.com/blog/wp-content/uploads/2011/09/NPRraypeatinterview1996.mp3
   # also https://180degreehealth.com/thyroid-deficiency-and-common-health-problems/
+  kind: audio
   duration: 58:30
-  notes:
+
 transcription:
   url: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
   author: ilovethesea
   date: 2014-07-25
+
 speakers:
   GN: Gary Null
   RP: Ray Peat

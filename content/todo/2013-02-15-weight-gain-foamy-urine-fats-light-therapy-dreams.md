@@ -7,5 +7,5 @@ source:
 
 transcription:
     url: https://www.youtube.com/watch?v=xcHLZSBTcCc
-    kind: audio
+    kind: auto-generated
 ---

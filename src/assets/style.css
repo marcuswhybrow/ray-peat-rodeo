@@ -198,6 +198,10 @@ blockquote > * {
     text-decoration: underline;
     filter: brightness(1.2);
 }
+#documents .document a.document-title.todo {
+    color: #aaa;
+    text-decoration: line-through;
+}
 #documents .document .document-hud {
     margin-bottom: 1px;
 }

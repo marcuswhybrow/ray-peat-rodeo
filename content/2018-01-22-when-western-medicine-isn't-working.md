@@ -1,8 +1,10 @@
 ---
 source:
-  title: When Western Medicine Isn’t Working
   series: Beyond The Interview
+  title: When Western Medicine Isn’t Working
   url: https://web.archive.org/web/20180123181651/https://www.beyondtheinterview.com/article/2018/when-western-medicine-isnt-workingdifferent-insights-from-a-leader-in-health
+  kind: text
+
 speakers:
   NB: Nicole Behnam
   RP: Ray Peat
