@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::PathBuf, fmt::Debug};
+use std::{collections::HashMap, path::Path, fmt::Debug};
 use markdown_it::parser::extset::MarkdownItExt;
 use tokio::task::JoinSet;
 
@@ -11,19 +11,22 @@ enum ScraperState {
 
 type ResponseHandler = Box<dyn FnOnce(String, String) -> String + Send + Sync + 'static>;
 
-//type ResponseHandler = dyn FnOnce(&reqwest::Response) -> dyn Future<Output = String>;
+pub enum ScraperKind {
+    Fulfiller,
+    Scraper,
+}
 
-pub struct Scraper {
-    cache_path: PathBuf,
+pub struct Scraper<'a> {
+    cache_path: &'a Path,
     state: ScraperState,
     cached_responses: HashMap<String, HashMap<String, String>>,
     pending_requests: Vec<(reqwest::Request, (String, ResponseHandler))>,
     client: reqwest::Client,
 }
 
-impl MarkdownItExt for Scraper {}
+impl MarkdownItExt for Scraper<'static> {}
 
-impl Debug for Scraper {
+impl<'a> Debug for Scraper<'a> {
     fn fmt(&self, _f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // Overriding Debug for scraper, because I don't know how to 
         // implement Debug for ResponseHandler.
@@ -31,28 +34,32 @@ impl Debug for Scraper {
     }
 }
 
-impl Scraper {
-    pub fn new_fulfiller(path: PathBuf) -> Self {
-        Self {
-            cache_path: path.clone(),
-            state: ScraperState::Fulfilling,
-            cached_responses: serde_yaml::from_str(
-                std::fs::read_to_string(path.clone())
-                .expect(format!("Failed to read scraper cache {:?}", path).as_str())
-                .as_str()
-            ).expect("Failed to deserialize scraper cache. Consider regenerating the cache."),
-            pending_requests: vec![],
-            client: reqwest::Client::new(),
-        }
-    }
+impl<'a> Scraper<'a> {
+    pub fn new(path: &'a Path, kind: ScraperKind) -> Self {
+        match kind {
+            ScraperKind::Fulfiller => {
+                Self {
+                    cache_path: path.clone(),
+                    state: ScraperState::Fulfilling,
+                    cached_responses: serde_yaml::from_str(
+                        std::fs::read_to_string(path.clone())
+                        .expect(format!("Failed to read scraper cache {:?}", path).as_str())
+                        .as_str()
+                    ).expect("Failed to deserialize scraper cache. Consider regenerating the cache."),
+                    pending_requests: vec![],
+                    client: reqwest::Client::new(),
+                }
+            },
+            ScraperKind::Scraper => {
+                Self {
+                    state: ScraperState::Scraping,
+                    cached_responses: HashMap::new(),
+                    cache_path: path,
+                    pending_requests: vec![],
+                    client: reqwest::Client::new(),
+                }
 
-    pub fn new_scraper(path: PathBuf) -> Self {
-        Self {
-            state: ScraperState::Scraping,
-            cached_responses: HashMap::new(),
-            cache_path: path,
-            pending_requests: vec![],
-            client: reqwest::Client::new(),
+            },
         }
     }
 

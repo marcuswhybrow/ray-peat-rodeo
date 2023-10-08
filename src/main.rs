@@ -5,6 +5,7 @@ use std::{
     fs,
     path::{Path, PathBuf}, collections::HashMap,
 };
+use chrono::NaiveDate;
 use clap::Parser;
 use fs_extra::dir::CopyOptions;
 use markdown::{
@@ -14,7 +15,7 @@ use markdown::{
 use markdown_it::{MarkdownIt, parser::extset::MarkdownItExt, Node};
 use markup::DynRender;
 use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
-use scraper::Scraper;
+use scraper::{Scraper, ScraperKind};
 
 extern crate fs_extra;
 
@@ -63,9 +64,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if args.build_cache {
         println!("  Building cache of web scraped data...");
-        let mut scraper = Scraper::new_scraper(cache_path.to_path_buf());
-        parse_input_files(input.to_path_buf(), &mut scraper);
+        let mut scraper = Scraper::new(cache_path, ScraperKind::Scraper);
+
+        let _ = OutputPages::new(input, &mut scraper);
         scraper.into_cache().await;
+
         println!("  Built cache at {:?}", cache_path);
         return Ok(())
     }
@@ -97,49 +100,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\nWriting Files");
 
-    let mut todo_output_pages = vec![];
-    for entry in fs::read_dir(input.join("todo")).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
+    let mut scraper = Scraper::new(&cache_path, ScraperKind::Fulfiller);
 
-        let extension = path.extension();
-        if path.is_dir() || 
-            extension.is_none() || 
-            extension.is_some_and(|ext| ext != "md") || 
-            path.file_stem().unwrap().to_ascii_uppercase() == "README" {
-            continue;
-        }
+    let mut output_pages = OutputPages::new(input, &mut scraper).0;
+    output_pages.sort_by_key(|p| p.input_file.date.as_date);
+    output_pages.reverse();
+    
+    let mut todo_output_pages = OutputPages::new(input.join("todo").as_path(), &mut scraper).0;
+    todo_output_pages.sort_by_key(|p| p.input_file.date.as_date);
+    todo_output_pages.reverse();
 
-        let text = std::fs::read_to_string(&path).unwrap();
-
-        let (raw_frontmatter, markdown) = Extractor::new(EnclosingLines("---"))
-            .extract(text.as_str());
-
-        let (date, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
-
-        let input_file = InputFile {
-            todo: true,
-            date: date[..10].into(),
-            path: path.strip_prefix(input).unwrap().to_str().unwrap().into(),
-            markdown: markdown.into(),
-            slug: slug.into(),
-            frontmatter: match serde_yaml::from_str(&raw_frontmatter) {
-                Ok(f) => f,
-                Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
-            },
-        };
-
-        todo_output_pages.push(OutputPage {
-            input_file,
-            html_ast: None,
-            mentions: None,
-            issues: None,
-        });
-    }
-
-    let mut output_pages = parse_input_files(input.to_path_buf(), &mut Scraper::new_fulfiller(cache_path.to_path_buf()));
-    output_pages.extend(todo_output_pages.into_iter());
-
+    output_pages.extend(todo_output_pages);
 
     for output_page in output_pages.iter() {
         render(&output.join(format!("{}/index.html", output_page.input_file.slug)), markup::new! {
@@ -199,22 +170,195 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
+
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+pub struct InputFileDate {
+    year: String,
+    month: String,
+    day: String,
+    as_date: NaiveDate,
+}
+
+impl From<InputFileDate> for String {
+    fn from(value: InputFileDate) -> Self {
+        value.to_string()
+    }
+}
+
+impl ToString for InputFileDate {
+    fn to_string(&self) -> String {
+        format!("{}-{}-{}", self.year, self.month, self.day)
+    }
+}
+
+impl InputFileDate {
+    fn new(path: &PathBuf) -> Self {
+        let date = &path.file_stem().unwrap().to_str().unwrap()[..=9];
+        let year = &date[..=3];
+        let month = &date[5..=6];
+        let day = &date[8..=9];
+
+        InputFileDate {
+            year: year.to_string(),
+            month: month.to_string(),
+            day: day.to_string(),
+            as_date: {
+                let year: i32 = {
+                    if year == "????" {
+                        0
+                    } else {
+                        year.parse()
+                            .unwrap_or_else(|_| panic!("Invalid year {}", year))
+                    }
+                };
+
+                let month: u32 = {
+                    if month == "??" {
+                        1
+                    } else {
+                        month.parse()
+                            .unwrap_or_else(|_| panic!("Invalid month {}", month))
+                    }
+                };
+
+                let day: u32 = {
+                    if day == "??" {
+                        1
+                    } else {
+                        day.parse()
+                            .unwrap_or_else(|_| panic!("Invalud day {}", day))
+                    }
+                };
+
+                NaiveDate::from_ymd_opt(year, month, day)
+                    .unwrap_or_else(|| panic!("Invalid date for {}", date))
+            }
+        }
+    }
+}
+
 /// An input markdownfile from ./content 
 #[derive(Debug, Hash, PartialEq, Eq, Clone)]
 pub struct InputFile {
     todo: bool,
-    date: String,
+    date: InputFileDate,
     path: String,
     slug: String,
     frontmatter: Frontmatter,
     markdown: String,
 }
 
+impl InputFile {
+    fn new(path: PathBuf) -> Result<Self, &'static str> {
+        let extension = path.extension();
+
+        if path.is_dir() {
+            return Err("Path was a directory");
+        }
+
+        if extension.is_none() || extension.is_some_and(|ext| {
+            let lc_ext = ext.to_ascii_lowercase();
+            !(lc_ext == "md" || lc_ext == "markdown")
+        }) {
+            return Err("Path does not have a markdown extension");
+        }
+
+        if path.file_stem().unwrap().to_ascii_uppercase() == "README" {
+            return Err("Path was a README markdown file");
+        }
+
+        let text = std::fs::read_to_string(&path)
+            .expect("Path could not be read to string");
+
+        let (raw_frontmatter, markdown) = Extractor::new(EnclosingLines("---"))
+            .extract(text.as_str());
+
+        Ok(Self {
+            todo: path.parent().unwrap().file_name().unwrap() == "todo",
+            date: InputFileDate::new(&path),
+            path: path.to_str().unwrap().to_string(),
+            markdown: markdown.into(),
+            slug: path.file_stem().unwrap().to_str().unwrap().split_at(11).1.to_string(),
+            frontmatter: match serde_yaml::from_str(&raw_frontmatter) {
+                Ok(f) => f,
+                Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
+            },
+        })
+    }
+}
+
 pub struct OutputPage {
     input_file: InputFile,
     html_ast: Option<Node>,
     mentions: Option<Vec<Mention>>,
+
+    #[allow(dead_code)]
     issues: Option<Vec<GitHubIssue>>,
+}
+
+impl OutputPage {
+    fn new(input_file: InputFile, parser: &mut MarkdownIt, scraper: &mut &mut Scraper) -> Self {
+        parser.ext.insert(InputFileBeingParsed(input_file.clone()));
+
+        let mut ast = parser.parse(input_file.markdown.as_str());
+        let mut mention_count: HashMap<MentionDeclaration, u32> = HashMap::new();
+        let mut mentions = vec![];
+        let mut issues = vec![];
+
+        ast.walk_mut(|node, _depth| {
+            if let Some(mention_declaration) = node.cast::<MentionDeclaration>() {
+                *mention_count.entry((*mention_declaration).clone()).or_insert(0) += 1;
+                let count = mention_count.get(mention_declaration).unwrap();
+                let mention = mention_declaration.as_mention(input_file.clone(), count.clone(), scraper);
+                node.replace(mention.clone());
+                mentions.push(mention);
+
+            } else if let Some(github_issue_declaration) = node.cast::<GitHubIssueDeclaration>() {
+                let issue = github_issue_declaration.as_github_issue(scraper);
+                node.replace(issue.clone());
+                issues.push(issue);
+            }
+        });
+
+        OutputPage {
+            input_file, 
+            html_ast: Some(ast), 
+            mentions: Some(mentions),
+            issues: Some(issues),
+        }
+    }
+}
+
+pub struct OutputPages(Vec<OutputPage>);
+
+impl OutputPages {
+    fn new(path: &Path, mut scraper: &mut Scraper) -> Self {
+        let mut parser = MarkdownIt::new();
+
+        // Standard markdown parsing rules
+        markdown_it::plugins::cmark::add(&mut parser);
+
+        // Custom markdown parsing rules
+        markdown::timecode::add(&mut parser);
+        markdown::speaker::add(&mut parser);
+        markdown::github::add(&mut parser); // must apply before sidenote rules
+        markdown::sidenote::add(&mut parser);
+        markdown::mention::add(&mut parser);
+
+        let mut input_file_results = vec![];
+        for entry in fs::read_dir(path.clone()).unwrap() {
+
+            let Ok(input_file) = InputFile::new(entry.unwrap().path()) else {
+                continue;
+            };
+
+            input_file_results.push(
+                OutputPage::new(input_file, &mut parser, &mut scraper)
+            );
+        }
+
+        OutputPages(input_file_results.into())
+    }
 }
 
 
@@ -252,86 +396,9 @@ fn copy_dir(input_path: &PathBuf, output_path: &PathBuf) {
 }
 
 
-
-fn parse_input_files(input: PathBuf, scraper: &mut Scraper) -> Vec<OutputPage> {
-    let parser = &mut MarkdownIt::new();
-
-    // Standard markdown parsing rules
-    markdown_it::plugins::cmark::add(parser);
-
-    // Custom markdown parsing rules
-    markdown::timecode::add(parser);
-    markdown::speaker::add(parser);
-    markdown::github::add(parser); // must apply before sidenote rules
-    markdown::sidenote::add(parser);
-    markdown::mention::add(parser);
-
-    let mut input_file_results = vec![];
-    for entry in fs::read_dir(input.clone()).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-
-        let extension = path.extension();
-        if path.is_dir() || extension.is_none() || extension.is_some_and(|ext| ext != "md") {
-            continue;
-        }
-
-        let text = std::fs::read_to_string(&path).unwrap();
-
-        let (raw_frontmatter, markdown) = Extractor::new(EnclosingLines("---"))
-            .extract(text.as_str());
-
-        let (date, slug) = path.file_stem().unwrap().to_str().unwrap().split_at(11);
-
-        let input_file = InputFile {
-            todo: false,
-            date: date.split_at(10).0.into(),
-            path: path.strip_prefix(input.as_path()).unwrap().to_str().unwrap().into(),
-            markdown: markdown.into(),
-            slug: slug.into(),
-            frontmatter: match serde_yaml::from_str(&raw_frontmatter) {
-                Ok(f) => f,
-                Err(e) => panic!("Invalid YAML frontmatter in {:?}\n{e}", path),
-            },
-        };
-
-        parser.ext.insert(InputFileBeingParsed(input_file.clone()));
-        let mut ast = parser.parse(input_file.markdown.as_str());
-
-        let mut mention_count: HashMap<MentionDeclaration, u32> = HashMap::new();
-        let mut mentions = vec![];
-        let mut issues = vec![];
-
-        ast.walk_mut(|node, _depth| {
-            if let Some(mention_declaration) = node.cast::<MentionDeclaration>() {
-                *mention_count.entry((*mention_declaration).clone()).or_insert(0) += 1;
-                let count = mention_count.get(mention_declaration).unwrap();
-                let mention = mention_declaration.as_mention(input_file.clone(), count.clone(), scraper);
-                node.replace(mention.clone());
-                mentions.push(mention);
-
-            } else if let Some(github_issue_declaration) = node.cast::<GitHubIssueDeclaration>() {
-                let issue = github_issue_declaration.as_github_issue(scraper);
-                node.replace(issue.clone());
-                issues.push(issue);
-            }
-        });
-
-        input_file_results.push(OutputPage {
-            input_file, 
-            html_ast: Some(ast), 
-            mentions: Some(mentions),
-            issues: Some(issues),
-        });
-    }
-
-    input_file_results
-}
-
-
 #[derive(Debug)]
-struct GlobalScraper(Scraper);
-impl MarkdownItExt for GlobalScraper {}
+struct GlobalScraper<'a>(Scraper<'a>);
+impl MarkdownItExt for GlobalScraper<'static> {}
 
 
 markup::define! {
@@ -429,7 +496,7 @@ markup::define! {
                                 div .document {
                                     div ."document-header" {
                                         div ."document-hud" {
-                                            span ."document-date" { @output_page.input_file.date }
+                                            span ."document-date" { @output_page.input_file.date.to_string() }
                                             a ."document-series" [
                                                 href = format!("/series/{}", output_page.input_file.frontmatter.source.series.to_lowercase().replace(" ", "-"))
                                             ] {
@@ -548,7 +615,7 @@ markup::define! {
                         h1.title { @output_page.input_file.frontmatter.source.title }
 
                         div.hud {
-                            span.date { @output_page.input_file.date }
+                            span.date { @output_page.input_file.date.to_string() }
                             a.series [
                                 href = format!("/series/{}", output_page.input_file.frontmatter.source.series.to_lowercase().replace(" ", "-"))
                             ] {
@@ -562,7 +629,7 @@ markup::define! {
                                 " originally published "
                             }
 
-                            " this interview on " @output_page.input_file.date "."
+                            " this interview on " @output_page.input_file.date.to_string() "."
 
                             @if let Some(transcription) = output_page.input_file.frontmatter.transcription.clone()  {
                                 @if let Some(author) = transcription.author.clone() {
@@ -585,7 +652,7 @@ markup::define! {
 
                             " "
 
-                            a[href = format!("{GITHUB_LINK}/edit/main/content/{}", output_page.input_file.path), target="_blank"] {
+                            a[href = format!("{GITHUB_LINK}/edit/main/{}", output_page.input_file.path), target="_blank"] {
                                 "Edit"
                             }
 
