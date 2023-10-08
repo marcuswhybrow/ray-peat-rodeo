@@ -124,7 +124,7 @@ input.sidenote-toggle {
 }
 
 .title {
-    margin-bottom: 0;
+    margin: 0;
 }
 .hud {
     font-size: 0.9em;
@@ -307,6 +307,48 @@ blockquote > * {
     background-color: #888;
     cursor: pointer;
     color: white;
+}
+
+.links {
+  margin-bottom: 5px;
+}
+
+a.github-link img {
+    width: 40px;
+}
+
+article.interview header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.transcription-attribution {
+    margin-top: 0px;
+    font-size: 0.9em;
+}
+
+.actions {
+    margin-top: 4px;
+    margin-bottom: 5px;
+}
+
+.actions a {
+    background-color: #AAA;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.actions a.orig-content {
+    background-color: #666;
+}
+.actions a.orig-content:hover {
+    background-color: #3A3;
+}
+.actions a.edit:hover {
+    background-color: #66F;
 }
 
 @media only screen and (max-width: 732px) {

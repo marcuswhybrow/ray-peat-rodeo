@@ -471,6 +471,15 @@ markup::define! {
                     section {
                         @Sidenote {
                             content: markup::new! {
+                                div.links {
+                                    a."github-link" [href = GITHUB_LINK] { 
+                                        img [
+                                            src = "/assets/images/github-mark.svg",
+                                            title = "Visit project on GitHub",
+                                        ] {}
+                                    } 
+                                }
+
                                 r#"Ray Peat Rodeo offers accurate, referenced 
                                 transcripts of Ray Peat interviews that can be 
                                 easily searched or surveyed."#
@@ -486,8 +495,7 @@ markup::define! {
                                 Rust. Ease of development and deployment are 
                                 guaranteed by the excellent nix package manager. 
                                 The project is maintained, discussed, and deployed
-                                via "#
-                                a [href = GITHUB_LINK] { "GitHub" } "."
+                                via GitHub."#
                             }
                         }
 
@@ -612,8 +620,6 @@ markup::define! {
             content: markup::new! {
                 article .interview {
                     header {
-                        h1.title { @output_page.input_file.frontmatter.source.title }
-
                         div.hud {
                             span.date { @output_page.input_file.date.to_string() }
                             a.series [
@@ -623,41 +629,37 @@ markup::define! {
                             }
                         }
 
-                        span .sidenote."sidenote-meta" {
-                            { output_page.input_file.frontmatter.source.series.clone() }
-                            a [href = output_page.input_file.frontmatter.source.url.clone(), target = "_bank"] {
-                                " originally published "
-                            }
+                        h1.title { @output_page.input_file.frontmatter.source.title }
 
-                            " this interview on " @output_page.input_file.date.to_string() "."
-
-                            @if let Some(transcription) = output_page.input_file.frontmatter.transcription.clone()  {
-                                @if let Some(author) = transcription.author.clone() {
+                        @if let Some(transcription) = output_page.input_file.frontmatter.transcription.clone()  {
+                            @if let Some(author) = transcription.author.clone() {
+                                div."transcription-attribution" {
                                     @if let Some(url) = transcription.url.clone() {
-                                        " Thank you to " @author " who "
+                                        "Thank you to " @author " who "
                                         a[href = url] {
                                             "published"
                                         }
-                                        " this transcript "
+                                        " an earlier version of this transcript "
                                     } else {
-                                        " Transcribed by " @author ", "
+                                        "Transcribed by " @author ", "
                                     }
 
                                     @ if let Some(date) = transcription.date.clone() {
                                         @date "."
                                     }
-
                                 }
-                            } 
-
-                            " "
-
-                            a[href = format!("{GITHUB_LINK}/edit/main/{}", output_page.input_file.path), target="_blank"] {
-                                "Edit"
                             }
-
-                            " this page on GitHub."
                         }
+
+                        div.actions {
+                            a."orig-content"[
+                                href = output_page.input_file.frontmatter.source.url.clone()
+                            ] { "View Source" }
+                            a."edit"[
+                                href = format!("{GITHUB_LINK}/edit/main/{}", output_page.input_file.path)
+                            ] { "Edit on GitHub" }
+                        }
+
                     }
 
                     main ["data-pagefind-body"] {
