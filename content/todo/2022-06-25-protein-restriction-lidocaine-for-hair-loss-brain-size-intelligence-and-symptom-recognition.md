@@ -1,6 +1,6 @@
 ---
 source:
-    series: Generative Energy Podcast
+    series: Generative Energy Stream
     episode: 85
     title: Protein Restriction. Lidocaine for Hair Loss? Brain Size, Intelligence & Symptom Recognition
     url: https://www.youtube.com/watch?v=zZCgpw6_sRA
