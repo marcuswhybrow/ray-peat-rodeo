@@ -1,7 +1,7 @@
 ---
 source:
-    series: Generative Energy
-    title: The Origins of Authoritarianism with Ray Peat
+    series: Generative Energy Podcast
+    title: The Origins of Authoritarianism
     episode: 28
     url: https://www.youtube.com/watch?v=MBsFWsHgSCY
     kind: audio

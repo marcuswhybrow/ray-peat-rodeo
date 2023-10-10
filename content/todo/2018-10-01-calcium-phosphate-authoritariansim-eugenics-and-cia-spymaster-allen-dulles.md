@@ -1,8 +1,8 @@
 ---
 source:
-    series: Generative Energy
+    series: Generative Energy Podcast
     episode: 34 
-    title: Calcium. Phosphate. Authoritarianism. Eugenics & CIA Spymaster Allen Dulles
+    title: Calcium, Phosphate, Authoritarianism, Eugenics & CIA Spymaster Allen Dulles
     url: https://www.youtube.com/watch?v=qA9YrebN5zY
     kind: audio
 
