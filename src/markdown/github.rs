@@ -8,7 +8,7 @@ use scraper::{Html, Selector};
 use crate::{
     markdown::sidenote::Position, 
     scraper::Scraper, 
-    GITHUB_LINK
+    GITHUB_LINK, InputFileBeingParsed
 };
 
 use super::sidenote::render_sidenote_label;
@@ -35,7 +35,10 @@ impl GitHubIssueDeclaration {
                 |url, text| {
                     let selector = "#partial-discussion-header h1 bdi";
                     Html::parse_document(text.as_str())
-                        .select(&Selector::parse(selector).unwrap())
+                        .select(
+                            &Selector::parse(selector)
+                            .unwrap_or_else(|_| panic!("Could not parse selector {:?} for {:?}", selector, url))
+                        )
                         .next()
                         .expect(format!("Failed to find \"{}\" in HTTP response for {}", selector, url).as_str())
                         .inner_html().clone().trim().to_string()
@@ -63,6 +66,7 @@ impl NodeValue for GitHubIssue {
         fmt.text(format!("Issue #{}. ", self.id).as_str());
 
         fmt.open("a", &[
+            ("id", format!("issue-{}", self.id)),
             ("href", format!("{GITHUB_LINK}/issues/{}", self.id)), 
         ]);
         fmt.text(self.title.as_str());
@@ -83,7 +87,7 @@ impl InlineRule for GitHubIssueInlineScanner {
         }
 
         let start = state.pos;
-        state.pos += 2;
+        state.pos += 1;
 
         while state.pos < state.pos_max {
             state.pos += 1;
@@ -93,7 +97,15 @@ impl InlineRule for GitHubIssueInlineScanner {
             }
 
             let node = Node::new(GitHubIssueDeclaration {
-                id: state.src.get(start+2..state.pos)?.to_string(),
+                id: {
+                    let candidate = state.src.get(start+2..state.pos)?.to_string();
+                    candidate.parse::<u32>().unwrap_or_else(|_| panic!(
+                        "GitHub issue id must be a positive integer, found {:?} in {:?}",
+                        candidate,
+                        state.md.ext.get::<InputFileBeingParsed>().unwrap().0.path,
+                    ));
+                    candidate
+                },
                 position: {
                     let mut position = state.root_ext.get_or_insert(Position(0)).0;
                     position += 1;
