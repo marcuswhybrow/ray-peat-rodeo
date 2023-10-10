@@ -78,6 +78,20 @@ impl WorkKind {
     }
 }
 
+impl TryFrom<&str> for WorkKind {
+    type Error = &'static str;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        match value.trim() {
+            "url" => Ok(WorkKind::Url),
+            "book" => Ok(WorkKind::Book),
+            "article" => Ok(WorkKind::Article),
+            "paper" => Ok(WorkKind::Paper),
+            _ => return Err("Invalid WorkKind must be one of: url, book, article, paper, discovery"),
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Work {
     pub kind: WorkKind,
@@ -357,12 +371,11 @@ impl MentionInlineScanner {
             author_cardinal: author_cardinal.trim().to_string(),
             author_prefix: author_prefix.trim().to_string(),
             work_kind: match work_kind.trim() {
-                "url" => Some(WorkKind::Url),
-                "book" => Some(WorkKind::Book),
-                "article" => Some(WorkKind::Article),
-                "paper" => Some(WorkKind::Paper),
                 "" => None,
-                _ => return None,
+                trimmed_work_kind => match trimmed_work_kind.try_into() {
+                    Ok(work_kind) => Some(work_kind),
+                    Err(_) => return None,
+                },
             },
             work_signature: work_signature.trim().to_string(),
         });
