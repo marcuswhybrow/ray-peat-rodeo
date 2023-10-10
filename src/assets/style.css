@@ -8,6 +8,7 @@ body {
 article,
 #top-bar {
     padding: 20px;
+    position: relative;
 }
 article header,
 article div.speaker,
@@ -17,6 +18,29 @@ body footer,
     width: 60%;
     margin-left: 5%;
     transition: width .1s;
+}
+
+#top-bar #search {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 30%;
+    z-index: 1000;
+}
+
+#top-bar #search .pagefind-ui__drawer {
+    background: white;
+}
+#top-bar #search p.pagefind-ui__result-title {
+    width: 100%;
+}
+#top-bar #search .pagefind-ui__result-title a {
+    font-family: inherit;
+    font-size: 1em;
+    color: black;
+    opacity: 1;
+    letter-spacing: inherit;
+    text-transform: inherit;
 }
 
 body footer {

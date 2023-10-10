@@ -431,6 +431,8 @@ markup::define! {
             body {
                 div #"top-bar" {
                     a [href="/"] { "Ray Peat Rodeo" }
+
+                    @PageFind {}
                 }
 
                 @content
@@ -449,19 +451,21 @@ markup::define! {
     }
 
     PageFind() {
-        link[href = "/_pagefind/pagefind-ui.css", rel = "stylesheet"] {}
-        script[src = "/_pagefind/pagefind-ui.js", type = "text/javascript"] {}
+        link[href = "/pagefind/pagefind-ui.css", rel = "stylesheet"] {}
+        script[src = "/pagefind/pagefind-ui.js", type = "text/javascript"] {}
         div #search {}
-        script { r#"
+        script { @markup::raw(r#"
             window.addEventListener('DOMContentLoaded', (event) => {
                 new PagefindUI({
                     element: '#search',
+                    showSubResults: true,
+                    showImages: false,
                     translations: {
-                        placeholder: 'Search Ray Peat Rodeo'
+                        placeholder: 'Search Ray Peat Rodeo',
                     }
                 });
             });
-        "# }
+        "#) }
     }
 
     Sidenote<'a>(content: DynRender<'a>) {
@@ -475,8 +479,6 @@ markup::define! {
             title: Some("Ray Peat Rodeo"),
             content: markup::new! {
                 article {
-                    section { @PageFind {} }
-
                     section {
                         @Sidenote {
                             content: markup::new! {
@@ -627,9 +629,9 @@ markup::define! {
         @Base {
             title: Some(output_page.input_file.frontmatter.source.title.as_str()),
             content: markup::new! {
-                article .interview {
+                article .interview ["data-pagefind-body"] {
                     header {
-                        div.hud {
+                        div.hud ["data-pagefind-ignore"] {
                             span.date { @output_page.input_file.date.to_string() }
                             a.series [
                                 href = format!("/series/{}", output_page.input_file.frontmatter.source.series.to_lowercase().replace(" ", "-"))
@@ -642,7 +644,7 @@ markup::define! {
 
                         @if let Some(transcription) = output_page.input_file.frontmatter.transcription.clone()  {
                             @if let Some(author) = transcription.author.clone() {
-                                div."transcription-attribution" {
+                                div."transcription-attribution" ["data-pagefind-ignore"] {
                                     @if let Some(url) = transcription.url.clone() {
                                         "Thank you to " @author " who "
                                         a[href = url] {
@@ -660,7 +662,7 @@ markup::define! {
                             }
                         }
 
-                        div.actions {
+                        div.actions ["data-pagefind-ignore"] {
                             a."orig-content"[
                                 href = output_page.input_file.frontmatter.source.url.clone()
                             ] { "View Source" }
@@ -671,7 +673,7 @@ markup::define! {
 
                     }
 
-                    main ["data-pagefind-body"] {
+                    main {
                         @if let Some(html_ast) = &output_page.html_ast {
                             @markup::raw(html_ast.render())
                         } else if output_page.input_file.todo {
