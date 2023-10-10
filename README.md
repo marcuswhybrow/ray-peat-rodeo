@@ -5,8 +5,14 @@ the public works of Ray Peat.
 
 # Usage
 
+Requirements: [Nix Package Manager](https://nixos.org/download.html#download-nix)
+
 ```bash
-nix run                         # build Ray Peat Rodeo to ./build
-nix develop -c watch            # Build on change to source code
-nix develop -c watch-and-serve  # as above + serve site over HTTP
+git clone git@github.com:marcuswhybrow/ray-peat-rodeo.git
+cd ray-peat-rodeo
+nix develop -c watch-and-serve
+
+# In another terminal add a new transcript.
+# See existing files in ./content for examples
+touch ./content/YYYY-MM-DD-title-of-new-transcription.md
 ```
