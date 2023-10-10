@@ -64,9 +64,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     if args.build_cache {
         println!("  Building cache of web scraped data...");
+
+        // In "Scraper" mode, mock data is returned, but a record is kept of 
+        // all URLs requested.
         let mut scraper = Scraper::new(cache_path, ScraperKind::Scraper);
 
+        // So we construct all the pages as normal, but do nothing with them.
         let _ = OutputPages::new(input, &mut scraper);
+        let _ = OutputPages::new(input.join("todo").as_path(), &mut scraper);
+
+        // The we write the cache to disk, which is used, when building the 
+        // pages from real, using a scraper in Fulfiller mode. Probably could 
+        // make this simplier, and easier to understand, but it works for now.
         scraper.into_cache().await;
 
         println!("  Built cache at {:?}", cache_path);
