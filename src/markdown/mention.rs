@@ -57,6 +57,13 @@ impl Author {
             self.cardinal.clone()
         }
     }
+
+    pub fn signature(&self) -> String {
+        match &self.prefix {
+            Some(prefix) => format!("{}, {}", self.cardinal, prefix),
+            None => self.cardinal.clone()
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -132,10 +139,12 @@ impl Mention {
         }
     }
 
+    /// The absolute URL to the place in a page where this mention is made
     pub fn slug(&self) -> String {
         format!("{}#{}", self.input_file.slug, self.id())
     }
 
+    /// The absolute URL to more details about the thing being mentioned
     pub fn more_details_slug(&self) -> String {
         if let Some(work) = &self.work {
             format!("/{MENTION_SLUG}/{}#{}", self.author.id(), work.id())
@@ -159,6 +168,13 @@ impl Mention {
             self.author.display_text()
         }
     }
+
+    pub fn signature(&self) -> String {
+        match &self.work {
+            Some(work) => work.signature.clone(),
+            None => self.author.signature(),
+        }
+    }
 }
 
 impl NodeValue for Mention {
@@ -167,19 +183,34 @@ impl NodeValue for Mention {
 
         attrs.push(("id", self.id().to_string()));
         attrs.push(("class", format!("mention {}", self.kind())));
-        attrs.push(("href", self.more_details_slug()));
         attrs.push(("data-position", self.position.to_string()));
         attrs.push(("data-display-text", self.display_text()));
 
-        fmt.open("a", &attrs);
+        attrs.push(("hx-trigger", "mouseenter".into()));
+        attrs.push(("hx-target", "find .popup-card".into()));
+        attrs.push(("hx-get", self.more_details_slug()));
+        attrs.push(("hx-swap", "innerHTML".into()));
+        attrs.push(("hx-select", ".mentions".into()));
 
+        fmt.open("span", &attrs);
+
+        fmt.open("a", &vec![
+            ("href", self.more_details_slug()),
+        ]);
         if node.children.is_empty() {
             fmt.text(self.display_text().as_str());
         } else {
             fmt.contents(&node.children);
         }
-
         fmt.close("a");
+
+        fmt.open("span", &vec![
+            ("class", "popup-card".into()),
+        ]);
+        fmt.close("span");
+
+        fmt.close("span");
+
     }
 }
 

@@ -137,11 +137,24 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
 
-        for (author, author_mentions) in authors {
+        for (author, author_mentions) in authors.iter() {
+
             render(&output.join(format!("{MENTION_SLUG}/{}/index.html", author.id())), markup::new! {
-                @AuthorPage {
+                @MentionPage {
                     author: author.clone(),
-                    mentions: author_mentions.clone(),
+                    grouped_mentions: {
+                        let mut grouped_mentions: HashMap<String, HashMap<String, HashMap<String, Vec<&Mention>>>> = HashMap::new();
+
+                        for mention in author_mentions {
+                            grouped_mentions
+                                .entry(mention.kind()).or_insert(HashMap::new())
+                                .entry(mention.signature()).or_insert(HashMap::new())
+                                .entry(mention.input_file.path.clone()).or_insert(vec![])
+                                .push(mention);
+                        }
+
+                        grouped_mentions
+                    },
                 }
             });
         }
@@ -426,7 +439,7 @@ markup::define! {
                 meta[name = "viewport", 
                     content = "width=device-width, initial-scale=1.0"] {}
                 link[rel = "stylesheet", href = "/assets/style.css"] {}
-                // script[src="https://unpkg.com/htmx.org@1.9.6"] {}
+                script[src="https://unpkg.com/htmx.org@1.9.6"] {}
             }
             body {
                 div #"top-bar" {
@@ -555,13 +568,21 @@ markup::define! {
                                     @if let Some(mentions) = &output_page.mentions {
                                         div ."document-body" {
                                             @for mention in mentions.iter().filter(|m| m.position == 1) {
-                                                a .mention.{ mention.kind() } [
-                                                    href = mention.slug(), 
-                                                    title = mention.display_text(),
-                                                ] {
-                                                    @mention.display_text()
-                                                }
+                                                span.mention.{mention.kind()} [
+                                                    "hx-trigger" = "mouseenter",
+                                                    "hx-target" = "find .popup-card",
+                                                    "hx-get" = mention.more_details_slug(),
+                                                    "hx-select" = ".mentions",
+                                                    "hx-swap" = "innerHTML",
+                                                ]{
+                                                    a [
+                                                        href = mention.slug(), 
+                                                    ] {
+                                                        @mention.display_text()
+                                                    }
 
+                                                    span."popup-card" {}
+                                                }
                                                 " "
                                             }
                                         }
@@ -575,23 +596,87 @@ markup::define! {
         }
     }
 
-    AuthorPage(author: Author, mentions: Vec<Mention>) {
+    MentionPage<'a>(author: Author, grouped_mentions: HashMap<String, HashMap<String, HashMap<String, Vec<&'a Mention>>>>) {
         @Base {
             title: Some(author.display_text().as_str()),
             content: markup::new! {
-                article {
+                article.mentions {
                     section {
                         h1 { @author.display_text() }
 
-                        p {
-                            "This author is mentioned on the following pages."
+                        @if let Some(signatures) = grouped_mentions.get("author") {
+                            h2 { "Mentioned in:" }
+                            ul {
+                                @for (_, mentions_by_input_file) in signatures {
+                                    @for (_, mentions) in mentions_by_input_file {
+                                        li {
+                                            a[href = format!("/{}", mentions.first().unwrap().slug())] {
+                                                @mentions.first().unwrap().input_file.frontmatter.source.title
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
 
-                        ul {
-                            @for mention in mentions {
-                                li {
-                                    a[href = format!("/{}", mention.slug())] {
-                                        @mention.input_file.frontmatter.source.title
+                        @if let Some(mentions_by_signature) = grouped_mentions.get("book") {
+                            h2 { "Books mentions:" }
+                            ul {
+                                @for (signature, mentions_by_input_file) in mentions_by_signature {
+                                    li {
+                                        span { @signature }
+
+                                        ul {
+                                            @for (_, mentions) in mentions_by_input_file {
+                                                li {
+                                                    a[href = format!("/{}", mentions.first().unwrap().slug())] {
+                                                        @mentions.first().unwrap().input_file.frontmatter.source.title
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @if let Some(signatures) = grouped_mentions.get("paper") {
+                            h2 { "Scientific paper mentions:" }
+                            ul {
+                                @for (signature, mentions_by_input_file) in signatures {
+                                    li {
+                                        span { @signature }
+
+                                        ul {
+                                            @for (_, mentions) in mentions_by_input_file {
+                                                li {
+                                                    a[href = format!("/{}", mentions.first().unwrap().slug())] {
+                                                        @mentions.first().unwrap().input_file.frontmatter.source.title
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        @if let Some(signatures) = grouped_mentions.get("url") {
+                            h2 { "Web pages mentions:" }
+                            ul {
+                                @for (signature, mentions_by_input_file) in signatures {
+                                    li {
+                                        span { @signature }
+
+                                        ul {
+                                            @for (_, mentions) in mentions_by_input_file {
+                                                li {
+                                                    a[href = format!("/{}", mentions.first().unwrap().slug())] {
+                                                        @mentions.first().unwrap().input_file.frontmatter.source.title
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
