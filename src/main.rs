@@ -438,6 +438,14 @@ markup::define! {
                 @content
 
                 footer {
+                    iframe [
+                        src="https://github.com/sponsors/marcuswhybrow/button",
+                        title="Sponsor marcuswhybrow",
+                        height="32",
+                        width="114",
+                        style="border: 0; border-radius: 6px;",
+                    ] {}
+
                     p {
                         "Ray Peat Rodeo is an "
                         a[href = GITHUB_LINK] { "open source" }
@@ -489,6 +497,15 @@ markup::define! {
                                             title = "Visit project on GitHub",
                                         ] {}
                                     } 
+                                    span."github-sponsor" {
+                                        iframe [
+                                            src="https://github.com/sponsors/marcuswhybrow/button",
+                                            title="Sponsor marcuswhybrow",
+                                            height="32",
+                                            width="114",
+                                            style="border: 0; border-radius: 6px;",
+                                        ] {}
+                                    }
                                 }
 
                                 r#"Ray Peat Rodeo offers accurate, referenced 

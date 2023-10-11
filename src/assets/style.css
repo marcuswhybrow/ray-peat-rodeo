@@ -337,8 +337,17 @@ blockquote > * {
   margin-bottom: 5px;
 }
 
+.github-link {
+    margin-right: 15px;
+}
+
 a.github-link img {
     width: 40px;
+}
+.github-sponsor {
+    display: inline-block;
+    position: relative;
+    top: -12px;
 }
 
 article.interview header {
