@@ -102,8 +102,9 @@
         (pkgs.writeScriptBin "watch" ''
           RUST_BACKTRACE=full cargo watch \
             --watch src \
+            --ignore stash.yml \
             --watch content \
-            --exec "run --bin ray-peat-rodeo" \
+            --exec "run --bin ray-peat-rodeo -- --update-stash" \
             --shell "pagefind --site ./build"
         '')
         (pkgs.writeScriptBin "serve" ''devd --open --livewatch ./build '')

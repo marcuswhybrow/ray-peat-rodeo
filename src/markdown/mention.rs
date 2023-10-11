@@ -4,7 +4,7 @@ use markdown_it::{
     parser::inline::{InlineRule, InlineState},
 };
 use scraper::{Html, Selector};
-use crate::{InputFile, scraper::Scraper, MENTION_SLUG};
+use crate::{InputFile, stash::Stash, MENTION_SLUG};
 use serde::{Serialize, Deserialize};
 
 #[derive(PartialEq)]
@@ -228,7 +228,7 @@ pub struct MentionDeclaration {
 }
 
 impl MentionDeclaration {
-    pub fn as_mention(&self, input_file: InputFile, position: u32, scraper: &mut Scraper) -> Mention {
+    pub fn as_mention(&self, input_file: InputFile, position: u32, stash: &mut Stash) -> Mention {
         let author = Author {
             cardinal: self.author_cardinal.clone(),
             prefix: {
@@ -250,7 +250,7 @@ impl MentionDeclaration {
                     signature: self.work_signature.clone(),
                     title: {
                         match work_kind {
-                            WorkKind::Url => scraper.get(
+                            WorkKind::Url => stash.get(
                                 "title", 
                                 |client| client.get(self.work_signature.clone()).build().unwrap(), 
                                 |url, text| {
@@ -265,7 +265,7 @@ impl MentionDeclaration {
                                     }
                                 }
                             ),
-                            WorkKind::Paper => scraper.get(
+                            WorkKind::Paper => stash.get(
                                 "title",
                                 |client| client
                                     .get(format!("https://doi.org/{}", self.work_signature.clone()))

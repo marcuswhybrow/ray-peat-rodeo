@@ -7,7 +7,7 @@ use scraper::{Html, Selector};
 
 use crate::{
     markdown::sidenote::Position, 
-    scraper::Scraper, 
+    stash::Stash, 
     GITHUB_LINK, InputFileBeingParsed
 };
 
@@ -25,11 +25,11 @@ impl GitHubIssueDeclaration {
         format!("{GITHUB_LINK}/issues/{}", self.id)
     }
 
-    pub fn as_github_issue(&self, scraper: &mut Scraper) -> GitHubIssue {
+    pub fn as_github_issue(&self, stash: &mut Stash) -> GitHubIssue {
         GitHubIssue {
             position: self.position,
             id: self.id.clone(),
-            title: scraper.get(
+            title: stash.get(
                 "title",
                 |client| client.get(self.url()).build().expect(""),
                 |url, text| {

@@ -1,5 +1,5 @@
 mod markdown;
-mod scraper;
+mod stash;
 
 use std::{
     fs,
@@ -15,7 +15,7 @@ use markdown::{
 use markdown_it::{MarkdownIt, parser::extset::MarkdownItExt, Node};
 use markup::DynRender;
 use extract_frontmatter::{Extractor, config::Splitter::EnclosingLines};
-use scraper::{Scraper, ScraperKind};
+use stash::{Stash, StashMode};
 
 extern crate fs_extra;
 
@@ -36,11 +36,14 @@ struct Args {
     #[arg(short, long, default_value_t = String::from("./build"))]
     output: String,
 
-    #[arg(long, default_value_t = String::from("./src/cache.yml"))]
-    cache_path: String,
+    #[arg(long, default_value_t = String::from("./src/stash.yml"))]
+    stash_path: String,
 
     #[arg(long, default_value_t = false)]
-    build_cache: bool,
+    wipe_stash: bool,
+
+    #[arg(long, default_value_t = false)]
+    update_stash: bool,
 
     /// Whether files and directories inside of OUT_PATH should be deleted
     /// before building
@@ -55,28 +58,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let input = Path::new(&args.input);
     let output = Path::new(&args.output);
 
-    let cache_path = Path::new(&args.cache_path);
+    let cache_path = Path::new(&args.stash_path);
 
     println!("Ray Peat Rodeo");
     println!("  Input:  {:?}", input);
     println!("  Output: {:?}", output);
     println!("  Cache:  {:?}", cache_path);
 
-    if args.build_cache {
+    if args.wipe_stash {
         println!("  Building cache of web scraped data...");
 
         // In "Scraper" mode, mock data is returned, but a record is kept of 
         // all URLs requested.
-        let mut scraper = Scraper::new(cache_path, ScraperKind::Scraper);
+        let mut stash = Stash::new(cache_path, StashMode::MockAll);
 
         // So we construct all the pages as normal, but do nothing with them.
-        let _ = OutputPages::new(input, &mut scraper);
-        let _ = OutputPages::new(input.join("todo").as_path(), &mut scraper);
+        let _ = OutputPages::new(input, &mut stash);
+        let _ = OutputPages::new(input.join("todo").as_path(), &mut stash);
 
         // The we write the cache to disk, which is used, when building the 
         // pages from real, using a scraper in Fulfiller mode. Probably could 
         // make this simplier, and easier to understand, but it works for now.
-        scraper.into_cache().await;
+        stash.write(cache_path).await;
 
         println!("  Built cache at {:?}", cache_path);
         return Ok(())
@@ -109,13 +112,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("\nWriting Files");
 
-    let mut scraper = Scraper::new(&cache_path, ScraperKind::Fulfiller);
+    if args.update_stash {
+        let mut stash = Stash::new(&cache_path, StashMode::MockOnMisses);
 
-    let mut output_pages = OutputPages::new(input, &mut scraper).0;
+        OutputPages::new(input, &mut stash);
+        OutputPages::new(input.join("todo").as_path(), &mut stash);
+
+        stash.write(&cache_path).await;
+    }
+
+    let mut stash = Stash::new(&cache_path, StashMode::PanicOnMisses);
+
+    let mut output_pages = OutputPages::new(input, &mut stash).0;
     output_pages.sort_by_key(|p| p.input_file.date.as_date);
     output_pages.reverse();
     
-    let mut todo_output_pages = OutputPages::new(input.join("todo").as_path(), &mut scraper).0;
+    let mut todo_output_pages = OutputPages::new(input.join("todo").as_path(), &mut stash).0;
     todo_output_pages.sort_by_key(|p| p.input_file.date.as_date);
     todo_output_pages.reverse();
 
@@ -319,7 +331,7 @@ pub struct OutputPage {
 }
 
 impl OutputPage {
-    fn new(input_file: InputFile, parser: &mut MarkdownIt, scraper: &mut &mut Scraper) -> Self {
+    fn new(input_file: InputFile, parser: &mut MarkdownIt, stash: &mut &mut Stash) -> Self {
         parser.ext.insert(InputFileBeingParsed(input_file.clone()));
 
         let mut ast = parser.parse(input_file.markdown.as_str());
@@ -331,12 +343,12 @@ impl OutputPage {
             if let Some(mention_declaration) = node.cast::<MentionDeclaration>() {
                 *mention_count.entry((*mention_declaration).clone()).or_insert(0) += 1;
                 let count = mention_count.get(mention_declaration).unwrap();
-                let mention = mention_declaration.as_mention(input_file.clone(), count.clone(), scraper);
+                let mention = mention_declaration.as_mention(input_file.clone(), count.clone(), stash);
                 node.replace(mention.clone());
                 mentions.push(mention);
 
             } else if let Some(github_issue_declaration) = node.cast::<GitHubIssueDeclaration>() {
-                let issue = github_issue_declaration.as_github_issue(scraper);
+                let issue = github_issue_declaration.as_github_issue(stash);
                 node.replace(issue.clone());
                 issues.push(issue);
             }
@@ -354,7 +366,7 @@ impl OutputPage {
 pub struct OutputPages(Vec<OutputPage>);
 
 impl OutputPages {
-    fn new(path: &Path, mut scraper: &mut Scraper) -> Self {
+    fn new(path: &Path, mut stash: &mut Stash) -> Self {
         let mut parser = MarkdownIt::new();
 
         // Standard markdown parsing rules
@@ -375,7 +387,7 @@ impl OutputPages {
             };
 
             input_file_results.push(
-                OutputPage::new(input_file, &mut parser, &mut scraper)
+                OutputPage::new(input_file, &mut parser, &mut stash)
             );
         }
 
@@ -419,8 +431,8 @@ fn copy_dir(input_path: &PathBuf, output_path: &PathBuf) {
 
 
 #[derive(Debug)]
-struct GlobalScraper<'a>(Scraper<'a>);
-impl MarkdownItExt for GlobalScraper<'static> {}
+struct GlobalScraper(Stash);
+impl MarkdownItExt for GlobalScraper {}
 
 
 markup::define! {
