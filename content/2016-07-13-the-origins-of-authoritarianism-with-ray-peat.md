@@ -70,9 +70,9 @@ So I wasn't sold on the idea that you have to work within the system, because it
 
 And around 1929 or 30 [[Reich, Wilhelm]] realized what [[Sigmund, Freud|Freud]] was doing. And he believed that [[Sigmund, Freud|Freud]] was very conscious of the rightness of [[Reich, Wilhelm|Reich's]] position, that you're never going to have a healthy individual as long as they're being oppressed. He believed that [[Sigmund, Freud|Freud]] simply wanted to save his movement from Nazism and they [were] able to survive by giving in to the oppression. 
 
-From the 1920s [[Wilhelm, Reich|Reich]] was saying that there's an emotional plague all through the world, not just Fascism, but it's the plague of authoritarianism. And at first he said education and medicine—psychiatry—can cure people of this, but then next thing he realised was that first you have to cure the doctors and the teachers of the emotional plague. 
+From the 1920s [[Reich, Wilhelm|Reich]] was saying that there's an emotional plague all through the world, not just Fascism, but it's the plague of authoritarianism. And at first he said education and medicine—psychiatry—can cure people of this, but then next thing he realised was that first you have to cure the doctors and the teachers of the emotional plague. 
 
-I think [[Wilhelm, Reich|Reich]] was essentially right, but I think it really is more than just an emotional plague, that I think it's something like a historical, intellectual, epistemological plague built into the way we believe knowledge works.
+I think [[Reich, Wilhelm|Reich]] was essentially right, but I think it really is more than just an emotional plague, that I think it's something like a historical, intellectual, epistemological plague built into the way we believe knowledge works.
 
 DR: [9:44] Did it originate from [[Plato]] and [[Aristotle]]? Do you see, like, a origin for this type of oppressive society?
 
