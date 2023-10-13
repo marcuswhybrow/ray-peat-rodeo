@@ -50,7 +50,7 @@ RP: If we extrapolate the curves for Alzheimer’s disease and obesity, it looks
 
 KM: For those of us who are aware of all the threats to our health, would avoidance seeking behavior and criticism of the culture be a logical focus? Do we still owe ourselves a life filled with fulfilling work, meaningful relationships, and self-knowledge?
 
-RP: If civilization doesn’t sink into disease and tyranny, those things have to happen. [[Melville, Herman [book] Bartleby, the Scrivener]] was [[Melville, Herman|Melville’s]] perception of the importance of avoidance of bad work, the kind of refusal everyone has to start making before constructive things can become possible.
+RP: If civilization doesn’t sink into disease and tyranny, those things have to happen. [[Melville, Herman > Bartleby, the Scrivener]] was [[Melville, Herman|Melville’s]] perception of the importance of avoidance of bad work, the kind of refusal everyone has to start making before constructive things can become possible.
 
 KM: When we start opening our eyes to certain threats like the oceans being in peril, depleted uranium weapon use, college students being crushed by 1 trillion dollar loans, the National Defense Authorization Act (NDAA), and the growing global food crisis (to name just a few), we can see how so many of these stresses are beyond the control and scope of everyday life. Should we be panicking on some level? Or participating in organized demonstration like “Occupy Wall street”?
 
@@ -83,7 +83,7 @@ RP: [[William Blake|Blake]] distinguished between Contraries, without which ther
 > But as a distorted & reversed Reflexion in the Darkness  
 > And in the Non Entity: nor shall that which is above  
 > Ever descend into thee: but thou shalt be a Non Entity for ever  
-> — [[Blake, William [book] Jerusalem]], Plate 17, (E 161)
+> — [[Blake, William > Jerusalem]], Plate 17, (E 161)
 
 KM: > For a tree’s branches to reach to heaven, its roots must reach to hell  
 > — Alchemical Dictum  
@@ -107,7 +107,7 @@ KM:
 
 > He who desires but acts not, breeds pestilence. — [[Blake, William]]
 
-In light of the New Age that 2012 ushered in, some people seem to be counting or hoping for some form of Morphic Resonance {Editors' Note: The Theory of Morphic Resonance was introducted by [[Sheldrake, Rupert]] in his book [[Sheldrake, Rupert [book] A New Science of Life]].} or 100th monkey effect to save us from the planet’s destruction (at our own hands). Is there a misunderstanding that “thought synergy” alone is the action instead of it being a call to action?
+In light of the New Age that 2012 ushered in, some people seem to be counting or hoping for some form of Morphic Resonance {Editors' Note: The Theory of Morphic Resonance was introducted by [[Sheldrake, Rupert]] in his book [[Sheldrake, Rupert > A New Science of Life]].} or 100th monkey effect to save us from the planet’s destruction (at our own hands). Is there a misunderstanding that “thought synergy” alone is the action instead of it being a call to action?
 
 RP: Monkey resonance working in reverse can produce pestilent inertia. But once people sense that there are real possibilities, many kinds of appropriate solutions will be immediately conceived and put into action. Immediacy is an energizer, and projects can be as big as is consistent with a sense of continuity between need and fulfillment. All of the hindering delays between need/desire and acting for fulfillment are inauthentic mechanisms for control, ultimately for exploitation. The mind-forged manacles breed pestilence.
 

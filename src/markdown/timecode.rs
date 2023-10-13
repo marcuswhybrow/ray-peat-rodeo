@@ -1,7 +1,7 @@
 use markdown_it::{MarkdownIt, Node, NodeValue, Renderer};
 use markdown_it::parser::inline::{InlineRule, InlineState};
 
-use crate::InputFileBeingParsed;
+use crate::content::ContentFileBeingParsed;
 
 
 #[derive(Debug)]
@@ -108,12 +108,12 @@ impl InlineRule for TimecodeInlineScanner {
                 // ---------^
                 if sections.len() < 2 || sections.len() > 3 { return None };
 
-                let input_file = &state.md.ext.get::<InputFileBeingParsed>()
+                let content_file = &state.md.ext.get::<ContentFileBeingParsed>()
                     .unwrap().0;
 
                 return Some((
                     Node::new(InlineTimecode {
-                        url: url::Url::parse(input_file.frontmatter.source.url
+                        url: url::Url::parse(content_file.frontmatter.source.url
                             .as_str()).unwrap(),
                         seconds: sections
                             .pop().unwrap_or(Vec::new())

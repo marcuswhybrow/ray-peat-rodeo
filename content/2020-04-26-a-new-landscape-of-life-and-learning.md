@@ -96,7 +96,7 @@ RP: Yeah, you know [[Dewey, John|John Dewey's]] famous phrase that "education is
 
 DB: [23:23] Oh I like that, I like that.
 
-RP: Another philosopher-psychologist that I think was very insightful and useful was [[Schachtel, Ernest George|Eric Schachtel]] who wrote the book [[Schachtel, Eric Ernest George [book] Metamorphosis]] and in that he has the ideas of "Allocentric Perception" starting in infancy in which you learn to see—empathy basically—to see that there are other beings and to learn to let your involvement go out, and have them participate in a personal way. But the way things are set up people start, what he called, "Secondary Autocentric Perception" in which things are understood and valued only as they are useful in your little, self-contained world: you don't go out of yourself, you bring everything useful in to your control.
+RP: Another philosopher-psychologist that I think was very insightful and useful was [[Schachtel, Eric Ernest George|Eric Schachtel]] who wrote the book [[Schachtel, Eric Ernest George > Metamorphosis]] and in that he has the ideas of "Allocentric Perception" starting in infancy in which you learn to see—empathy basically—to see that there are other beings and to learn to let your involvement go out, and have them participate in a personal way. But the way things are set up people start, what he called, "Secondary Autocentric Perception" in which things are understood and valued only as they are useful in your little, self-contained world: you don't go out of yourself, you bring everything useful in to your control.
 
 DB: [24:52] Why do you think it is that we learn to do that?
 
@@ -118,7 +118,7 @@ DB: [28:55] I think that's great. Is that part of his fundamental stages of lear
 
 RP: Yeah. What is most _personal_ is also most _general_ and universal. If you really are involved in something and share that involvement it involves the whole world as you understand it. So personal and universal can't be separated.
 
-DB: [29:36] Wow. Didn't [[Emerson, Ralph Waldo]] in his [[Emerson, Ralph Waldo [book] Self-Reliance|essay on self-reliance]] say something like "that whatever is felt by me, is true for everyone." I think he describes it differently but is that kind of what you was getting at?
+DB: [29:36] Wow. Didn't [[Emerson, Ralph Waldo]] in his [[Emerson, Ralph Waldo > Self-Reliance|essay on self-reliance]] say something like "that whatever is felt by me, is true for everyone." I think he describes it differently but is that kind of what you was getting at?
 
 RP: Yeah [[Emerson, Ralph Waldo|Emerson]] was very good.
 
@@ -188,11 +188,11 @@ DB: [47:05] Do you feel that the winds have changed? Be it if they go into a mor
 
 RP: Yeah. I started getting discouraged in the late 1960s following the Blake thing. And I started seeing that the U.S. was being treated as on a course to becoming just more of the third world. That the masses of the U.S. weren't on a course of democracy. I think that is what we've been seeing progressively. And I think this current thing of the pandemic—or the "plandemic"—is a late stage of the process of shaking down small businesses. Getting them out of the way.
 
-Like the Gates Foundation and the United Nations Agriculture Organization are—right now—in process in Africa of destroying small subsistence agriculture and replacing it with giant industrial soybean farms. And the same thing— do you know [[Corbett, James [url] https://www.corbettreport.com|The Corbett Report]]?
+Like the Gates Foundation and the United Nations Agriculture Organization are—right now—in process in Africa of destroying small subsistence agriculture and replacing it with giant industrial soybean farms. And the same thing— do you know [[Corbett, James > https://www.corbettreport.com|The Corbett Report]]?
 
 DB: I've heard of it, I haven't watched any of it.
 
-RP: They have a good episode, it's called [[Corbett, James [url] https://www.corbettreport.com/was-there-foreknowledge-of-the-plandemic-qfc-059|Was There Foreknowledge of the Plandemic?]]. It shows that the Federal Reserve was doing drastic, historically novel stuff already in September of last year that looked like the beginning of what was only announced several weeks ago as the multi-trillion-dollar bailout. They were starting on this multi-trillion-dollar _pre_ bailout already in September.
+RP: They have a good episode, it's called [[Corbett, James > https://www.corbettreport.com/was-there-foreknowledge-of-the-plandemic-qfc-059|Was There Foreknowledge of the Plandemic?]]. It shows that the Federal Reserve was doing drastic, historically novel stuff already in September of last year that looked like the beginning of what was only announced several weeks ago as the multi-trillion-dollar bailout. They were starting on this multi-trillion-dollar _pre_ bailout already in September.
 
 RP: And an Agency of the Defence Intelligence Agency, according to an ABC news item that was multiply confirmed—many sources confirmed it—that this Medical Intelligence Branch reported that around the end of November a virus was on the move in Wuhan. But China didn't mention it until late December and didn't start taking action until, I think, the 23rd of January. But our Defence Intelligence Agency already reported it before the Chinese knew about it.
 
@@ -390,7 +390,7 @@ DB: Interesting. But now do you think the same opportunities would be had by peo
 
 RP: No, I've heard people express attitudes that you have to be qualified to have access to certain instruments.
 
-[1:35:40] Did you read the book [[Arp, Halton, [book] Seeing Red]]?
+[1:35:40] Did you read the book [[Arp, Halton, > Seeing Red]]?
 
 DB: No, I have not.
 
@@ -430,7 +430,7 @@ DB: Geez. So are there other examples of things we can learn from what they were
 
 RP: Oh. Yeah. A lot of good Science was really developing in those early years with between wars. Psychology, Philosophy, Education ideas, learning ideas, therapeutic ideas.
 
-DB: Did you write about some of that stuff in your book on [[Peat, Raymond [book] Mind and Tissue]]?
+DB: Did you write about some of that stuff in your book on [[Peat, Raymond > Mind and Tissue]]?
 
 RP: Yeah.
 
@@ -442,7 +442,7 @@ DB: Okay, so someone could just email you at <raypeatsnewsletter@gmail.com> and 
 
 RP: Yeah.
 
-DB: [1:44:26] Okay great. Are you familiar with [[Iserbyt, Charlotte Thomson|Charlotte Iserbyt]]? {Editor's note: [[Iserbyt, Charlotte Thomson]] wrote [[Iserbyt, Charlotte Thomson [book] The Deliberate Dumbing Down of America]] in 1999.} Have you ever heard of her?
+DB: [1:44:26] Okay great. Are you familiar with [[Iserbyt, Charlotte Thomson|Charlotte Iserbyt]]? {Editor's note: [[Iserbyt, Charlotte Thomson]] wrote [[Iserbyt, Charlotte Thomson > The Deliberate Dumbing Down of America]] in 1999.} Have you ever heard of her?
 
 RP: I don't recognize it.
 

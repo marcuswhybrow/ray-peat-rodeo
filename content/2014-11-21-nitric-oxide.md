@@ -53,7 +53,7 @@ AM: Uh-hm.
 
 RP: But in the 1980s, everyone knew nitric oxide primarily as a toxic component of smog. And so when people started discovering that it was being produced in small amounts in the body, immediately they started looking for the parallels with smog poisoning: lung injury, circulatory disease and so on. And one of the first things they found was that it kills the beta cells in the pancreas that produce insulin. So in early 1940s there was this flurry of papers demonstrating that our _internal_ smog is just as toxic as Los Angeles smog!
 
-[4:53] But then the [[Pfizer [url] https://pubchem.ncbi.nlm.nih.gov/patent/US6469012 |Viagra patent]] and publicity came out in the later 1990s. And right then suddenly the medical publications all found that it was a glorious, protective and natural— oh, protected just about every function you can think of. Making you smarter, have more endurance and all kinds of good things. 
+[4:53] But then the [[Pfizer > https://pubchem.ncbi.nlm.nih.gov/patent/US6469012 |Viagra patent]] and publicity came out in the later 1990s. And right then suddenly the medical publications all found that it was a glorious, protective and natural— oh, protected just about every function you can think of. Making you smarter, have more endurance and all kinds of good things. 
 
 But then, after a few years, I guess the investment in publicity started wearing off and people started coming back to the diabetes-producing effects and looking at what it's actually doing biochemically. 
 

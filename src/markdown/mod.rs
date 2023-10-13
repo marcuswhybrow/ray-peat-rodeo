@@ -5,6 +5,7 @@ pub mod mention;
 pub mod github;
 
 use std::collections::BTreeMap;
+use markdown_it::MarkdownIt;
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq, Serialize, Deserialize)]
@@ -53,4 +54,26 @@ pub struct Frontmatter {
     pub source: Source,
     pub speakers: Option<BTreeMap<String, String>>, 
     pub transcription: Option<Transcription>,
+}
+
+pub trait ProjectParser {
+    fn new_project_parser() -> MarkdownIt;
+}
+
+impl ProjectParser for MarkdownIt {
+    fn new_project_parser() -> MarkdownIt {
+        let mut parser = MarkdownIt::new();
+
+        // Standard markdown parsing rules
+        markdown_it::plugins::cmark::add(&mut parser);
+
+        // Custom markdown parsing rules
+        timecode::add(&mut parser);
+        speaker::add(&mut parser);
+        github::add(&mut parser); // must apply before sidenote rules
+        sidenote::add(&mut parser);
+        mention::add(&mut parser);
+
+        parser
+    }
 }

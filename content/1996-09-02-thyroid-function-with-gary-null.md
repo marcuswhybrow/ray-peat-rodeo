@@ -20,7 +20,7 @@ speakers:
 
 GN: [05:42] I'm Gary Null and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.
 
-Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Peat, Raymond [book] Nutrition for Women]], [[Peat, Raymond [book] Progesterone in Orthomolecular Medicine]], and [[Peat, Raymond [book] Generative Energy]] and [[Peat, Raymond [book] Mind and Tissue]].
+Dr. Peat has a background in biology from The University of Oregon and he specialised in hormone related oxidative changes. He's taught biochemistry, endochronology, and nutrition at several universities, and he's authored several very good books including [[Peat, Raymond > Nutrition for Women]], [[Peat, Raymond > Progesterone in Orthomolecular Medicine]], and [[Peat, Raymond > Generative Energy]] and [[Peat, Raymond > Mind and Tissue]].
 
 [06:32] So let's go to our conference call and welcome him onboard. Nice to have you with us, Dr. Peat.
 
@@ -56,7 +56,7 @@ But this also happens in very young people who have low thyroid. And when it get
 
 [15:10] One of the common stereotypes about low thyroid people is that they are just lethargic and sluggish. But a very large group of low thyroid people become hyperactive because of this very high adrenaline compensating for the low blood sugar.
 
-[[Barnes, Broda Otto|Broda Barnes]], who was one of the best thyroid researchers in the '30s and '40s wrote a book called [[Barnes, Broda [book] Hope for Hypoglycemia|Hypoglyceamia: It's Your Liver, not Your Mind]] because he found that almost all hypoglycemics were low thyroid, and that the liver simply wasn't able to store enough glycogen to keep their blood sugar steady.
+[[Barnes, Broda Otto|Broda Barnes]], who was one of the best thyroid researchers in the '30s and '40s wrote a book called [[Barnes, Broda > Hope for Hypoglycemia|Hypoglyceamia: It's Your Liver, not Your Mind]] because he found that almost all hypoglycemics were low thyroid, and that the liver simply wasn't able to store enough glycogen to keep their blood sugar steady.
 
 [15:59] The high cholesterol that develops in most people as they age is another thing that, in the '30s and '40s, many researchers recognized that high cholesterol was nothing but an indicator of low thyroid, the same way low blood sugar was mostly an indicator of low thyroid. There were published studies in the middle 1930's which showed that when you took out someone's thyroid gland, immediately the cholesterol went up, and when you gave them a thyroid supplement, immediately the cholesterol goes down.
 

@@ -27,7 +27,7 @@ DR: Hey, how are you?
 
 RP: Good!
 
-DR: [1:15] Thankyou so much for doing this. I've been interested in this topic for a while and I had a chance to read through [[Peat, Raymond [article] Public Passivity and the Screw]]
+DR: [1:15] Thankyou so much for doing this. I've been interested in this topic for a while and I had a chance to read through [[Peat, Raymond > Public Passivity and the Screw]]
 and—
 
 RP: Oh!—
@@ -42,7 +42,7 @@ RP: Oh, oh yeah.
 
 DR: We don't have to go strictly through that, but I was thinking, like, authoritarianism when you talk about it, it seems to be an ambiguous term to a lot of people so I thought before we got into, kind of, the weeds you could talk about what it means to you, and then your general experience with it, maybe growing up, and scientifically.
 
-RP: Academically there has been a study now for I guess about 50 years, [[Altemeyer, Robert Anthony|Bob Altemeyer’s]] book [[Altemeyer, Robert Anthony[book] The Authoritarians]], which came out— I guess he put it on the internet maybe five or ten years ago, and [[Dean III, John Wesley|John Dean]] {Editor's note: Ray said "Bob Dean", which I've ammended to [[Dean III, John wesley|John Dean]], who I believe was the watergate lawyer he was referring to.} the Watergate lawyer became a fan of it and helped to publicize it because it was about the psychology of political authoritarianism, primarily. And his main focus is on what he calls the right-wing authoritarians. 
+RP: Academically there has been a study now for I guess about 50 years, [[Altemeyer, Robert Anthony|Bob Altemeyer’s]] book [[Altemeyer, Robert Anthony> The Authoritarians]], which came out— I guess he put it on the internet maybe five or ten years ago, and [[Dean III, John Wesley|John Dean]] {Editor's note: Ray said "Bob Dean", which I've ammended to [[Dean III, John wesley|John Dean]], who I believe was the watergate lawyer he was referring to.} the Watergate lawyer became a fan of it and helped to publicize it because it was about the psychology of political authoritarianism, primarily. And his main focus is on what he calls the right-wing authoritarians. 
 
 And in my understanding of it, which started long before that, it was the intuitive thing of seeing that in the culture there is a unreasoning submission to the ideas of anyone in power, and conformism around what is taken to be the power enforced authoritative doctrine. 
 
@@ -86,7 +86,7 @@ And [[Aristotle]] really acknowledged some of the reality of [[Heraclitus]]. [[H
 
 [[Aristotle]] tried to formalize this using some of the concepts of [[Plato]] by putting it into a sensible scheme in which he had different kinds of causality including the ‘final cause principle’ which is that things are moved according to meaning, or intention. The universality of motion has no randomness and everything is meaningful, everything can be seen in terms of the first cause and the final cause and the various causes, consisting of their nature. So that for [[Aristotle]] laws were derived from the nature of things they weren't in some other eternal world like for [[Plato]].
 
-DR: [12:40] Well that goes back to [[Peat, Raymond [article] Public Passivity and the Screw | the newsletter]]. You say laws were written in the past and since the past isn't accessible it's almost as though a foreign power ruled from a distant imperial capital. Maybe this goes back to your writing on [[Blake, William|Blake]], and you say that that's a representation of the _past_, and it's trying to retain the past into the current view of things. Is that the problem with not only these laws but politics maybe in general?
+DR: [12:40] Well that goes back to [[Peat, Raymond > Public Passivity and the Screw | the newsletter]]. You say laws were written in the past and since the past isn't accessible it's almost as though a foreign power ruled from a distant imperial capital. Maybe this goes back to your writing on [[Blake, William|Blake]], and you say that that's a representation of the _past_, and it's trying to retain the past into the current view of things. Is that the problem with not only these laws but politics maybe in general?
 
 RP: Oh, oh yeah. The [[Plato|Platonic]] idea is creating a false reality for everything that we have in our memory. Seeing everything in terms of the past—something we have at one time generalized—and then saying that's absolute and unchanging. And what it does is to say that all of these current events are random happenings, they don't contain the meaning in themselves, they only get the meaning from these generalizations, and those are all eternal, out of time. 
 
@@ -100,7 +100,7 @@ And in modelling biology on physics the equivalent of the timeless unchanging at
 
 And this was developed very closely with people like [[Spencer, Herbert]] who identified that even [[Darwin, Charles|Darwin]] was a racist that believed that [[United Kingdom of Great Britain and Northern Ireland|English]] science, and animals, and people were the best in the world.
 
-DR: [16:11] You mentioned Psychopaths before and in the KMUD interview, {#24} and to quote, you mentioned the Dulles brothers. And I think you were alluding to a book by [[Talbot, David]] called [[Talbot, David [book] The Devil's Chessboard]], was that correct?
+DR: [16:11] You mentioned Psychopaths before and in the KMUD interview, {#24} and to quote, you mentioned the Dulles brothers. And I think you were alluding to a book by [[Talbot, David]] called [[Talbot, David > The Devil's Chessboard]], was that correct?
 
 RP: Yeah I think that’s his name.
 

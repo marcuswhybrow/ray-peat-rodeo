@@ -292,7 +292,7 @@ SJM: We're running out of time here. But I do want to mention some herbs and als
 
 RP: So sock up on your raw carrot salad, and some cascara powder, tabebuia, like I mentioned, pau d’arco, another good herb to use is echinacea, also goldenseal, barberry [sic?], oregon grape root [sic?] those also are anti-microbial if you come down with a nasty bug in your intestine.
 
-AM: [59:20] For people who'd like to hear more of Dr. Ray Peat, or read his articles, please go to his website [[Peat, Raymond [url] https://raypeat.com | raypeat.com]]. Lot's of good information.
+AM: [59:20] For people who'd like to hear more of Dr. Ray Peat, or read his articles, please go to his website [[Peat, Raymond > https://raypeat.com | raypeat.com]]. Lot's of good information.
 
 Well, thank you so much for listening. And thank you for the callers. We really enjoy doing the show. We're so pleased to hear that people want to ask questions and are into it as well.
 

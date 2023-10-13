@@ -1,7 +1,8 @@
 use std::{collections::HashMap, path::Path, fmt::Debug};
-use markdown_it::parser::extset::MarkdownItExt;
+use markdown_it::{parser::extset::MarkdownItExt, MarkdownIt};
 use tokio::task::JoinSet;
 
+use crate::{content::ContentFile, markdown::ProjectParser};
 
 type ResponseHandler = Box<dyn FnOnce(String, String) -> String + Send + Sync + 'static>;
 
@@ -26,7 +27,6 @@ type Url = String;
 pub enum StashMode {
     PanicOnMisses,
     MockOnMisses,
-    MockAll,
 }
 
 pub struct Stash {
@@ -46,10 +46,10 @@ impl Debug for Stash {
     }
 }
 
-impl Stash {
-    pub fn new<'a>(path: &'a Path, mode: StashMode) -> Self {
+impl From<&Path> for Stash {
+    fn from(path: &Path) -> Self {
         Self {
-            mode,
+            mode: StashMode::PanicOnMisses,
             stash: serde_yaml::from_str(
                 std::fs::read_to_string(path.clone())
                 .unwrap_or_else(|_| panic!("Failed to read stash {:?}", path))
@@ -58,6 +58,22 @@ impl Stash {
             log: vec![],
             client: reqwest::Client::new(),
         }
+    }
+}
+
+impl Stash {
+    /// Parse all the input files using a stash that will mock missing values.
+    /// A call to `Stash::write`
+    pub fn analyse(mut self, content_files: Vec<ContentFile>) -> Stash {
+        self.mode = StashMode::MockOnMisses;
+
+        let parser = &mut MarkdownIt::new_project_parser();
+
+        for content_file in content_files {
+            content_file.as_content(parser, &mut self);
+        }
+
+        self
     }
 
     fn get_from_stash(&self, stash_request: &StashRequest) -> Option<String> {
@@ -90,10 +106,7 @@ impl Stash {
         };
 
         if let Some(string) = self.get_from_stash(&req) {
-            match self.mode {
-                StashMode::MockAll => self.log.push((req, false)),
-                _ => self.log.push((req, true)),
-            }
+            self.log.push((req, true));
             return string;
         }
 
@@ -101,7 +114,7 @@ impl Stash {
             StashMode::PanicOnMisses => {
                 panic!("Haven't stashed {:?} for {:?}", req.key, req.request.url());
             },
-            StashMode::MockOnMisses|StashMode::MockAll => {
+            StashMode::MockOnMisses => {
                 self.log.push((req, false));
                 return "".into();
             },

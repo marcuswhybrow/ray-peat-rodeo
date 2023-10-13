@@ -1,17 +1,18 @@
-use std::fmt::Debug;
+use std::{fmt::Debug, path::Path, collections::HashMap, mem::replace};
 use markdown_it::{
     MarkdownIt, Node, NodeValue, Renderer,
     parser::inline::{InlineRule, InlineState},
 };
 use scraper::{Html, Selector};
-use crate::{InputFile, stash::Stash, MENTION_SLUG};
+use url::{Url, Host};
+use crate::{stash::Stash, MENTION_SLUG, write, BasePage, content::ContentFile};
 use serde::{Serialize, Deserialize};
 
-#[derive(PartialEq)]
+use itertools::Itertools;
+
+#[derive(PartialEq, Clone)]
 pub enum Phase {
-    Author,
-    MentioableKind,
-    MentionableDefinition,
+    SubMention,
     DisplayText,
     Done,
 }
@@ -34,183 +35,63 @@ fn is_closer(state: &InlineState) -> bool {
     false
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct Author {
-    pub cardinal: String,
-    pub prefix: Option<String>,
-}
+markup::define! {
+    MentionPage<'a>(mentionable: &'a Mentionable, direct_mentions: DirectMentions<'a>, sub_mentions: SubMentions<'a>) {
+        @BasePage {
+            title: Some(mentionable.human_readable().as_str()),
+            content: markup::new! {
+                article.mentions {
+                    section."popup-select" {
+                        h1 { 
+                            a [href = mentionable.permalink()] {
+                                @mentionable.human_readable() 
+                            }
+                        }
 
-impl Author {
-    pub fn id(&self) -> String {
-        if let Some(prefix) = &self.prefix {
-            format!("{}-{}", prefix, self.cardinal)
-                .to_lowercase()
-        } else {
-            self.cardinal.clone()
-        }.to_lowercase().replace(" ", "-")
-    }
+                        @if direct_mentions.len() > 0 {
+                            ul {
+                                @for (content_file, mentions) in direct_mentions
+                                    .iter().sorted_by_key(|x| x.0.frontmatter.source.title.clone()) 
+                                {
+                                    li.content {
+                                        a[href = mentions.first().unwrap().permalink()] {
+                                            @content_file.frontmatter.source.title
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
-    pub fn display_text(&self) -> String  {
-        if let Some(prefix) = &self.prefix {
-            format!("{} {}", prefix, self.cardinal)
-        } else {
-            self.cardinal.clone()
+                        @for (sub_mentionable, content_file_to_mentions) in sub_mentions
+                            .iter().sorted_by_key(|x| x.0.default_display_text.clone()) 
+                        {
+                            h2.mentionable {
+                                @match sub_mentionable.as_url() {
+                                    Some(url) => {
+                                        a [ href = url.to_string() ] {
+                                            @sub_mentionable.default_display_text
+                                        }
+                                    }
+                                    None => { @sub_mentionable.default_display_text }
+                                }
+                            }
+
+                            ul {
+                                @for (content_file, mentions) in content_file_to_mentions
+                                    .iter().sorted_by_key(|x| x.0.frontmatter.source.title.clone()) 
+                                {
+                                    li.content {
+                                        a[href = format!("/{}", mentions.first().unwrap().permalink())] {
+                                            @content_file.frontmatter.source.title
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
         }
-    }
-
-    pub fn signature(&self) -> String {
-        match &self.prefix {
-            Some(prefix) => format!("{}, {}", self.cardinal, prefix),
-            None => self.cardinal.clone()
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub enum WorkKind {
-    Book,
-    Article,
-    Paper,
-    Url,
-}
-
-impl WorkKind {
-    fn id(&self) -> String {
-        match self {
-            WorkKind::Book => "book",
-            WorkKind::Article => "article",
-            WorkKind::Url => "url",
-            WorkKind::Paper => "paper",
-        }.into()
-    }
-}
-
-impl TryFrom<&str> for WorkKind {
-    type Error = &'static str;
-
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        match value.trim() {
-            "url" => Ok(WorkKind::Url),
-            "book" => Ok(WorkKind::Book),
-            "article" => Ok(WorkKind::Article),
-            "paper" => Ok(WorkKind::Paper),
-            _ => return Err("Invalid WorkKind must be one of: url, book, article, paper, discovery"),
-        }
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct Work {
-    pub kind: WorkKind,
-    pub signature: String,
-    pub title: String,
-}
-
-impl Work {
-    fn id(&self) -> String {
-        format!("{}-{}", self.signature, self.kind.id())
-            .to_lowercase()
-            .replace(" ", "-")
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct Mention {
-    pub input_file: InputFile,
-    pub position: u32,
-    pub author: Author,
-    pub work: Option<Work>,
-}
-
-impl Mention {
-    pub fn id(&self) -> String {
-        let id = {
-            if let Some(work) = &self.work {
-                format!("{}-{}", self.author.id(), work.id())
-            } else {
-                self.author.id()
-            }
-        };
-
-        if self.position > 1 {
-            format!("{}-{}", id, self.position)
-        } else {
-            id
-        }
-    }
-
-    /// The absolute URL to the place in a page where this mention is made
-    pub fn slug(&self) -> String {
-        format!("{}#{}", self.input_file.slug, self.id())
-    }
-
-    /// The absolute URL to more details about the thing being mentioned
-    pub fn more_details_slug(&self) -> String {
-        if let Some(work) = &self.work {
-            format!("/{MENTION_SLUG}/{}#{}", self.author.id(), work.id())
-        } else {
-            format!("/{MENTION_SLUG}/{}", self.author.id())
-        }
-    }
-
-    pub fn kind(&self) -> String {
-        if let Some(work) = &self.work {
-            work.kind.id()
-        } else {
-            "author".into()
-        }
-    }
-
-    pub fn display_text(&self) -> String {
-        if let Some(work) = &self.work {
-            work.title.clone()
-        } else {
-            self.author.display_text()
-        }
-    }
-
-    pub fn signature(&self) -> String {
-        match &self.work {
-            Some(work) => work.signature.clone(),
-            None => self.author.signature(),
-        }
-    }
-}
-
-impl NodeValue for Mention {
-    fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
-        let mut attrs = node.attrs.clone();
-
-        attrs.push(("id", self.id().to_string()));
-        attrs.push(("class", format!("mention {}", self.kind())));
-        attrs.push(("data-position", self.position.to_string()));
-        attrs.push(("data-display-text", self.display_text()));
-
-        attrs.push(("hx-trigger", "mouseenter".into()));
-        attrs.push(("hx-target", "find .popup-card".into()));
-        attrs.push(("hx-get", self.more_details_slug()));
-        attrs.push(("hx-swap", "innerHTML".into()));
-        attrs.push(("hx-select", ".mentions".into()));
-
-        fmt.open("span", &attrs);
-
-        fmt.open("a", &vec![
-            ("href", self.more_details_slug()),
-        ]);
-        if node.children.is_empty() {
-            fmt.text(self.display_text().as_str());
-        } else {
-            fmt.contents(&node.children);
-        }
-        fmt.close("a");
-
-        fmt.open("span", &vec![
-            ("class", "popup-card".into()),
-        ]);
-        fmt.close("span");
-
-        fmt.close("span");
-
     }
 }
 
@@ -219,68 +100,252 @@ pub struct DoiData {
     pub title: String,
 }
 
-#[derive(Debug, Hash, PartialEq, Eq, Clone)]
+#[derive(Debug, Clone)]
+pub struct Mention {
+    pub content_file: ContentFile,
+    pub position: u32,
+    pub mentionable: Mentionable,
+    pub sub_mentionable: Option<Mentionable>,
+}
+
+impl Mention {
+    pub fn id(&self) -> String {
+        let id = match &self.sub_mentionable {
+            Some(sub_mention) => format!("{}-{}", self.mentionable.id(), sub_mention.id()),
+            None => self.mentionable.id(),
+        };
+
+        if self.position == 1 {
+            return id;
+        }
+
+        format!("{}-{}", id, self.position)
+    }
+
+    /// The absolute URL to the place in a page where this mention is made
+    pub fn permalink(&self) -> String {
+        format!("{}#{}", self.content_file.permalink(), self.id())
+    }
+
+    /// The absolute URL to more details about the thing being mentioned
+    pub fn mentionable_permalink(&self) -> String {
+        match &self.sub_mentionable {
+            None  => self.mentionable.permalink(),
+            Some(sub_mentionable) => self.mentionable.sub_mentionable_permalink(sub_mentionable),
+        }
+    }
+
+    pub fn ultimate(&self) -> &Mentionable {
+        match &self.sub_mentionable {
+            Some(sub_mention) => sub_mention,
+            None => &self.mentionable,
+        }
+    }
+
+    pub fn as_url(&self) -> Option<Url> {
+        self.ultimate().as_url()
+    }
+
+}
+
+impl NodeValue for Mention {
+    fn render(&self, node: &Node, fmt: &mut dyn Renderer) {
+        fmt.text_raw(markup::new! {
+            span [
+                id = self.id(),
+                class = "mention",
+                "hx-trigger" = "mouseenter",
+                "hx-target" = "find .popup-card",
+                "hx-get" = self.mentionable_permalink(),
+                "hx-swap" = "innerHTML",
+                "hx-select" = ".popup-select",
+            ] {
+                a [ href = self.mentionable_permalink() ] {
+                    @match node.children.is_empty() {
+                        false => { @node.collect_text() }
+                        true => { @{self.ultimate().default_display_text.clone()} }
+                    }
+                }
+
+                span."popup-card" {}
+            }
+        }.to_string().as_str());
+    }
+}
+
+type DirectMentions<'a> = HashMap<&'a ContentFile, Vec<&'a Mention>>;
+type SubMentions<'a> = HashMap<&'a &'a Mentionable, HashMap<&'a ContentFile, Vec<&'a &'a Mention>>>;
+
+#[derive(Debug, Hash, PartialEq, Eq, PartialOrd, Ord, Clone)]
+pub struct MentionableDeclaration {
+    pub cardinal: String,
+    pub prefix: String,
+}
+
+impl MentionableDeclaration {
+    pub fn has_prefix(&self) -> bool {
+        !self.prefix.is_empty()
+    }
+
+    #[allow(dead_code)]
+    pub fn cardinal_first(&self) -> String {
+        let mut result = self.cardinal.clone();
+        if self.has_prefix() {
+            result.push_str(", ");
+            result.push_str(self.prefix.as_str());
+        }
+        result
+    }
+
+    pub fn human_readable(&self) -> String {
+        format!("{} {}", self.prefix, self.cardinal)
+            .trim()
+            .to_string()
+    }
+
+
+    pub fn as_url(&self) -> Option<Url> {
+        if self.has_prefix() {
+            None
+        } else {
+            Url::parse(self.cardinal.as_str()).ok()
+        }
+    }
+
+    pub fn as_mentionable(&self, stash: &mut Stash) -> Mentionable {
+        Mentionable {
+            cardinal: self.cardinal.clone(),
+            prefix: self.prefix.clone(),
+            default_display_text: match self.as_url() {
+                Some(url) => match url.host() {
+                    Some(Host::Domain("doi.org")) => {
+                        stash.get(
+                            "title",
+                            |client| client
+                                .get(url.clone())
+                                .header("Accept", "application/json; charset=utf-8")
+                                .build()
+                                .unwrap_or_else(|_| panic!("Failed to build HTTP request for {url}")),
+                            |url, text| serde_json::from_str::<DoiData>(text.as_str())
+                                .unwrap_or_else(|_| panic!("Failed to deserialize JSON HTTP response for {url}"))
+                                .title.trim().to_string(),
+                        )
+                    },
+                    Some(_) => {
+                        stash.get(
+                            "title", 
+                            |client| client.get(url.clone()).build()
+                                .unwrap_or_else(|_| panic!("Failed to build HTTP request for {url}")), 
+                            |url, text| {
+                                let html = Html::parse_document(text.as_str());
+                                let title = html
+                                    .select(
+                                        &Selector::parse("head title")
+                                            .unwrap_or_else(|_| panic!("Failed to parse title selector"))
+                                    )
+                                    .next();
+
+                                match title {
+                                    Some(title) => title.inner_html().clone().trim().to_string(),
+                                    None => url,
+                                }
+                            }
+                        )
+                    },
+                    None => self.human_readable(),
+                }
+                None => self.human_readable(),
+            }
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, PartialOrd, Ord, Clone)]
+pub struct Mentionable {
+    pub cardinal: String,
+    pub prefix: String,
+    pub default_display_text: String,
+}
+
+impl Mentionable {
+    pub fn has_prefix(&self) -> bool {
+        !self.prefix.is_empty()
+    }
+
+    pub fn cardinal_first(&self) -> String {
+        let mut result = self.cardinal.clone();
+        if self.has_prefix() {
+            result.push_str(", ");
+            result.push_str(self.prefix.as_str());
+        }
+        result
+    }
+
+    pub fn human_readable(&self) -> String {
+        format!("{} {}", self.prefix, self.cardinal)
+            .trim()
+            .to_string()
+    }
+
+    pub fn id(&self) -> String {
+        self.human_readable().replace(" ", "-").to_lowercase()
+    }
+
+    pub fn as_url(&self) -> Option<Url> {
+        if self.has_prefix() {
+            None
+        } else {
+            Url::parse(self.cardinal.as_str()).ok()
+        }
+    }
+
+    pub fn permalink(&self) -> String {
+        format!("/{MENTION_SLUG}/{}", self.id())
+    }
+
+    pub fn sub_mentionable_permalink(&self, sub_mentionable: &Mentionable) -> String {
+        format!("{}#{}", self.permalink(), sub_mentionable.id())
+    }
+
+    pub fn write(&self, output: &Path, mentions: Vec<&Mention>) {
+        let mentions = mentions.into_iter()
+            .sorted_by_key(|m| m.position);
+
+        write(&output.join(format!("{MENTION_SLUG}/{}/index.html", self.id())), markup::new! {
+            @MentionPage {
+                mentionable: &self,
+                direct_mentions: mentions.clone()
+                    .filter(|m| m.sub_mentionable.is_none())
+                    .into_group_map_by(|m| &m.content_file),
+                sub_mentions: mentions.clone()
+                    .filter(|m| m.sub_mentionable.is_some())
+                    .into_group_map_by(|m| m.sub_mentionable.as_ref()
+                        .unwrap_or_else(|| panic!("Expect Sub Mentionable to exist")))
+                    .iter().map(|(mentionable, mentions)| {
+                        let x = 
+                        (mentionable, mentions.iter().into_group_map_by(|m| &m.content_file))
+                        ; x
+                    }).collect::<SubMentions>(),
+
+            }
+        });
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Clone)]
 pub struct MentionDeclaration {
-    author_cardinal: String,
-    author_prefix: String,
-    work_kind: Option<WorkKind>,
-    work_signature: String,
+    mentionable_declaration: MentionableDeclaration,
+    sub_mentionable_declaration: Option<MentionableDeclaration>,
 }
 
 impl MentionDeclaration {
-    pub fn as_mention(&self, input_file: InputFile, position: u32, stash: &mut Stash) -> Mention {
-        let author = Author {
-            cardinal: self.author_cardinal.clone(),
-            prefix: {
-                if self.author_prefix.is_empty() {
-                    None
-                } else {
-                    Some(self.author_prefix.clone())
-                }
-            }
-        };
+    pub fn as_mention(&self, content_file: ContentFile, count: u32, stash: &mut Stash) -> Mention {
         Mention {
-            input_file,
-            position,
-            author,
-            work: match &self.work_kind {
-                None => None,
-                Some(work_kind) => Some(Work {
-                    kind: work_kind.clone(),
-                    signature: self.work_signature.clone(),
-                    title: {
-                        match work_kind {
-                            WorkKind::Url => stash.get(
-                                "title", 
-                                |client| client.get(self.work_signature.clone()).build().unwrap(), 
-                                |url, text| {
-                                    let html = Html::parse_document(text.as_str());
-                                    let title = html
-                                        .select(&Selector::parse("head title").unwrap())
-                                        .next();
-
-                                    match title {
-                                        Some(title) => title.inner_html().clone().trim().to_string(),
-                                        None => url,
-                                    }
-                                }
-                            ),
-                            WorkKind::Paper => stash.get(
-                                "title",
-                                |client| client
-                                    .get(format!("https://doi.org/{}", self.work_signature.clone()))
-                                    .header("Accept", "application/json; charset=utf-8")
-                                    .build()
-                                    .expect(format!("Failed to build HTTP request for {}", self.work_signature).as_str()),
-                                |url, text| serde_json::from_str::<DoiData>(text.as_str())
-                                    .expect(format!("Failed to deserialize JSON HTTP response for {}", url).as_str())
-                                    .title.trim().to_string(),
-                            ),
-                            WorkKind::Book|WorkKind::Article => self.work_signature.clone(),
-                        }
-                    }
-                })
-            }
+            position: count,
+            content_file,
+            mentionable: self.mentionable_declaration.as_mentionable(stash),
+            sub_mentionable: self.sub_mentionable_declaration.as_ref()
+                .and_then(|m| Some(m.as_mentionable(stash))),
         }
     }
 }
@@ -288,9 +353,72 @@ impl MentionDeclaration {
 impl NodeValue for MentionDeclaration {}
 
 
+type SrcFragment = (usize, usize);
+
+
 struct MentionInlineScanner {}
 
 impl MentionInlineScanner {
+    fn consume_quoted_text(state: &mut InlineState) -> Option<String> {
+        let (pos, max) = (state.pos, state.pos_max);
+
+        let closer = state.src.get(pos+1..max)?.find('"')? + 1;
+        state.pos += closer + 1;
+
+        let quoted_text = state.src.get(pos+1..pos+closer)?;
+        Some(quoted_text.to_string())
+    }
+
+    fn consume_mentionable(state: &mut InlineState, until: &[(&str, Phase)]) -> Option<(MentionableDeclaration, Phase)> {
+        let mut cardinal = String::new();
+        let mut prefix = String::new();
+        let mut target = &mut cardinal;
+
+        while state.pos < state.pos_max {
+            let chunk = get_chunk(state)?;
+
+            for (terminator, phase) in until {
+                 if state.src.get(state.pos..state.pos_max)?.starts_with(terminator) {
+                     state.pos += terminator.len();
+                     return Some((
+                         MentionableDeclaration { 
+                             cardinal: cardinal.trim().into(),
+                             prefix: prefix.trim().into() 
+                         }, 
+                         (*phase).clone()
+                     ));
+                 }
+            }
+
+            if chunk.starts_with('"') {
+                target.push_str(Self::consume_quoted_text(state)?.as_str());
+            } else if chunk.starts_with(",") {
+                target = &mut prefix;
+                state.pos += chunk.len();
+            } else {
+                target.push_str(chunk);
+                state.pos += chunk.len();
+            }
+        }
+
+        None
+    }
+
+    fn consume_display_text(state: &mut InlineState) -> Option<(usize, usize)> {
+        let start: usize = state.pos;
+
+        while state.pos < state.pos_max {
+            if is_closer(state) {
+                state.pos += 2;
+                return Some((start, state.pos-2));
+            }
+
+            state.md.inline.skip_token(state);
+        }
+
+        None
+    }
+
     fn consume_mention(state: &mut InlineState) -> Option<Node> {
         if !state.src.get(state.pos..state.pos_max)?.starts_with("[[") {
             return None;
@@ -298,129 +426,51 @@ impl MentionInlineScanner {
 
         state.pos += 2;
 
-        let mut phase = Phase::Author;
-
-        let mut author_cardinal = String::new();
-        let mut author_comma_found = false;
-        let mut author_prefix = String::new();
-
-        let mut work_kind = String::new();
-        let mut work_signature = String::new();
-
-        let mut display_text_start: Option<usize> = None;
-        let mut display_text_end: Option<usize> = None;
+        let (mentionable, mut phase) = Self::consume_mentionable(state, &[
+            (">", Phase::SubMention),
+            ("|", Phase::DisplayText),
+            ("]]", Phase::Done),
+        ])?;
+        let mut sub_mentionable: Option<MentionableDeclaration> = None;
+        let mut display_text: Option<SrcFragment> = None;
 
         while state.pos < state.pos_max {
-            let chunk = get_chunk(state)?;
-
             match phase {
-                Phase::Author => {
-                    // [["Quoted Authors, Ignore Commas"...
-                    if chunk.starts_with('"') {
-                        let closer = state.src.get(state.pos+1..state.pos_max)?.find('"')? + 1;
-                        let quoted_text = state.src.get(state.pos+1..state.pos+closer)?;
-                        if author_comma_found {
-                            author_prefix.push_str(quoted_text)
-                        } else {
-                            author_cardinal.push_str(quoted_text)
-                        }
-                        state.pos += closer + 1;
-                    } else if chunk.starts_with("[") {
-                        phase = Phase::MentioableKind;
-                    } else if chunk.starts_with("|") {
-                        phase = Phase::DisplayText;
-                    } else if is_closer(state) {
-                        phase = Phase::Done;
-                    } else if chunk.starts_with(",") {
-                        author_comma_found = true;
-                        state.pos += chunk.len();
-
-                    // [[Whybrow, Marcus...
-                    } else {
-                        if author_comma_found {
-                            author_prefix.push_str(chunk);
-                        } else {
-                            author_cardinal.push_str(chunk);
-                        }
-                        state.pos += chunk.len();
-                    }
-                },
-
-                Phase::MentioableKind => {
-                    // [[Whybrow, Marcus, [KIND]..
-                    if chunk.starts_with("[") && work_kind.is_empty() {
-                        let closer = state.src.get(state.pos+1..state.pos_max)?.find("]")? + 1;
-                        work_kind = state.src.get(state.pos+1..state.pos+closer)?.to_string();
-                        state.pos += closer + 1;
-                        phase = Phase::MentionableDefinition;
-                    } else {
-                        return None;
-                    }
-                },
-
-                Phase::MentionableDefinition => {
-                    if chunk.starts_with('"') {
-                        let closer = state.src.get(state.pos+1..state.pos_max)?.find('"')? + 1;
-                        let quoted_text = state.src.get(state.pos+1..state.pos+closer)?;
-                        work_signature.push_str(quoted_text);
-                        state.pos += closer + 1;
-
-                    } else if chunk.starts_with("|") {
-                        phase = Phase::DisplayText;
-
-                    } else if is_closer(state) {
-                        phase = Phase::Done;
-
-                    } else {
-                        work_signature.push_str(chunk.get(0..1)?);
-                        state.pos += 1;
-                    }
+                Phase::SubMention => {
+                    let (mentionable, next_phase) = Self::consume_mentionable(state, &[
+                        ("|", Phase::DisplayText),
+                        ("]]", Phase::Done),
+                    ])?;
+                    sub_mentionable = Some(mentionable);
+                    phase = next_phase;
                 },
 
                 Phase::DisplayText => {
-                    if chunk.starts_with("|") {
-                        display_text_start = Some(state.pos+1);
-                        state.pos += chunk.len();
-                    } else if is_closer(state) {
-                        display_text_end = Some(state.pos);
-                        phase = Phase::Done;
-                    } else {
-                        state.md.inline.skip_token(state)
-                    }
+                    display_text = Some(Self::consume_display_text(state)?);
+                    phase = Phase::Done;
                 },
 
                 Phase::Done => {
-                    if is_closer(state) {
-                        state.pos += 2;
-                        break;
-                    }
+                    break;
                 }
             }
         }
 
         let mut node = Node::new(MentionDeclaration {
-            author_cardinal: author_cardinal.trim().to_string(),
-            author_prefix: author_prefix.trim().to_string(),
-            work_kind: match work_kind.trim() {
-                "" => None,
-                trimmed_work_kind => match trimmed_work_kind.try_into() {
-                    Ok(work_kind) => Some(work_kind),
-                    Err(_) => return None,
-                },
-            },
-            work_signature: work_signature.trim().to_string(),
+            mentionable_declaration: mentionable,
+            sub_mentionable_declaration: sub_mentionable,
         });
 
-        if let (Some(start), Some(end)) = (display_text_start, display_text_end) {
-            let orig_node = std::mem::replace(&mut state.node, node);
-            let pos = std::mem::replace(&mut state.pos, start);
-            let pos_max = std::mem::replace(&mut state.pos_max, end);
+        if let Some((start, end)) = display_text {
+            let orig_node = replace(&mut state.node, node);
+            let pos = replace(&mut state.pos, start);
+            let pos_max = replace(&mut state.pos_max, end);
 
             state.md.inline.tokenize(state);
 
             state.pos = pos;
             state.pos_max = pos_max;
-            node = std::mem::replace(&mut state.node, orig_node);
+            node = replace(&mut state.node, orig_node);
         }
 
 
@@ -434,14 +484,17 @@ impl InlineRule for MentionInlineScanner {
     fn run(state: &mut InlineState) -> Option<(Node, usize)> {
         let start = state.pos;
 
-        if let Some(node) = MentionInlineScanner::consume_mention(state) {
-            let consumed = state.pos - start;
-            state.pos = start;
-            return Some((node, consumed))
+        match Self::consume_mention(state) {
+            Some(node) => {
+                let consumed = state.pos - start;
+                state.pos = start;
+                Some((node, consumed))
+            },
+            None => {
+                state.pos = start;
+                None
+            }
         }
-
-        state.pos = start;
-        return None
     }
 }
 

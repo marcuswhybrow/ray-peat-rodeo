@@ -1,3 +1,6 @@
+
+/* Global styles */
+
 body {
     max-width: 1300px;
     margin: 0 auto;
@@ -20,38 +23,22 @@ body footer,
     transition: width .1s;
 }
 
-#top-bar #search {
-    position: absolute;
-    top: 70px;
-    right: 0;
-    width: 30%;
-    z-index: 1000;
+sup, sub {
+    vertical-align: baseline;
+    position: relative;
+    top: -0.4em;
+}
+sub { 
+    top: 0.4em; 
 }
 
-#top-bar #search .pagefind-ui__drawer {
-    background: white;
-}
-#top-bar #search p.pagefind-ui__result-title {
-    width: 100%;
-}
-#top-bar #search .pagefind-ui__result-title a {
-    font-family: inherit;
-    font-size: 1em;
-    color: black;
-    opacity: 1;
-    letter-spacing: inherit;
-    text-transform: inherit;
-}
 
-body footer {
-    padding: 60px 20px;
-    font-size: 0.8em;
-    opacity: 0.8;
-}
+/* Top bar on every page */
 
 #top-bar {
     padding-top: 80px;
 }
+
 #top-bar a {
     text-decoration: none;
     color: black;
@@ -67,24 +54,59 @@ body footer {
     opacity: 0.6;
 }
 
-.sidenote-number {
+#top-bar #search {
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 30%;
+    z-index: 1000;
+}
+#top-bar #search .pagefind-ui__drawer {
+    background: white;
+}
+#top-bar #search p.pagefind-ui__result-title {
+    width: 100%;
+}
+#top-bar #search .pagefind-ui__result-title a {
+    font-family: inherit;
+    font-size: 1em;
+    color: black;
+    opacity: 1;
+    letter-spacing: inherit;
+    text-transform: inherit;
+}
+
+
+/* Footer on every page */
+
+body footer {
+    padding: 60px 20px;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+
+/* Sidenotes on any page */
+
+article .sidenote-number {
     counter-increment: sidenote-counter;
 }
-.sidenote-number:after {
+article .sidenote-number:after {
     content: counter(sidenote-counter);
     top: -0.2rem;
     left: 0.0rem;
 }
-.sidenote-number:after, .sidenote:before {
+article .sidenote-number:after, .sidenote:before {
     font-family: et-book-roman-old-style;
     font-size: 0.8rem;
     position: relative;
     vertical-align: baseline;
 }
-input.sidenote-toggle {
+article input.sidenote-toggle {
     display: none;
 }
-.sidenote {
+
+article .sidenote {
     font-size: 0.9em;
     float: right;
     clear: right;
@@ -93,71 +115,37 @@ input.sidenote-toggle {
     position: relative;
     padding-bottom: 10px;
 }
-.sidenote:before {
+article .sidenote:before {
     content: counter(sidenote-counter) " ";
     right: 102%;
     position: absolute;
 }
-.sidenote-meta {
+article .sidenote-meta {
     padding-top: 60px;
 }
-.sidenote-meta:before {
+article .sidenote-meta:before {
     content: "";
 }
-.sidenote-standalone:before {
+article .sidenote-standalone:before {
     content: "";
 }
-.sidenote img {
+article .sidenote img {
     width: 100%;
     margin: 10px 0;
 }
 
-.timecode {
-    font-size: 0.8em;
-    margin-left: -10%;
-    position: absolute;
-    right: 103%;
-    transition: opacity .2s;
-}
-.timecode a.external {
-    text-decoration: none;
-    color: black;
-    opacity: 0.4;
-    transition: all .2s;
-}
-.timecode a.external:hover {
-    opacity: 1;
-}
-.timecode a.internal {
-    transform: rotate(90deg);
-    position: absolute;
-    right: 80%;
-    opacity: 0;
-    transition: all .2s;
-    top: -5px;
-    width: 16px;
-    height: 16px;
-    padding: 2px;
-    border-radius: 1000px;
-}
-.timecode:hover a.internal {
-    opacity: 0.3;
-}
-.timecode:hover a.internal:hover {
-    opacity: 1;
-}
 
-.title {
-    margin: 0;
+/* Interview elements - All pages are .interview currently */
+
+article.interview > header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
 }
-.hud {
+article.interview > header > .hud {
     font-size: 0.9em;
     color: #666;
 }
-.hud a.series {
-    color: #666;
-}
-.hud .date {
+article.interview > header > .hud > .date {
     position: relative;
     top: 30px;
     float: left;
@@ -176,63 +164,130 @@ input.sidenote-toggle {
     font-family: inherit;
     top: 0;
 }
-.hud .date:after {
+article.interview > header > .hud > .date:after {
   content: " /";
 }
-.hud a.series:hover {
+article.interview > header > .hud > a.series {
+    color: #666;
+}
+article.interview > header > .hud > a.series:hover {
     color: black;
     text-decoration: underline;
 }
-
-sup, sub {
-    vertical-align: baseline;
-    position: relative;
-    top: -0.4em;
+article.interview > header > h1.title {
+    margin: 0;
 }
-sub { 
-    top: 0.4em; 
+article.interview > header > .transcription-attribution {
+    margin-top: 0px;
+    font-size: 0.9em;
+}
+article.interview > header > .actions {
+    margin-top: 4px;
+    margin-bottom: 5px;
+}
+article.interview > header > .actions a {
+    background-color: #AAA;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+article.interview > header > .actions > a.view-source {
+    background-color: #666;
+}
+article.interview > header > .actions > a.view-source:hover {
+    background-color: #3A3;
+}
+article.interview > header > .actions > a.edit:hover {
+    background-color: #66F;
 }
 
-.speaker {
+/* Interview Timecodes */
+
+article.interview .timecode {
+    font-size: 0.8em;
+    margin-left: -10%;
+    position: absolute;
+    right: 103%;
+    transition: opacity .2s;
+}
+article.interview .timecode > a.external {
+    text-decoration: none;
+    color: black;
+    opacity: 0.4;
+    transition: all .2s;
+}
+article.interview .timecode > a.external:hover {
+    opacity: 1;
+}
+article.interview .timecode > a.internal {
+    transform: rotate(90deg);
+    position: absolute;
+    right: 80%;
+    opacity: 0;
+    transition: all .2s;
+    top: -5px;
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    border-radius: 1000px;
+}
+article.interview .timecode:hover > a.internal {
+    opacity: 0.3;
+}
+article.interview .timecode:hover > a.internal:hover {
+    opacity: 1;
+}
+
+
+/* Interview speakers */
+
+article.interview > main > .speaker {
     margin-top: 20px;
     position: relative;
 }
-.speaker .speaker-name {
+article.interview > main > .speaker > .speaker-name {
     font-size: 0.8em;
     opacity: 0.6;
     position: relative;
     top: 15px;
 }
-.speaker p {
+article.interview > main > .speaker > p {
     margin: 20px 0;
 }
 
-.mention a {
+
+/* Interview mentions */
+
+article.interview > main .mention > a {
     font-weight: normal;
     transition: all .1s;
     text-decoration: underline;
     font-weight: bold;
+    color: blue;
 }
-.mentiona :hover {
+article.interview > main .mention a:hover {
     text-decoration: underline;
     filter: brightness(1.5);
 }
-.mention.author a { color: #0057d9 }
-.mention.book a { color: #028b0c }
-.mention.article a { color: #028b0c } /* same as book */
-.mention.paper a { color: #ae00d9 }
-.mention.url a { color: #444 }
 
-blockquote > * {
+
+/* Interview quotes */
+
+article.interview > main blockquote > * {
     padding-left: 20px;
     font-style: italic;
 }
 
-#documents .document {
+
+/* Homepage Content */
+
+article.homepage #content > .content {
     margin-bottom: 50px;
     position: relative;
 }
-#documents .document a.document-title {
+article.homepage #content > .content > .header > a.title {
     text-decoration: none;
     color: black;
     font-weight: bold;
@@ -240,18 +295,18 @@ blockquote > * {
     display: block;
     margin-bottom: 5px;
 }
-#documents .document a.document-title:hover {
+article.homepage #content > .content > .header > a.title:hover {
     text-decoration: underline;
     filter: brightness(1.2);
 }
-#documents .document a.document-title.todo {
+article.homepage #content > .content > .header > a.todo.title {
     color: #aaa;
     text-decoration: line-through;
 }
-#documents .document .document-hud {
+article.homepage #content > .content > .header > .hud {
     margin-bottom: 1px;
 }
-#documents .document .document-hud .document-date {
+article.homepage #content > .content > .header > .hud > .date {
     position: relative;
     top: 30px;
     float: left;
@@ -263,138 +318,76 @@ blockquote > * {
     color: #999;
     font-size: 0.9em;
 }
-#documents .document .document-hud a.document-series {
+article.homepage #content > .content > .header > .hud > a.series {
     font-size: 0.9em;
     color: #444;
 }
-#documents .document a.document-series:hover {
+article.homepage #content > .content > .header > .hud > a.series:hover {
     color: black;
     text-decoration: underline;
 }
-#documents .document .citation {
+article.homepage #content > .content > .body > .mention > a {
     transition: all .1s;
     text-decoration: none;
     font-weight: normal;
-}
 
-#documents .document-body .mention a {
     font-size: 1em;
     border-radius: 10px;
-    filter: saturate(0);
-    text-decoration: none;
     margin-right: 2px;
     font-weight: normal;
-}
-#documents .document-body .mention a:hover {
     text-decoration: underline;
-    filter: saturate(1.5);
+    color: #333;
 }
-
-/* #documents .document:hover a.document-title { } */
-
-#documents .document .citation:hover {
+article.homepage #content > .content > .body > .mention > a:hover {
+    color: blue;
     text-decoration: underline;
 }
 
-#people ul,
-#books ul,
-#science-papers ul,
-#external-links ul {
-    margin-left: -60px;
-    list-style: none;
-}
-#people ul li,
-#books ul li,
-#science-papers ul li,
-#external-links ul li {
-    padding-left: 20px;
-}
 
-#contact-form input,
-#contact-form textarea {
-    width: 100%;
-    display: block;
-    margin: 20px 0;
-    padding: 10px 15px;
-    border: 1px solid #999;
-    border-radius: 1px;
-}
-#contact-form textarea {
-    min-height: 350px;
-}
-#contact-form button {
-    padding: 10px 15px;
-    border: none;
-    transition: all .1s;
-}
-#contact-form button:hover {
-    background-color: #888;
-    cursor: pointer;
-    color: white;
-}
+/* Homepage HUD */
 
-.links {
+article.homepage .homepage-hud  {
   margin-bottom: 5px;
 }
-
-.github-link {
+article.homepage .homepage-hud > a.github-project {
     margin-right: 15px;
 }
-
-a.github-link img {
+article.homepage .homepage-hud > a.github-project img {
     width: 40px;
 }
-.github-sponsor {
+article.homepage .homepage-hud > .github-sponsor {
     display: inline-block;
     position: relative;
     top: -12px;
 }
 
-article.interview header {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-}
 
-.transcription-attribution {
-    margin-top: 0px;
-    font-size: 0.9em;
-}
+/* Mention Details Page elements */
 
-.actions {
-    margin-top: 4px;
-    margin-bottom: 5px;
+article.mentions h1 a {
+    color: black;
+    font-size: 1.5em;
 }
-
-.actions a {
-    background-color: #AAA;
-    color: #fff;
-    padding: 4px 10px;
-    border-radius: 6px;
-    margin-right: 10px;
-    font-weight: bold;
+article.mentions h1 a:hover {
+    text-decoration: underline;
 }
-
-.actions a.orig-content {
-    background-color: #666;
-}
-.actions a.orig-content:hover {
-    background-color: #3A3;
-}
-.actions a.edit:hover {
-    background-color: #66F;
-}
-
 article.mentions h2 {
     font-size: 1em;
     font-weight: normal;
     margin-top: 20px;
     margin-bottom: 10px;
 }
-
 article.mentions ul {
     list-style: disc;
     margin-left: 20px;
 }
+article.mentions .content > a {
+    color: blue;
+    text-decoration: underline;
+}
+
+
+/* Inline Mention Popup Card */
 
 .mention .popup-card {
     position: absolute;
@@ -409,45 +402,68 @@ article.mentions ul {
     display: inherit;
 }
 
-.popup-card .mentions {
+.mention .popup-card .popup-select {
     background-color: #fff;
     border: 2px solid #000;
     border-radius: 6px;
     max-height: 400px;
     overflow-y: auto;
     padding: 0;
-}
 
-.popup-card .mentions section {
     width: 100%;
     margin: 0;
+    padding-bottom: 20px;
 }
 
-.popup-card .mentions h1 {
+.mention .popup-card .popup-select h1 {
     font-size: 1.5em;
     font-weight: bold;
     margin: 0;
     padding: 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
 }
-
-.popup-card .mentions h2 {
-    font-size: 0.9em;
-    line-height: 0.9em;
-    font-weight: normal;
-    color: #444;
-    margin: 0;
-    padding: 15px 20px 8px 20px;
-    border-top: 1px solid #ddd;
-}
-
-.popup-card .mentions ul {
-    padding: 0 20px 10px 20px;
-    word-break: break-word;
-}
-
-.popup-card .mentions ul a {
+.mention .popup-card .popup-select h1 > a {
     color: black;
 }
+.mention .popup-card .popup-select h1 > a:hover {
+    text-decoration: underline;
+}
+.mention .popup-card .popup-select h2 {
+    font-size: 0.9em;
+    line-height: 1.2em;
+    font-weight: normal;
+    color: #444;
+    margin: 20px 0 0 0;
+    padding: 8px 20px 8px 20px;
+    word-break: break-word;
+}
+.mention .popup-card .popup-select h2 a {
+    color: #666;
+    text-decoration: underline;
+}
+.mention .popup-card .popup-select h2 a:hover {
+    color: #000;
+}
+.mention .popup-card .popup-select > ul {
+    margin: 0 20px;
+}
+.mention .popup-card .popup-select ul {
+    list-style-type: circle;
+    padding: 0 20px 0 20px;
+    word-break: break-word;
+}
+.mention .popup-card .popup-select .content a {
+    color: #000;
+    text-decoration: underline;
+}
+.mention .popup-card .popup-select .content a:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+
+/* Media queries */
 
 @media only screen and (max-width: 732px) {
     article header,
@@ -458,7 +474,8 @@ article.mentions ul {
         width: 100%;
         margin-left: 0;
     }
-    .sidenote {
+
+    article .sidenote {
         position: relative;
         display: none;
         float: left;
@@ -467,23 +484,23 @@ article.mentions ul {
         width: 95%;
         margin: 30px
     }
-    .sidenote.sidenote-standalone {
+    article .sidenote.sidenote-standalone {
         display: block;
         width: 100%;
         margin: 10px 0;
     }
-    .sidenote:before {
+    article .sidenote:before {
         right: 101%;
     }
-    .sidenote-toggle:checked + .sidenote {
+    article .sidenote-toggle:checked + .sidenote {
         display: block;
     }
-    label.sidenote-toggle {
+    article label.sidenote-toggle {
         cursor: pointer;
     }
 }
 @media only screen and (max-width: 1400px) {
-    #documents .document .document-hud .document-date {
+    article.homepage #content > .content >  .header > .hud > .date {
         float: none;
         clear: none;
         margin-left: 0;
@@ -492,17 +509,17 @@ article.mentions ul {
         top: 0;
 
     }
-    #documents .document .document-hud .document-date:after {
+    article.homepage #content > .content > .header > .hud > .date:after {
         content: " /";
     }
-    .timecode {
+    article.interview .timecode {
         position: relative;
         right: 0;
         margin-left: 0;
         top: 0;
         margin-right: 3px;
     }
-    .timecode a.internal {
+    article.interview .timecode a.internal {
         top: -10px;
     }
 }

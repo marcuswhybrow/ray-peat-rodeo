@@ -6,7 +6,7 @@ use markdown_it::{
     plugins::cmark::block::paragraph::Paragraph,
 };
 
-use crate::InputFileBeingParsed;
+use crate::content::ContentFileBeingParsed;
 
 #[derive(Debug)]
 pub struct SpeakerSection {
@@ -104,8 +104,8 @@ impl BlockRule for SpeakerParagraphScanner {
                 let Some(shortname) = get_speaker_shortname(content.as_str()) else { return None };
 
                 if shortname != section_shortname {
-                    let path = state.md.ext.get::<InputFileBeingParsed>().unwrap().0.path.clone();
-                    panic!("Speaker shortname {shortname} found within speaker section {section_shortname} in {}", path);
+                    let path = state.md.ext.get::<ContentFileBeingParsed>().unwrap().0.path.clone();
+                    panic!("Speaker shortname {shortname} found within speaker section {section_shortname} in {:?}", path);
                 }
 
                 shortname
@@ -155,12 +155,12 @@ impl BlockRule for SpeakerSectionBlockScanner {
             shortname.to_string()
         };
        
-        let input_file = state.md.ext.get::<InputFileBeingParsed>().unwrap().0.clone();
+        let content_file = state.md.ext.get::<ContentFileBeingParsed>().unwrap().0.clone();
 
-        let longname = input_file.frontmatter.speakers
+        let longname = content_file.frontmatter.speakers
             .expect("Attribute \"speakers\" must be provided in the YAML frontmatter of content that refers to speakers.")
             .get(&shortname.to_string())
-            .expect(format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {}", input_file.path).as_str())
+            .expect(format!("Speaker shortname \"{shortname}\" not found in \"speakers\" in YAML frontmatter in {:?}", content_file.path).as_str())
             .to_string();
 
         loop {

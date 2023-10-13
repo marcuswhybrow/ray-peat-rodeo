@@ -10,7 +10,7 @@ speakers:
   RP: Ray Peat
 ---
 
-KM: What is good health? {Editor's note: Although the source material doesn't mention the name of the interviewer, [[Roddy, Danny [url] https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii | this]] article says it "was conducted by the amazing [[Mcc, Karen]] with help from [[Labosco, Matt]]" and also thanks "[[Kurra, Heath]], [[Waitt, Greg]], [[Curran, Wayde]], and [[Mariam]]."}
+KM: What is good health? {Editor's note: Although the source material doesn't mention the name of the interviewer, [[Roddy, Danny > https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii | this]] article says it "was conducted by the amazing [[Mcc, Karen]] with help from [[Labosco, Matt]]" and also thanks "[[Kurra, Heath]], [[Waitt, Greg]], [[Curran, Wayde]], and [[Mariam]]."}
 
 Mind/Body/Spirit – Is there a hierarchy of importance within these three aspects of health?
 
@@ -58,7 +58,7 @@ RP: There are biofeedback gadgets, some very simple, that can easily make the co
 
 KM: 
 
-> In [[Dostoevsky, Fyodor Mikhailovich|Dostoyevsky’s]] story, [[Dostoevsky, Fyodor Mikhailovich [book] The Dream of a Ridiculous Man|Dream of an Odd Fellow]], the theme is stated even more clearly—the world is very boring, and everything seems the same as everything else, until you can escape from a certain interpretive framework, to see what opportunities are really present to you. — [[Peat, Raymond|Dr. Ray Peat]]
+> In [[Dostoevsky, Fyodor Mikhailovich|Dostoyevsky’s]] story, [[Dostoevsky, Fyodor Mikhailovich > The Dream of a Ridiculous Man|Dream of an Odd Fellow]], the theme is stated even more clearly—the world is very boring, and everything seems the same as everything else, until you can escape from a certain interpretive framework, to see what opportunities are really present to you. — [[Peat, Raymond|Dr. Ray Peat]]
 
 What if it’s the same with healing? What activities can we do for our mind and body that will give us another framework to see what opportunities are present to us personally on our journey? Is the framework different for each of us?
 
@@ -66,7 +66,7 @@ Does art or play heal physical maladies?
 
 RP: Yes, there are scales or hierarchies of play, and they strengthen the organism to enter the world more generally with an attitude of play, desire in action.
 
-KM: In [[Persinger, Michael A.|Michael Persinger’s]] lecture, [[Persinger, Michael A. [url] https://www.youtube.com/watch?v=qgawWCBj2Jk|No More Secrets]], he spoke of an experiment in which a person’s dreams were affected by another person’s thoughts in another room. The implication of this video is that we are all connected. Is the person who is in good health affected by the field of a person or group of people who are in bad health? Does the “other” person’s health then become important to my health?
+KM: In [[Persinger, Michael A.|Michael Persinger’s]] lecture, [[Persinger, Michael A. > https://www.youtube.com/watch?v=qgawWCBj2Jk|No More Secrets]], he spoke of an experiment in which a person’s dreams were affected by another person’s thoughts in another room. The implication of this video is that we are all connected. Is the person who is in good health affected by the field of a person or group of people who are in bad health? Does the “other” person’s health then become important to my health?
 
 RP: It’s good to be surrounded by happy people. If you insist on being happy in the presence of authoritarians, you risk losing your job or being considered insane, or worse. One rigid person can freeze up a large group, but sometimes it can go the other way.
 

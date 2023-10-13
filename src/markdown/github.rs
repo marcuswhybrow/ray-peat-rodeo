@@ -8,7 +8,7 @@ use scraper::{Html, Selector};
 use crate::{
     markdown::sidenote::Position, 
     stash::Stash, 
-    GITHUB_LINK, InputFileBeingParsed
+    GITHUB_LINK, content::ContentFileBeingParsed
 };
 
 use super::sidenote::render_sidenote_label;
@@ -102,7 +102,7 @@ impl InlineRule for GitHubIssueInlineScanner {
                     candidate.parse::<u32>().unwrap_or_else(|_| panic!(
                         "GitHub issue id must be a positive integer, found {:?} in {:?}",
                         candidate,
-                        state.md.ext.get::<InputFileBeingParsed>().unwrap().0.path,
+                        state.md.ext.get::<ContentFileBeingParsed>().unwrap().0.path,
                     ));
                     candidate
                 },
