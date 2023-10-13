@@ -287,6 +287,9 @@ article.homepage #content > .content {
     margin-bottom: 50px;
     position: relative;
 }
+article.homepage #content > .content > .header {
+    margin-bottom: 20px;
+}
 article.homepage #content > .content > .header > a.title {
     text-decoration: none;
     color: black;
