@@ -1,0 +1,12 @@
+schema = 3
+
+[mod]
+  [mod."github.com/a-h/templ"]
+    version = "v0.2.432"
+    hash = "sha256-x7qqOsIIId7i9THgVkZVTj6S+wM+/V66Xu4bPqfTf/8="
+  [mod."github.com/gosimple/slug"]
+    version = "v1.13.1"
+    hash = "sha256-+PBC4QOfBJt3w9BH3yRc61yTVFeJGTjrUMCEV65xTgM="
+  [mod."github.com/yuin/goldmark"]
+    version = "v1.5.4"
+    hash = "sha256-4he5sGi0uj1LogdqvgpvN8b7p6qlKMGuWXRFzh+FK8s="

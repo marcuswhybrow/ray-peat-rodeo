@@ -3,49 +3,58 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    rust-overlay.url = "github:oxalica/rust-overlay";
     flake-utils.url = "github:numtide/flake-utils";
-    cargo2nix = {
-      url = "github:marcuswhybrow/cargo2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
+    templ.url = "github:a-h/templ";
+    gomod2nix.url = "github:nix-community/gomod2nix";
   };
 
   outputs = inputs: with inputs; flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import inputs.nixpkgs {
+      overlays = [
+        inputs.gomod2nix.overlays.default
+        inputs.templ.overlays.default
+      ];
       inherit system;
-      overlays = [ cargo2nix.overlays.default ];
-    };
-
-    # https://github.com/cargo2nix/cargo2nix#arguments-to-makepackageset
-    rustPkgs = pkgs.rustBuilder.makePackageSet {
-      rustVersion = "1.72.0";
-      rustChannel = "stable";
-      packageFun = import ./Cargo.nix;
     };
   in {
-    packages = rec {
-      ray-peat-rodeo = (rustPkgs.workspace.ray-peat-rodeo {});
+    apps = rec {
+      build = inputs.flake-utils.lib.mkApp {
+        drv = pkgs.writeScriptBin "build" ''
+          # Echo commands to stdout before running
+          set -o xtrace
 
-      rpr-with-search = pkgs.stdenv.mkDerivation {
-        pname = "rpr-with-search";
-        version = "unstable";
+          ${inputs.templ.packages.${system}.templ}/bin/templ generate
+          ${self.packages.${system}.ray-peat-rodeo}/bin/ray-peat-rodeo
+          ${pkgs.pagefind}/bin/pagefind --site ./build
+          ${pkgs.nodePackages.tailwindcss}/bin/tailwindcss \
+            --config ./tailwind.config.js \
+            --minify \
+            --output ./build/assets/tailwind.css \
+        '';
+      };
+      default = build;
+    };
+
+    packages = {
+      # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
+      ray-peat-rodeo = pkgs.buildGoApplication {
+        name = "ray-peat-rodeo";
+        pwd = ./.;
         src = ./.;
+        modules = ./gomod2nix.toml;
 
-        buildPhase = let 
-          buildScript = pkgs.writeScript "build" ''
-            ${ray-peat-rodeo}/bin/ray-peat-rodeo
-            ${pagefind}/bin/pagefind --site ./build
-          '';
-        in ''
-          mkdir --parents $out/bin
-          cp ${buildScript} $out/bin/rpr-with-search
+        buildPhase = ''
+          mkdir -p $out/bin
+          ${inputs.templ.packages.${system}.templ}/bin/templ generate
+          go build ./cmd/ray-peat-rodeo
+          mv ray-peat-rodeo $out/bin
         '';
       };
 
-      default = inputs.self.packages.${system}.rpr-with-search;
-
+      # Pagefind builds a JS search API by inspect HTML files.
+      # It's not in nixpkgs, so this manually packages it.
+      # Using precompiled downloads from GitHub, as building from source takes
+      # a while and fails for some reason, anyway this works.
       pagefind = pkgs.stdenv.mkDerivation rec {
         pname = "pagefind";
         version = "1.0.3";
@@ -90,29 +99,40 @@
       };
     };
 
-    devShell = rustPkgs.workspaceShell {
-      name = "ray-peat-rodeo";
+    devShells.default = pkgs.mkShell {
+      name = "ray-peat-rodeo-devshell";
       packages = with pkgs; [
-        inputs.self.packages.${system}.pagefind
-        openssl
-        pkg-config
-        cargo-watch
-        devd
-        tmux
-        (pkgs.writeScriptBin "watch" ''
-          RUST_BACKTRACE=full cargo watch \
-            --watch src \
-            --ignore stash.yml \
-            --watch content \
-            --exec "run --bin ray-peat-rodeo -- --update-stash" \
-            --shell "pagefind --site ./build"
+
+        # Add "go" command with correct modules in environment
+        # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
+        (mkGoEnv { 
+          pwd = ./.; # wordking directory
+          modules = ./gomod2nix.toml;
+        })
+
+        # Translates go.mod packages into a nix expression.
+        gomod2nix
+
+        # Compiles .templ files into .go files
+        inputs.templ.packages.${system}.templ
+
+        # Builds JS search API by inspecting HTML build by this package
+        self.packages.${system}.pagefind
+
+        # Builds CSS utility classes by inspecting template source code
+        nodePackages.tailwindcss
+
+        # Modd should be running tailwind for us, but "watching" doesnt work
+        (pkgs.writeScriptBin "tailwind-watch" ''
+          tailwind --watch --output ./build/assets/tailwind.css
         '')
-        (pkgs.writeScriptBin "serve" ''devd --open --livewatch ./build '')
-        (pkgs.writeScriptBin "watch-and-serve" ''tmux new-session -d watch \; split-window serve \; attach'')
-        (pkgs.writeScriptBin "deps" ''
-          cargo generate-lockfile
-          nix run github:cargo2nix/cargo2nix
-        '')
+
+        # Dev tools to watch the files system and rerun (above) commands
+        modd 
+
+        # Dev HTTP server with auto page reload on file changes
+        devd 
+
       ];
     };
   });

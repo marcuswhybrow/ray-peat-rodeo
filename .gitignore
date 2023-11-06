@@ -2,6 +2,8 @@ result
 result-bin
 target
 build
+*_templ.go
 
 .direnv/
 .envrc
+node_modules/
