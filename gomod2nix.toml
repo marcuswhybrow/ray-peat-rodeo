@@ -4,9 +4,21 @@ schema = 3
   [mod."github.com/a-h/templ"]
     version = "v0.2.432"
     hash = "sha256-x7qqOsIIId7i9THgVkZVTj6S+wM+/V66Xu4bPqfTf/8="
+  [mod."github.com/gomarkdown/markdown"]
+    version = "v0.0.0-20230922112808-5421fefb8386"
+    hash = "sha256-N3qjdMq0L4toiTu2rut9sSPR/cA7bEe/bZ1iEVNzXOE="
   [mod."github.com/gosimple/slug"]
     version = "v1.13.1"
     hash = "sha256-+PBC4QOfBJt3w9BH3yRc61yTVFeJGTjrUMCEV65xTgM="
+  [mod."github.com/mitchellh/mapstructure"]
+    version = "v1.5.0"
+    hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="
   [mod."github.com/yuin/goldmark"]
-    version = "v1.5.4"
-    hash = "sha256-4he5sGi0uj1LogdqvgpvN8b7p6qlKMGuWXRFzh+FK8s="
+    version = "v1.6.0"
+    hash = "sha256-0PeGjGxxM7lUSx2dn8yPUBpilPQzEN9nkgf3s+5zGTY="
+  [mod."github.com/yuin/goldmark-meta"]
+    version = "v1.1.0"
+    hash = "sha256-Q/kRP4rpS3r24HYBvPTiuKNbf+PUMVsEp2m6yOblth0="
+  [mod."gopkg.in/yaml.v2"]
+    version = "v2.3.0"
+    hash = "sha256-8tPC5nMGvUFs97W6+JXsxJLjU6EpDmPG9tXo1DyFoNU="
