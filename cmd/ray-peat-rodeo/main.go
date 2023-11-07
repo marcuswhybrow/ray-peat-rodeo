@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/fs"
 	"log"
@@ -11,6 +12,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/marcuswhybrow/ray-peat-rodeo/cmd/ray-peat-rodeo/templates"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
 	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark"
@@ -54,11 +56,12 @@ func main() {
 		log.Panicf("Failed to read assets: %v", err)
 	}
 
+	// err = os.RemoveAll(build)
+	// if err != nil {
+	// 	log.Panicf("Failed to remove build directory: %v", err)
+	// }
+
 	var waitGroup sync.WaitGroup
-	err = os.RemoveAll(build)
-	if err != nil {
-		log.Panicf("Failed to remove build directory: %v", err)
-	}
 
 	filesChannel := make(chan Result[*File], len(files))
 	for _, filePath := range files {
@@ -77,11 +80,11 @@ func main() {
 			}
 
 			var html bytes.Buffer
-			context := parser.NewContext()
-			markdownParser.Convert(markdown, &html, parser.WithContext(context))
+			parserContext := parser.NewContext()
+			markdownParser.Convert(markdown, &html, parser.WithContext(parserContext))
 
 			var frontMatter FrontMatter
-			err = mapstructure.Decode(meta.Get(context), &frontMatter)
+			err = mapstructure.Decode(meta.Get(parserContext), &frontMatter)
 			if err != nil {
 				filesChannel <- Result[*File]{value: (*File)(nil), err: err}
 				return
@@ -95,7 +98,8 @@ func main() {
 				return
 			}
 
-			outFile.Write(html.Bytes())
+			base := templates.Base(frontMatter.Source.Title, html.String())
+			base.Render(context.Background(), outFile)
 
 			file := &File{}
 			file.path = filePath

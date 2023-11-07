@@ -29,7 +29,7 @@ func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, n
 
 	is_ray := false
 
-	linkClass := "text-sm px-2 py-1 rounded-md"
+	linkClass := "text-sm px-2 py-1 rounded-md "
 	if is_ray {
 		linkClass += "bg-gray-300 hover:bg-gray-500 text-gray-50"
 	} else {
