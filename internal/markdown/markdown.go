@@ -1,15 +1,17 @@
-package meta
+package markdown
 
 type FrontMatter struct {
 	Source struct {
-		Title    string
 		Series   string
+		Title    string
 		Url      string
+		Kind     string
 		Duration string
 	}
 	Speakers      map[string]string
 	Transcription struct {
-		Source string
+		Url    string
+		Kind   string
 		Date   string
 		Author string
 	}

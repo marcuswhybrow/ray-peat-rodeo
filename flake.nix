@@ -10,10 +10,7 @@
 
   outputs = inputs: with inputs; flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import inputs.nixpkgs {
-      overlays = [
-        inputs.gomod2nix.overlays.default
-        inputs.templ.overlays.default
-      ];
+      overlays = [inputs.gomod2nix.overlays.default];
       inherit system;
     };
   in {
@@ -35,70 +32,23 @@
       default = build;
     };
 
-    packages = {
-      # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
-      ray-peat-rodeo = pkgs.buildGoApplication {
-        name = "ray-peat-rodeo";
-        pwd = ./.;
-        src = ./.;
-        modules = ./gomod2nix.toml;
+    # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
+    packages.ray-peat-rodeo = pkgs.buildGoApplication {
+      name = "ray-peat-rodeo";
+      pwd = ./.;
+      src = ./.;
+      modules = ./gomod2nix.toml;
 
-        buildPhase = ''
-          mkdir -p $out/bin
-          ${inputs.templ.packages.${system}.templ}/bin/templ generate
-          go build ./cmd/ray-peat-rodeo
-          mv ray-peat-rodeo $out/bin
-        '';
-      };
-
-      # Pagefind builds a JS search API by inspect HTML files.
-      # It's not in nixpkgs, so this manually packages it.
-      # Using precompiled downloads from GitHub, as building from source takes
-      # a while and fails for some reason, anyway this works.
-      pagefind = pkgs.stdenv.mkDerivation rec {
-        pname = "pagefind";
-        version = "1.0.3";
-        src = ./.;
-
-        meta = {
-          description = "Pagefind is a fully static search library that aims to perform well on large sites, while using as little of your users' bandwidth as possible.";
-          homepage = "https://pagefind.app";
-        };
-
-        installPhase = let
-          binary = let
-            type = "pagefind"; # "pagefind_extended" includes Chinese language support
-
-            # https://github.com/CloudCannon/pagefind/releases/tag/v0.12.0
-            translations = {
-              "aarch64-darwin" = {
-                system = "aarch64-apple-darwin";
-                sha256 = "sha256:0bsc57cbfymfadxa27a64321g4a9zh3mz8yxbm2l7k0f1a62ysv9";
-              };
-              "aarch64-linux" = {
-                system = "aarch64-unknown-linux-musl";
-                sha256 = "sha256:0hikvdjafajjcdlix46chi4w7c7j57g579ssgggc0klx4yjvmxg9";
-              };
-              "x86_64-darwin" = {
-                system = "x86_64-apple-darwin";
-                sha256 = "sha256:0p84g2h4khnpahq0r7phbdkw9acy6k6gj2kpdxi4vi08wpnkhlil";
-              };
-              "x86_64-linux" = {
-                system = "x86_64-unknown-linux-musl";
-                sha256 = "sha256:0l4fnf8ad2cif2lvsxb9nfw7a2mqzi8bdn0i3b8wv33hzh9az2ak";
-              };
-            };
-          in fetchTarball {
-            url = "https://github.com/CloudCannon/pagefind/releases/download/v${version}/${type}-v${version}-${translations.${system}.system}.tar.gz";
-            sha256 = translations.${system}.sha256;
-          };
-        in ''
-          mkdir -p $out/bin;
-          cp ${binary} $out/bin/pagefind
-        '';
-      };
+      buildPhase = ''
+        mkdir -p $out/bin
+        ${inputs.templ.packages.${system}.templ}/bin/templ generate
+        go build ./cmd/ray-peat-rodeo
+        mv ray-peat-rodeo $out/bin/ray-peat-rodeo
+      '';
     };
 
+    # Run `nix develop` to enter a shell containing all dependencies.
+    # One may use nix-direnv to auto load said shell on cd into project.
     devShells.default = pkgs.mkShell {
       name = "ray-peat-rodeo-devshell";
       packages = with pkgs; [
@@ -117,7 +67,7 @@
         inputs.templ.packages.${system}.templ
 
         # Builds JS search API by inspecting HTML build by this package
-        self.packages.${system}.pagefind
+        pagefind 
 
         # Builds CSS utility classes by inspecting template source code
         nodePackages.tailwindcss

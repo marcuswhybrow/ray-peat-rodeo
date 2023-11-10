@@ -27,10 +27,8 @@ func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, n
 		return gmAst.WalkStop, fmt.Errorf("Failed to determine timecode external URL: %v", err)
 	}
 
-	is_ray := false
-
 	linkClass := "text-sm px-2 py-1 rounded-md "
-	if is_ray {
+	if !timecode.IsRaySpeaking {
 		linkClass += "bg-gray-300 hover:bg-gray-500 text-gray-50"
 	} else {
 		linkClass += "bg-sky-300 hover:bg-sky-500 text-sky-50"

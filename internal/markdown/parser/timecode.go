@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bytes"
+	"log"
 	"strconv"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
@@ -61,8 +62,20 @@ func (w *TimecodeParser) Parse(parent gmAst.Node, block text.Reader, pc parser.C
 		}
 	}
 	timecode.Hours = hours
+	timecode.IsRaySpeaking = isRay(pc)
 
 	block.Advance(consumed)
 
 	return timecode
+}
+
+func isRay(pc parser.Context) bool {
+	for _, block := range pc.OpenedBlocks() {
+		log.Printf("Inside %v", block.Node.Type())
+		speaker, ok := block.Node.(*ast.Speaker)
+		if ok && speaker.IsRay() {
+			return true
+		}
+	}
+	return false
 }

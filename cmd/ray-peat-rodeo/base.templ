@@ -1,4 +1,4 @@
-package templates
+package main
 
 import (
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
@@ -16,7 +16,7 @@ func Unsafe(html string) templ.Component {
 	})
 }
 
-templ Base(title string, content string) {
+templ Base(title string, content templ.Component) {
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -89,7 +89,7 @@ templ Base(title string, content string) {
 					<div class="h-px bg-gradient-to-r from-slate-200/0 via-slate-200 to-slate-200/0"></div>
 				</div>
 			</div>
-			@Unsafe(content)
+			@content
 			<footer class="pt-10 pb-20 px-4 text-sm opacity-80 max-w-screen-lg mx-auto text-center">
 				<p>
 					Ray Peat Rodeo is an <a href="{ global.GITHUB_LINK }">open source</a>

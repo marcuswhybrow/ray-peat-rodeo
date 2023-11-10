@@ -12,10 +12,11 @@ import (
 
 type Timecode struct {
 	ast.BaseInline
-	Hours   int
-	Minutes int
-	Seconds int
-	Source  string
+	Hours         int
+	Minutes       int
+	Seconds       int
+	Source        string
+	IsRaySpeaking bool
 }
 
 func (t *Timecode) Terse() string {

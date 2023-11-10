@@ -12,7 +12,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/marcuswhybrow/ray-peat-rodeo/cmd/ray-peat-rodeo/templates"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
 	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark"
@@ -35,6 +35,7 @@ func main() {
 		gmExtension.Typographer,
 		meta.New(meta.WithStoresInDocument()),
 		extension.Timecodes,
+		extension.Speakers,
 	))
 
 	log.Printf("Scanning files in %v\n", assets)
@@ -73,7 +74,7 @@ func main() {
 			fileName := filepath.Base(filePath)
 			fileStem := strings.TrimSuffix(fileName, filepath.Ext(filePath))
 
-			markdown, err := os.ReadFile(filePath)
+			markdownBytes, err := os.ReadFile(filePath)
 			if err != nil {
 				filesChannel <- Result[*File]{value: (*File)(nil), err: err}
 				return
@@ -81,9 +82,9 @@ func main() {
 
 			var html bytes.Buffer
 			parserContext := parser.NewContext()
-			markdownParser.Convert(markdown, &html, parser.WithContext(parserContext))
+			markdownParser.Convert(markdownBytes, &html, parser.WithContext(parserContext))
 
-			var frontMatter FrontMatter
+			var frontMatter markdown.FrontMatter
 			err = mapstructure.Decode(meta.Get(parserContext), &frontMatter)
 			if err != nil {
 				filesChannel <- Result[*File]{value: (*File)(nil), err: err}
@@ -98,11 +99,15 @@ func main() {
 				return
 			}
 
-			base := templates.Base(frontMatter.Source.Title, html.String())
-			base.Render(context.Background(), outFile)
-
 			file := &File{}
-			file.path = filePath
+			file.Path = filePath
+			file.FrontMatter = frontMatter
+			file.IsTodo = false
+			file.Markdown = string(markdownBytes)
+			file.Html = html.String()
+
+			RenderChat(file).Render(context.Background(), outFile)
+
 			filesChannel <- Result[*File]{file, nil}
 		}(filePath)
 	}
@@ -115,32 +120,24 @@ func main() {
 			log.Panicf("Failed to construct file: '%v'", result.err)
 		}
 
-		log.Printf("Wrote '%v'", result.value.path)
+		log.Printf("Wrote '%v'", result.value.Path)
 	}
 
 	fmt.Println("Done.")
 }
 
 type File struct {
-	path string
+	FrontMatter   markdown.FrontMatter
+	IsTodo        bool
+	Path          string
+	Markdown      string
+	Html          string
+	IssueCount    int
+	MentionCounts map[string]int
+	EditPermalink string
 }
 
 type Result[T any] struct {
 	value T
 	err   error
-}
-
-type FrontMatter struct {
-	Source struct {
-		Title    string
-		Series   string
-		Url      string
-		Duration string
-	}
-	Speakers      map[string]string
-	Transcription struct {
-		Source string
-		Date   string
-		Author string
-	}
 }
