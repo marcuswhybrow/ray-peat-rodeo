@@ -36,6 +36,7 @@ func main() {
 		meta.New(meta.WithStoresInDocument()),
 		extension.Timecodes,
 		extension.Speakers,
+		extension.Sidenotes,
 	))
 
 	log.Printf("Scanning files in %v\n", assets)

@@ -1,6 +1,7 @@
 package main
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
+import "fmt"
 
 type MapEnumeration[V any] struct {
 	Index   int
@@ -205,12 +206,12 @@ templ chat(file *File) {
 				} else {
 					data-has-issues="No"
 				}
- 				data-issue-count={ string(file.IssueCount) }
+ 				data-issue-count={ fmt.Sprint(file.IssueCount) }
  				data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
  				class="font-bold mt-4 mb-20 text-4xl text-center text-sky-900 w-3/5 mx-auto"
 			>{ file.FrontMatter.Source.Title }</h1>
 		</header>
-		<main>
+		<main style="counter-reset:sidenote">
 			<style> mark { background-color: #fef08a } </style>
 			if file.IsTodo {
 				@prioritiseThisChat()

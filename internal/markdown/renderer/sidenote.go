@@ -1,0 +1,44 @@
+package renderer
+
+import (
+	"fmt"
+
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
+	gast "github.com/yuin/goldmark/ast"
+	grenderer "github.com/yuin/goldmark/renderer"
+	"github.com/yuin/goldmark/util"
+)
+
+type SidenoteHTMLRendereer struct {
+}
+
+func NewSidenoteHTMLRenderer() grenderer.NodeRenderer {
+	return &SidenoteHTMLRendereer{}
+}
+
+func (r *SidenoteHTMLRendereer) RegisterFuncs(reg grenderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindSidenote, r.renderSidenote)
+}
+
+func (t *SidenoteHTMLRendereer) renderSidenote(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
+	if entering {
+		sidenote := node.(*ast.Sidenote)
+		position := fmt.Sprint(sidenote.Position)
+
+		// Uses CSS counters. Requires "counter-reset:sidenote" on parent
+		w.WriteString(fmt.Sprintf(`
+      <label 
+        for="sidenote-%v" 
+        class="[counter-increment:sidenote] after:content-[counter(sidenote)] after:-top-1 after:left-0 after:align-baseline after:text-sm after:relative after:-top-1 font-serif after:bg-white after:rounded-md after:shadow after:text-gray-600 after:py-1 after:px-2"
+      ></label><span 
+        class="z-20 block bg-white rounded-md shadow w-1/2 mr-[-5%%] sm:mr-[-10%%] md:mr-[-15%%] lg:mr-[-25%%] float-right clear-right text-sm relative p-4 before:content-[counter(sidenote)_'.'] before:float-left m-2 before:mr-1 before:text-gray-500 leading-5 align-middle transition-all"
+      >
+    `,
+			position,
+		))
+	} else {
+		_, _ = w.WriteString("</span>")
+	}
+
+	return gast.WalkContinue, nil
+}
