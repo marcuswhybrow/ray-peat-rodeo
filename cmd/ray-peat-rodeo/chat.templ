@@ -2,6 +2,8 @@ package main
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 import "fmt"
+import "golang.org/x/text/cases"
+import "golang.org/x/text/language"
 
 type MapEnumeration[V any] struct {
 	Index   int
@@ -36,23 +38,23 @@ templ joinedTheChat(file *File) {
 			for _, speaker := range EnumerateMap(file.FrontMatter.Speakers) {
 				if !speaker.IsFirst {
 					if !speaker.IsLast {
-						", "
+						{ ", " }
 					} else {
-						" and "
+						{ " and " }
 					}
 				}
 				<span class="text-gray-800">{ speaker.Value }</span>
 			}
-			joined the chat
+			{ " joined the chat" }
 		</div>
 	}
 }
 
 templ pinnedOriginal(file *File) {
-	<div data-pagefind-ignore data-pagefind-filter="Medium:{ strings.Capitalize(file.FrontMatter.source.kind) }" class="mb-24 mt-4 text-sm text-gray-400 w-2/3 mx-auto">
+	<div data-pagefind-ignore data-pagefind-filter={ "Medium:" + cases.Title(language.English).String(file.FrontMatter.Source.Kind) } class="mb-24 mt-4 text-sm text-gray-400 w-2/3 mx-auto">
 		📌 Pinned 
-		<a href="{ file.FrontMatter.Source.Url }" class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2">
-			original { file.FrontMatter.Source.Kind }
+		<a href={ templ.URL(file.FrontMatter.Source.Url) } class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2">
+			original { cases.Lower(language.English).String(file.FrontMatter.Source.Kind) }
 		</a>
 	</div>
 }
@@ -120,14 +122,14 @@ templ leftTheChat(file *File) {
 			for _, speaker := range EnumerateMap(file.FrontMatter.Speakers) {
 				if !speaker.IsFirst {
 					if !speaker.IsLast {
-						", "
+						{ ", " }
 					} else {
-						" and "
+						{ " and " }
 					}
 				}
 				<span class="text-gray-800">{ speaker.Value }</span>
 			}
-			left the chat
+			{ " left the chat" }
 		</div>
 	}
 }

@@ -28,10 +28,11 @@ func main() {
 	build := "./build"
 
 	if err := os.MkdirAll("build", os.ModePerm); err != nil {
-		log.Fatalf("failed to create output directory: %v", err)
+		log.Fatalf("Failed to create output directory: %v", err)
 	}
 
 	markdownParser := goldmark.New(goldmark.WithExtensions(
+		extension.Mentions,
 		gmExtension.Typographer,
 		meta.New(meta.WithStoresInDocument()),
 		extension.Timecodes,

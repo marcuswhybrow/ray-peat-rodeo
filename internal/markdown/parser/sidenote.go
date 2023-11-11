@@ -9,18 +9,17 @@ import (
 
 var sidenoteCountKey = gparser.NewContextKey()
 
-type sidenotesParser struct {
-}
+type sidenoteParser struct{}
 
 func NewSidenotesParser() gparser.InlineParser {
-	return &sidenotesParser{}
+	return &sidenoteParser{}
 }
 
-func (w *sidenotesParser) Trigger() []byte {
+func (p *sidenoteParser) Trigger() []byte {
 	return []byte{'{', '}'}
 }
 
-func (w *sidenotesParser) Parse(parent gast.Node, block text.Reader, pc gparser.Context) gast.Node {
+func (p *sidenoteParser) Parse(parent gast.Node, block text.Reader, pc gparser.Context) gast.Node {
 	before := block.PrecendingCharacter()
 	line, segment := block.PeekLine()
 

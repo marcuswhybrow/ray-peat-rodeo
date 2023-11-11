@@ -9,10 +9,9 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type sidenotes struct {
-}
+type sidenotes struct{}
 
-// Sidenotes is an extension for Goldmark that replaces [00:00:00] with links
+// Sidenotes is an extension for Goldmark that replaces [00:00:00] with a link
 var Sidenotes = &sidenotes{}
 
 func NewSidenotes() goldmark.Extender {
