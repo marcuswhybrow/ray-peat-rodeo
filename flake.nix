@@ -13,23 +13,22 @@
       overlays = [inputs.gomod2nix.overlays.default];
       inherit system;
     };
-    buildScript = pkgs.writeScriptBin "build" ''
-      # Echo commands to stdout before running
-      set -o xtrace
-
-      ${inputs.templ.packages.${system}.templ}/bin/templ generate
-      ${self.packages.${system}.ray-peat-rodeo}/bin/ray-peat-rodeo
-      ${pkgs.pagefind}/bin/pagefind --site ./build
-      ${pkgs.nodePackages.tailwindcss}/bin/tailwindcss \
-        --config ./tailwind.config.js \
-        --minify \
-        --output ./build/assets/tailwind.css
-      cp -r ./internal/assets/* ./build/assets
-    '';
   in {
     apps = rec {
       build = inputs.flake-utils.lib.mkApp {
-        drv = buildScript;
+        drv = pkgs.writeScriptBin "build" ''
+          # Echo commands to stdout before running
+          set -o xtrace
+
+          ${inputs.templ.packages.${system}.templ}/bin/templ generate
+          ${self.packages.${system}.ray-peat-rodeo}/bin/ray-peat-rodeo
+          ${pkgs.pagefind}/bin/pagefind --site ./build
+          ${pkgs.nodePackages.tailwindcss}/bin/tailwindcss \
+            --config ./tailwind.config.js \
+            --minify \
+            --output ./build/assets/tailwind.css
+          cp -r ./internal/assets/* ./build/assets
+        '';
       };
       default = build;
     };
@@ -54,8 +53,19 @@
     devShells.default = pkgs.mkShell {
       name = "ray-peat-rodeo-devshell";
       packages = with pkgs; [
-        # Custom script (above) to build everything
-        buildScript
+        (pkgs.writeScriptBin "build" ''
+          # Echo commands to stdout before running
+          set -o xtrace
+
+          templ generate && \
+          go run ./cmd/ray-peat-rodeo && \
+          pagefind --site ./build && \
+          tailwind \
+            --config ./tailwind.config.js \
+            --minify \
+            --output ./build/assets/tailwind.css && \
+          cp -r ./internal/assets/* ./build/assets
+        '')
 
         # Add "go" command with correct modules in environment
         # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
