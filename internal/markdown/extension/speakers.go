@@ -12,7 +12,8 @@ import (
 type speakers struct {
 }
 
-// Speakers is an extension for Goldmark that prefixes paragraphs with exclamation marks
+// Speakers is an extension for Goldmark that converts initialled markdown
+// blocks into HTML divs
 var Speakers = &speakers{}
 
 func NewSpeakers() goldmark.Extender {
