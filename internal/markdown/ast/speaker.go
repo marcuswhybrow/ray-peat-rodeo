@@ -1,6 +1,8 @@
 package ast
 
 import (
+	"strings"
+
 	gmAst "github.com/yuin/goldmark/ast"
 )
 
@@ -35,7 +37,7 @@ func (s *Speaker) Kind() gmAst.NodeKind {
 }
 
 func (s *Speaker) IsRay() bool {
-	return s.ShortName == "RP"
+	return strings.Trim(s.ShortName, " ") == "RP"
 }
 
 func (s *Speaker) IsRetorting(source []byte) bool {

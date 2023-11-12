@@ -3,6 +3,7 @@ package parser
 import (
 	"bytes"
 	"slices"
+	"strings"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	gmAst "github.com/yuin/goldmark/ast"
@@ -49,7 +50,7 @@ func (s *SpeakerParser) Open(parent gmAst.Node, reader text.Reader, pc parser.Co
 	shortName, bytesConsumed := getShortName(line)
 
 	speaker := ast.NewSpeaker()
-	speaker.ShortName = string(shortName)
+	speaker.ShortName = strings.Trim(string(shortName), " ")
 
 	pc.Set(isRaySpeakingKey, speaker.IsRay())
 

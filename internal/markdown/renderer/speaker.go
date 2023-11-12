@@ -2,11 +2,12 @@ package renderer
 
 import (
 	"fmt"
+	"html/template"
 
 	meta "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	"github.com/mitchellh/mapstructure"
-	gmAst "github.com/yuin/goldmark/ast"
+	gast "github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
@@ -34,7 +35,7 @@ func (r *SpeakerHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegiste
 
 var SpeakerAttributeFilter = html.GlobalAttributeFilter
 
-func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, node gmAst.Node, entering bool) (gmAst.WalkStatus, error) {
+func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
 	if entering {
 		speaker := node.(*ast.Speaker)
 
@@ -43,56 +44,74 @@ func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, nod
 
 		longName := frontMatter.Speakers[speaker.ShortName]
 
-		wrapperClass := "font-sans relative first:mt-0"
+		t, err := template.New("openSpeaker").Parse(`
+      <div 
+        class="
+          font-sans relative first:mt-0
 
-		if speaker.IsHello {
-			wrapperClass += " hello"
+          {{ if .IsHello }} 
+            hello
+          {{ end }}
+
+          {{ if .IsRay }}
+            is-ray ml-1 mr-16
+          {{ else }} 
+            ml-16 mr-1
+          {{ end }}
+
+          {{ if .IsRetorting }}
+            retort mt-4
+          {{ else }} 
+            -mt-4 [.is-short+&>.name]
+          {{ end }}
+        "
+      >
+        {{ if not .IsRetorting }}
+          <div 
+            class="
+              text-sm mt-8 mb-4 block
+
+              {{ if .IsRay }} 
+                text-gray-400
+              {{ else }} 
+                text-sky-400
+              {{ end }}
+            "
+          >{{ .LongName }}</div>
+        {{ end }}
+
+        <div 
+          class="
+            p-8 rounded shadow [&>*]:mb-6 [&>*:last-child]:mb-0 [&>blockquote]:pl-4 [&>blockquote]:text-sm 
+
+            {{ if .IsRetorting }} 
+              inline-block
+            {{ else }}
+              block
+            {{ end }}
+
+            {{ if .IsRay }} 
+              text-gray-900 bg-gray-100
+            {{ else }} 
+              text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200
+            {{ end }}
+          "
+        >
+    `)
+
+		if err != nil {
+			return gast.WalkStop, fmt.Errorf("Failed to parse speaker html/template: %v", err)
 		}
 
-		if speaker.IsRay() {
-			wrapperClass += " is-ray ml-1 mr-16" // tailwind CSS classes
-		} else {
-			wrapperClass += " ml-16 mr-1"
-		}
-
-		if speaker.IsRetorting(source) {
-			wrapperClass += " retort mt-4"
-		} else {
-			wrapperClass += " -mt-4 [.is-short+&>.name]"
-		}
-
-		w.WriteString(fmt.Sprintf(`<div class="%v">`, wrapperClass))
-
-		if !speaker.IsRetorting(source) {
-			nameClass := "text-sm mt-8 mb-4 block"
-
-			if speaker.IsRay() {
-				nameClass += " text-gray-400"
-			} else {
-				nameClass += " text-sky-400"
-			}
-
-			w.WriteString(fmt.Sprintf(`<div class="%v">%v</div>`, nameClass, longName))
-		}
-
-		innerClass := "p-8 rounded shadow [&>*]:mb-6 [&>*:last-child]:mb-0 [&>blockquote]:pl-4 [&>blockquote]:text-sm"
-
-		if speaker.IsRetorting(source) {
-			innerClass += " inline-block"
-		} else {
-			innerClass += " block"
-		}
-
-		if speaker.IsRay() {
-			innerClass += " text-gray-900 bg-gray-100"
-		} else {
-			innerClass += " text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200"
-		}
-
-		w.WriteString(fmt.Sprintf(`<div class="name %v">`, innerClass))
+		t.Execute(w, map[string]interface{}{
+			"LongName":    longName,
+			"IsRetorting": speaker.IsRetorting(source),
+			"IsRay":       speaker.IsRay(),
+			"IsHello":     speaker.IsHello,
+		})
 	} else {
 		_, _ = w.WriteString("</div></div>")
 	}
 
-	return gmAst.WalkContinue, nil
+	return gast.WalkContinue, nil
 }
