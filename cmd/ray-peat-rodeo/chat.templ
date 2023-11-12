@@ -103,10 +103,11 @@ templ attribution(file *File) {
 	>
 		if file.FrontMatter.Transcription.Author != "" {
 			<span class="text-green-700">
-				if file.FrontMatter.Transcription.Author != "Marcus Whybrow" {
-					Actually
+				if file.FrontMatter.Transcription.Author == "Marcus Whybrow" {
+					<span class="font-bold">{ file.FrontMatter.Transcription.Author }</span> transcribed this interview, { file.FrontMatter.Transcription.Date }.
+				} else {
+					Transcription modified from an earlier version by <span class="font-bold">{ file.FrontMatter.Transcription.Author }</span>, { file.FrontMatter.Transcription.Date }.
 				}
-				<span class="font-bold">{ file.FrontMatter.Transcription.Author }</span> transcribed this interview, { file.FrontMatter.Transcription.Date }.
 			</span>
 		} else {
 			<span class="text-green-700">
