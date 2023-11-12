@@ -9,20 +9,20 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type sidenotes struct{}
+type githubIssues struct{}
 
-// Sidenotes is an extension for Goldmark that replaces [00:00:00] with a link
-var Sidenotes = &sidenotes{}
+// GitHubIssues is an extension for Goldmark that replaces {#7} with an aside
+var GitHubIssues = &githubIssues{}
 
-func NewSidenotes() goldmark.Extender {
-	return &sidenotes{}
+func NewGitHubIssues() goldmark.Extender {
+	return &githubIssues{}
 }
 
-func (e *sidenotes) Extend(m goldmark.Markdown) {
+func (e *githubIssues) Extend(m goldmark.Markdown) {
 	m.Parser().AddOptions(gparser.WithInlineParsers(
-		util.Prioritized(parser.NewSidenotesParser(), 2),
+		util.Prioritized(parser.NewGitHubIssueParser(), 1),
 	))
 	m.Renderer().AddOptions(grenderer.WithNodeRenderers(
-		util.Prioritized(renderer.NewSidenoteHTMLRenderer(), 2),
+		util.Prioritized(renderer.NewGitHubIssueHTMLRenderer(), 1),
 	))
 }

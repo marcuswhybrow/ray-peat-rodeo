@@ -14,8 +14,7 @@ import (
 var prevSpeakersKey = parser.NewContextKey()
 var isRaySpeakingKey = parser.NewContextKey()
 
-type SpeakerParser struct {
-}
+type SpeakerParser struct{}
 
 func NewSpeakerParser() parser.BlockParser {
 	return &SpeakerParser{}

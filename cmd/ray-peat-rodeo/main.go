@@ -38,6 +38,7 @@ func main() {
 		extension.Timecodes,
 		extension.Speakers,
 		extension.Sidenotes,
+		extension.GitHubIssues,
 	))
 
 	log.Printf("Scanning files in %v\n", assets)
