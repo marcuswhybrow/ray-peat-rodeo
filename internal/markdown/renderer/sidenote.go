@@ -2,6 +2,7 @@ package renderer
 
 import (
 	"fmt"
+	"html/template"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	gast "github.com/yuin/goldmark/ast"
@@ -23,19 +24,25 @@ func (r *SidenoteHTMLRendereer) RegisterFuncs(reg grenderer.NodeRendererFuncRegi
 func (t *SidenoteHTMLRendereer) renderSidenote(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
 	if entering {
 		sidenote := node.(*ast.Sidenote)
-		position := fmt.Sprint(sidenote.Position)
 
 		// Uses CSS counters. Requires "counter-reset:sidenote" on parent
-		w.WriteString(fmt.Sprintf(`
+		t, err := template.New("openSidenote").Parse(`
       <label 
-        for="sidenote-%v" 
+        for="sidenote-{{.SidenoteId}}" 
         class="[counter-increment:sidenote] after:content-[counter(sidenote)] after:-top-1 after:left-0 after:align-baseline after:text-sm after:relative after:-top-1 font-serif after:bg-white after:rounded-md after:shadow after:text-gray-600 after:py-1 after:px-2"
-      ></label><span 
-        class="z-20 block bg-white rounded-md shadow w-1/2 mr-[-5%%] sm:mr-[-10%%] md:mr-[-15%%] lg:mr-[-25%%] float-right clear-right text-sm relative p-4 before:content-[counter(sidenote)_'.'] before:float-left m-2 before:mr-1 before:text-gray-500 leading-5 align-middle transition-all"
+      ></label><span
+        id="sidenote-{{.SidenoteId}}"
+        class="z-20 block bg-white rounded-md shadow w-1/2 mr-[-5%] sm:mr-[-10%] md:mr-[-15%] lg:mr-[-25%] float-right clear-right text-sm relative p-4 before:content-[counter(sidenote)_'.'] before:float-left m-2 before:mr-1 before:text-gray-500 leading-5 align-middle transition-all"
       >
-    `,
-			position,
-		))
+    `)
+		if err != nil {
+			return gast.WalkStop, fmt.Errorf("Failed to parse sidenote html/template: %v", err)
+		}
+
+		t.Execute(w, map[string]string{
+			"SidenoteId": fmt.Sprint(sidenote.Position),
+		})
+
 	} else {
 		_, _ = w.WriteString("</span>")
 	}

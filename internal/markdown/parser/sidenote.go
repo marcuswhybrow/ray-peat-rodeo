@@ -50,13 +50,11 @@ func (p *sidenotesDelimiterProcessor) CanOpenCloser(opener, closer *gparser.Deli
 }
 
 func (p *sidenotesDelimiterProcessor) OnMatch(consumes int) gast.Node {
-	sidenodeCount := func() int {
-		if extantCount := p.context.Get(sidenoteCountKey); extantCount != nil {
-			return extantCount.(int)
-		}
+	sidenoteCount := p.context.ComputeIfAbsent(sidenoteCountKey, func() interface{} {
 		return 0
-	}()
-	sidenodeCount += 1
-	p.context.Set(sidenoteCountKey, sidenodeCount)
-	return ast.NewSidenote(sidenodeCount)
+	}).(int)
+
+	sidenoteCount += 1
+	p.context.Set(sidenoteCountKey, sidenoteCount)
+	return ast.NewSidenote(sidenoteCount)
 }
