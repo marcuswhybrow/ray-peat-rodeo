@@ -10,8 +10,7 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type SidenoteHTMLRenderer struct {
-}
+type SidenoteHTMLRenderer struct{}
 
 func NewSidenoteHTMLRenderer() grenderer.NodeRenderer {
 	return &SidenoteHTMLRenderer{}
@@ -40,7 +39,7 @@ func (t *SidenoteHTMLRenderer) renderSidenote(w util.BufWriter, source []byte, n
 		}
 
 		t.Execute(w, map[string]string{
-			"SidenoteId": fmt.Sprint(sidenote.Id),
+			"SidenoteId": fmt.Sprint(sidenote.Position),
 		})
 
 	} else {
