@@ -105,7 +105,7 @@ func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, nod
 
 		t.Execute(w, map[string]interface{}{
 			"LongName":    longName,
-			"IsRetorting": speaker.IsRetorting(source),
+			"IsRetorting": speaker.IsRetorting,
 			"IsRay":       speaker.IsRay(),
 			"IsHello":     speaker.IsHello,
 		})

@@ -17,7 +17,7 @@ type Speaker struct {
 
 	// A short reponse for which it isn't worth redeclaring the speakers name if
 	// the previous was directly interrupting this speaker.
-	CanRetort bool
+	IsRetorting bool
 }
 
 func NewSpeaker() *Speaker {
@@ -38,8 +38,4 @@ func (s *Speaker) Kind() gmAst.NodeKind {
 
 func (s *Speaker) IsRay() bool {
 	return strings.Trim(s.ShortName, " ") == "RP"
-}
-
-func (s *Speaker) IsRetorting(source []byte) bool {
-	return s.CanRetort && len(s.Text(source)) < 50
 }

@@ -81,13 +81,13 @@ func (s *SpeakerParser) Open(parent gmAst.Node, reader text.Reader, pc parser.Co
 	})
 
 	if speaker.IsHello {
-		speaker.CanRetort = false
+		speaker.IsRetorting = false
 	} else if speaker.IsRay() && penultimateSpeaker.ShortName == speaker.ShortName {
-		speaker.CanRetort = true
-	} else if !speaker.IsRay() && prevSpeaker.IsRay() {
-		speaker.CanRetort = true
+		speaker.IsRetorting = prevSpeaker.IsRetorting
+	} else if !speaker.IsRay() && prevSpeaker.IsRay() && penultimateSpeaker.ShortName == speaker.ShortName {
+		speaker.IsRetorting = true
 	} else {
-		speaker.CanRetort = false
+		speaker.IsRetorting = false
 	}
 
 	prevSpeakers = append(prevSpeakers, speaker)
