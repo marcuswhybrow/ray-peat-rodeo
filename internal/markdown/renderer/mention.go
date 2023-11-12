@@ -37,7 +37,7 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
         data-occurance=""
       ><a 
         href="#"
-        class="font-mono font-bold drop-shadow-md tracking-normal box-decoration-clone border-b hover:border-b-2 %v">%v`, anchorClass, mention.Inside))
+        class="font-mono font-bold drop-shadow-md tracking-normal box-decoration-clone border-b hover:border-b-2 %v">%v`, anchorClass, mention.Title()))
 	} else {
 		w.WriteString(`</a></span>`)
 	}
