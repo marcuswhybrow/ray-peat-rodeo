@@ -28,10 +28,10 @@ func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, n
 	}
 
 	linkClass := "text-sm px-2 py-1 rounded-md "
-	if !timecode.IsRaySpeaking {
-		linkClass += "bg-gray-300 hover:bg-gray-500 text-gray-50"
+	if IsRaySpeaking(node) {
+		linkClass += "is-not-ray bg-gray-300 hover:bg-gray-500 text-gray-50"
 	} else {
-		linkClass += "bg-sky-300 hover:bg-sky-500 text-sky-50"
+		linkClass += "is-ray bg-sky-300 hover:bg-sky-500 text-sky-50"
 	}
 
 	if entering {

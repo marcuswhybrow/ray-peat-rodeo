@@ -12,10 +12,9 @@ var KindMention = gast.NewNodeKind("Mention")
 
 type Mention struct {
 	gast.BaseInline
-	IsRaySpeaking bool
-	Primary       MentionPart
-	Secondary     MentionPart
-	DisplayText   string
+	Primary     MentionPart
+	Secondary   MentionPart
+	DisplayText string
 }
 
 func (m *Mention) Title() string {
@@ -60,11 +59,10 @@ func (n *Mention) Kind() gast.NodeKind {
 
 func NewMention(primary, secondary MentionPart, displayText string) *Mention {
 	return &Mention{
-		BaseInline:    gast.BaseInline{},
-		IsRaySpeaking: false,
-		Primary:       primary,
-		Secondary:     secondary,
-		DisplayText:   displayText,
+		BaseInline:  gast.BaseInline{},
+		Primary:     primary,
+		Secondary:   secondary,
+		DisplayText: displayText,
 	}
 }
 

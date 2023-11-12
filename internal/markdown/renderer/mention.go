@@ -24,7 +24,7 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
 		mention := node.(*ast.Mention)
 
 		var anchorClass string
-		if mention.IsRaySpeaking {
+		if IsRaySpeaking(node) {
 			anchorClass = "text-gray-700 hover:text-gray-900 shadow-orange-300 border-gray-700"
 		} else {
 			anchorClass = "text-sky-800 hover:text-sky-900 shadow-pink-300 border-sky-800"
