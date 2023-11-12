@@ -60,9 +60,9 @@ func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, nod
           {{ end }}
 
           {{ if .IsRetorting }}
-            retort mt-4
+            retort -mt-4 [.is-short+&>.name]
           {{ else }} 
-            -mt-4 [.is-short+&>.name]
+            mt-4
           {{ end }}
         "
       >
