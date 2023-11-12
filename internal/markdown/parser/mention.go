@@ -22,7 +22,7 @@ func (p *mentionParser) Trigger() []byte {
 }
 
 // Parses the mention tag which has several parts, some of which are optional.
-// [[Primary Cardinal, Prefix > Secondary Cardinal, Prefix | Display Text]]
+// [[Primary Mention, Prefix > Secondary Mention, Prefix | Display Text]]
 func (p *mentionParser) Parse(parent gast.Node, block text.Reader, pc gparser.Context) gast.Node {
 	line, _ := block.PeekLine()
 	if line[1] != '[' {
