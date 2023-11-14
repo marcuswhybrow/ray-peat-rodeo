@@ -35,9 +35,19 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
         data-signature="" 
         data-title="" 
         data-occurance=""
-      ><a 
-        href="#"
-        class="font-mono font-bold drop-shadow-md tracking-normal box-decoration-clone border-b hover:border-b-2 %v">%v`, anchorClass, mention.Title()))
+        ><a 
+        id="%v"
+        href="%v"
+        class="font-mono font-bold drop-shadow-md tracking-normal box-decoration-clone border-b hover:border-b-2 %v">`,
+			mention.ID,
+			mention.CatalogPermalink(),
+			anchorClass))
+
+		if len(mention.Label) > 0 {
+			w.WriteString(mention.Label)
+		} else {
+			w.WriteString(mention.Ultimate().PrefixFirst())
+		}
 	} else {
 		w.WriteString(`</a></span>`)
 	}

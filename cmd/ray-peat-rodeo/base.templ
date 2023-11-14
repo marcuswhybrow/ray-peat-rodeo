@@ -18,7 +18,7 @@ func Unsafe(html string) templ.Component {
 
 templ Base(title string) {
 	<!DOCTYPE html>
-	<html>
+	<html class="scroll-pt-24">
 		<head>
 			<title>
 				if len(title) > 0 {
@@ -98,8 +98,6 @@ templ Base(title string) {
             function relativeDate(origStr) {
               let buildDate = Date.parse(origStr);
               let delta = Date.now() - buildDate;
-
-              console.log(delta / 1000);
 
               let hours = Math.floor(delta / (60 * 60 * 1000));
               if (hours < 24) {

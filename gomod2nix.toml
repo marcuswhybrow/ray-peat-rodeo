@@ -19,6 +19,9 @@ schema = 3
   [mod."github.com/yuin/goldmark-meta"]
     version = "v1.1.0"
     hash = "sha256-Q/kRP4rpS3r24HYBvPTiuKNbf+PUMVsEp2m6yOblth0="
+  [mod."golang.org/x/text"]
+    version = "v0.14.0"
+    hash = "sha256-yh3B0tom1RfzQBf1RNmfdNWF1PtiqxV41jW1GVS6JAg="
   [mod."gopkg.in/yaml.v2"]
     version = "v2.3.0"
     hash = "sha256-8tPC5nMGvUFs97W6+JXsxJLjU6EpDmPG9tXo1DyFoNU="

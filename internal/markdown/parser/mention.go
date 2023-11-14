@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"bytes"
 	"strings"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
@@ -10,6 +11,14 @@ import (
 )
 
 var mentionCountKey = gparser.NewContextKey()
+var mentionsKey = gparser.NewContextKey()
+
+func GetMentions(pc gparser.Context) []*ast.Mention {
+	return pc.ComputeIfAbsent(mentionsKey, func() interface{} {
+		var mentions []*ast.Mention
+		return mentions
+	}).([]*ast.Mention)
+}
 
 type mentionParser struct{}
 
@@ -25,71 +34,40 @@ func (p *mentionParser) Trigger() []byte {
 // [[Primary Mention, Prefix > Secondary Mention, Prefix | Display Text]]
 func (p *mentionParser) Parse(parent gast.Node, block text.Reader, pc gparser.Context) gast.Node {
 	line, _ := block.PeekLine()
-	if line[1] != '[' {
+	if !bytes.HasPrefix(line, []byte{'[', '['}) {
 		return nil
 	}
 
-	inside, _, foundEnd := strings.Cut(string(line[2:]), "]]")
-	if !foundEnd || len(inside) == 0 {
+	inside, _, foundCloser := strings.Cut(string(line[2:]), "]]")
+	if !foundCloser || len(inside) == 0 {
 		return nil
 	}
 
-	segments := quotedSegments(inside)
+	signature, label, _ := strings.Cut(inside, "|")
 
-	var primary ast.MentionPart
-	var secondary ast.MentionPart
-	var displayText string
+	primary, secondary, _ := strings.Cut(signature, ">")
 
-	phase := mentionCardinalPhase
-	target := func() *string {
-		switch phase {
-		case mentionCardinalPhase:
-			return &primary.Cardinal
-		case mentionPrefixPhase:
-			return &primary.Prefix
-		case subMentionCardinalPhase:
-			return &secondary.Cardinal
-		case subMentionPrefixPhase:
-			return &secondary.Prefix
-		case displayTextPhase:
-			return &displayText
-		default:
-			return &primary.Cardinal
-		}
+	pCardinal, pPrefix, _ := strings.Cut(primary, ",")
+	sCardinal, sPrefix, _ := strings.Cut(secondary, ",")
+
+	primaryPart := ast.MentionPart{
+		Cardinal: strings.Trim(pCardinal, " "),
+		Prefix:   strings.Trim(pPrefix, " "),
+	}
+	secondaryPart := ast.MentionPart{
+		Cardinal: strings.Trim(sCardinal, " "),
+		Prefix:   strings.Trim(sPrefix, " "),
 	}
 
-	for _, segment := range segments {
-		if segment.Quoted {
-			*target() += segment.String
-		} else {
-			for _, r := range segment.String {
-				switch r {
-				case ',':
-					switch phase {
-					case mentionCardinalPhase:
-						phase = mentionPrefixPhase
-					case subMentionCardinalPhase:
-						phase = subMentionPrefixPhase
-					}
-				case '|':
-					phase = displayTextPhase
-				case '>':
-					switch phase {
-					case mentionCardinalPhase:
-						phase = subMentionCardinalPhase
-					case mentionPrefixPhase:
-						phase = subMentionCardinalPhase
-					}
-				default:
-					*target() += string(r)
-				}
-			}
-		}
-	}
+	mention := ast.NewMention(pc, primaryPart, secondaryPart, label)
+
+	mentions := GetMentions(pc)
+	mentions = append(mentions, mention)
+	pc.Set(mentionsKey, mentions)
 
 	block.Advance(4 + len(inside))
-	return ast.NewMention(primary, secondary, displayText)
 
+	return mention
 }
 
 func (p *mentionParser) CloseBlock(parent gast.Node, pc gparser.Context) {
@@ -106,12 +84,11 @@ type segment struct {
 	String string
 }
 
-// Parses a string that contains quoted segments into a list of structs
+// Parses a string that contains quoted segments into a slice of structs
 // representing that state. This is usefull for ignoring control symbols within
 // quoted segments of mention signatures.
 //
-//	s := `my "quoted" string`
-//	assertEq(quotedSegments(s), []segment{
+//	assertEq(quotedSegments(`my "quoted" string`), []segment{
 //	  segment{ Quoted: false, String: "my " },
 //	  segment{ Quoted: true, String: "quoted" },
 //	  segment{ Quoted: false, String: " string" },

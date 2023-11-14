@@ -14,12 +14,14 @@ import (
 	"sync"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/parser"
 	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark"
 	meta "github.com/yuin/goldmark-meta"
 	gmExtension "github.com/yuin/goldmark/extension"
-	"github.com/yuin/goldmark/parser"
+	gparser "github.com/yuin/goldmark/parser"
 )
 
 func main() {
@@ -92,9 +94,15 @@ func main() {
 				return
 			}
 
+			id := fileStem
+			permalink := "/" + id
+
 			var html bytes.Buffer
-			parserContext := parser.NewContext()
-			err = markdownParser.Convert(markdownBytes, &html, parser.WithContext(parserContext))
+			parserContext := gparser.NewContext()
+			parserContext.Set(markdown.PermalinkKey, permalink)
+			parserContext.Set(markdown.IDKey, id)
+
+			err = markdownParser.Convert(markdownBytes, &html, gparser.WithContext(parserContext))
 			if err != nil {
 				log.Panicf("Failed to parse markdown: %v\n", err)
 			}
@@ -118,13 +126,16 @@ func main() {
 			parentName := path.Base(parentPath)
 
 			file := &File{}
+			file.ID = id
 			file.Path = filePath
+			file.OutPath = outPath
 			file.Date = fileStem[:11]
 			file.Permalink = "/" + fileStem
 			file.FrontMatter = frontMatter
 			file.IsTodo = parentName == "todo"
-			file.Markdown = string(markdownBytes)
-			file.Html = html.String()
+			file.Markdown = markdownBytes
+			file.Html = html.Bytes()
+			file.Mentions = parser.GetMentions(parserContext)
 
 			RenderChat(file).Render(context.Background(), outFile)
 
@@ -134,15 +145,51 @@ func main() {
 
 	waitGroup.Wait()
 
-	var files []*File
+	var allFiles []*File
 	close(filesChannel)
 	for result := range filesChannel {
 		if result.err != nil {
 			log.Panicf("Failed to construct file: '%v'", result.err)
 		}
 
-		files = append(files, result.value)
-		log.Printf("Wrote '%v'", result.value.Path)
+		file := result.value
+		allFiles = append(allFiles, file)
+		log.Printf("Wrote '%v'\n", file.OutPath)
+	}
+
+	mentions := map[ast.MentionPart]map[ast.MentionPart]map[*File][]*ast.Mention{}
+	for _, file := range allFiles {
+		for _, mention := range file.Mentions {
+			secondaries := mentions[mention.Primary]
+			if secondaries == nil {
+				secondaries = map[ast.MentionPart]map[*File][]*ast.Mention{}
+			}
+			filesWithMention := secondaries[mention.Secondary]
+			if filesWithMention == nil {
+				filesWithMention = map[*File][]*ast.Mention{}
+			}
+			filesWithMention[file] = append(filesWithMention[file], mention)
+			secondaries[mention.Secondary] = filesWithMention
+			mentions[mention.Primary] = secondaries
+		}
+	}
+
+	for primaryMentionPart, secondaries := range mentions {
+		title := primaryMentionPart.CardinalFirst()
+		title = strings.ToLower(title)
+		title = strings.ReplaceAll(title, " ", "-")
+		path := path.Join(build, title, "index.html")
+
+		parent := filepath.Dir(path)
+		os.MkdirAll(parent, 0755)
+		mentionFile, err := os.Create(path)
+		if err != nil {
+			log.Panicf("Failed to create HTML for mention: %v", err)
+		}
+
+		component := MentionPage(primaryMentionPart, secondaries)
+		component.Render(context.Background(), mentionFile)
+		log.Printf("Wrote %v", path)
 	}
 
 	indexFile, err := os.Create(path.Join(build, "index.html"))
@@ -150,10 +197,10 @@ func main() {
 		log.Panicf("Failed to create index.html: %v", err)
 	}
 
-	sort.Sort(ByDate(files))
+	sort.Sort(ByDate(allFiles))
 
 	var latest []*File
-	for _, file := range files {
+	for _, file := range allFiles {
 		if !file.IsTodo {
 			latest = append(latest, file)
 		}
@@ -164,7 +211,7 @@ func main() {
 	sort.Sort(ByTranscriptionDate(latest))
 
 	var humanTranscripts []*File
-	for _, file := range files {
+	for _, file := range allFiles {
 		if file.IsTodo && file.FrontMatter.Transcription.Kind == "text" {
 			humanTranscripts = append(humanTranscripts, file)
 		}
@@ -174,28 +221,37 @@ func main() {
 	}
 
 	var aiTranscripts []*File
-	for _, file := range files {
+	for _, file := range allFiles {
 		if file.IsTodo && file.FrontMatter.Transcription.Kind == "auto-generated" {
 			aiTranscripts = append(aiTranscripts, file)
 		}
 	}
 
-	Index(latest, humanTranscripts).Render(context.Background(), indexFile)
+	x := Index(latest, humanTranscripts)
+	x.Render(context.Background(), indexFile)
 
 	fmt.Println("Done.")
+}
+
+type Result[T any] struct {
+	value T
+	err   error
 }
 
 type File struct {
 	FrontMatter   markdown.FrontMatter
 	IsTodo        bool
 	Path          string
+	ID            string
+	OutPath       string
 	Date          string
-	Markdown      string
-	Html          string
+	Markdown      []byte
+	Html          []byte
 	IssueCount    int
 	MentionCounts map[string]int
 	EditPermalink string
 	Permalink     string
+	Mentions      []*ast.Mention
 }
 
 type ByDate []*File
@@ -213,8 +269,3 @@ func (f ByTranscriptionDate) Less(i, j int) bool {
 	return f[i].FrontMatter.Transcription.Date > f[j].FrontMatter.Transcription.Date
 }
 func (f ByTranscriptionDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
-
-type Result[T any] struct {
-	value T
-	err   error
-}

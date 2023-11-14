@@ -1,5 +1,7 @@
 package markdown
 
+import "github.com/yuin/goldmark/parser"
+
 type FrontMatter struct {
 	Source struct {
 		Series   string
@@ -16,3 +18,7 @@ type FrontMatter struct {
 		Author string
 	}
 }
+
+var PermalinkKey = parser.NewContextKey()
+var IDKey = parser.NewContextKey()
+var SourceKey = parser.NewContextKey()

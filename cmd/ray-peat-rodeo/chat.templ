@@ -269,7 +269,7 @@ templ RenderChat(file *File) {
  					data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
 				>{ file.FrontMatter.Source.Title }</h1>
 			</header>
-			<main style="counter-reset:sidenote" hx-boost="true">
+			<main style="counter-reset:sidenote">
 				<style> mark { background-color: #fef08a } </style>
 				if file.IsTodo {
 					@prioritiseThisChat()
@@ -278,7 +278,7 @@ templ RenderChat(file *File) {
 					@sponsorThisChat()
 					@attribution(file)
 				}
-				@Unsafe(file.Html)
+				@Unsafe(string(file.Html))
 				@SpeakerStatusChange(file.FrontMatter.Speakers) {
 					left the chat
 				}

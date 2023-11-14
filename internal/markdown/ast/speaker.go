@@ -3,11 +3,11 @@ package ast
 import (
 	"strings"
 
-	gmAst "github.com/yuin/goldmark/ast"
+	gast "github.com/yuin/goldmark/ast"
 )
 
 type Speaker struct {
-	gmAst.BaseBlock
+	gast.BaseBlock
 
 	// The short name of a speaker, e.g. "RP", used in markdown.
 	ShortName string
@@ -22,20 +22,31 @@ type Speaker struct {
 
 func NewSpeaker() *Speaker {
 	return &Speaker{
-		BaseBlock: gmAst.BaseBlock{},
+		BaseBlock: gast.BaseBlock{},
 	}
 }
 
 func (s *Speaker) Dump(source []byte, level int) {
-	gmAst.DumpHelper(s, source, level, nil, nil)
+	gast.DumpHelper(s, source, level, nil, nil)
 }
 
-var KindSpeaker = gmAst.NewNodeKind("Speaker")
+var KindSpeaker = gast.NewNodeKind("Speaker")
 
-func (s *Speaker) Kind() gmAst.NodeKind {
+func (s *Speaker) Kind() gast.NodeKind {
 	return KindSpeaker
 }
 
 func (s *Speaker) IsRay() bool {
 	return strings.Trim(s.ShortName, " ") == "RP"
+}
+
+func IsRaySpeaking(node gast.Node) bool {
+	for parent := node.Parent(); parent != nil; parent = parent.Parent() {
+		speaker, ok := parent.(*Speaker)
+		if ok {
+			return speaker.IsRay()
+		}
+	}
+
+	return false
 }

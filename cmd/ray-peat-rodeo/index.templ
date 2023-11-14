@@ -59,7 +59,6 @@ templ ChatCard(file *File) {
 templ renderLatest(files []*File) {
 	<div
  		class="text-center"
- 		hx-boost="true"
 	>
 		for _, file := range files {
 			@ChatCard(file)
@@ -68,7 +67,7 @@ templ renderLatest(files []*File) {
 }
 
 templ renderSuggestions(files []*File) {
-	<div class="text-center" hx-boost="true">
+	<div class="text-center">
 		for _, file := range files {
 			@ChatCard(file)
 		}
