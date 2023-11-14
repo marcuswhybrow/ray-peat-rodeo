@@ -16,7 +16,7 @@ func Unsafe(html string) templ.Component {
 	})
 }
 
-templ Base(title string, content templ.Component) {
+templ Base(title string) {
 	<!DOCTYPE html>
 	<html>
 		<head>
@@ -49,30 +49,30 @@ templ Base(title string, content templ.Component) {
 		<body
  			class="pt-20"
  			_="
-      on keydown[key==&#39;/&#39;] 
-        if #search matches .hidden then 
-          send openSearch to me
-          halt the event
-        end
+        on keydown[key==&#39;/&#39;] 
+          if #search matches .hidden then 
+            send openSearch to me
+            halt the event
+          end
 
-      on keydown[key==&#39;Escape&#39;] send closeSearch to me
+        on keydown[key==&#39;Escape&#39;] send closeSearch to me
 
-      on toggleSearch
-        if #search matches .hidden then
-          send openSearch to me
-        else
-          send closeSearch to me
-        end
+        on toggleSearch
+          if #search matches .hidden then
+            send openSearch to me
+          else
+            send closeSearch to me
+          end
 
-      on openSearch
-        remove .hidden from #search
-        add .overflow-hidden to body
-        focus() the first .pagefind-ui__search-input 
+        on openSearch
+          remove .hidden from #search
+          add .overflow-hidden to body
+          focus() the first .pagefind-ui__search-input 
 
-      on closeSearch
-        add .hidden to #search
-        remove .overflow-hidden from body
-    "
+        on closeSearch
+          add .hidden to #search
+          remove .overflow-hidden from body
+      "
 		>
 			<div class="sticky top-0 bg-white/90 backdrop-blur-sm z-30 w-full">
 				<div class="max-w-screen-sm mx-auto text-center">
@@ -89,7 +89,7 @@ templ Base(title string, content templ.Component) {
 					<div class="h-px bg-gradient-to-r from-slate-200/0 via-slate-200 to-slate-200/0"></div>
 				</div>
 			</div>
-			@content
+			{ children... }
 			<footer class="pt-10 pb-20 px-4 text-sm opacity-80 max-w-screen-lg mx-auto text-center">
 				<p>
 					Ray Peat Rodeo is an <a href="{ global.GITHUB_LINK }">open source</a>

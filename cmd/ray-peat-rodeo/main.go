@@ -9,6 +9,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 	"sync"
 
@@ -43,14 +44,22 @@ func main() {
 
 	log.Printf("Scanning files in %v\n", assets)
 
-	files := []string{}
-	err := fs.WalkDir(os.DirFS(assets), ".", func(filePath string, d fs.DirEntry, err error) error {
+	filePaths := []string{}
+	err := fs.WalkDir(os.DirFS(assets), ".", func(filePath string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return fmt.Errorf("Failed to obtain dir entry: %v", err)
 		}
 
-		if !d.IsDir() {
-			files = append(files, path.Join(assets, filePath))
+		if !entry.IsDir() {
+			base := path.Base(filePath)
+			baseLower := strings.ToLower(base)
+
+			if baseLower == "readme.md" {
+				return nil
+			}
+
+			outPath := path.Join(assets, filePath)
+			filePaths = append(filePaths, outPath)
 		}
 
 		return nil
@@ -67,8 +76,8 @@ func main() {
 
 	var waitGroup sync.WaitGroup
 
-	filesChannel := make(chan Result[*File], len(files))
-	for _, filePath := range files {
+	filesChannel := make(chan Result[*File], len(filePaths))
+	for _, filePath := range filePaths {
 		waitGroup.Add(1)
 
 		go func(filePath string) {
@@ -85,7 +94,10 @@ func main() {
 
 			var html bytes.Buffer
 			parserContext := parser.NewContext()
-			markdownParser.Convert(markdownBytes, &html, parser.WithContext(parserContext))
+			err = markdownParser.Convert(markdownBytes, &html, parser.WithContext(parserContext))
+			if err != nil {
+				log.Panicf("Failed to parse markdown: %v\n", err)
+			}
 
 			var frontMatter markdown.FrontMatter
 			err = mapstructure.Decode(meta.Get(parserContext), &frontMatter)
@@ -102,10 +114,15 @@ func main() {
 				return
 			}
 
+			parentPath := path.Dir(filePath)
+			parentName := path.Base(parentPath)
+
 			file := &File{}
 			file.Path = filePath
+			file.Date = fileStem[:11]
+			file.Permalink = "/" + fileStem
 			file.FrontMatter = frontMatter
-			file.IsTodo = false
+			file.IsTodo = parentName == "todo"
 			file.Markdown = string(markdownBytes)
 			file.Html = html.String()
 
@@ -117,14 +134,53 @@ func main() {
 
 	waitGroup.Wait()
 
+	var files []*File
 	close(filesChannel)
 	for result := range filesChannel {
 		if result.err != nil {
 			log.Panicf("Failed to construct file: '%v'", result.err)
 		}
 
+		files = append(files, result.value)
 		log.Printf("Wrote '%v'", result.value.Path)
 	}
+
+	indexFile, err := os.Create(path.Join(build, "index.html"))
+	if err != nil {
+		log.Panicf("Failed to create index.html: %v", err)
+	}
+
+	sort.Sort(ByDate(files))
+
+	var latest []*File
+	for _, file := range files {
+		if !file.IsTodo {
+			latest = append(latest, file)
+		}
+	}
+	if len(latest) > 4 {
+		latest = latest[:4]
+	}
+	sort.Sort(ByTranscriptionDate(latest))
+
+	var humanTranscripts []*File
+	for _, file := range files {
+		if file.IsTodo && file.FrontMatter.Transcription.Kind == "text" {
+			humanTranscripts = append(humanTranscripts, file)
+		}
+	}
+	if len(humanTranscripts) > 2 {
+		humanTranscripts = humanTranscripts[:2]
+	}
+
+	var aiTranscripts []*File
+	for _, file := range files {
+		if file.IsTodo && file.FrontMatter.Transcription.Kind == "auto-generated" {
+			aiTranscripts = append(aiTranscripts, file)
+		}
+	}
+
+	Index(latest, humanTranscripts).Render(context.Background(), indexFile)
 
 	fmt.Println("Done.")
 }
@@ -133,12 +189,30 @@ type File struct {
 	FrontMatter   markdown.FrontMatter
 	IsTodo        bool
 	Path          string
+	Date          string
 	Markdown      string
 	Html          string
 	IssueCount    int
 	MentionCounts map[string]int
 	EditPermalink string
+	Permalink     string
 }
+
+type ByDate []*File
+
+func (f ByDate) Len() int { return len(f) }
+func (f ByDate) Less(i, j int) bool {
+	return f[i].Date > f[j].Date
+}
+func (f ByDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
+
+type ByTranscriptionDate []*File
+
+func (f ByTranscriptionDate) Len() int { return len(f) }
+func (f ByTranscriptionDate) Less(i, j int) bool {
+	return f[i].FrontMatter.Transcription.Date > f[j].FrontMatter.Transcription.Date
+}
+func (f ByTranscriptionDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
 
 type Result[T any] struct {
 	value T

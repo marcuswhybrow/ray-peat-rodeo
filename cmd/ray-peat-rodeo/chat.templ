@@ -32,38 +32,55 @@ func EnumerateMap[V any](m map[string]V) []MapEnumeration[V] {
 	return results
 }
 
-templ joinedTheChat(file *File) {
-	if len(file.FrontMatter.Speakers) > 0 {
-		<div data-pagefind-ignore class="text-sm mt-4 text-gray-400 w-2/3 mx-auto">
-			for _, speaker := range EnumerateMap(file.FrontMatter.Speakers) {
-				if !speaker.IsFirst {
-					if !speaker.IsLast {
-						{ ", " }
-					} else {
-						{ " and " }
+templ SpeakerStatusChange(speakers map[string]string) {
+	if len(speakers) > 0 {
+		<div data-pagefind-ignore class="text-sm mt-4 text-gray-400 w-2/3 mx-auto text-center">
+			<span class="mr-2">
+				for _, speaker := range EnumerateMap(speakers) {
+					if !speaker.IsFirst {
+						if !speaker.IsLast {
+							{ ", " }
+						} else {
+							{ " and " }
+						}
 					}
+					<span class="text-gray-800">{ speaker.Value }</span>
 				}
-				<span class="text-gray-800">{ speaker.Value }</span>
-			}
-			{ " joined the chat" }
+			</span>
+			{ children... }
 		</div>
 	}
 }
 
-templ pinnedOriginal(file *File) {
-	<div data-pagefind-ignore data-pagefind-filter={ "Medium:" + cases.Title(language.English).String(file.FrontMatter.Source.Kind) } class="mb-24 mt-4 text-sm text-gray-400 w-2/3 mx-auto">
-		📌 Pinned 
-		<a href={ templ.URL(file.FrontMatter.Source.Url) } class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2">
-			original { cases.Lower(language.English).String(file.FrontMatter.Source.Kind) }
-		</a>
+templ StatusChange() {
+	<div data-pagefind-ignore class="text-sm text-gray-400 w-2/3 mx-auto text-center">
+		{ children... }
 	</div>
 }
 
+templ pinnedOriginal(file *File) {
+	@StatusChange() {
+		📌 Pinned 
+		<a
+ 			data-pagefind-ignore
+ 			data-pagefind-filter={ "Medium:" + cases.Title(language.English).String(file.FrontMatter.Source.Kind) }
+ 			href={ templ.URL(file.FrontMatter.Source.Url) }
+ 			class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2"
+		>
+			original { cases.Lower(language.English).String(file.FrontMatter.Source.Kind) }
+		</a>
+	}
+}
+
 templ openChat(file *File) {
-	<div data-pagefind-ignore class="text-sm text-gray-400 w-2/3 mx-auto">
-		<a data-pagefind-filter="Host" href="" class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2">{ file.FrontMatter.Source.Series }</a>
+	@StatusChange() {
+		<a
+ 			data-pagefind-filter="Host"
+ 			href=""
+ 			class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2"
+		>{ file.FrontMatter.Source.Series }</a>
 		started a chat
-	</div>
+	}
 }
 
 templ prioritiseThisChat() {
@@ -117,29 +134,31 @@ templ attribution(file *File) {
 	</a>
 }
 
-templ leftTheChat(file *File) {
-	if len(file.FrontMatter.Speakers) > 0 {
-		<div data-pagefind-ignore class="text-sm mb-2 text-gray-400 mt-24 text-center px-8">
-			for _, speaker := range EnumerateMap(file.FrontMatter.Speakers) {
-				if !speaker.IsFirst {
-					if !speaker.IsLast {
-						{ ", " }
-					} else {
-						{ " and " }
-					}
-				}
-				<span class="text-gray-800">{ speaker.Value }</span>
-			}
-			{ " left the chat" }
-		</div>
-	}
+templ Handle() {
+	<div class="text-sm text-gray-400 mb-2 mt-8">
+		{ children... }
+	</div>
+}
+
+templ Message() {
+	<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">
+		{ children... }
+	</div>
+}
+
+templ MarcusMessage() {
+	<div class="rounded shadow p-8 bg-gradient-to-b from-yellow-200 to-amber-200 text-yellow-900">
+		{ children... }
+	</div>
 }
 
 templ todoAfterwards(file *File) {
 	<div data-pagefind-ignore class="mr-16 mb-8">
-		<div class="text-sm text-gray-400 mb-2 mt-8">Marcus</div>
-		<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900">
-			if file.FrontMatter.Transcription.Url != "" {
+		@Handle() {
+			marcus
+		}
+		if file.FrontMatter.Transcription.Url != "" {
+			@Message() {
 				<p>
 					Hi, Marcus here. I've yet to add this chat to Ray Peat Rodeo. However, there is an <a href={ templ.URL(file.FrontMatter.Transcription.Url) } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">existing transcript</a>
 					if file.FrontMatter.Transcription.Kind == "auto-generated" {
@@ -153,11 +172,13 @@ templ todoAfterwards(file *File) {
 				<p class="mt-4">
 					If you're familiar with Markdown, you can <a href={ templ.URL(file.EditPermalink) } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">add it</a> to the website yourself via GitHub. Or you may support me on <a href={ global.SPONSOR_LINK } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">GitHub Sponsors</a> and I'll make this transcript a priority, along with other goodies.
 				</p>
-			} else {
+			}
+		} else {
+			@Message() {
 				<p>Hi, Marcus here. I've yet to add this chat to Ray Peat Rodeo and I'm not aware of any existing transcriptions.</p>
 				<p class="mt-4">If you yourself have a transcription, please <a href={ templ.URL(file.EditPermalink) } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">edit this page</a> on GitHub. Or you can support me on <a href={ global.SPONSOR_LINK } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">GitHub Sponsors</a> and I'll make this transcript a priority, along with other goodies.</p>
 			}
-		</div>
+		}
 	</div>
 }
 
@@ -192,44 +213,77 @@ templ helloFromMarcus(file *File) {
 	@callToActionAfterwards(file)
 }
 
-templ chat(file *File) {
-	<article class="p-8 relative max-w-2xl mx-auto" data-pagefind-body>
-		<header class="ml-1 border-solid border-slate-200 text-center">
-			@openChat(file)
-			@joinedTheChat(file)
-			@pinnedOriginal(file)
-			<h1
- 				if file.IsTodo {
-					data-todo="Todo"
-				} else {
-					data-todo="Complete"
-				}
- 				if file.IssueCount > 0 {
-					data-has-issues="Yes"
-				} else {
-					data-has-issues="No"
-				}
- 				data-issue-count={ fmt.Sprint(file.IssueCount) }
- 				data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
- 				class="font-bold mt-4 mb-20 text-4xl text-center text-sky-900 w-3/5 mx-auto"
-			>{ file.FrontMatter.Source.Title }</h1>
-		</header>
-		<main style="counter-reset:sidenote">
-			<style> mark { background-color: #fef08a } </style>
-			if file.IsTodo {
-				@prioritiseThisChat()
-				@contributeToThisChat(file)
-			} else {
-				@sponsorThisChat()
-				@attribution(file)
-			}
-			@Unsafe(file.Html)
-			@leftTheChat(file)
-			@helloFromMarcus(file)
-		</main>
-	</article>
+templ Sidenote(name string) {
+	<label
+ 		for={ "sidenote-" + name }
+ 		class="[counter-increment:sidenote] after:content-[counter(sidenote)] after:-top-1 after:left-0 after:align-baseline after:text-sm after:relative font-serif after:bg-white after:rounded-md after:shadow after:text-gray-600 after:py-1 after:px-2"
+	></label>
+	<span
+ 		id={ "sidenote-" + name }
+ 		class="z-20 block bg-white rounded-md shadow w-1/2 mr-[-5%] sm:mr-[-10%] md:mr-[-15%] lg:mr-[-25%] float-right clear-right text-sm relative p-4 before:content-[counter(sidenote)_&#39;.&#39;] before:float-left m-2 before:mr-1 before:text-gray-500 leading-5 align-middle transition-all"
+	>
+		{ children... }
+	</span>
+}
+
+templ GitHubSidenoteLink(url string, title string) {
+	<a
+ 		href={ templ.URL(url) }
+ 		class="z-10 block transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-yellow-800/20 hover:shadow-yellow-600/40 rounded-md bg-gradient-to-br from-yellow-200 from-10% to-amber-200 hover:from-yellow-100 hover:from-70% hover:to-amber-200 xl:block w-2/5 mr-[-5%] md:mr-[-10%] lg:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
+	>
+		<span class="text-yellow-900 font-bold mr-0.5">
+			<img src="/assets/images/github-mark.svg" class="h-4 w-4 inline-block relative top-[-1px] mr-0.5"/> { title }
+		</span>
+		<span class="text-yellow-800">
+			{ children... }
+		</span>
+	</a>
 }
 
 templ RenderChat(file *File) {
-	@Base(file.FrontMatter.Source.Title, chat(file))
+	@Base(file.FrontMatter.Source.Title) {
+		<article class="p-8 relative max-w-2xl mx-auto" data-pagefind-body>
+			<header class="ml-1 border-solid border-slate-200 text-center">
+				@openChat(file)
+				<div class="mb-4">
+					@SpeakerStatusChange(file.FrontMatter.Speakers) {
+						joined the chat
+					}
+				</div>
+				<div class="mb-16">
+					@pinnedOriginal(file)
+				</div>
+				<h1
+ 					class="font-bold mt-4 mb-20 text-4xl text-center text-transparent bg-clip-text bg-gradient-to-br from-sky-500 to-purple-500 w-3/5 mx-auto"
+ 					if file.IsTodo {
+						data-todo="Todo"
+					} else {
+						data-todo="Complete"
+					}
+ 					if file.IssueCount > 0 {
+						data-has-issues="Yes"
+					} else {
+						data-has-issues="No"
+					}
+ 					data-issue-count={ fmt.Sprint(file.IssueCount) }
+ 					data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
+				>{ file.FrontMatter.Source.Title }</h1>
+			</header>
+			<main style="counter-reset:sidenote" hx-boost="true">
+				<style> mark { background-color: #fef08a } </style>
+				if file.IsTodo {
+					@prioritiseThisChat()
+					@contributeToThisChat(file)
+				} else {
+					@sponsorThisChat()
+					@attribution(file)
+				}
+				@Unsafe(file.Html)
+				@SpeakerStatusChange(file.FrontMatter.Speakers) {
+					left the chat
+				}
+				@helloFromMarcus(file)
+			</main>
+		</article>
+	}
 }
