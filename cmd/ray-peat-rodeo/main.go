@@ -13,6 +13,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
@@ -22,6 +23,7 @@ import (
 	meta "github.com/yuin/goldmark-meta"
 	gmExtension "github.com/yuin/goldmark/extension"
 	gparser "github.com/yuin/goldmark/parser"
+	"gopkg.in/yaml.v3"
 )
 
 func main() {
@@ -76,6 +78,20 @@ func main() {
 	// 	log.Panicf("Failed to remove build directory: %v", err)
 	// }
 
+	cachePath := "./internal/http_cache.yml"
+	cacheBytes, err := os.ReadFile(cachePath)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to read cache file '%v': %v", cachePath, err))
+	}
+
+	cacheData := map[string]map[string]string{}
+	err = yaml.Unmarshal(cacheBytes, cacheData)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to parse YAML contents of cache file '%v': %v", cachePath, err))
+	}
+
+	httpCache := cache.NewHTTPCache(cacheData)
+
 	var waitGroup sync.WaitGroup
 
 	filesChannel := make(chan Result[*File], len(filePaths))
@@ -101,6 +117,7 @@ func main() {
 			parserContext := gparser.NewContext()
 			parserContext.Set(markdown.PermalinkKey, permalink)
 			parserContext.Set(markdown.IDKey, id)
+			parserContext.Set(markdown.HTTPCache, httpCache)
 
 			err = markdownParser.Convert(markdownBytes, &html, gparser.WithContext(parserContext))
 			if err != nil {
@@ -145,6 +162,17 @@ func main() {
 
 	waitGroup.Wait()
 
+	cacheHitsData := httpCache.GetHits()
+	cacheHits, err := yaml.Marshal(cacheHitsData)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to marshal cache hits to YAML: %v", err))
+	}
+
+	err = os.WriteFile(cachePath, cacheHits, 0755)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to write cache hits to file '%v': %v", cachePath, err))
+	}
+
 	var allFiles []*File
 	close(filesChannel)
 	for result := range filesChannel {
@@ -187,7 +215,11 @@ func main() {
 			log.Panicf("Failed to create HTML for mention: %v", err)
 		}
 
-		component := MentionPage(primaryMentionPart, secondaries)
+		empty := ast.MentionPart{Cardinal: "", Prefix: ""}
+		primaries := secondaries[empty]
+		delete(secondaries, empty)
+
+		component := MentionPage(primaryMentionPart, primaries, secondaries)
 		component.Render(context.Background(), mentionFile)
 		log.Printf("Wrote %v", path)
 	}

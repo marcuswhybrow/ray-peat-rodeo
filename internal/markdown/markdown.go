@@ -22,3 +22,4 @@ type FrontMatter struct {
 var PermalinkKey = parser.NewContextKey()
 var IDKey = parser.NewContextKey()
 var SourceKey = parser.NewContextKey()
+var HTTPCache = parser.NewContextKey()

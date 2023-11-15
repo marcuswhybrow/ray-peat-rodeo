@@ -1,11 +1,15 @@
 package ast
 
 import (
+	"encoding/json"
 	"fmt"
 	"html"
+	"io"
+	"net/http"
 	"net/url"
 	"strings"
 
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	gast "github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
@@ -65,7 +69,8 @@ func (m *Mention) VignetteHTML(source []byte, radius int) string {
 	panic("Failed to find parent speaker block for mention node")
 }
 
-// Recursive search of tree for a target Node return Node text before and after
+// Recursive search of tree for a target Node that returns the Node text before
+// and after the target.
 func CutText(source []byte, root gast.Node, target gast.Node, found bool) (string, string, bool) {
 
 	if root.HasChildren() {
@@ -84,11 +89,10 @@ func CutText(source []byte, root gast.Node, target gast.Node, found bool) (strin
 		// Block level elements (paragraphs) don't have any spaces when inline
 		isBlock := root.Type() == gast.TypeBlock
 		if isBlock {
-			if len(left) > 0 {
-				left += " "
-			}
-			if len(right) > 0 {
+			if found {
 				right += " "
+			} else {
+				left += " "
 			}
 		}
 
@@ -106,6 +110,50 @@ func CutText(source []byte, root gast.Node, target gast.Node, found bool) (strin
 type MentionPart struct {
 	Cardinal string
 	Prefix   string
+	UrlTitle string
+	IsURL    bool
+}
+
+func NewMentionPart(cardinal, prefix string, httpCache *cache.HTTPCache) *MentionPart {
+	mp := &MentionPart{
+		Cardinal: strings.Trim(cardinal, " "),
+		Prefix:   strings.Trim(prefix, " "),
+	}
+
+	if len(mp.Prefix) == 0 {
+		url, err := url.Parse(mp.Cardinal)
+		if err == nil && url.IsAbs() {
+			mp.IsURL = true
+
+			doiHost := url.Hostname() == "doi.org"
+
+			// All DOIs start with the number 10 followed by a period
+			doiPath := strings.HasPrefix(url.Path, "/10.")
+
+			if doiHost && doiPath {
+				mp.UrlTitle = <-httpCache.GetJSON(mp.Cardinal, "title", func(res *http.Response) string {
+
+					body, err := io.ReadAll(res.Body)
+					if err != nil {
+						panic(fmt.Sprintf("Failed to read body of HTTP response for url '%v': %v", mp.Cardinal, err))
+					}
+
+					data := DOIData{}
+					err = json.Unmarshal(body, &data)
+					if err != nil {
+
+						panic(fmt.Sprintf("Failed to unmarshal JSON response for url '%v': %v", mp.Cardinal, err))
+					}
+
+					return data.Title
+				})
+			} else {
+				mp.UrlTitle = <-httpCache.Get(mp.Cardinal, "title", cache.H1OrTitleHandler)
+			}
+		}
+	}
+
+	return mp
 }
 
 func (p *MentionPart) PrefixFirst() string {
@@ -187,4 +235,8 @@ func (m *Mention) Ultimate() *MentionPart {
 	} else {
 		return &m.Primary
 	}
+}
+
+type DOIData struct {
+	Title string
 }

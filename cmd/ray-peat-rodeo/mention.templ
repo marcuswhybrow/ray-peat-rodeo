@@ -1,34 +1,57 @@
 package main
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
-import "fmt"
 
-templ MentionPage(primary ast.MentionPart, secondaries map[ast.MentionPart]map[*File][]*ast.Mention) {
+templ MentionPage(primary ast.MentionPart, primaries map[*File][]*ast.Mention, secondaries map[ast.MentionPart]map[*File][]*ast.Mention) {
 	@Base("Mention") {
 		<div class="max-w-2xl mx-auto">
 			<h1 class="mb-4 mt-16 text-3xl text-center">{ primary.CardinalFirst() }</h1>
+			if len(primaries) > 0 {
+				@mentions(primaries)
+			}
 			for secondary, files := range secondaries {
-				if len(secondary.CardinalFirst()) > 0 {
-					<h2 class="text-3xl font-bold mb-8 mt-16">{ secondary.CardinalFirst() } ({ fmt.Sprint(len(files)) })</h2>
-				}
-				for file, mentions := range files {
-					<div class="rounded border p-8 mb-4">
-						<div class="mb-4">
-							<a class="underline" href={ templ.URL(file.Permalink) }>{ file.FrontMatter.Source.Title }</a>
-						</div>
-						for _, mention := range mentions {
-							<blockquote
- 								class={
-									"mt-4 p-8 rounded shadow",
-									templ.KV("text-gray-900 bg-gray-100", ast.IsRaySpeaking(mention)),
-									templ.KV("text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200", !ast.IsRaySpeaking(mention)),
-								}
-							>
-								@Unsafe(string(mention.VignetteHTML(file.Markdown, 100)))
-							</blockquote>
-						}
+				<div class="text-center text-sm mt-16">{ primary.CardinalFirst() }</div>
+				if secondary.IsURL {
+					<div class="text-center text-sm mt-2 mb-2">
+						<a
+ 							href={ templ.URL(secondary.Cardinal) }
+ 							class="border-b hover:border-b-2"
+						>
+							{ secondary.CardinalFirst() }
+						</a>
 					</div>
 				}
+				<h2 class="text-3xl text-center">
+					if secondary.IsURL {
+						{ secondary.UrlTitle }
+					} else {
+						{ secondary.CardinalFirst() }
+					}
+				</h2>
+				<div class="mt-8">
+					@mentions(files)
+				</div>
+			}
+		</div>
+	}
+}
+
+templ mentions(files map[*File][]*ast.Mention) {
+	for file, mentions := range files {
+		<div class="rounded border p-8 mb-4">
+			<div class="mb-4">
+				<a class="border-b hover:border-b-2" href={ templ.URL(file.Permalink) }>{ file.FrontMatter.Source.Title }</a>
+			</div>
+			for _, mention := range mentions {
+				<blockquote
+ 					class={
+						"mt-4 p-8 rounded shadow",
+						templ.KV("text-gray-900 bg-gray-100", ast.IsRaySpeaking(mention)),
+						templ.KV("text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200", !ast.IsRaySpeaking(mention)),
+					}
+				>
+					@Unsafe(string(mention.VignetteHTML(file.Markdown, 100)))
+				</blockquote>
 			}
 		</div>
 	}

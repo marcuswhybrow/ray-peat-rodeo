@@ -27,10 +27,10 @@ func (g *GitHubIssue) Kind() gast.NodeKind {
 	return KindGitHubIssue
 }
 
-func NewGitHubIssue(id int) *GitHubIssue {
+func NewGitHubIssue(id int, title string) *GitHubIssue {
 	return &GitHubIssue{
 		BaseInline: gast.BaseInline{},
 		Id:         id,
-		Title:      fmt.Sprintf("Issue #%v", id),
+		Title:      title,
 	}
 }

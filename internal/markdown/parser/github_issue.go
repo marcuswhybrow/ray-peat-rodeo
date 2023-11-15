@@ -1,9 +1,15 @@
 package parser
 
 import (
+	"fmt"
+	"net/http"
 	"strconv"
 	"strings"
 
+	"github.com/PuerkitoBio/goquery"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	gast "github.com/yuin/goldmark/ast"
 	gparser "github.com/yuin/goldmark/parser"
@@ -43,6 +49,19 @@ func (p *githubIssueParser) Parse(parent gast.Node, block text.Reader, pc gparse
 		return nil
 	}
 
+	httpCache := pc.Get(markdown.HTTPCache).(*cache.HTTPCache)
+	url := global.GitHubIssueLink(id)
+	key := "title"
+	handler := func(res *http.Response) string {
+		defer res.Body.Close()
+		doc, err := goquery.NewDocumentFromReader(res.Body)
+		if err != nil {
+			panic(fmt.Sprintf("Failed to parse HTTP response for url: %v", res.Request.URL.String()))
+		}
+		return doc.Find("h1 bdi").Text()
+	}
+	title := <-httpCache.Get(url, key, handler)
+
 	block.Advance(len(inside) + 2)
-	return ast.NewGitHubIssue(id)
+	return ast.NewGitHubIssue(id, title)
 }
