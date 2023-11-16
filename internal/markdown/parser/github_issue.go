@@ -9,7 +9,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	gast "github.com/yuin/goldmark/ast"
 	gparser "github.com/yuin/goldmark/parser"
@@ -49,7 +48,7 @@ func (p *githubIssueParser) Parse(parent gast.Node, block text.Reader, pc gparse
 		return nil
 	}
 
-	httpCache := pc.Get(markdown.HTTPCache).(*cache.HTTPCache)
+	httpCache := pc.Get(ast.HTTPCache).(*cache.HTTPCache)
 	url := global.GitHubIssueLink(id)
 	key := "title"
 	handler := func(res *http.Response) string {

@@ -7,9 +7,9 @@ import (
 
 func IsRaySpeaking(node gast.Node) bool {
 	for parent := node.Parent(); parent != nil; parent = parent.Parent() {
-		speaker, ok := parent.(*ast.Speaker)
+		utterance, ok := parent.(*ast.Utterance)
 		if ok {
-			return speaker.IsRay()
+			return utterance.IsRay()
 		}
 	}
 

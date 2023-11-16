@@ -5,13 +5,12 @@ import (
 	"net/url"
 	"slices"
 
-	meta "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
-	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark/ast"
 )
 
 type Timecode struct {
-	ast.BaseInline
+	BaseInline
+	FrontMatterNode
 	Hours   int
 	Minutes int
 	Seconds int
@@ -27,10 +26,7 @@ func (t *Timecode) Terse() string {
 }
 
 func (t *Timecode) ExternalUrl() (*url.URL, error) {
-	var frontMatter meta.FrontMatter
-	mapstructure.Decode(t.OwnerDocument().Meta(), &frontMatter)
-
-	sourceUrl, err := url.Parse(frontMatter.Source.Url)
+	sourceUrl, err := url.Parse(t.FrontMatter().Source.Url)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse frontmatter source url: %v", err)
 	}
@@ -76,6 +72,6 @@ func (n *Timecode) Kind() ast.NodeKind {
 
 func NewTimecode() *Timecode {
 	return &Timecode{
-		BaseInline: ast.BaseInline{},
+		BaseInline: BaseInline{},
 	}
 }

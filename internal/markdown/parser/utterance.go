@@ -15,13 +15,13 @@ import (
 var prevSpeakersKey = parser.NewContextKey()
 var isRaySpeakingKey = parser.NewContextKey()
 
-type SpeakerParser struct{}
+type UtteranceParser struct{}
 
 func NewSpeakerParser() parser.BlockParser {
-	return &SpeakerParser{}
+	return &UtteranceParser{}
 }
 
-func (s *SpeakerParser) Trigger() []byte {
+func (s *UtteranceParser) Trigger() []byte {
 	return []byte{
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 		'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -45,50 +45,30 @@ func getShortName(line []byte) ([]byte, int) {
 	return line[:colon], colon + 1
 }
 
-func (s *SpeakerParser) Open(parent gmAst.Node, reader text.Reader, pc parser.Context) (gmAst.Node, parser.State) {
+func (s *UtteranceParser) Open(parent gmAst.Node, reader text.Reader, pc parser.Context) (gmAst.Node, parser.State) {
 	line, _ := reader.PeekLine()
 	shortName, bytesConsumed := getShortName(line)
 
 	speaker := ast.NewSpeaker()
-	speaker.ShortName = strings.Trim(string(shortName), " ")
+	speaker.SpeakerID = strings.Trim(string(shortName), " ")
 
 	pc.Set(isRaySpeakingKey, speaker.IsRay())
 
-	if len(speaker.ShortName) <= 0 {
+	if len(speaker.SpeakerID) <= 0 {
 		return nil, parser.HasChildren | parser.Continue
 	}
 
-	var prevSpeakers []*ast.Speaker
+	var prevSpeakers []*ast.Utterance
 	prevSpeakersVal := pc.Get(prevSpeakersKey)
 	if prevSpeakersVal == nil {
-		prevSpeakers = []*ast.Speaker{}
+		prevSpeakers = []*ast.Utterance{}
 	} else {
-		prevSpeakers = *prevSpeakersVal.(*[]*ast.Speaker)
+		prevSpeakers = *prevSpeakersVal.(*[]*ast.Utterance)
 	}
 
-	var prevSpeaker *ast.Speaker
-	if len(prevSpeakers) >= 1 {
-		prevSpeaker = prevSpeakers[len(prevSpeakers)-1]
-	}
-
-	var penultimateSpeaker *ast.Speaker
-	if len(prevSpeakers) >= 2 {
-		penultimateSpeaker = prevSpeakers[len(prevSpeakers)-2]
-	}
-
-	speaker.IsHello = !slices.ContainsFunc(prevSpeakers, func(s *ast.Speaker) bool {
-		return s.ShortName == speaker.ShortName
+	speaker.IsNewSpeaker = !slices.ContainsFunc(prevSpeakers, func(s *ast.Utterance) bool {
+		return s.SpeakerID == speaker.SpeakerID
 	})
-
-	if speaker.IsHello {
-		speaker.IsRetorting = false
-	} else if speaker.IsRay() && penultimateSpeaker.ShortName == speaker.ShortName {
-		speaker.IsRetorting = prevSpeaker.IsRetorting
-	} else if !speaker.IsRay() && prevSpeaker.IsRay() && penultimateSpeaker.ShortName == speaker.ShortName {
-		speaker.IsRetorting = true
-	} else {
-		speaker.IsRetorting = false
-	}
 
 	prevSpeakers = append(prevSpeakers, speaker)
 	pc.Set(prevSpeakersKey, &prevSpeakers)
@@ -97,12 +77,12 @@ func (s *SpeakerParser) Open(parent gmAst.Node, reader text.Reader, pc parser.Co
 	return speaker, parser.HasChildren
 }
 
-func (s *SpeakerParser) Continue(node gmAst.Node, reader text.Reader, pc parser.Context) parser.State {
-	speaker := node.(*ast.Speaker)
+func (s *UtteranceParser) Continue(node gmAst.Node, reader text.Reader, pc parser.Context) parser.State {
+	speaker := node.(*ast.Utterance)
 	line, _ := reader.PeekLine()
 	shortName, bytesConsumed := getShortName(line)
 
-	if shortName != nil && string(shortName) != speaker.ShortName {
+	if shortName != nil && string(shortName) != speaker.SpeakerID {
 		return parser.Close
 	}
 
@@ -110,13 +90,13 @@ func (s *SpeakerParser) Continue(node gmAst.Node, reader text.Reader, pc parser.
 	return parser.HasChildren | parser.Continue
 }
 
-func (s *SpeakerParser) Close(node gmAst.Node, reader text.Reader, pc parser.Context) {
+func (s *UtteranceParser) Close(node gmAst.Node, reader text.Reader, pc parser.Context) {
 }
 
-func (s *SpeakerParser) CanInterruptParagraph() bool {
+func (s *UtteranceParser) CanInterruptParagraph() bool {
 	return false
 }
 
-func (s *SpeakerParser) CanAcceptIndentedLine() bool {
+func (s *UtteranceParser) CanAcceptIndentedLine() bool {
 	return false
 }

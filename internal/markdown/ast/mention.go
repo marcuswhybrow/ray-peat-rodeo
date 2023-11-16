@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	gast "github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/parser"
 	gparser "github.com/yuin/goldmark/parser"
@@ -141,7 +140,6 @@ func NewMentionPart(cardinal, prefix string, httpCache *cache.HTTPCache) *Mentio
 					data := DOIData{}
 					err = json.Unmarshal(body, &data)
 					if err != nil {
-
 						panic(fmt.Sprintf("Failed to unmarshal JSON response for url '%v': %v", mp.Cardinal, err))
 					}
 
@@ -209,7 +207,7 @@ func NewMention(pc gparser.Context, primary, secondary MentionPart, displayText 
 	counts[primary] = count
 	pc.Set(perMentionCountKey, counts)
 
-	filePermalink := pc.Get(markdown.PermalinkKey).(string)
+	filePermalink := pc.Get(PermalinkKey).(string)
 	id := primary.ID()
 	if count > 1 {
 		id += "-" + fmt.Sprint(count)
@@ -223,7 +221,7 @@ func NewMention(pc gparser.Context, primary, secondary MentionPart, displayText 
 		Secondary:  secondary,
 		Label:      displayText,
 		ID:         id,
-		FileID:     pc.Get(markdown.IDKey).(string),
+		FileID:     pc.Get(IDKey).(string),
 		Permalink:  permalink,
 		Occurance:  count,
 	}

@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	gast "github.com/yuin/goldmark/ast"
 	gparser "github.com/yuin/goldmark/parser"
@@ -52,7 +51,7 @@ func (p *mentionParser) Parse(parent gast.Node, block text.Reader, pc gparser.Co
 	pCardinal, pPrefix, _ := strings.Cut(primary, ",")
 	sCardinal, sPrefix, _ := strings.Cut(secondary, ",")
 
-	httpCache := pc.Get(markdown.HTTPCache).(*cache.HTTPCache)
+	httpCache := pc.Get(ast.HTTPCache).(*cache.HTTPCache)
 	primaryPart := ast.NewMentionPart(pCardinal, pPrefix, httpCache)
 	secondaryPart := ast.NewMentionPart(sCardinal, sPrefix, httpCache)
 

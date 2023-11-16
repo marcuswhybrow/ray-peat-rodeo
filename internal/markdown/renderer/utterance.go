@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"html/template"
 
-	meta "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
-	"github.com/mitchellh/mapstructure"
 	gast "github.com/yuin/goldmark/ast"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
@@ -15,12 +13,12 @@ import (
 
 const RETORT_MAX_LEN = 50
 
-type SpeakerHTMLRenderer struct {
+type UtteranceHTMLRenderer struct {
 	html.Config
 }
 
-func NewSpeakerHTMLRenderer(opts ...html.Option) renderer.NodeRenderer {
-	r := &SpeakerHTMLRenderer{
+func NewUtteranceHTMLRenderer(opts ...html.Option) renderer.NodeRenderer {
+	r := &UtteranceHTMLRenderer{
 		Config: html.NewConfig(),
 	}
 	for _, opt := range opts {
@@ -29,68 +27,90 @@ func NewSpeakerHTMLRenderer(opts ...html.Option) renderer.NodeRenderer {
 	return r
 }
 
-func (r *SpeakerHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+func (r *UtteranceHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindSpeaker, r.renderSpeaker)
 }
 
 var SpeakerAttributeFilter = html.GlobalAttributeFilter
 
-func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
+func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
 	if entering {
-		speaker := node.(*ast.Speaker)
+		utterance := node.(*ast.Utterance)
 
-		var frontMatter meta.FrontMatter
-		mapstructure.Decode(speaker.OwnerDocument().Meta(), &frontMatter)
+		// It's pleasant to visually squish many small replies together if it's
+		// obvious who's speaking by the context alone.
+		isShort := func() bool {
+			if utterance.IsNewSpeaker {
+				return false
+			}
 
-		longName := frontMatter.Speakers[speaker.ShortName]
+			if !utterance.PrevAndNextIsSameSpeaker() {
+				return false
+			}
+
+			if len(utterance.Text(source)) > 50 {
+				return false
+			}
+
+			// Utterances by other speakers may only be squished if Ray was
+			// previously speaking. That's because all utterances by other speakers
+			// are visually indistinguisable when squished.
+			if !utterance.IsRay() {
+				return utterance.PrevIsRay()
+			}
+
+			// However Ray's utterances are always visually distinguishable from any
+			// utterance by another speaker.
+			return true
+		}()
 
 		t, err := template.New("openSpeaker").Parse(`
       <div 
         class="
           font-sans relative first:mt-0
 
-          {{ if .IsHello }} 
+          {{ if .Utterance.IsNewSpeaker }} 
             hello
           {{ end }}
 
-          {{ if .IsRay }}
+          {{ if .Utterance.IsRay }}
             is-ray ml-1 mr-16
           {{ else }} 
             ml-16 mr-1
           {{ end }}
 
-          {{ if .IsRetorting }}
+          {{ if .IsShort }}
             retort -mt-4 [.is-short+&>.name]
           {{ else }} 
             mt-4
           {{ end }}
         "
       >
-        {{ if not .IsRetorting }}
+        {{ if not .IsShort }}
           <div 
             class="
               text-sm mt-8 mb-4 block
 
-              {{ if .IsRay }} 
+              {{ if .Utterance.IsRay }} 
                 text-gray-400
               {{ else }} 
                 text-sky-400
               {{ end }}
             "
-          >{{ .LongName }}</div>
+          >{{ .Utterance.SpeakerName }}</div>
         {{ end }}
 
         <div 
           class="
             p-8 rounded shadow [&>*]:mb-6 [&>*:last-child]:mb-0 [&>blockquote]:pl-4 [&>blockquote]:text-sm 
 
-            {{ if .IsRetorting }} 
+            {{ if .IsShort }} 
               inline-block
             {{ else }}
               block
             {{ end }}
 
-            {{ if .IsRay }} 
+            {{ if .Utterance.IsRay }} 
               text-gray-900 bg-gray-100
             {{ else }} 
               text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200
@@ -104,10 +124,8 @@ func (s *SpeakerHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, nod
 		}
 
 		t.Execute(w, map[string]interface{}{
-			"LongName":    longName,
-			"IsRetorting": speaker.IsRetorting,
-			"IsRay":       speaker.IsRay(),
-			"IsHello":     speaker.IsHello,
+			"IsShort":   isShort,
+			"Utterance": utterance,
 		})
 	} else {
 		_, _ = w.WriteString("</div></div>")

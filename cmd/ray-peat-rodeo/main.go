@@ -14,7 +14,6 @@ import (
 	"sync"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/parser"
@@ -115,16 +114,16 @@ func main() {
 
 			var html bytes.Buffer
 			parserContext := gparser.NewContext()
-			parserContext.Set(markdown.PermalinkKey, permalink)
-			parserContext.Set(markdown.IDKey, id)
-			parserContext.Set(markdown.HTTPCache, httpCache)
+			parserContext.Set(ast.PermalinkKey, permalink)
+			parserContext.Set(ast.IDKey, id)
+			parserContext.Set(ast.HTTPCache, httpCache)
 
 			err = markdownParser.Convert(markdownBytes, &html, gparser.WithContext(parserContext))
 			if err != nil {
 				log.Panicf("Failed to parse markdown: %v\n", err)
 			}
 
-			var frontMatter markdown.FrontMatter
+			var frontMatter ast.FrontMatter
 			err = mapstructure.Decode(meta.Get(parserContext), &frontMatter)
 			if err != nil {
 				filesChannel <- Result[*File]{value: (*File)(nil), err: err}
@@ -271,7 +270,7 @@ type Result[T any] struct {
 }
 
 type File struct {
-	FrontMatter   markdown.FrontMatter
+	FrontMatter   ast.FrontMatter
 	IsTodo        bool
 	Path          string
 	ID            string
