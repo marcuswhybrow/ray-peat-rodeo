@@ -1,49 +1,82 @@
 package ast
 
 import (
-	"encoding/json"
 	"fmt"
-	"html"
-	"io"
-	"net/http"
-	"net/url"
-	"strings"
 
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	gast "github.com/yuin/goldmark/ast"
-	"github.com/yuin/goldmark/parser"
 	gparser "github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/text"
+	"golang.org/x/net/html"
 )
 
-var KindMention = gast.NewNodeKind("Mention")
+var countKey = gparser.NewContextKey()
 
 type Mention struct {
-	gast.BaseInline
-	Primary   MentionPart
-	Secondary MentionPart
-	Label     string
-	Permalink string
-	Occurance int
-	ID        string
-	FileID    string
+	BaseInline
+	FileNode
+
+	Mentionable Mentionable
+	Label       string
+	Occurance   int
+	File        File
+
+	Source            Source
+	MentionableSource Source
+}
+
+type Source struct {
+	Row     int
+	Col     int
+	Segment text.Segment
+}
+
+func NewMention(pc gparser.Context, mentionable Mentionable, label string) *Mention {
+	count := pc.ComputeIfAbsent(countKey, func() interface{} {
+		return map[Mentionable]int{}
+	}).(map[Mentionable]int)
+
+	count[mentionable] += 1
+	pc.Set(countKey, count)
+
+	file := GetFile(pc)
+
+	return &Mention{
+		BaseInline:  BaseInline{},
+		Mentionable: mentionable,
+		Label:       label,
+		File:        file,
+		Occurance:   count[mentionable],
+	}
+}
+
+func (m *Mention) LocalID() string {
+	id := m.Mentionable.ID()
+	if m.Occurance > 1 {
+		id += "-" + fmt.Sprint(m.Occurance)
+	}
+	return id
+}
+
+func (m *Mention) ID() string {
+	return m.LocalID() + "@" + m.File.GetID()
+}
+
+func (m *Mention) Permalink() string {
+	return m.File.GetPermalink() + "#" + m.LocalID()
 }
 
 func (m *Mention) Title() string {
 	if len(m.Label) > 0 {
 		return m.Label
 	} else {
-		return m.Ultimate().PrefixFirst()
+		return m.Mentionable.Ultimate().PrefixFirst()
 	}
-}
-
-func (m *Mention) CatalogPermalink() string {
-	return "/" + m.Primary.ID() + "#" + m.FileID + "-" + m.ID
 }
 
 func (m *Mention) VignetteHTML(source []byte, radius int) string {
 	for p := m.Parent(); p != nil; p = p.Parent() {
 		if p.Kind() == KindSpeaker {
-			before, after, _ := CutText(source, p, m, false)
+			before, after, _ := cutText(source, p, m, false)
 
 			rBefore := []rune(before)
 			rAfter := []rune(after)
@@ -54,7 +87,12 @@ func (m *Mention) VignetteHTML(source []byte, radius int) string {
 			}
 			result = append(result, rBefore[max(0, len(rBefore)-radius):]...)
 
-			result = append(result, []rune(fmt.Sprintf(`<mark><a id="%v" href="%v" class="underline">%s</a></mark>`, m.FileID+"-"+m.ID, m.Permalink, m.Text(source)))...)
+			result = append(result, []rune(fmt.Sprintf(
+				`<mark><a id="%v" href="%v" class="underline">%s</a></mark>`,
+				m.ID(),
+				m.Permalink(),
+				m.Text(source),
+			))...)
 
 			result = append(result, rAfter[:min(len(rAfter), radius)]...)
 
@@ -68,9 +106,27 @@ func (m *Mention) VignetteHTML(source []byte, radius int) string {
 	panic("Failed to find parent speaker block for mention node")
 }
 
+func (m *Mention) Dump(source []byte, level int) {
+	gast.DumpHelper(m, source, level, nil, nil)
+}
+
+func (m *Mention) Text(source []byte) []byte {
+	if len(m.Label) > 0 {
+		return []byte(m.Label)
+	} else {
+		return []byte(m.Mentionable.Ultimate().PrefixFirst())
+	}
+}
+
+var KindMention = gast.NewNodeKind("Mention")
+
+func (m *Mention) Kind() gast.NodeKind {
+	return KindMention
+}
+
 // Recursive search of tree for a target Node that returns the Node text before
 // and after the target.
-func CutText(source []byte, root gast.Node, target gast.Node, found bool) (string, string, bool) {
+func cutText(source []byte, root gast.Node, target gast.Node, found bool) (string, string, bool) {
 
 	if root.HasChildren() {
 		left, right := "", ""
@@ -78,7 +134,7 @@ func CutText(source []byte, root gast.Node, target gast.Node, found bool) (strin
 			if child == target {
 				found = true
 			} else {
-				l, r, f := CutText(source, child, target, found)
+				l, r, f := cutText(source, child, target, found)
 				left += l
 				right += r
 				found = f
@@ -104,137 +160,4 @@ func CutText(source []byte, root gast.Node, target gast.Node, found bool) (strin
 			return text, "", found
 		}
 	}
-}
-
-type MentionPart struct {
-	Cardinal string
-	Prefix   string
-	UrlTitle string
-	IsURL    bool
-}
-
-func NewMentionPart(cardinal, prefix string, httpCache *cache.HTTPCache) *MentionPart {
-	mp := &MentionPart{
-		Cardinal: strings.Trim(cardinal, " "),
-		Prefix:   strings.Trim(prefix, " "),
-	}
-
-	if len(mp.Prefix) == 0 {
-		url, err := url.Parse(mp.Cardinal)
-		if err == nil && url.IsAbs() {
-			mp.IsURL = true
-
-			doiHost := url.Hostname() == "doi.org"
-
-			// All DOIs start with the number 10 followed by a period
-			doiPath := strings.HasPrefix(url.Path, "/10.")
-
-			if doiHost && doiPath {
-				mp.UrlTitle = <-httpCache.GetJSON(mp.Cardinal, "title", func(res *http.Response) string {
-
-					body, err := io.ReadAll(res.Body)
-					if err != nil {
-						panic(fmt.Sprintf("Failed to read body of HTTP response for url '%v': %v", mp.Cardinal, err))
-					}
-
-					data := DOIData{}
-					err = json.Unmarshal(body, &data)
-					if err != nil {
-						panic(fmt.Sprintf("Failed to unmarshal JSON response for url '%v': %v", mp.Cardinal, err))
-					}
-
-					return data.Title
-				})
-			} else {
-				mp.UrlTitle = <-httpCache.Get(mp.Cardinal, "title", cache.H1OrTitleHandler)
-			}
-		}
-	}
-
-	return mp
-}
-
-func (p *MentionPart) PrefixFirst() string {
-	return strings.Trim(fmt.Sprintf("%v %v", p.Prefix, p.Cardinal), " ")
-}
-
-func (p *MentionPart) CardinalFirst() string {
-	result := p.Cardinal
-	if len(p.Prefix) > 0 {
-		result += ", " + p.Prefix
-	}
-	return result
-}
-
-func (p *MentionPart) ParseUrl() (*url.URL, error) {
-	if len(p.Prefix) > 0 {
-		return nil, nil
-	}
-	return url.Parse(p.Cardinal)
-}
-
-func (p *MentionPart) ID() string {
-	id := p.CardinalFirst()
-	id = strings.ToLower(id)
-	id = strings.ReplaceAll(id, " ", "-")
-	return id
-}
-
-func (m *Mention) Dump(source []byte, level int) {
-	gast.DumpHelper(m, source, level, nil, nil)
-}
-
-func (m *Mention) Text(source []byte) []byte {
-	if len(m.Label) > 0 {
-		return []byte(m.Label)
-	} else {
-		return []byte(m.Ultimate().PrefixFirst())
-	}
-}
-
-func (m *Mention) Kind() gast.NodeKind {
-	return KindMention
-}
-
-var perMentionCountKey = parser.NewContextKey()
-
-func NewMention(pc gparser.Context, primary, secondary MentionPart, displayText string) *Mention {
-	counts := pc.ComputeIfAbsent(perMentionCountKey, func() interface{} {
-		return map[MentionPart]int{}
-	}).(map[MentionPart]int)
-	count := counts[primary]
-	count += 1
-	counts[primary] = count
-	pc.Set(perMentionCountKey, counts)
-
-	filePermalink := pc.Get(PermalinkKey).(string)
-	id := primary.ID()
-	if count > 1 {
-		id += "-" + fmt.Sprint(count)
-	}
-
-	permalink := filePermalink + "#" + id
-
-	return &Mention{
-		BaseInline: gast.BaseInline{},
-		Primary:    primary,
-		Secondary:  secondary,
-		Label:      displayText,
-		ID:         id,
-		FileID:     pc.Get(IDKey).(string),
-		Permalink:  permalink,
-		Occurance:  count,
-	}
-}
-
-func (m *Mention) Ultimate() *MentionPart {
-	if len(m.Secondary.Cardinal) > 0 || len(m.Secondary.Prefix) > 0 {
-		return &m.Secondary
-	} else {
-		return &m.Primary
-	}
-}
-
-type DOIData struct {
-	Title string
 }

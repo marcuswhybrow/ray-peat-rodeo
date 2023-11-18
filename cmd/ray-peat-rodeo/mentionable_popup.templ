@@ -1,0 +1,91 @@
+package main
+
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
+
+func title(m *ast.MentionablePart) string {
+	if m.IsURL() {
+		return m.URLTitle
+	}
+	return m.CardinalFirst()
+}
+
+templ MentionablePopup(mentionable ast.Mentionable, mentionsByFile ByFile[Mentions], otherMentionables []ast.Mentionable) {
+	<html data-pagefind-ignore>
+		<div class="hx-select">
+			<div class="pt-8 px-8 pb-8">
+				if mentionable.HasSecondary() {
+					<div
+ 						class={
+							"text-sm text-center text-gray-500 break-all",
+							templ.KV("break-all", mentionable.Primary.IsURL()),
+						}
+					>
+						{ title(&mentionable.Primary) }
+					</div>
+				}
+				<h3 class="text-center text-xl text-gray-600">
+					<a
+ 						href={ templ.URL(mentionable.Permalink()) }
+ 						class={
+							"border-b hover:border-b-2",
+							"border-b-gray-400 hover:border-b-gray-500",
+							templ.KV("break-all", mentionable.Ultimate().IsURL()),
+						}
+					>
+						{ title(mentionable.Ultimate()) }
+					</a>
+				</h3>
+			</div>
+			for file, mentions := range mentionsByFile {
+				<div>
+					<div
+ 						class="
+              px-8
+              pb-2 pt-2 
+              text-center sticky top-0 
+              bg-white/90 backdrop-blur-2xl
+            "
+					>
+						<a
+ 							class="
+                text-yellow-700 hover:text-yellow-800
+                border-b hover:border-b-2
+                border-b-yellow-600 hover:border-b-yellow-800
+              "
+ 							href={ templ.URL(file.Permalink) }
+						>
+							{ file.FrontMatter.Source.Title }
+						</a>
+					</div>
+					<div class="pt-4 pb-4">
+						<style> mark { padding: 2px; }</style>
+						for _, mention := range mentions {
+							<blockquote
+ 								class={ "px-8 pb-2 text-sm text-gray-900 [&>mark]:rounded-lg leading-5" }
+							>
+								@Unsafe(string(mention.VignetteHTML(file.Markdown, 50)))
+							</blockquote>
+						}
+					</div>
+				</div>
+			}
+			if len(otherMentionables) > 0 {
+				<div class="px-8 pb-8 pt-8 text-sm bg-sky-100">
+					<b>Also by { mentionable.Primary.Cardinal }</b>: 
+					for i, mentionable := range otherMentionables {
+						if i > 0 {
+							{ ", " }
+						}
+						<a
+ 							href={ templ.URL(mentionable.Permalink()) }
+ 							class="border-b hover:border-b-2"
+						>
+							{ mentionable.Ultimate().CardinalFirst() }
+						</a>
+					}
+					{ "." }
+				</div>
+			}
+		</div>
+	</html>
+}

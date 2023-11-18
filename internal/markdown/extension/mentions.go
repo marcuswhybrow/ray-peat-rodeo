@@ -11,26 +11,6 @@ import (
 
 var mentionsContextKey = gparser.NewContextKey()
 
-/*
-type MentionSignature struct {
-	Cardinal string
-	Prefix   string
-}
-
-type Mention struct {
-	Signature  MentionSignature
-	SubMention SubMention
-}
-
-type SubMention struct {
-	Signature MentionSignature
-}
-
-func Get(pc gparser.Context) []Mention {
-	return pc.Get(mentionsContextKey).([]Mention)
-}
-*/
-
 type mentions struct{}
 
 // Mentions is an extension for Goldmark that replaces [[mention]] with a link

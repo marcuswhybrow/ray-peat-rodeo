@@ -13,6 +13,7 @@ import (
 
 var mentionCountKey = gparser.NewContextKey()
 var mentionsKey = gparser.NewContextKey()
+var mentionablesKey = gparser.NewContextKey()
 
 func GetMentions(pc gparser.Context) []*ast.Mention {
 	return pc.ComputeIfAbsent(mentionsKey, func() interface{} {
@@ -34,7 +35,7 @@ func (p *mentionParser) Trigger() []byte {
 // Parses the mention tag which has several parts, some of which are optional.
 // [[Primary Mention, Prefix > Secondary Mention, Prefix | Display Text]]
 func (p *mentionParser) Parse(parent gast.Node, block text.Reader, pc gparser.Context) gast.Node {
-	line, _ := block.PeekLine()
+	line, segment := block.PeekLine()
 	if !bytes.HasPrefix(line, []byte{'[', '['}) {
 		return nil
 	}
@@ -45,23 +46,34 @@ func (p *mentionParser) Parse(parent gast.Node, block text.Reader, pc gparser.Co
 	}
 
 	signature, label, _ := strings.Cut(inside, "|")
-
 	primary, secondary, _ := strings.Cut(signature, ">")
 
 	pCardinal, pPrefix, _ := strings.Cut(primary, ",")
 	sCardinal, sPrefix, _ := strings.Cut(secondary, ",")
 
-	httpCache := pc.Get(ast.HTTPCache).(*cache.HTTPCache)
-	primaryPart := ast.NewMentionPart(pCardinal, pPrefix, httpCache)
-	secondaryPart := ast.NewMentionPart(sCardinal, sPrefix, httpCache)
+	httpCache := pc.Get(ast.HTTPCacheKey).(*cache.HTTPCache)
+	primaryPart := ast.NewMentionablePart(pCardinal, pPrefix, httpCache)
+	secondaryPart := ast.NewMentionablePart(sCardinal, sPrefix, httpCache)
 
-	mention := ast.NewMention(pc, *primaryPart, *secondaryPart, label)
+	mentionable := ast.Mentionable{
+		Primary:   primaryPart,
+		Secondary: secondaryPart,
+	}
 
-	mentions := GetMentions(pc)
-	mentions = append(mentions, mention)
-	pc.Set(mentionsKey, mentions)
+	mention := ast.NewMention(pc, mentionable, label)
+
+	row, _ := block.Position()
+	mentionSegment := segment.WithStop(segment.Start + len(inside) + 4)
+	mention.Source = ast.Source{
+		Row:     row,
+		Col:     block.LineOffset(),
+		Segment: mentionSegment,
+	}
 
 	block.Advance(4 + len(inside))
+
+	mention.File = ast.GetFile(pc)
+	mention.File.RegisterMention(mention)
 
 	return mention
 }

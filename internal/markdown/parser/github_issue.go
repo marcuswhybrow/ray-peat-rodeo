@@ -48,7 +48,7 @@ func (p *githubIssueParser) Parse(parent gast.Node, block text.Reader, pc gparse
 		return nil
 	}
 
-	httpCache := pc.Get(ast.HTTPCache).(*cache.HTTPCache)
+	httpCache := pc.Get(ast.HTTPCacheKey).(*cache.HTTPCache)
 	url := global.GitHubIssueLink(id)
 	key := "title"
 	handler := func(res *http.Response) string {

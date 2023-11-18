@@ -50,7 +50,7 @@ RP: If we extrapolate the curves for Alzheimer’s disease and obesity, it looks
 
 KM: For those of us who are aware of all the threats to our health, would avoidance seeking behavior and criticism of the culture be a logical focus? Do we still owe ourselves a life filled with fulfilling work, meaningful relationships, and self-knowledge?
 
-RP: If civilization doesn’t sink into disease and tyranny, those things have to happen. [[Melville, Herman > Bartleby, the Scrivener]] was [[Melville, Herman|Melville’s]] perception of the importance of avoidance of bad work, the kind of refusal everyone has to start making before constructive things can become possible.
+RP: If civilization doesn’t sink into disease and tyranny, those things have to happen. [[Melville, Herman > Bartleby\, the Scrivener]] was [[Melville, Herman|Melville’s]] perception of the importance of avoidance of bad work, the kind of refusal everyone has to start making before constructive things can become possible.
 
 KM: When we start opening our eyes to certain threats like the oceans being in peril, depleted uranium weapon use, college students being crushed by 1 trillion dollar loans, the National Defense Authorization Act (NDAA), and the growing global food crisis (to name just a few), we can see how so many of these stresses are beyond the control and scope of everyday life. Should we be panicking on some level? Or participating in organized demonstration like “Occupy Wall street”?
 
@@ -70,7 +70,7 @@ KM: > I was angry with my friend: I told my wrath, my wrath did end.
 
 Why have we judged friction as negative when it is needed to create change in our environment?
 
-RP: [[William Blake|Blake]] distinguished between Contraries, without which there is no progression, and Negations, which hinder:
+RP: [[Blake, William|Blake]] distinguished between Contraries, without which there is no progression, and Negations, which hinder:
 
 > But Negations Exist Not: Exceptions & Objections & Unbeliefs  
 > Exist not: nor shall they ever be Organized for ever & ever:  

@@ -8,8 +8,7 @@ import (
 
 type Utterance struct {
 	BaseBlock
-	FrontMatterNode
-	ChatNode
+	FileNode
 
 	// Initials definied at the start of a paragraph used to lookup a full name.
 	//

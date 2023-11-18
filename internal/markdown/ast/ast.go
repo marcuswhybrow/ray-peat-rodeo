@@ -23,33 +23,35 @@ type FrontMatter struct {
 	}
 }
 
-var PermalinkKey = parser.NewContextKey()
-var IDKey = parser.NewContextKey()
-var SourceKey = parser.NewContextKey()
-var HTTPCache = parser.NewContextKey()
+var FileKey = parser.NewContextKey()
 
-type FrontMatterNode struct {
+type File interface {
+	GetMarkdown() []byte
+	GetPath() string
+	RegisterMention(mention *Mention)
+	GetID() string
+	GetPermalink() string
+}
+
+var SourceKey = parser.NewContextKey()
+var HTTPCacheKey = parser.NewContextKey()
+
+type FileNode struct {
 	gast.BaseNode
 }
 
-func (n *FrontMatterNode) FrontMatter() FrontMatter {
+func (n *FileNode) FrontMatter() FrontMatter {
 	var frontMatter FrontMatter
 	mapstructure.Decode(n.OwnerDocument().Meta(), &frontMatter)
 	return frontMatter
 }
 
-type ChatNode struct {
-	FrontMatterNode
-}
-
-func (n *ChatNode) IsRaySpeaking() bool {
-	for p := n.Parent(); p != nil; p = p.Parent() {
-		utterance, ok := p.(*Utterance)
-		if ok {
-			return utterance.IsRay()
-		}
+func GetFile(pc parser.Context) File {
+	file, ok := pc.Get(FileKey).(File)
+	if !ok {
+		panic("Failed to coerce FileKey in parser context to File interface")
 	}
-	return false
+	return file
 }
 
 type BaseBlock struct {

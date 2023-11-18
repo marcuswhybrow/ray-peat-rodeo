@@ -10,7 +10,8 @@ import (
 
 type Timecode struct {
 	BaseInline
-	FrontMatterNode
+	FileNode
+
 	Hours   int
 	Minutes int
 	Seconds int

@@ -22,28 +22,35 @@ type HTTPCache struct {
 	responses map[*http.Request]*http.Response
 
 	// Tracking url/key requests to purge unused cache values.
-	hits map[string][]string
+	requestsMade map[string][]string
+
+	// Tracks url/ley request that weren't found in cache
+	requestsMissed map[string][]string
 }
 
 func NewHTTPCache(cache map[string]map[string]string) *HTTPCache {
 	return &HTTPCache{
-		cache:      cache,
-		responders: map[*http.Request][]Responder{},
-		responses:  map[*http.Request]*http.Response{},
-		hits:       map[string][]string{},
+		cache:        cache,
+		responders:   map[*http.Request][]Responder{},
+		responses:    map[*http.Request]*http.Response{},
+		requestsMade: map[string][]string{},
 	}
 }
 
 // Returns cache purged of unrequest entries
-func (h *HTTPCache) GetHits() map[string]map[string]string {
-	hits := map[string]map[string]string{}
-	for url, keys := range h.hits {
-		hits[url] = map[string]string{}
+func (h *HTTPCache) GetRequestsMade() map[string]map[string]string {
+	requestsMade := map[string]map[string]string{}
+	for url, keys := range h.requestsMade {
+		requestsMade[url] = map[string]string{}
 		for _, key := range keys {
-			hits[url][key] = h.cache[url][key]
+			requestsMade[url][key] = h.cache[url][key]
 		}
 	}
-	return hits
+	return requestsMade
+}
+
+func (h *HTTPCache) GetRequestsMissed() map[string][]string {
+	return h.requestsMissed
 }
 
 func (h *HTTPCache) insert(url string, key string, val string) {
@@ -83,7 +90,7 @@ func (h *HTTPCache) request(req *http.Request, key string, handler ResponseHandl
 
 	url := req.URL.String()
 
-	h.hits[url] = append(h.hits[url], key)
+	h.requestsMade[url] = append(h.requestsMade[url], key)
 
 	keysFromCache, ok := h.cache[url]
 	if !ok {
@@ -95,6 +102,8 @@ func (h *HTTPCache) request(req *http.Request, key string, handler ResponseHandl
 		valCh <- val
 		return valCh
 	}
+
+	h.requestsMissed[url] = append(h.requestsMissed[url], key)
 
 	res := h.responses[req]
 	if res != nil {
@@ -128,7 +137,7 @@ func (h *HTTPCache) request(req *http.Request, key string, handler ResponseHandl
 	return valCh
 }
 
-func H1OrTitleHandler(res *http.Response) string {
+func GetH1OrTitle(res *http.Response) string {
 	defer res.Body.Close()
 	doc, err := goquery.NewDocumentFromReader(res.Body)
 	if err != nil {
