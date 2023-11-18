@@ -226,7 +226,7 @@ func main() {
 	if len(misses) == 0 {
 		fmt.Println("  ✅ HTTP Cache fulfilled all requests")
 	} else {
-		fmt.Printf("  ❌ HTTP Cache rectified %v miss(es)", len(misses))
+		fmt.Printf("  ❌ HTTP Cache rectified %v miss(es)\n", len(misses))
 		for url, keys := range misses {
 			fmt.Print("    - Missed ")
 			for i, key := range keys {
