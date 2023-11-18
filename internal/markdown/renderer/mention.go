@@ -30,21 +30,32 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
 
 		t, err := template.New("OpenMention").Parse(
 			`<span
-        hx-trigger="mouseenter"
+        hx-trigger="mouseenter once"
         hx-target="find .popup"
         hx-get="{{ .Mention.Mentionable.PopupPermalink }}"
         hx-swap="innerHTML"
         hx-select=".hx-select"
         data-mention-id="{{ .Mention.ID }}"
-        class="relative"
+        class="mention relative"
         _="
-          on mouseenter
-            send open to .popup in me
+          on mousemove
+            trigger closeAllPopups(exception: my @data-mention-id) on .open-popup
+            trigger openPopup on .popup in me
+
+          on closeAllPopups(exception)
+            if my @data-mention-id is not the exception 
+              trigger closePopup on .popup in me
+            end
 
           on mouseleave
-            wait for open(elem) or 200ms
-            if the result's type is not 'open'
-              send close to .popup in me
+            wait for closeAllPopups(exception) or openPopup or 500ms
+            if the result's type is 'closeAllPopups'
+              if my @data-mention-id is not the exception
+                trigger closePopup on .popup in me
+              end
+            else if the result's type is 'openPopup'
+            else 
+              trigger closePopup on .popup in me
             end
         "
       ><a 
@@ -61,24 +72,24 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
 			      text-sky-800 hover:text-sky-900 shadow-pink-300 border-sky-800
           {{ end }}
         "
-      >{{ .Label }}</a><span
+        >{{ .Label }}</a><span
         class="
           popup 
           bg-white rounded shadow-lg block absolute 
           z-50 
           overflow-y-auto 
           mb-4 
-          transition-[opacity]
+          w-[400px] h-[300px]
           left-[calc(50%-200px)]
+          hidden
           top-[120%]
         "
         data-mention-id="{{ .Mention.ID }}"
         _="
-          on open
-            set my *width to 400px
-            set my *height to 400px
+          on openPopup
+            add .open-popup to me
+            remove .hidden from me
             send checkPosition to me
-            transition my *opacity to 1.0 over 50ms then settle
 
           on checkPosition
             measure my left then
@@ -91,12 +102,15 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
               end
             end
 
-          on close 
-            transition my *opacity to 0 over 50ms then settle
-            set my *width to 0
-            set my *height to 0
+          on closePopup
+            remove .open-popup from me
+            add .hidden to me
         "
-      ></span>`,
+      >
+        <span class="text-center text-gray-400 block p-8">
+          loading {{ .Mention.Mentionable.Ultimate.CardinalFirst }}...
+        </span>
+      </span>`,
 		)
 
 		if err != nil {
