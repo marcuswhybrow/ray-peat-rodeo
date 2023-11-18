@@ -23,7 +23,10 @@ templ MentionPage(primary ast.MentionablePart, primaries ByFile[Mentions], secon
 						</a>
 					</div>
 				}
-				<h2 class="text-3xl text-center">
+				<h2
+ 					id={ secondary.ID() }
+ 					class="text-3xl text-center"
+				>
 					if secondary.IsURL() {
 						{ secondary.URLTitle }
 					} else {

@@ -72,17 +72,21 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
 			      text-sky-800 hover:text-sky-900 shadow-pink-300 border-sky-800
           {{ end }}
         "
-        >{{ .Label }}</a><span
+      >{{ .Label }}</a><span
         class="
           popup 
-          bg-white rounded shadow-lg block absolute 
-          z-50 
+          bg-white shadow-2xl block absolute 
+          z-10 
+          overflow-hidden
           overflow-y-auto 
           mb-4 
           w-[400px] h-[300px]
           left-[calc(50%-200px)]
           hidden
           top-[120%]
+          scrollbar
+          scrollbar-track-slate-100
+          scrollbar-thumb-slate-200
         "
         data-mention-id="{{ .Mention.ID }}"
         _="

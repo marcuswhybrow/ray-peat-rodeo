@@ -2,90 +2,114 @@ package main
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 
-func title(m *ast.MentionablePart) string {
-	if m.IsURL() {
-		return m.URLTitle
-	}
-	return m.CardinalFirst()
-}
-
 templ MentionablePopup(mentionable ast.Mentionable, mentionsByFile ByFile[Mentions], otherMentionables []ast.Mentionable) {
 	<html data-pagefind-ignore>
-		<div class="hx-select">
-			<div class="pt-8 px-8 pb-8">
-				if mentionable.HasSecondary() {
-					<div
- 						class={
-							"text-sm text-center text-gray-500 break-all",
-							templ.KV("break-all", mentionable.Primary.IsURL()),
-						}
-					>
-						{ title(&mentionable.Primary) }
+		<head>
+			<link rel="stylesheet" href="/assets/tailwind.css"/>
+		</head>
+		<body>
+			<div class="w-[400px] h-[300px] rounded bg-white shadow m-16 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-500 scrollbar-track-slate-100">
+				<div class="hx-select">
+					@header(mentionable)
+					<div class="text-sm text-center px-8 mb-6">
+						<span class="relative py-4 px-8 top-[-11px] bg-slate-100 text-slate-400 rounded-full">mentioned in</span>
 					</div>
-				}
-				<h3 class="text-center text-xl text-gray-600">
-					<a
- 						href={ templ.URL(mentionable.Permalink()) }
- 						class={
-							"border-b hover:border-b-2",
-							"border-b-gray-400 hover:border-b-gray-500",
-							templ.KV("break-all", mentionable.Ultimate().IsURL()),
-						}
-					>
-						{ title(mentionable.Ultimate()) }
-					</a>
-				</h3>
-			</div>
-			for file, mentions := range mentionsByFile {
-				<div>
-					<div
- 						class="
-              px-8
-              pb-2 pt-2 
-              text-center sticky top-0 
-              bg-white/90 backdrop-blur-2xl
-            "
-					>
-						<a
- 							class="
-                text-yellow-700 hover:text-yellow-800
-                border-b hover:border-b-2
-                border-b-yellow-600 hover:border-b-yellow-800
-              "
- 							href={ templ.URL(file.Permalink) }
-						>
-							{ file.FrontMatter.Source.Title }
-						</a>
-					</div>
-					<div class="pt-4 pb-4">
-						<style> mark { padding: 2px; }</style>
-						for _, mention := range mentions {
-							<blockquote
- 								class={ "px-8 pb-2 text-sm text-gray-900 [&>mark]:rounded-lg leading-5" }
+					for file, mentions := range mentionsByFile {
+						<div>
+							<div
+ 								class="
+                  px-8
+                  pt-2 
+                  text-center sticky top-0 
+                  backdrop-blur-2xl
+                  bg-white/90
+                "
 							>
-								@Unsafe(string(mention.VignetteHTML(file.Markdown, 50)))
-							</blockquote>
-						}
-					</div>
-				</div>
-			}
-			if len(otherMentionables) > 0 {
-				<div class="px-8 pb-8 pt-8 text-sm bg-sky-100">
-					<b>Also by { mentionable.Primary.Cardinal }</b>: 
-					for i, mentionable := range otherMentionables {
-						if i > 0 {
-							{ ", " }
-						}
-						<a
- 							href={ templ.URL(mentionable.Permalink()) }
- 							class="border-b hover:border-b-2"
-						>
-							{ mentionable.Ultimate().CardinalFirst() }
-						</a>
+								<a
+ 									class="text-slate-600 hover:text-slate-800 hover:underline"
+ 									href={ templ.URL(file.Permalink) }
+								>
+									{ file.FrontMatter.Source.Title }
+								</a>
+								<div class="mt-2 bg-gradient-to-r from-slate-200/0 via-slate-200 to-slate-200/0 h-px"></div>
+							</div>
+							<div class="pt-4 pb-4">
+								for _, mention := range mentions {
+									<blockquote
+ 										class={ "px-8 pb-4 text-sm text-slate-700" }
+									>
+										@Unsafe(string(mention.VignetteHTML(file.Markdown, 50)))
+									</blockquote>
+								}
+							</div>
+						</div>
 					}
-					{ "." }
+					@related(otherMentionables)
 				</div>
+			</div>
+		</body>
+	</html>
+}
+
+templ header(mentionable ast.Mentionable) {
+	<div class="pt-10 px-8 pb-8 bg-slate-100 z-20">
+		if mentionable.HasSecondary() {
+			<div
+ 				class={
+					"text-sm text-center text-slate-500 hover:text-slate-800 hover:underline",
+					templ.KV("break-all", mentionable.Primary.IsURL()),
+				}
+			>
+				<a
+ 					href={ templ.URL(mentionable.PermalinkForPrimary()) }
+ 					class={
+						templ.SafeClass("text-slate-500 hover:text-slate-800 hover:underline"),
+						templ.KV("break-all", mentionable.Ultimate().IsURL()),
+					}
+				>
+					{ mentionable.Primary.CardinalFirst() }
+				</a>
+			</div>
+		}
+		<h3 class="text-center text-xl pb-2 tracking-wide">
+			<a
+ 				href={ templ.URL(mentionable.Permalink()) }
+ 				class={
+					templ.SafeClass("text-slate-500 hover:text-slate-800 hover:underline"),
+					templ.KV("break-all", mentionable.Ultimate().IsURL()),
+				}
+			>
+				{ mentionable.Ultimate().CardinalFirst() }
+			</a>
+		</h3>
+		if mentionable.Ultimate().IsURL() {
+			<a
+ 				href={ templ.URL(mentionable.Ultimate().Cardinal) }
+ 				class="px-4 py-2 mt-4 mb-4 text-slate-600 hover:text-slate-50 bg-slate-300 hover:bg-slate-400 rounded-lg block text-center"
+			>
+				Visit Link
+			</a>
+		}
+	</div>
+}
+
+templ related(otherMentionables []ast.Mentionable) {
+	if len(otherMentionables) > 0 {
+		<div class="text-sm text-center px-8 mt-6">
+			<span class="relative py-4 px-8 top-[11px] bg-slate-100 text-slate-400 rounded-full">related mentions</span>
+		</div>
+		<div class="bg-slate-100 px-8 pt-8 pb-8 text-center">
+			for i, mentionable := range otherMentionables {
+				if i > 0 && i < len(otherMentionables) - 1 {
+					<span class="text-slate-300">{ " • " }</span>
+				}
+				<a
+ 					href={ templ.URL(mentionable.Permalink()) }
+ 					class="text-sm text-slate-700 hover:text-slate-800 hover:border-b hover:border-b-slate-800"
+				>
+					{ mentionable.Ultimate().PrefixFirst() }
+				</a>
 			}
 		</div>
-	</html>
+	}
 }

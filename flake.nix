@@ -48,6 +48,34 @@
       '';
     };
 
+    packages.tailwind-scrollbar = pkgs.buildNpmPackage rec {
+      pname = "tailwind-scrollbar";
+      version = "3.0.5";
+
+      src = pkgs.fetchFromGitHub {
+        owner = "adoxography";
+        repo = pname;
+        rev = "v${version}";
+        hash = "sha256-i3tWZmchE+jYoPwOkyUR3j1d7imJNdN+fzC3ainJj8A=";
+      };
+
+      npmDepsHash = "sha256-iht2umjqANBwkZR57Y8P+KtH/JkvNTOLj8tR9m91eKo=";
+
+      dontNpmBuild = true;
+
+      # The prepack script runs the build script, which we'd rather do in the build phase.
+      #npmPackFlags = [ "--ignore-scripts" ];
+
+      NODE_OPTIONS = "";
+
+      meta = with pkgs.lib; {
+        description = "Scrollbar plugin for Tailwind CSS";
+        homepage = "https://github.com/adoxography/tailwind-scrollbar";
+        license = licenses.mit;
+        maintainers = [ "Marcus Whybrow <marcus@whybrow.uk>" ];
+      };
+    };
+
     # Run `nix develop` to enter a shell containing all dependencies.
     # One may use nix-direnv to auto load said shell on cd into project.
     devShells.default = pkgs.mkShell {
@@ -82,6 +110,12 @@
 
         # Builds JS search API by inspecting HTML build by this package
         pagefind 
+
+        # NodeJS is needed to for Tailwind plugins to be found
+        nodejs_20
+
+        # Scrollbar styling plugin for TaildindCSS
+        inputs.self.packages.${system}.tailwind-scrollbar
 
         # Builds CSS utility classes by inspecting template source code
         nodePackages.tailwindcss

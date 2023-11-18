@@ -65,14 +65,6 @@ func (m *Mention) Permalink() string {
 	return m.File.GetPermalink() + "#" + m.LocalID()
 }
 
-func (m *Mention) Title() string {
-	if len(m.Label) > 0 {
-		return m.Label
-	} else {
-		return m.Mentionable.Ultimate().PrefixFirst()
-	}
-}
-
 func (m *Mention) VignetteHTML(source []byte, radius int) string {
 	for p := m.Parent(); p != nil; p = p.Parent() {
 		if p.Kind() == KindSpeaker {
@@ -88,7 +80,7 @@ func (m *Mention) VignetteHTML(source []byte, radius int) string {
 			result = append(result, rBefore[max(0, len(rBefore)-radius):]...)
 
 			result = append(result, []rune(fmt.Sprintf(
-				`<mark><a id="%v" href="%v" class="underline">%s</a></mark>`,
+				`<mark class="p-px text-yellow-900 hover:text-yellow-950 bg-amber-100 hover:bg-yellow-300 rounded"><a id="%v" href="%v" class="">%s</a></mark>`,
 				m.ID(),
 				m.Permalink(),
 				m.Text(source),

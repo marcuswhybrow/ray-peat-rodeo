@@ -42,6 +42,22 @@ func (m *MentionablePart) ID() string {
 	return id
 }
 
+func (m *MentionablePart) TitleOrPrefixFirst() string {
+	if m.IsURL() {
+		return m.URLTitle
+	} else {
+		return m.PrefixFirst()
+	}
+}
+
+func (m *MentionablePart) TitleOrCardinalFirst() string {
+	if m.IsURL() {
+		return m.URLTitle
+	} else {
+		return m.CardinalFirst()
+	}
+}
+
 func (m *MentionablePart) IsURL() bool {
 	if m.HasPrefix() {
 		return false

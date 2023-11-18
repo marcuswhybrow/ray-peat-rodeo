@@ -24,8 +24,12 @@ func (m *Mentionable) HasSecondary() bool {
 	return len(m.Secondary.Cardinal) > 0
 }
 
+func (m *Mentionable) PermalinkForPrimary() string {
+	return "/" + m.Primary.ID()
+}
+
 func (m *Mentionable) Permalink() string {
-	return "/" + m.Primary.ID() + "#" + m.Secondary.ID()
+	return m.PermalinkForPrimary() + "#" + m.Secondary.ID()
 }
 
 func (m *Mentionable) PopupPermalink() string {
