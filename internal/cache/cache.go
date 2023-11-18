@@ -30,10 +30,11 @@ type HTTPCache struct {
 
 func NewHTTPCache(cache map[string]map[string]string) *HTTPCache {
 	return &HTTPCache{
-		cache:        cache,
-		responders:   map[*http.Request][]Responder{},
-		responses:    map[*http.Request]*http.Response{},
-		requestsMade: map[string][]string{},
+		cache:          cache,
+		responders:     map[*http.Request][]Responder{},
+		responses:      map[*http.Request]*http.Response{},
+		requestsMade:   map[string][]string{},
+		requestsMissed: map[string][]string{},
 	}
 }
 
