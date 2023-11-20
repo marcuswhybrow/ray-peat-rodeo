@@ -34,20 +34,30 @@ templ Base(title string) {
 			<script src="https://unpkg.com/htmx.org@1.9.6"></script>
 			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 			<script>
-      window.addEventListener('DOMContentLoaded', (event) => {
-        new PagefindUI({
-          element: '#pagefind',
-          showSubResults: true,
-          showImages: false,
-          translations: {
-            placeholder: 'Search Ray Peat Rodeo',
-          }
+        window.addEventListener('DOMContentLoaded', (event) => {
+          new PagefindUI({
+            element: '#pagefind',
+            highlightParam: 'highlight',
+            showSubResults: true,
+            showImages: false,
+            translations: {
+              placeholder: 'Search Ray Peat Rodeo',
+            }
+          });
         });
-      });
-    </script>
+      </script>
+			<script type="module">
+        await import('/pagefind/pagefind-highlight.js');
+        new PagefindHighlight({ highlightParam: "highlight" });
+      </script>
 		</head>
 		<body
- 			class="pt-20"
+ 			class="
+        pt-20
+        scrollbar
+        scrollbar-thumb-purple-300
+        scrollbar-track-pink-50
+      "
  			_="
         on keydown[key==&#39;/&#39;] 
           if #search matches .hidden then 
