@@ -260,7 +260,7 @@ templ RenderChat(file *File) {
 					} else {
 						data-todo="Complete"
 					}
- 					if file.IssueCount > 0 {
+ 					if file.HasIssues() {
 						data-has-issues="Yes"
 					} else {
 						data-has-issues="No"

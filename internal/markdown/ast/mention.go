@@ -15,12 +15,25 @@ type Mention struct {
 	BaseInline
 	FileNode
 
+	// The thing being mentioned
 	Mentionable Mentionable
-	Label       string
-	Occurance   int
-	File        File
 
-	Source            Source
+	// An option label to override the full name of this mention
+	Label string
+
+	// The number of mentions referring to the this mentionable before this, + 1
+	Occurance int
+
+	// The number of mentions before this, + 1
+	Position int
+
+	// The file this mention is in
+	File File
+
+	// The markdown source which created this mention
+	Source Source
+
+	// The markdown source which defines the mentionable
 	MentionableSource Source
 }
 

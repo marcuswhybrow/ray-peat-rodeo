@@ -192,9 +192,6 @@ func main() {
 			latest = append(latest, file)
 		}
 	}
-	if len(latest) > 4 {
-		latest = latest[:4]
-	}
 	sort.Sort(ByTranscriptionDate(latest))
 
 	var humanTranscripts []*File

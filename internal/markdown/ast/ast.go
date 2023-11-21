@@ -29,6 +29,7 @@ type File interface {
 	GetMarkdown() []byte
 	GetPath() string
 	RegisterMention(mention *Mention)
+	RegisterIssue(id int)
 	GetID() string
 	GetPermalink() string
 }

@@ -1,7 +1,6 @@
 package main
 
 import "fmt"
-import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 
 templ ChatCard(file *File) {
 	<a
@@ -21,12 +20,12 @@ templ ChatCard(file *File) {
 			</span>
 		</div>
 		<div class="p-8 pt-4">
-			if file.IssueCount > 0 {
+			if file.HasIssues() {
 				<br/>
 				<span class="inline-block bg-gradient-to-br from-yellow-100 to-amber-200 py-2 px-4 rounded-full text-sm text-yellow-900">
 					<img src="/assets/images/github-mark.svg" class="w-4 h-4 relative -top-px inline-block mr-1"/>
-					{ fmt.Sprint(file.IssueCount) } issue
-					if file.IssueCount > 1 {
+					{ fmt.Sprint(file.IssueCount()) } issue
+					if file.HasIssues() {
 						s 
 					}
 				</span>
@@ -56,13 +55,256 @@ templ ChatCard(file *File) {
 	</a>
 }
 
+func pluralise(i int, s string) string {
+	if i != 1 {
+		return s
+	}
+	return ""
+}
+
+templ bigCard(file *File) {
+	<a
+ 		href={ templ.URL(file.Permalink) }
+ 		class={ templ.SafeClass(`
+      flex-auto
+      bg-gradient-to-tr from-white to-lime-100
+      backdrop-blur-2xl
+      rounded-lg p-8
+      mr-8 last:mr-0
+      shadow-lg hover:shadow shadow-lime-700/10
+      transition-all
+      relative top-0 hover:top-2
+    `) }
+	>
+		<ol class="mb-4">
+			for _, mentionCount := range AtMost(file.TopMentions(), 3) {
+				<li
+ 					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-white text-gray-600 rounded-full"
+ 					title={ mentionCount.Mention.Mentionable.Ultimate().PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+				>
+					{ mentionCount.Mention.Mentionable.Ultimate().Cardinal }
+				</li>
+			}
+			if file.HasIssues() {
+				<li
+ 					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-yellow-100 text-yellow-600 rounded-full"
+ 					title={ fmt.Sprint(file.IssueCount()) + " GitHub issue" + pluralise(file.IssueCount(), "s") }
+				>
+					🏆 { fmt.Sprint(file.IssueCount()) }
+				</li>
+			}
+		</ol>
+		<div class="mb-4">
+			<h2 class="text-3xl">
+				{ file.FrontMatter.Source.Title }
+			</h2>
+			<p>{ file.FrontMatter.Source.Series }</p>
+		</div>
+		<div class="flex">
+			<div class="flex-auto">
+				for speakerKey, speakerName := range file.FrontMatter.Speakers {
+					<div class="inline-block rounded-full overflow-hidden bg-gray-50 w-16 h-16 text-center shadow first:ml-0 -ml-2 border-4 border-white">
+						if p, found := SpeakerAvatar(speakerName); found {
+							<img src={ p } alt={ speakerName } title={ speakerName } class="contast-75"/>
+						} else {
+							<span class="font-bold text-gray-400 text-xl relative top-[14px]" title={ speakerName }>{ speakerKey }</span>
+						}
+					</div>
+				}
+			</div>
+			<div class="flex-initial">
+				<div class="flex-none bg-gray-50 rounded-full p-4">{ file.Date }</div>
+			</div>
+		</div>
+	</a>
+}
+
+templ smallCard(file *File) {
+	<a
+ 		href={ templ.URL(file.Permalink) }
+ 		class="
+      flex-auto
+      bg-gradient-to-tr from-white to-amber-100
+      rounded-lg p-8
+      mr-8 last:mr-0
+      shadow-lg hover:shadow shadow-amber-600/10
+      transition-all
+      relative top-0 hover:top-2
+    "
+	>
+		<ol class="mb-4">
+			for _, mentionCount := range AtMost(file.TopMentions(), 3) {
+				<li
+ 					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-white text-gray-600 rounded-full"
+ 					title={ mentionCount.Mention.Mentionable.Ultimate().PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+				>
+					{ mentionCount.Mention.Mentionable.Ultimate().Cardinal }
+				</li>
+			}
+			if file.HasIssues() {
+				<li
+ 					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-yellow-100 text-yellow-600 rounded-full"
+ 					title={ fmt.Sprint(file.IssueCount()) + " GitHub issue" + pluralise(file.IssueCount(), "s") }
+				>
+					🏆 { fmt.Sprint(file.IssueCount()) }
+				</li>
+			}
+		</ol>
+		<h2 class="text-2xl">{ file.FrontMatter.Source.Title }</h2>
+		<p class="text-sm">{ file.FrontMatter.Source.Series }</p>
+		<div class="flex">
+			<div class="flex-initial">
+				<div class="flex-none bg-gray-50 rounded-full p-6">{ file.Date }</div>
+			</div>
+		</div>
+		<div class="flex-auto">
+			for speakerKey, speakerName := range file.FrontMatter.Speakers {
+				<div class="inline-block rounded-full overflow-hidden bg-gray-50 w-16 h-16 text-center shadow first:ml-0 -ml-2 border-4 border-white">
+					if imgPath, found := SpeakerAvatar(speakerName); found {
+						<img
+ 							src={ imgPath }
+ 							alt={ speakerName }
+ 							title={ speakerName }
+ 							class="contrast-75"
+						/>
+					} else {
+						<span class="font-bold text-gray-400 text-xl relative top-[14px]" title={ speakerName }>{ speakerKey }</span>
+					}
+				</div>
+			}
+		</div>
+	</a>
+}
+
+templ fadeOutCard(file *File) {
+	<div
+ 		class="
+      flex-auto
+      bg-gradient-to-b from-gray-100 to-gray-100/0 rounded-lg p-8
+      mr-8 last:mr-0
+    "
+	>
+		<h2 class="text-2xl">{ file.FrontMatter.Source.Title }</h2>
+		<div class="flex">
+			<div class="flex-auto">
+				<div class="inline-block rounded-full bg-gray-50 w-16 h-16 text-center mr-4">
+					<span>{ file.FrontMatter.Source.Series }</span>
+				</div>
+			</div>
+			<div class="flex-initial">
+				<div class="flex-none bg-gray-50 rounded-full p-6">{ file.Date }</div>
+			</div>
+		</div>
+	</div>
+}
+
+templ tinyCard(file *File) {
+	<a
+ 		href={ templ.URL(file.Permalink) }
+ 		class="
+      flex-auto
+      rounded-lg p-8
+      bg-gradient-to-tr from-white to-green-100
+      mr-8 last:mr-0
+      shadow-lg hover:shadow shadow-greeen-400/20
+      transition-all
+      relative top-0 hover:top-2
+    "
+	>
+		<ol class="mb-4">
+			for _, mentionCount := range AtMost(file.TopMentions(), 3) {
+				<li
+ 					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-white text-gray-600 rounded-full"
+ 					title={ mentionCount.Mention.Mentionable.Ultimate().PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+				>
+					{ mentionCount.Mention.Mentionable.Ultimate().Cardinal }
+				</li>
+			}
+			if file.HasIssues() {
+				<li
+ 					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-yellow-100 text-yellow-600 rounded-full"
+ 					title={ fmt.Sprint(file.IssueCount()) + " GitHub issue" + pluralise(file.IssueCount(), "s") }
+				>
+					🏆 { fmt.Sprint(file.IssueCount()) }
+				</li>
+			}
+		</ol>
+		<h2 class="text-xl">{ file.FrontMatter.Source.Title }</h2>
+		<p class="text-sm">{ file.FrontMatter.Source.Series }</p>
+		<div class="flex">
+			<div class="flex-initial">
+				<div class="flex-none bg-gray-50 rounded-full p-6">{ file.Date }</div>
+			</div>
+		</div>
+		<div class="flex-auto">
+			for speakerKey, speakerName := range file.FrontMatter.Speakers {
+				<div class="inline-block rounded-full overflow-hidden bg-gray-50 w-16 h-16 text-center shadow first:ml-0 -ml-2 border-4 border-white">
+					if imgPath, found := SpeakerAvatar(speakerName); found {
+						<img
+ 							src={ imgPath }
+ 							alt={ speakerName }
+ 							title={ speakerName }
+ 							class="contrast-75"
+						/>
+					} else {
+						<span class="font-bold text-gray-400 text-xl relative top-[14px]" title={ speakerName }>{ speakerKey }</span>
+					}
+				</div>
+			}
+		</div>
+	</a>
+}
+
 templ renderLatest(files []*File) {
 	<div
- 		class="text-center"
+ 		class="
+      [background-image:radial-gradient(50%_50%_at_top_50%_left_33%,rgba(220,255,220,0.6),rgba(220,255,220,0))]
+    "
 	>
-		for _, file := range files {
-			@ChatCard(file)
-		}
+		<div
+ 			class="
+        max-w-screen-2xl mx-auto px-8
+      "
+		>
+			<div class="flex">
+				for _, file := range files[:2] {
+					@bigCard(file)
+				}
+			</div>
+			<div class="flex mt-8">
+				for _, file := range files[3:5] {
+					@smallCard(file)
+				}
+				<div class="flex-1 bg-amber-100 rounded-lg p-8">
+					<h2 class="text-3xl">Great Intro to Ray Peat</h2>
+					<div class="bg-gray-50 h-32"></div>
+				</div>
+			</div>
+			<div class="flex my-8">
+				<div class="flex-auto bg-green-100 p-8 rounded-lg mr-8">
+					<h2 class="text-3xl">Looking to contribute?</h2>
+				</div>
+				for _, file := range files[6:9] {
+					@tinyCard(file)
+				}
+			</div>
+			<div class="flex my-8">
+				for _, file := range files[9:] {
+					@fadeOutCard(file)
+				}
+			</div>
+			<div class="text-center">
+				<a
+ 					href=""
+ 					class="
+          p-8 -top-16
+          rounded-full 
+          bg-blue-600 
+          text-white font-bold text-xl relative 
+        "
+				>View All</a>
+			</div>
+		</div>
 	</div>
 }
 
@@ -96,7 +338,7 @@ templ issueSrc(id int) {
 }
 
 templ markdown() {
-	<div class="inline-block relative">
+	<div class="inline-block relative mb-16 2xl:mb-0">
 		<div class="w-[150px] h-[100px] bg-pink-100 rounded-lg absolute -rotate-1 -left-8"></div>
 		<div class="w-[100px] h-[90px] bg-pink-50 rounded-lg absolute -rotate-2 -left-32 top-32"></div>
 		<div class="w-[40px] h-[30px] bg-pink-50/60 rounded absolute -rotate-3 -left-24 top-16"></div>
@@ -138,7 +380,8 @@ templ markdown() {
 					<br/>
 					@speakerSrc("RP")
 					{ " " }
-					Oh, there was an Austrailian study 
+					<span class="text-purple-500">[18:32]</span>
+					There was an Austrailian study 
 					@issueSrc(12)
 					{ " " }
 					around that time.
@@ -159,11 +402,22 @@ templ markdown() {
 templ program() {
 	<div
  		class="
+      relative
       inline-block align-top
       ml-16 mr-12
-      mt-32
-      rotate-90 2xl:rotate-0
+      mt-40
+      rotate-[95deg] 2xl:rotate-[-6deg]
       transition-all
+    "
+ 		_="
+      on load
+        trigger hover on me
+
+      on hover
+        transition *top to 10px over 1.5s
+        transition *top to 0px over 1.5s
+        trigger hover on me
+        
     "
 	>
 		<span
@@ -321,9 +575,10 @@ templ output() {
 		<div class="px-8 pb-10 pt-2 max-w-xl mx-auto">
 			@utterance("Ray Peat") {
 				<p>
-					There was an Australian study 
+					<span class="text-sm px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-500 text-gray-50 cursor-pointer">18:32</span>
+					There was an Australian
 					@issue()
-					around that time.
+					study around that time.
 				</p>
 			}
 			@utterance("Interviewer") {
@@ -359,92 +614,6 @@ templ Index(latest, humanTrascripts []*File) {
 			</section>
 			<section class="mb-32">
 				@renderLatest(latest)
-			</section>
-			<section>
-				<div class="text-center">
-					<div class="text-slate-500 mb-16 max-w-xl text-4xl mx-auto leading-10">
-						<span class="font-bold uppercase text-transparent bg-clip-text bg-gradient-to-br from-sky-500 to-purple-500">Ray Peat's interviews</span>
-						<br/>
-						...supercharged 🎉🥳
-					</div>
-				</div>
-				<div class="max-w-xl mx-auto mt-40">
-					@SpeakerStatusChange(marcus) {
-						entered the chat
-					}
-					@Handle() {
-						Marcus 
-					}
-					@Message() {
-						<p class="mb-4">👋 Hi, Marcus here. I'm a programmer and admirer of Ray Peat. His key idea is that <span class="">energy and structure are interdependent at every level</span>. The implications are profound.</p>
-						<p>
-							Ray's articles are availble on <a class="font-bold border-b border-b-black border-solid hover:border-b-2" href="https://raypeat.com">raypeat.com</a>, but his interviews are scattered. I created Ray Peat Rodeo to round up his public chats, and supercharge them for discoverability. 
-							@Sidenote("search") {
-								<b>Search</b> Ray Peat Rodeo:
-								<br/>
-								<br/>
-								Hit <kbd class="font-bold border border-black px-2 py-1 rounded">/</kbd> key, or tap <span class="border-black border px-2 py-1 rounded"><img class="w-4 h-4 inline-block -mt-[5px]" src="assets/images/magnifying-glass-icon.svg"/></span> up top.
-							}
-						</p>
-						<p class="mt-4">I'll pin the <b>latest additions</b> { "for" } you.</p>
-					}
-					<div class="mt-16">
-						@SpeakerStatusChange(marcus) {
-							pinned 4 chats
-						}
-					</div>
-				</div>
-				<div class="max-w-xl mx-auto mt-40 mb-16">
-					@Handle() {
-						Marcus 
-					}
-					@Message() {
-						<p>
-							<span class="font-bold text-3xl uppercase text-transparent bg-clip-text bg-gradient-to-br from-gray-600 to-gray-300 tracking-wider">Contributing 💕</span>
-							@GitHubSidenoteLink(global.GITHUB_LINK + "/issues/new", "Open A New Issue") {
-								Click here to open a new issue on GitHub.
-							}
-						</p>
-						<p class="mt-4">
-							If you spot a mistake, or have an idea, <a class="font-bold border-b border-b-black hover:border-b-2" href={ templ.URL(global.GITHUB_LINK + "/issues/new") }>open a new issue</a> on GitHub.
-							There we can talk about the issue to get it fixed!
-						</p>
-						<p class="mt-4">
-							Many interviews are awaiting transcription. If you want to <b>contribute a transcript</b>, open that interview and click the green "contribute" bubble up top to edit the source code.
-						</p>
-						<p>I'll pin a couple of interviews with existing transcripts that need adding.</p>
-					}
-				</div>
-				<div class="mt-16">
-					@SpeakerStatusChange(marcus) {
-						pinned 2 chats
-					}
-				</div>
-				<div class="mt-8">
-					@renderSuggestions(humanTrascripts)
-				</div>
-				<div class="max-w-xl mx-auto mt-40 mb-16">
-					@Handle() {
-						Marcus 
-					}
-					@MarcusMessage() {
-						<p>
-							<a data-pagefind-ignore href={ templ.URL(global.SPONSOR_LINK) } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl hover:shadow-yellow-800/40 rounded-md bg-gradient-to-br from-orange-300 from-0% via-purple-300 via-40% to-sky-300/50 hover:from-pink-200 hover:from-0% hover:via-purple-400 hover:via-60% hover:to-sky-300 xl:block w-3/5 mr-[-20%] lg:mr-[-20%] xl:mr-[-30%] float-right clear-right text-sm relative leading-5 tracking-tight backdrop-blur">
-								<span class="text-slate-700 tracking-wide">
-									<img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4"/>
-									<span class="text-white font-bold tracking-widest drop-shadow-md">Sponsor Marcus</span>
-									<br/>
-									Support Marcus' work on Ray Peat Rodeo.
-								</span>
-							</a>
-							<span class="font-bold text-3xl uppercase text-transparent bg-clip-text bg-gradient-to-br from-yellow-700 to-orange-300 tracking-wider">Sponsor Me 💓</span>
-						</p>
-						<p class="mt-4">
-							Ray Peat Rodeo is my attempt to preserve the legacy of Ray Peat in a durable, open source project.
-						</p>
-						<p class="mt-4">Funding me on <a href={ templ.URL(global.SPONSOR_LINK) } class="font-bold border-b border-b-black hover:border-b-2">GitHub Sponsors</a> makes a huge difference to how fast I can transcribe interviews and add new features.</p>
-					}
-				</div>
 			</section>
 		</article>
 	}

@@ -2,10 +2,13 @@ package main
 
 import (
 	"bytes"
+	"io/fs"
 	"log"
 	"os"
 	"path"
 	"path/filepath"
+	"slices"
+	"sort"
 	"strings"
 	"text/template"
 
@@ -22,11 +25,11 @@ type File struct {
 	Date          string
 	Markdown      []byte
 	Html          []byte
-	IssueCount    int
 	EditPermalink string
 	Permalink     string
 	Mentions      Mentions
 	Mentionables  ByMentionable[Mentions]
+	Issues        []int
 }
 
 func NewFile(filePath string) *File {
@@ -48,7 +51,7 @@ func NewFile(filePath string) *File {
 		ID:           id,
 		Path:         filePath,
 		OutPath:      outPath,
-		Date:         fileStem[:11],
+		Date:         fileStem[:10],
 		Permalink:    permalink,
 		IsTodo:       parentName == "todo",
 		Markdown:     markdownBytes,
@@ -69,7 +72,64 @@ func (f *File) GetPath() string {
 
 func (f *File) RegisterMention(mention *ast.Mention) {
 	f.Mentions = append(f.Mentions, mention)
+	mention.Position = len(f.Mentions)
 	f.Mentionables[mention.Mentionable] = append(f.Mentionables[mention.Mentionable], mention)
+}
+
+type MentionCount struct {
+	Mention *ast.Mention
+	Count   int
+}
+
+type ByMostMentioned []MentionCount
+
+func (m ByMostMentioned) Len() int { return len(m) }
+
+func (m ByMostMentioned) Less(i, j int) bool {
+	if m[i].Count > m[j].Count {
+		return true
+	} else if m[i].Count == m[j].Count {
+		return m[i].Mention.Position > m[j].Mention.Position
+	}
+	return false
+}
+
+func (m ByMostMentioned) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
+
+func (f *File) TopMentions() []MentionCount {
+	results := []MentionCount{}
+
+	for _, m := range f.Mentions {
+		i := slices.IndexFunc(results, func(ms MentionCount) bool {
+			return ms.Mention.Mentionable == m.Mentionable
+		})
+		if i >= 0 {
+			results[i].Count += 1
+			if m.Occurance == 1 {
+				results[i].Mention = m
+			}
+		} else {
+			results = append(results, MentionCount{
+				Mention: m,
+				Count:   1,
+			})
+		}
+	}
+
+	sort.Sort(ByMostMentioned(results))
+	return results
+}
+
+func (f *File) IssueCount() int {
+	return len(f.Issues)
+}
+
+func (f *File) HasIssues() bool {
+	return f.IssueCount() > 0
+}
+
+func (f *File) RegisterIssue(id int) {
+	f.Issues = append(f.Issues, id)
 }
 
 func (f *File) GetID() string {
@@ -195,4 +255,29 @@ more specific. For example:
 	})
 	panic(b.String())
 
+}
+
+func AtMost[T any](ts []T, i int) []T {
+	if len(ts) > i {
+		return ts[:i]
+	}
+	return ts
+}
+
+func SpeakerAvatar(speakerName string) (string, bool) {
+	speakerName = strings.ToLower(speakerName)
+	speakerName = strings.ReplaceAll(speakerName, " ", "-")
+	found := ""
+
+	fs.WalkDir(os.DirFS("./internal"), "assets/images/avatars", func(filePath string, entry fs.DirEntry, err error) error {
+		fileStem := path.Base(filePath)
+		ext := path.Ext(fileStem)
+		fileName, _ := strings.CutSuffix(fileStem, ext)
+
+		if speakerName == fileName {
+			found = "/" + filePath
+		}
+		return nil
+	})
+	return found, len(found) > 0
 }
