@@ -89,7 +89,9 @@ func (m ByMostMentioned) Less(i, j int) bool {
 	if m[i].Count > m[j].Count {
 		return true
 	} else if m[i].Count == m[j].Count {
-		return m[i].Mention.Position > m[j].Mention.Position
+		iCardinal := m[i].Mention.Mentionable.Ultimate().Cardinal
+		jCardinal := m[j].Mention.Mentionable.Ultimate().Cardinal
+		return len(iCardinal) < len(jCardinal)
 	}
 	return false
 }
@@ -117,6 +119,49 @@ func (f *File) TopMentions() []MentionCount {
 	}
 
 	sort.Sort(ByMostMentioned(results))
+	return results
+}
+
+type MentionablePartCount struct {
+	MentionablePart ast.MentionablePart
+	Count           int
+}
+
+type ByMostMentionedPrimary []MentionablePartCount
+
+func (m ByMostMentionedPrimary) Len() int { return len(m) }
+
+func (m ByMostMentionedPrimary) Less(i, j int) bool {
+	if m[i].Count > m[j].Count {
+		return true
+	} else if m[i].Count == m[j].Count {
+		iCardinal := m[i].MentionablePart.Cardinal
+		jCardinal := m[j].MentionablePart.Cardinal
+		return len(iCardinal) < len(jCardinal)
+	}
+	return false
+}
+
+func (m ByMostMentionedPrimary) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
+
+func (f *File) TopPrimaryMentionables() []MentionablePartCount {
+	results := []MentionablePartCount{}
+
+	for _, m := range f.Mentions {
+		i := slices.IndexFunc(results, func(ms MentionablePartCount) bool {
+			return ms.MentionablePart == m.Mentionable.Primary
+		})
+		if i >= 0 {
+			results[i].Count += 1
+		} else {
+			results = append(results, MentionablePartCount{
+				MentionablePart: m.Mentionable.Primary,
+				Count:           1,
+			})
+		}
+	}
+
+	sort.Sort(ByMostMentionedPrimary(results))
 	return results
 }
 

@@ -77,12 +77,12 @@ templ bigCard(file *File) {
     `) }
 	>
 		<ol class="mb-4">
-			for _, mentionCount := range AtMost(file.TopMentions(), 3) {
+			for _, mentionCount := range AtMost(file.TopPrimaryMentionables(), 3) {
 				<li
  					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-white text-gray-600 rounded-full"
- 					title={ mentionCount.Mention.Mentionable.Ultimate().PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+ 					title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
 				>
-					{ mentionCount.Mention.Mentionable.Ultimate().Cardinal }
+					{ mentionCount.MentionablePart.Cardinal }
 				</li>
 			}
 			if file.HasIssues() {
@@ -105,7 +105,7 @@ templ bigCard(file *File) {
 				for speakerKey, speakerName := range file.FrontMatter.Speakers {
 					<div class="inline-block rounded-full overflow-hidden bg-gray-50 w-16 h-16 text-center shadow first:ml-0 -ml-2 border-4 border-white">
 						if p, found := SpeakerAvatar(speakerName); found {
-							<img src={ p } alt={ speakerName } title={ speakerName } class="contast-75"/>
+							<img src={ p } alt={ speakerName } title={ speakerName } class="opacity-50"/>
 						} else {
 							<span class="font-bold text-gray-400 text-xl relative top-[14px]" title={ speakerName }>{ speakerKey }</span>
 						}
@@ -133,12 +133,12 @@ templ smallCard(file *File) {
     "
 	>
 		<ol class="mb-4">
-			for _, mentionCount := range AtMost(file.TopMentions(), 3) {
+			for _, mentionCount := range AtMost(file.TopPrimaryMentionables(), 3) {
 				<li
  					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-white text-gray-600 rounded-full"
- 					title={ mentionCount.Mention.Mentionable.Ultimate().PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+ 					title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
 				>
-					{ mentionCount.Mention.Mentionable.Ultimate().Cardinal }
+					{ mentionCount.MentionablePart.Cardinal }
 				</li>
 			}
 			if file.HasIssues() {
@@ -165,7 +165,7 @@ templ smallCard(file *File) {
  							src={ imgPath }
  							alt={ speakerName }
  							title={ speakerName }
- 							class="contrast-75"
+ 							class="opacity-50"
 						/>
 					} else {
 						<span class="font-bold text-gray-400 text-xl relative top-[14px]" title={ speakerName }>{ speakerKey }</span>
@@ -212,12 +212,12 @@ templ tinyCard(file *File) {
     "
 	>
 		<ol class="mb-4">
-			for _, mentionCount := range AtMost(file.TopMentions(), 3) {
+			for _, mentionCount := range AtMost(file.TopPrimaryMentionables(), 3) {
 				<li
  					class="inline-block py-2 px-4 mb-2 mr-2 last:mr-0 bg-white text-gray-600 rounded-full"
- 					title={ mentionCount.Mention.Mentionable.Ultimate().PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+ 					title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
 				>
-					{ mentionCount.Mention.Mentionable.Ultimate().Cardinal }
+					{ mentionCount.MentionablePart.Cardinal }
 				</li>
 			}
 			if file.HasIssues() {
@@ -244,7 +244,7 @@ templ tinyCard(file *File) {
  							src={ imgPath }
  							alt={ speakerName }
  							title={ speakerName }
- 							class="contrast-75"
+ 							class="opacity-50"
 						/>
 					} else {
 						<span class="font-bold text-gray-400 text-xl relative top-[14px]" title={ speakerName }>{ speakerKey }</span>
