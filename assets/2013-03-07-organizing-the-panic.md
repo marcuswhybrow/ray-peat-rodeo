@@ -5,6 +5,10 @@ source:
   url: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
   kind: text
 
+added:
+  date: 2023-02-22
+  author: Marcus Whybrow
+
 speakers:
     KM: Karen Mcc
     RP: Ray Peat

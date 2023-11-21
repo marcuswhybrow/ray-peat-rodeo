@@ -12,6 +12,10 @@ transcription:
     url: https://raypeatforum.com/community/threads/nitric-oxide-kmud-2014.5532/
     kind: text
 
+added:
+    date: 2023-10-10
+    author: Marcus Whybrow
+
 speakers:
     AM: Andrew Murray
     RP: Ray Peat
