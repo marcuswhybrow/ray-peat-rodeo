@@ -76,7 +76,7 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
         class="
           popup 
           bg-white shadow-2xl block absolute 
-          z-10 
+          z-20 
           overflow-hidden
           overflow-y-auto 
           mb-4 
