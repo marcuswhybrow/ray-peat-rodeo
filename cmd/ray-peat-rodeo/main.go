@@ -211,7 +211,9 @@ func main() {
 		}
 	}
 
-	x := Index(latest, humanTranscripts)
+	progress := float32(len(latest)) / float32(len(allFiles.Files))
+
+	x := Index(allFiles.Files, latest, humanTranscripts, progress)
 	x.Render(context.Background(), indexFile)
 
 	fmt.Println("\nEpilogue")

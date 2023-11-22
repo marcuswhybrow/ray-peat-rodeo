@@ -660,7 +660,7 @@ templ demo() {
 	</div>
 }
 
-templ Index(latest, humanTrascripts []*File) {
+templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 	@Base("Ray Peat Rodeo") {
 		<article class="pt-16">
 			<section class="mb-24">
@@ -680,6 +680,16 @@ templ Index(latest, humanTrascripts []*File) {
 			</section>
 			<section class="">
 				<div class="max-w-screen-xl mx-auto px-8">
+					<div class="mb-16">
+						<div class="text-3xl mb-4">
+							<span>{ fmt.Sprint(len(latest)) } / { fmt.Sprint(len(allFiles)) } Interviews Transcribed</span>
+						</div>
+						@progressBar(progress)
+					</div>
+				</div>
+			</section>
+			<section class="">
+				<div class="max-w-screen-xl mx-auto px-8">
 					<div class="flex mb-16">
 						<div class="flex-auto border-t-8 border-gray-100 mr-32 pt-8">
 							<h2 class="text-4xl mb-8">Support</h2>
@@ -695,4 +705,14 @@ templ Index(latest, humanTrascripts []*File) {
 			</section>
 		</article>
 	}
+}
+
+templ progressBar(progress float32) {
+	<div class="w-full bg-gray-200 rounded-full h-8 dark:bg-gray-700">
+		<div
+ 			class="bg-blue-600 h-8 rounded-full"
+ 			data-width={ fmt.Sprint(progress*100) + "%" }
+ 			_="on load set my *width to my @data-width"
+		></div>
+	</div>
 }
