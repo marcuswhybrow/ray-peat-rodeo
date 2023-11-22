@@ -1,0 +1,93 @@
+package main 
+
+import "fmt"
+
+templ Chats(allFiles, done, todo []*File) {
+	@Base("All chats") {
+		<div class="max-w-screen-2xl mx-auto">
+			<div class="mx-8">
+				<h2 class="text-4xl font-bold mt-16 mb-8">All Chats</h2>
+				<div>
+					for _, file := range done {
+						<a
+ 							href={ templ.URL(file.Permalink) }
+ 							class="p-8 rounded inline-block rounded-lg shadow bg-white mr-8 mb-8 max-w-md"
+						>
+							<div>
+								@SpeakerCards(file)
+								if file.HasIssues() {
+									<div
+ 										class="inline-block align-top overflow-hidden w-16 h-20 rounded-lg shadow rotate-3 text-center bg-gradient-to-br from-yellow-100 to-amber-200"
+ 										title={ fmt.Sprint(file.IssueCount()) + " GitHub issue" + pluralise(file.IssueCount(), "s") }
+									>
+										<span
+ 											class="relative top-6 text-yellow-500 text-3xl"
+										>{ fmt.Sprint(file.IssueCount()) }</span>
+									</div>
+								}
+							</div>
+							<ol class="mb-0">
+								for i, mentionCount := range AtMost(file.TopPrimaryMentionables(), 3) {
+									if i > 0 && i < 3 {
+										<span class="mr-2 text-rose-300/90">/</span>
+									}
+									<li class="inline-block mb-2 mr-2 last:mr-0">
+										<span
+ 											class="text-gray-400/90 uppercase trakcing-wider"
+ 											title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mentions)" }
+										>{ mentionCount.MentionablePart.Cardinal }</span>
+									</li>
+								}
+								<span class="mr-2 text-rose-300/90">/</span>
+								<li
+ 									class="inline-block mb-2 mr-2 last:mr-0 text-gray-400/90 tracking-wider uppercase"
+ 									title="Date of conversation"
+ 									_="install RelativeDate"
+								>{ file.Date }</li>
+							</ol>
+							<h3 class="tracking-tighter text-3xl font-bold text-gray-500 mb-2">{ file.FrontMatter.Source.Title }</h3>
+							<div class="tracking-wider text-gray-500">{ file.FrontMatter.Source.Series }</div>
+						</a>
+					}
+				</div>
+				<h2 class="text-4xl font-bold mt-16 mb-8">Todo</h2>
+				<table class="w-full">
+					<thead class="border-b">
+						<tr>
+							<td>Date</td>
+							<td>Publisher</td>
+							<td>Title</td>
+							<td>Transcript?</td>
+						</tr>
+					</thead>
+					for _, file := range todo {
+						<tr>
+							<td>{ file.Date }</td>
+							<td>{ file.FrontMatter.Source.Series }</td>
+							<td><a class="font-bold hover:underline" href={ templ.URL(file.Permalink) }>{ file.FrontMatter.Source.Title }</a></td>
+							<td>
+								switch file.FrontMatter.Transcription.Kind {
+									case "text":
+										<span
+ 											class="inline-block bg-green-100 rounded-lg py-px px-2 text-sm text-green-600"
+ 											title="Existing transcript"
+										>easy</span>
+									case "auto-generated":
+										<span
+ 											class="inline-block bg-orange-100 rounded-lg py-px px-2 text-sm text-orange-600"
+ 											title="AI transcript"
+										>moderate</span>
+									default:
+										<span
+ 											class="inline-block bg-red-100 rounded-lg py-px px-2 text-sm text-red-600"
+ 											title="No transcript"
+										>difficult</span>
+								}
+							</td>
+						</tr>
+					}
+				</table>
+			</div>
+		</div>
+	}
+}

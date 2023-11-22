@@ -111,23 +111,33 @@ templ mentionsAndIssues(file *File) {
 	</ol>
 }
 
-templ speakerCards(file *File) {
-	<div class="">
-		for speakerKey, speakerName := range file.FrontMatter.Speakers {
-			<div
- 				title={ speakerName }
- 				class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 last:mr-0 rotate-2"
+templ SpeakerCards(file *File) {
+	for _, speaker := range AtMost(file.TopSpeakers(), 3) {
+		<div
+ 			title={ speaker.Name }
+ 			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 last:mr-0 rotate-2"
+		>
+			if imgSrc, found := SpeakerAvatar(speaker.Name); found {
+				<div class="w-[9999px] h-20">
+					<img src={ imgSrc } alt={ speaker.Name } class="h-full "/>
+				</div>
+			} else {
+				<span class="font-bold text-gray-300 text-xl relative relative top-6" title={ speaker.Name }>{ speaker.Key }</span>
+			}
+		</div>
+	}
+	if len(file.FrontMatter.Speakers) > 3 {
+		<div
+ 			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 rotate-2"
+ 			title={ fmt.Sprint(len(file.FrontMatter.Speakers)-3) + " more speakers" }
+		>
+			<span
+ 				class="font-bold text-gray-300 text-xl relative relative top-6"
 			>
-				if imgSrc, found := SpeakerAvatar(speakerName); found {
-					<div class="w-[9999px] h-20">
-						<img src={ imgSrc } alt={ speakerName } class="h-full "/>
-					</div>
-				} else {
-					<span class="font-bold text-gray-300 text-xl relative relative top-6" title={ speakerName }>{ speakerKey }</span>
-				}
-			</div>
-		}
-	</div>
+				+{ fmt.Sprint(len(file.FrontMatter.Speakers)-3) }
+			</span>
+		</div>
+	}
 }
 
 templ rayPicture() {
@@ -224,7 +234,9 @@ templ topLeftInterview(file *File) {
 			</h3>
 			<p class="text-rose-500 tracking-wide text-lg mt-2">{ file.FrontMatter.Source.Series }</p>
 		</div>
-		@speakerCards(file)
+		<div>
+			@SpeakerCards(file)
+		</div>
 	</a>
 }
 
@@ -265,7 +277,9 @@ templ topRightInterview(file *File) {
 			</h3>
 			<p class="text-gray-600 tracking-wide text-lg mt-2">{ file.FrontMatter.Source.Series }</p>
 		</div>
-		@speakerCards(file)
+		<div>
+			@SpeakerCards(file)
+		</div>
 	</a>
 }
 
@@ -306,7 +320,9 @@ templ bottomLeftInterview(file *File) {
 			</h2>
 			<p class="text-gray-600 tracking-wide text-lg mt-2">{ file.FrontMatter.Source.Series }</p>
 		</div>
-		@speakerCards(file)
+		<div>
+			@SpeakerCards(file)
+		</div>
 	</a>
 }
 
@@ -340,7 +356,7 @@ templ meetRay() {
 	</a>
 }
 
-templ renderLatest(files []*File) {
+templ renderLatest(files []*File, totalFileCount int) {
 	<div
  		class="
       [background-image:radial-gradient(50%_50%_at_top_50%_left_33%,rgba(220,255,220,0.6),rgba(220,255,220,0))]
@@ -371,7 +387,7 @@ templ renderLatest(files []*File) {
 			</div>
 			<div class="text-center mb-4">
 				<a
- 					href=""
+ 					href="/chats"
  					class="
             z-30
             px-6 py-4
@@ -383,7 +399,7 @@ templ renderLatest(files []*File) {
             transition-all
             scale-100 hover:scale-90
           "
-				>View All Interviews</a>
+				>View All { fmt.Sprint(totalFileCount) } Interviews</a>
 			</div>
 		</div>
 	</div>
@@ -691,7 +707,7 @@ templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 				</div>
 			</section>
 			<section class="mb-32">
-				@renderLatest(latest)
+				@renderLatest(latest, len(allFiles))
 			</section>
 			<section class="">
 				<div class="max-w-screen-xl mx-auto px-8">

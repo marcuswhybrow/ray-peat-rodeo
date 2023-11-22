@@ -186,13 +186,21 @@ func main() {
 
 	sort.Sort(ByDate(allFiles.Files))
 
-	var latest []*File
+	var done []*File
+	var todo []*File
 	for _, file := range allFiles.Files {
 		if !file.IsTodo {
-			latest = append(latest, file)
+			done = append(done, file)
+		} else {
+			todo = append(todo, file)
 		}
 	}
+
+	latest := make([]*File, len(done))
+	copy(latest, done)
 	sort.Sort(ByAddedDate(latest))
+	sort.Sort(ByDate(done))
+	sort.Sort(ByDate(todo))
 
 	var humanTranscripts []*File
 	for _, file := range allFiles.Files {
@@ -213,11 +221,18 @@ func main() {
 
 	progress := float32(len(latest)) / float32(len(allFiles.Files))
 
-	x := Index(allFiles.Files, latest, humanTranscripts, progress)
-	x.Render(context.Background(), indexFile)
+	component := Index(allFiles.Files, latest, humanTranscripts, progress)
+	component.Render(context.Background(), indexFile)
 
 	fmt.Println("\nEpilogue")
 	fmt.Println("  ✅ Created Ray Peat Rodeo HTML in " + BUILD)
+
+	// CHATS
+
+	chatFile, _ := createBuildHTMLFile("chats")
+
+	component = Chats(allFiles.Files, done, todo)
+	component.Render(context.Background(), chatFile)
 
 	// DUMP HTTP CACHE
 

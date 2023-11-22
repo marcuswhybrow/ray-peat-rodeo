@@ -185,6 +185,44 @@ func (f *File) GetPermalink() string {
 	return f.Permalink
 }
 
+func (f *File) TopSpeakers() []Speaker {
+	speakers := []Speaker{}
+	for key, name := range f.FrontMatter.Speakers {
+		avatar, _ := SpeakerAvatar(name)
+		speakers = append(speakers, Speaker{
+			Key:    key,
+			Name:   name,
+			Avatar: avatar,
+		})
+	}
+	slices.SortFunc(speakers, func(a, b Speaker) int {
+		// Prefer speakers with avatars
+		if len(a.Avatar) > 0 && len(b.Avatar) == 0 {
+			return -1
+		}
+		if len(b.Avatar) > 0 && len(a.Avatar) == 0 {
+			return 1
+		}
+
+		// Prefer speakers without parenthesis: "Audience Member (Male)"
+		if strings.Contains(a.Name, "(") && !strings.Contains(b.Name, "(") {
+			return -1
+		}
+		if strings.Contains(b.Name, "(") && !strings.Contains(a.Name, "(") {
+			return 1
+		}
+
+		return 0
+	})
+	return speakers
+}
+
+type Speaker struct {
+	Key    string
+	Name   string
+	Avatar string
+}
+
 type ByDate []*File
 
 func (f ByDate) Len() int { return len(f) }
