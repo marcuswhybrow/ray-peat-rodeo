@@ -192,7 +192,7 @@ func main() {
 			latest = append(latest, file)
 		}
 	}
-	sort.Sort(ByTranscriptionDate(latest))
+	sort.Sort(ByAddedDate(latest))
 
 	var humanTranscripts []*File
 	for _, file := range allFiles.Files {

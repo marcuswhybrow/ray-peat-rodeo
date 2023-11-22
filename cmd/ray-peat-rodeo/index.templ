@@ -241,7 +241,10 @@ templ renderLatest(files []*File) {
 						<p class="text-rose-500 tracking-wide text-lg mt-2">{ files[0].FrontMatter.Source.Series }</p>
 					</div>
 					<div class="h-20 float-right">
-						<div class="ml-8 text-rose-400/90 pt-[3.8rem] tracking-wider">{ files[0].Date }</div>
+						<div
+ 							class="ml-8 text-rose-400/90 pt-[3.8rem] tracking-wider"
+ 							_="install RelativeDate"
+						>{ files[0].FrontMatter.Added.Date }</div>
 					</div>
 					@speakerCards(files[0])
 				</a>
@@ -276,7 +279,10 @@ templ renderLatest(files []*File) {
 						<p class="text-gray-600 tracking-wide text-lg mt-2">{ files[1].FrontMatter.Source.Series }</p>
 					</div>
 					<div class="h-20 float-right">
-						<div class="ml-8 text-gray-400/90 pt-[3.8rem] tracking-wider">{ files[0].Date }</div>
+						<div
+ 							class="ml-8 text-gray-400/90 pt-[3.8rem] tracking-wider"
+ 							_="install RelativeDate"
+						>{ files[0].FrontMatter.Added.Date }</div>
 					</div>
 					@speakerCards(files[1])
 				</a>
@@ -313,7 +319,10 @@ templ renderLatest(files []*File) {
 						<p class="text-gray-600 tracking-wide text-lg mt-2">{ files[2].FrontMatter.Source.Series }</p>
 					</div>
 					<div class="h-20 float-right">
-						<div class="ml-8 text-gray-400/90 pt-[3.8rem] tracking-wider">{ files[0].Date }</div>
+						<div
+ 							class="ml-8 text-gray-400/90 pt-[3.8rem] tracking-wider"
+ 							_="install RelativeDate"
+						>{ files[0].FrontMatter.Added.Date }</div>
 					</div>
 					@speakerCards(files[2])
 				</a>
@@ -669,7 +678,21 @@ templ Index(latest, humanTrascripts []*File) {
 			<section class="mb-32">
 				@renderLatest(latest)
 			</section>
-			<section class=""></section>
+			<section class="">
+				<div class="max-w-screen-xl mx-auto px-8">
+					<div class="flex mb-16">
+						<div class="flex-auto border-t-8 border-gray-100 mr-32 pt-8">
+							<h2 class="text-4xl mb-8">Support</h2>
+							<p>Support Marcus on GitHub Sponsors!</p>
+						</div>
+						<div class="flex-auto border-t-8 border-gray-100 pt-8">
+							<h2 class="text-4xl mb-8">Blog & Chat</h2>
+							<p class="mb-4">Read the latest blog post here.</p>
+							<p>Join the Discord server.</p>
+						</div>
+					</div>
+				</div>
+			</section>
 		</article>
 	}
 }

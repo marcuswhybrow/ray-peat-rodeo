@@ -205,6 +205,16 @@ func (f ByTranscriptionDate) Less(i, j int) bool {
 
 func (f ByTranscriptionDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
 
+type ByAddedDate []*File
+
+func (f ByAddedDate) Len() int { return len(f) }
+
+func (f ByAddedDate) Less(i, j int) bool {
+	return f[i].FrontMatter.Added.Date > f[j].FrontMatter.Added.Date
+}
+
+func (f ByAddedDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
+
 type Mentions = []*ast.Mention
 type ByFile[T any] map[*File]T
 type ByPart[T any] map[ast.MentionablePart]T

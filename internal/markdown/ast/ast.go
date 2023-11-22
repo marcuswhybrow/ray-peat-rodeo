@@ -21,6 +21,10 @@ type FrontMatter struct {
 		Date   string
 		Author string
 	}
+	Added struct {
+		Date   string
+		Author string
+	}
 }
 
 var FileKey = parser.NewContextKey()
