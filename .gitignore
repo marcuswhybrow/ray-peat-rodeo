@@ -3,8 +3,8 @@ result-bin
 target
 build
 *_templ.go
-ray-peat-rodeo
+/ray-peat-rodeo
 
-.direnv/
-.envrc
-node_modules/
+/.direnv
+/.envrc
+/node_modules
