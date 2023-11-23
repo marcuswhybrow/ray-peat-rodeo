@@ -20,6 +20,7 @@
           # Echo commands to stdout before running
           set -o xtrace
 
+          ${pkgs.nodejs_20}/bin/npm --version
           ${inputs.templ.packages.${system}.templ}/bin/templ generate
           ${self.packages.${system}.ray-peat-rodeo}/bin/ray-peat-rodeo
           ${pkgs.pagefind}/bin/pagefind --site ./build
