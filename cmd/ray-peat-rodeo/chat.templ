@@ -100,7 +100,7 @@ templ sponsorThisChat() {
 }
 
 templ contributeToThisChat(file *File) {
-	<a data-pagefind-ignore href="{ file.EditPermalink }" class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+	<a data-pagefind-ignore href={ templ.URL(file.EditPermalink) } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
 		<span class="text-green-700">
 			<img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4"/>
 			Or, <strong>contribute</strong> to this page on GitHub.

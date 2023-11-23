@@ -12,6 +12,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 )
 
@@ -43,20 +44,22 @@ func NewFile(filePath string) *File {
 
 	id := fileStem[11:]
 	permalink := "/" + id
+	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", filePath)
 	outPath := path.Join(BUILD, id, "index.html")
 	parentPath := path.Dir(filePath)
 	parentName := path.Base(parentPath)
 
 	return &File{
-		ID:           id,
-		Path:         filePath,
-		OutPath:      outPath,
-		Date:         fileStem[:10],
-		Permalink:    permalink,
-		IsTodo:       parentName == "todo",
-		Markdown:     markdownBytes,
-		Mentions:     Mentions{},
-		Mentionables: ByMentionable[Mentions]{},
+		ID:            id,
+		Path:          filePath,
+		OutPath:       outPath,
+		Date:          fileStem[:10],
+		Permalink:     permalink,
+		EditPermalink: editPermalink,
+		IsTodo:        parentName == "todo",
+		Markdown:      markdownBytes,
+		Mentions:      Mentions{},
+		Mentionables:  ByMentionable[Mentions]{},
 	}
 }
 
