@@ -29,10 +29,10 @@ jobs:
       with:
        extra_nix_config: experimental-features = nix-command flakes
     - uses: DeterminateSystems/magic-nix-cache-action@v2
-    - run: nix run
+    - run: nix build
     - uses: actions/upload-pages-artifact@v1.0.8
       with:
-        path: build
+        path: result
         
   deploy:
     environment:

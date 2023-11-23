@@ -14,14 +14,61 @@
       inherit system;
     };
   in {
-    apps = rec {
-      build = inputs.flake-utils.lib.mkApp {
-        drv = pkgs.writeScriptBin "build" ''
-          # Echo commands to stdout before running
-          set -o xtrace
+    # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
+    packages = rec {
+      ray-peat-rodeo = pkgs.buildGoApplication {
+        name = "ray-peat-rodeo";
+        pwd = ./.;
+        src = ./.;
+        modules = ./gomod2nix.toml;
 
-          ${pkgs.nodejs_20}/bin/npm --version
+        buildPhase = ''
+          mkdir -p $out/bin
           ${inputs.templ.packages.${system}.templ}/bin/templ generate
+          go build ./cmd/ray-peat-rodeo
+          mv ray-peat-rodeo $out/bin/ray-peat-rodeo
+        '';
+      };
+
+      tailwind-scrollbar = pkgs.buildNpmPackage rec {
+        pname = "tailwind-scrollbar";
+        version = "3.0.5";
+
+        src = pkgs.fetchFromGitHub {
+          owner = "adoxography";
+          repo = pname;
+          rev = "v${version}";
+          hash = "sha256-i3tWZmchE+jYoPwOkyUR3j1d7imJNdN+fzC3ainJj8A=";
+        };
+
+        npmDepsHash = "sha256-iht2umjqANBwkZR57Y8P+KtH/JkvNTOLj8tR9m91eKo=";
+
+        dontNpmBuild = true;
+
+        # The prepack script runs the build script, which we'd rather do in the build phase.
+        #npmPackFlags = [ "--ignore-scripts" ];
+
+        NODE_OPTIONS = "";
+
+        meta = with pkgs.lib; {
+          description = "Scrollbar plugin for Tailwind CSS";
+          homepage = "https://github.com/adoxography/tailwind-scrollbar";
+          license = licenses.mit;
+          maintainers = [ "Marcus Whybrow <marcus@whybrow.uk>" ];
+        };
+      };
+    
+      build = pkgs.stdenv.mkDerivation {
+        pname = "build";
+        version = "unstable";
+        src = ./.;
+
+        buildInputs = [
+          inputs.self.packages.${system}.tailwind-scrollbar
+          pkgs.nodejs_20
+        ];
+
+        buildPhase = ''
           ${self.packages.${system}.ray-peat-rodeo}/bin/ray-peat-rodeo
           ${pkgs.pagefind}/bin/pagefind --site ./build
           ${pkgs.nodePackages.tailwindcss}/bin/tailwindcss \
@@ -29,52 +76,11 @@
             --minify \
             --output ./build/assets/tailwind.css
           cp -r ./internal/assets/* ./build/assets
+          mv ./build $out
         '';
       };
+
       default = build;
-    };
-
-    # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
-    packages.ray-peat-rodeo = pkgs.buildGoApplication {
-      name = "ray-peat-rodeo";
-      pwd = ./.;
-      src = ./.;
-      modules = ./gomod2nix.toml;
-
-      buildPhase = ''
-        mkdir -p $out/bin
-        ${inputs.templ.packages.${system}.templ}/bin/templ generate
-        go build ./cmd/ray-peat-rodeo
-        mv ray-peat-rodeo $out/bin/ray-peat-rodeo
-      '';
-    };
-
-    packages.tailwind-scrollbar = pkgs.buildNpmPackage rec {
-      pname = "tailwind-scrollbar";
-      version = "3.0.5";
-
-      src = pkgs.fetchFromGitHub {
-        owner = "adoxography";
-        repo = pname;
-        rev = "v${version}";
-        hash = "sha256-i3tWZmchE+jYoPwOkyUR3j1d7imJNdN+fzC3ainJj8A=";
-      };
-
-      npmDepsHash = "sha256-iht2umjqANBwkZR57Y8P+KtH/JkvNTOLj8tR9m91eKo=";
-
-      dontNpmBuild = true;
-
-      # The prepack script runs the build script, which we'd rather do in the build phase.
-      #npmPackFlags = [ "--ignore-scripts" ];
-
-      NODE_OPTIONS = "";
-
-      meta = with pkgs.lib; {
-        description = "Scrollbar plugin for Tailwind CSS";
-        homepage = "https://github.com/adoxography/tailwind-scrollbar";
-        license = licenses.mit;
-        maintainers = [ "Marcus Whybrow <marcus@whybrow.uk>" ];
-      };
     };
 
     # Run `nix develop` to enter a shell containing all dependencies.
