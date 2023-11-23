@@ -3,6 +3,7 @@ package extension
 import (
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/parser"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/renderer"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/transformer"
 	"github.com/yuin/goldmark"
 	gmParser "github.com/yuin/goldmark/parser"
 	gmRenderer "github.com/yuin/goldmark/renderer"
@@ -21,10 +22,16 @@ func NewSpeakers() goldmark.Extender {
 }
 
 func (s *speakers) Extend(m goldmark.Markdown) {
-	m.Parser().AddOptions(gmParser.WithBlockParsers(
-		util.Prioritized(parser.NewSpeakerParser(), 100),
-	))
+	m.Parser().AddOptions(
+		gmParser.WithBlockParsers(
+			util.Prioritized(parser.NewSpeakerParser(), 100),
+		),
+		gmParser.WithASTTransformers(
+			util.Prioritized(transformer.UtteranceLinkTransformer, 100),
+		),
+	)
 	m.Renderer().AddOptions(gmRenderer.WithNodeRenderers(
 		util.Prioritized(renderer.NewUtteranceHTMLRenderer(), 100),
+		util.Prioritized(renderer.NewUtteranceLinkRenderer(), 100),
 	))
 }

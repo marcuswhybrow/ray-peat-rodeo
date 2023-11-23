@@ -36,15 +36,17 @@ func main() {
 		log.Fatalf("Failed to create output directory: %v", err)
 	}
 
-	markdownParser := goldmark.New(goldmark.WithExtensions(
-		extension.Mentions,
-		gmExtension.Typographer,
-		meta.New(meta.WithStoresInDocument()),
-		extension.Timecodes,
-		extension.Speakers,
-		extension.Sidenotes,
-		extension.GitHubIssues,
-	))
+	markdownParser := goldmark.New(
+		goldmark.WithExtensions(
+			extension.Mentions,
+			gmExtension.Typographer,
+			meta.New(meta.WithStoresInDocument()),
+			extension.Timecodes,
+			extension.Speakers,
+			extension.Sidenotes,
+			extension.GitHubIssues,
+		),
+	)
 
 	log.Printf("Scanning files in %v\n", ASSETS)
 
