@@ -1,9 +1,15 @@
 schema = 3
 
 [mod]
+  [mod."github.com/PuerkitoBio/goquery"]
+    version = "v1.8.1"
+    hash = "sha256-z2RaB8PVPEzSJdMUfkfNjT616yXWTjW2gkhNOh989ZU="
   [mod."github.com/a-h/templ"]
     version = "v0.2.432"
     hash = "sha256-x7qqOsIIId7i9THgVkZVTj6S+wM+/V66Xu4bPqfTf/8="
+  [mod."github.com/andybalholm/cascadia"]
+    version = "v1.3.1"
+    hash = "sha256-M0u22DXSeXUaYtl1KoW1qWL46niFpycFkraCEQ/luYA="
   [mod."github.com/gomarkdown/markdown"]
     version = "v0.0.0-20230922112808-5421fefb8386"
     hash = "sha256-N3qjdMq0L4toiTu2rut9sSPR/cA7bEe/bZ1iEVNzXOE="
@@ -19,9 +25,15 @@ schema = 3
   [mod."github.com/yuin/goldmark-meta"]
     version = "v1.1.0"
     hash = "sha256-Q/kRP4rpS3r24HYBvPTiuKNbf+PUMVsEp2m6yOblth0="
+  [mod."golang.org/x/net"]
+    version = "v0.9.0"
+    hash = "sha256-EG5GRDq282twyce8uugsDTjMz1pNn6zPcyVTZmSiJ14="
   [mod."golang.org/x/text"]
     version = "v0.14.0"
     hash = "sha256-yh3B0tom1RfzQBf1RNmfdNWF1PtiqxV41jW1GVS6JAg="
   [mod."gopkg.in/yaml.v2"]
     version = "v2.3.0"
     hash = "sha256-8tPC5nMGvUFs97W6+JXsxJLjU6EpDmPG9tXo1DyFoNU="
+  [mod."gopkg.in/yaml.v3"]
+    version = "v3.0.1"
+    hash = "sha256-FqL9TKYJ0XkNwJFnq9j0VvJ5ZUU1RvH/52h/f5bkYAU="
