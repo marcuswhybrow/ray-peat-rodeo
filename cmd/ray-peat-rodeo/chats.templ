@@ -67,7 +67,7 @@ templ DoneFile(file *File) {
 					>
 						{ fmt.Sprint(file.IssueCount()) }
 					</span>
-					<span class="text-sm absolute bottom-2 left-0 right-0 text-center text-yellow-500">issue</span>
+					<span class="text-sm absolute bottom-2 left-0 right-0 text-center text-yellow-500">issue{ pluralise(file.IssueCount(), "s") }</span>
 				</div>
 			}
 		</div>
