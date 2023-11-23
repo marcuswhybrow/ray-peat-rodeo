@@ -5,7 +5,7 @@ import "github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 
 templ MentionPage(primary ast.MentionablePart, primaries ByFile[Mentions], secondaries ByPart[ByFile[Mentions]], httpCache *cache.HTTPCache) {
 	@Base("Mention") {
-		<div class="max-w-2xl mx-auto popup-select">
+		<div class="max-w-2xl mx-auto popup-select mb-32">
 			<h1 class="mb-4 mt-16 text-3xl text-center">{ primary.CardinalFirst() }</h1>
 			if len(primaries) > 0 {
 				@mentions(primaries)
