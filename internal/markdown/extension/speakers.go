@@ -32,6 +32,5 @@ func (s *speakers) Extend(m goldmark.Markdown) {
 	)
 	m.Renderer().AddOptions(gmRenderer.WithNodeRenderers(
 		util.Prioritized(renderer.NewUtteranceHTMLRenderer(), 100),
-		util.Prioritized(renderer.NewUtteranceLinkRenderer(), 100),
 	))
 }

@@ -1,7 +1,6 @@
 package transformer
 
 import (
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	gast "github.com/yuin/goldmark/ast"
 	gparser "github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/text"
@@ -22,10 +21,7 @@ func (t *utteranceLinkTransformer) Transform(document *gast.Document, reader tex
 		}
 
 		if link, ok := node.(*gast.Link); ok {
-			parent := link.Parent()
-			utteranceLink := ast.NewUtteranceLink()
-			parent.InsertAfter(parent, link, utteranceLink)
-			utteranceLink.AppendChild(utteranceLink, link)
+			link.SetAttribute([]byte("class"), []uint8("border-b hover:border-b-2 border-gray-400"))
 		}
 
 		return gast.WalkContinue, nil
