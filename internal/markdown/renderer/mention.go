@@ -89,6 +89,7 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
           scrollbar-thumb-slate-200
         "
         data-mention-id="{{ .Mention.ID }}"
+        data-pagefind-ignore
         _="
           on openPopup
             add .open-popup to me
