@@ -10,17 +10,17 @@ import (
 	"github.com/yuin/goldmark/util"
 )
 
-type GitHubIssueHTMLRendereer struct{}
+type GitHubIssueHTMLRenderer struct{}
 
 func NewGitHubIssueHTMLRenderer() grenderer.NodeRenderer {
-	return &GitHubIssueHTMLRendereer{}
+	return &GitHubIssueHTMLRenderer{}
 }
 
-func (r *GitHubIssueHTMLRendereer) RegisterFuncs(reg grenderer.NodeRendererFuncRegisterer) {
+func (r *GitHubIssueHTMLRenderer) RegisterFuncs(reg grenderer.NodeRendererFuncRegisterer) {
 	reg.Register(ast.KindGitHubIssue, r.renderGitHubIssue)
 }
 
-func (t *GitHubIssueHTMLRendereer) renderGitHubIssue(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
+func (t *GitHubIssueHTMLRenderer) renderGitHubIssue(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
 	if entering {
 		github_issue := node.(*ast.GitHubIssue)
 
