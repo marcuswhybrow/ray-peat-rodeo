@@ -1,7 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './build/**/*.html',
+    './cmd/ray-peat-rodeo/**/*.{templ,go}',
+    './internal/**/*.{templ,go}',
+    './build/index.html'
   ],
   theme: {
     extend: {

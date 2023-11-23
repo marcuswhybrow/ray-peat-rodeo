@@ -1,5 +1,7 @@
 package main
 
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
+
 func pluralise(i int, s string) string {
 	if i != 1 {
 		return s
@@ -22,7 +24,7 @@ templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 					@demo()
 				</div>
 			</section>
-			<section class="mb-32 max-w-screen-lg mx-auto">
+			<section class="mb-8 max-w-screen-lg mx-auto">
 				<div class="mx-8">
 					<h2 class="-rotate-3 text-pink-400/90 text-4xl uppercase border-4 border-pink-400/90 p-4 inline-block relative top-12 left-16 rounded-lg">New</h2>
 					@DoneFile(latest[0])
@@ -31,6 +33,22 @@ templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 						<span _="install RelativeDate">{ latest[0].FrontMatter.Added.Date }</span>
 					</p>
 				</div>
+			</section>
+			<section class="max-w-screen-lg mx-auto px-8 mb-32">
+				<a
+ 					href={ templ.URL(global.SPONSOR_LINK) }
+ 					class="block rounded-lg bg-white shadow-lg px-8 py-4"
+				>
+					<h2
+ 						class="float-right text-4xl text-gray-300 mt-2 tracking-tight uppercase tracking-wider italic"
+					>Supporters</h2>
+					<img
+ 						class="w-14 h-14 rounded-lg rotate-3 border inline-block mr-6 align-top"
+ 						src="https://avatars.githubusercontent.com/u/151856434"
+ 						title="HayesKim"
+					/>
+					<span class="inline-block mt-4 text-gray-500 uppercase tracking-wider italic">become a sponsor</span>
+				</a>
 			</section>
 			<section class="max-w-screen-lg mx-auto mb-64">
 				<div class="mx-8">
