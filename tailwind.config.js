@@ -11,8 +11,9 @@ module.exports = {
     // // So far, CSS counters have sufficed in such situations:
     // `<span class="[counter-increment:count] before:content-[counter(count)]">`
     // ```
-    './cmd/**/*.{templ,go}',
-    './internal/**/*.{templ,go}',
+    './build/index.html',
+    './build/2018-01-22-when-western-medicine-isn\'t-working/index.html',
+    './build/2022-11-18-untitled-interview-2022-11-18/index.html'
   ],
   theme: {
     extend: {
