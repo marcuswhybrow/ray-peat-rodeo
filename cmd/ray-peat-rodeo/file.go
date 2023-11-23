@@ -41,9 +41,9 @@ func NewFile(filePath string) *File {
 		log.Panicf("Failed to read markdown file '%v': %v", filePath, err)
 	}
 
-	id := fileStem
+	id := fileStem[11:]
 	permalink := "/" + id
-	outPath := path.Join(BUILD, fileStem, "index.html")
+	outPath := path.Join(BUILD, id, "index.html")
 	parentPath := path.Dir(filePath)
 	parentName := path.Base(parentPath)
 
