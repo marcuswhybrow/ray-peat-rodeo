@@ -79,7 +79,7 @@ templ DoneFile(file *File) {
 				<li class="inline-block mb-2 mr-2 last:mr-0">
 					<span
  						class="text-gray-400/90 uppercase trakcing-wider"
- 						title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mentions)" }
+ 						title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
 					>{ mentionCount.MentionablePart.Cardinal }</span>
 				</li>
 			}
