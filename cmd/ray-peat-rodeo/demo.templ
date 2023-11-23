@@ -1,0 +1,289 @@
+package main
+
+import "fmt"
+
+var marcus = map[string]string{"MW": "Marcus"}
+
+templ keySrc(title string) {
+	<span class="text-red-400">{ title }:</span>
+}
+
+templ mentionSrc(primary, secondary, label string) {
+	<span class="text-purple-500">[[{ primary }]]</span>
+}
+
+templ speakerSrc(initials string) {
+	<span class="text-red-500">{ initials }:</span>
+}
+
+templ issueSrc(id int) {
+	<span class="text-purple-500">{ "{#" }{ fmt.Sprint(id) }{ "}" }</span>
+}
+
+templ markdown() {
+	<div class="inline-block relative mb-16 2xl:mb-0">
+		<div class="w-[150px] h-[100px] bg-pink-100 rounded-lg absolute -rotate-1 -left-8"></div>
+		<div class="w-[100px] h-[90px] bg-pink-50 rounded-lg absolute -rotate-2 -left-32 top-32"></div>
+		<div class="w-[40px] h-[30px] bg-pink-50/60 rounded absolute -rotate-3 -left-24 top-16"></div>
+		<div class="w-[200px] h-[150px] bg-pink-200/60 rounded-lg absolute -rotate-2 -right-32 -bottom-32"></div>
+		<div
+ 			class="
+      relative top-16
+      text-left
+      rounded-lg w-[500px] overflow-hidden
+      shadow-2xl
+      shadow-pink-500/10
+      font-mono text-lg text-pink-600
+      bg-gradient-to-bl from-pink-300 to-white
+      -rotate-3
+    "
+		>
+			<div class="h-8">
+				<div class="pt-6 pl-8">
+					<div class="rounded-full bg-red-400/40 w-4 h-4 inline-block"></div>
+					<div class="rounded-full bg-red-400/40 w-4 h-4 ml-[10px] inline-block"></div>
+					<div class="rounded-full bg-red-400/40 w-4 h-4 ml-[10px] inline-block"></div>
+				</div>
+			</div>
+			<div id="frontmatter" class="px-8 pt-6 pb-6">
+				<p>---</p>
+				<p>
+					@keySrc("speakers")
+				</p>
+				<p class="ml-4">
+					@keySrc("RP")
+					{ " " }Ray Peat
+				</p>
+				<p class="ml-4">
+					@keySrc("I")
+					{ " " }Interviewer
+				</p>
+				<p>---</p>
+				<p>
+					<br/>
+					@speakerSrc("RP")
+					{ " " }
+					<span class="text-purple-500">[18:32]</span>
+					There was an Austrailian study 
+					@issueSrc(12)
+					{ " " }
+					around that time.
+				</p>
+				<p>
+					<br/>
+					@speakerSrc("I")
+					{ " " }
+					And when did you first discover 
+					@mentionSrc("Blake, William", "", "")
+					?
+				</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ program() {
+	<div
+ 		class="
+      relative
+      inline-block align-top
+      ml-16 mr-12
+      mt-40
+      rotate-[95deg] 2xl:rotate-[-6deg]
+      transition-all
+    "
+ 		_="
+      on load
+        trigger hover on me
+
+      on hover
+        transition *top to 10px over 1.5s
+        transition *top to 0px over 1.5s
+        trigger hover on me
+        
+    "
+	>
+		<span
+ 			class="
+        pt-8 inline-block 
+        text-transparent bg-clip-text 
+        bg-gradient-to-b from-pink-300/50 to-70% to-purple-400/30
+        text-9xl
+      "
+		>👉</span>
+	</div>
+}
+
+templ utterance(speaker string) {
+	<div
+ 		class={
+			"font-sans",
+			templ.KV("ml-1 mr-16", speaker == "Ray Peat"),
+			templ.KV("ml-16 mr-1", speaker != "Ray Peat"),
+		}
+	>
+		<div
+ 			class={
+				"text-sm mt-8 mb-4 block",
+				templ.KV("text-gray-400", speaker == "Ray Peat"),
+				templ.KV("text-sky-400", speaker != "Ray Peat"),
+			}
+		>
+			{ speaker }
+		</div>
+		<div
+ 			class={
+				"p-8 rounded shadow",
+				templ.KV("text-gray-900 bg-gray-100", speaker == "Ray Peat"),
+				templ.KV("text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200", speaker != "Ray Peat"),
+			}
+		>
+			{ children... }
+		</div>
+	</div>
+}
+
+templ blakeMention() {
+	<span
+ 		hx-trigger="load"
+ 		hx-target="find .popup"
+ 		hx-get="/api/mentionable/popup/william-blake"
+ 		hx-swap="innerHTML"
+ 		hx-select=".hx-select"
+ 		class="relative cursor-pointer"
+ 		_={ `
+      on mouseenter
+        remove .hidden from .popup in me
+        send stopWiggling to .label in me
+
+      on mouseleave
+        wait for mouseenter or 500ms
+        if the result's type is not 'mouseenter'
+          add .hidden to .popup in me
+        end
+      
+    ` }
+	>
+		<span
+ 			class="
+        label
+        font-mono font-bold tracking-normal 
+        drop-shadow-md box-decoration-clone 
+        border-b hover:border-b-2
+			  text-sky-800 hover:text-sky-900 shadow-pink-300 border-sky-800
+        inline-block
+        rotate-0
+        transition-all
+      "
+ 			_={ `
+        on load 
+          wait 1s
+          trigger wiggle on me
+
+        on wiggle
+          set x to Math.random() * 10
+          if x > 8 
+            wait for stopWiggling or 8s
+          else if x > 3
+            wait for stopWiggling or 5s
+          else 
+            wait for stopWiggling or 2s
+          end
+          if the result's type is not 'stopWiggling'
+            set my *transform to 'rotate(16deg)' then settle
+            set my *transform to 'rotate(-6deg)' then settle
+            set my *transform to 'rotate(6deg)' then settle
+            set my *transform to 'rotate(-4deg)' then settle
+            set my *transform to 'rotate(0deg)' then settle
+            trigger wiggle on me
+          end
+        ` }
+		>William Blake</span>?
+		<span
+ 			class="
+        popup
+        bg-white shadow-2xl block absolute 
+        hidden
+        z-10 
+        overflow-hidden
+        overflow-y-auto 
+        mb-4 
+        w-[400px] h-[300px]
+        left-[calc(50%-200px)]
+        top-8
+        scrollbar
+        scrollbar-track-slate-100
+        scrollbar-thumb-slate-200
+      "
+ 			_="
+        on click halt the event
+      "
+		>
+			<span class="text-center text-gray-400 block p-8">
+				loading William Blake...
+			</span>
+		</span>
+	</span>
+}
+
+templ issue() {
+	<span
+ 		class="
+      z-10 block transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-yellow-800/20 hover:shadow-yellow-600/40 rounded-md bg-gradient-to-br from-yellow-200 from-10% to-amber-200 hover:from-yellow-100 hover:from-70% hover:to-amber-200 xl:block w-2/5 mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight
+      cursor-pointer
+    "
+	>
+		<span class="text-yellow-900 font-bold mr-0.5">
+			<img src="/assets/images/github-mark.svg" class="h-4 w-4 inline-block relative top-[-1px] mr-0.5"/> #12
+		</span>
+		<span class="text-yellow-800">Which Australian study is Ray referring to?</span>
+	</span>
+}
+
+templ output() {
+	<div
+ 		class="
+      inline-block align-top
+      w-[90%] lg:w-[900px] 2xl:w-[700px] 
+      text-left
+      backdrop-blur-2xl
+      bg-gradient-to-br from-white/90 to-gray-100/30
+      rounded-lg 
+      shadow-2xl shadow-purple-700/20
+    "
+	>
+		<div class="py-4 bg-gradient-to-r from-blue-200 to-purple-300 rounded-t-lg">
+			<div class="h-8 w-3/5 mx-auto bg-gradient-to-br from-white/60 to-white/50 rounded"></div>
+		</div>
+		<div class="px-8 pb-10 pt-2 max-w-xl mx-auto">
+			@utterance("Ray Peat") {
+				<p>
+					<span class="text-sm px-2 py-1 rounded-md bg-gray-300 hover:bg-gray-500 text-gray-50 cursor-pointer">18:32</span>
+					There was an Australian
+					@issue()
+					study around that time.
+				</p>
+			}
+			@utterance("Interviewer") {
+				<p>
+					When did you first discover 
+					@blakeMention()
+				</p>
+			}
+		</div>
+	</div>
+}
+
+templ demo() {
+	<div
+ 		class="
+      text-center
+      from-purple-300 to-white
+      [background-image:radial-gradient(50%_50%_at_top_50%_right_33%,rgba(255,220,255,1),rgba(255,220,255,0))]
+    "
+	>
+		@markdown()
+		@program()
+		@output()
+	</div>
+}

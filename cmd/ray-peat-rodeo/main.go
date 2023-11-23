@@ -227,13 +227,6 @@ func main() {
 	fmt.Println("\nEpilogue")
 	fmt.Println("  ✅ Created Ray Peat Rodeo HTML in " + BUILD)
 
-	// CHATS
-
-	chatFile, _ := createBuildHTMLFile("chats")
-
-	component = Chats(allFiles.Files, done, todo)
-	component.Render(context.Background(), chatFile)
-
 	// DUMP HTTP CACHE
 
 	misses := httpCache.GetRequestsMissed()
