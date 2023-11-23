@@ -74,11 +74,10 @@ templ pinnedOriginal(file *File) {
 
 templ openChat(file *File) {
 	@StatusChange() {
-		<a
+		<span
  			data-pagefind-filter="Host"
- 			href=""
- 			class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2"
-		>{ file.FrontMatter.Source.Series }</a>
+ 			class="text-gray-800 hover:text-gray-900 border-gray-400"
+		>{ file.FrontMatter.Source.Series }</span>
 		started a chat
 	}
 }
