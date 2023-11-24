@@ -100,7 +100,7 @@ templ related(otherMentionables []ast.Mentionable) {
 		</div>
 		<div class="bg-slate-100 px-8 pt-8 pb-8 text-center">
 			for i, mentionable := range otherMentionables {
-				if i > 0 && i < len(otherMentionables) - 1 {
+				if i > 0 && i < len(otherMentionables) {
 					<span class="text-slate-300">{ " • " }</span>
 				}
 				<a
