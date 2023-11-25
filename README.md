@@ -5,16 +5,26 @@ the public works of Ray Peat.
 
 ![banner](https://raw.githubusercontent.com/marcuswhybrow/ray-peat-rodeo/back-to-go/internal/assets/docs/ray-peat-rodeo-banner.png)
 
-# Usage
+# Developing
 
 Requirements: [Nix Package Manager](https://nixos.org/download.html#download-nix)
 
 ```bash
 git clone git@github.com:marcuswhybrow/ray-peat-rodeo.git
 cd ray-peat-rodeo
-nix develop -c watch-and-serve
 
-# In another terminal add a new transcript.
+nix develop -c modd # Starts auto-reloading dev server
+``
+
+In a second terminal...
+
+```bash
+nix develop -c tailwind-watch # Allows tailwind to rebuild CSS classes
+```
+
+In a third terminal edit a transcription file... 
+
+```bash
 # See existing files in ./content for examples
-touch ./content/YYYY-MM-DD-title-of-new-transcription.md
+vim ./assets/YYYY-MM-DD-title-of-new-transcription.md
 ```
