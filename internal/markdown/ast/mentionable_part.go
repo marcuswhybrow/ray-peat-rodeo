@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/mail"
 	"net/url"
 	"strings"
 
@@ -65,6 +66,18 @@ func (m *MentionablePart) IsURL() bool {
 
 	u, err := url.Parse(m.Cardinal)
 	if err != nil || !u.IsAbs() {
+		return false
+	}
+	return true
+}
+
+func (m *MentionablePart) IsEmailAddress() bool {
+	if m.HasPrefix() {
+		return false
+	}
+
+	_, err := mail.ParseAddress(m.Cardinal)
+	if err != nil {
 		return false
 	}
 	return true

@@ -89,6 +89,13 @@ templ header(mentionable ast.Mentionable) {
 			>
 				Visit Link
 			</a>
+		} else if mentionable.Ultimate().IsEmailAddress() {
+			<a
+ 				href={ templ.URL("mailto:" + mentionable.Ultimate().Cardinal) }
+ 				class="px-4 py-2 mt-4 mb-4 text-slate-600 hover:text-slate-50 bg-slate-300 hover:bg-slate-400 rounded-lg block text-center"
+			>
+				Send Email
+			</a>
 		}
 	</div>
 }
