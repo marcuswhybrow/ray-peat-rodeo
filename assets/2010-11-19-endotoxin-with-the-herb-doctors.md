@@ -294,9 +294,9 @@ AM: [58:27] Wow. Well, Dr. Peat, sorry for cutting you short. I know that people
 
 SJM: We're running out of time here. But I do want to mention some herbs and also, especially, comming up to this time of the year, with thanksgiving and christmas, and so many people suffering from so many different infections, a lot of times it's the gut endotoxins from the gut bacteria that creates the flu-like symptoms and the sniffles and the colds that people get this time of year.
 
-RP: So sock up on your raw carrot salad, and some cascara powder, tabebuia, like I mentioned, pau d’arco, another good herb to use is echinacea, also goldenseal, barberry [sic?], oregon grape root [sic?] those also are anti-microbial if you come down with a nasty bug in your intestine.
+So stock up on your raw carrot salad, and some cascara powder, tabebuia, like I mentioned, pau d’arco, another good herb to use is echinacea, also goldenseal, barberry [sic?], oregon grape root [sic?] those also are anti-microbial if you come down with a nasty bug in your intestine.
 
-AM: [59:20] For people who'd like to hear more of Dr. Ray Peat, or read his articles, please go to his website [[Peat, Raymond > https://raypeat.com | raypeat.com]]. Lot's of good information.
+AM: [59:20] For people who'd like to hear more of [[Peat, Raymond|Dr. Ray Peat]], or read his articles, please go to his website [[Peat, Raymond > https://raypeat.com | raypeat.com]]. Lot's of good information.
 
 Well, thank you so much for listening. And thank you for the callers. We really enjoy doing the show. We're so pleased to hear that people want to ask questions and are into it as well.
 
