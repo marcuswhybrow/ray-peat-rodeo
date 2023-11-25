@@ -25,6 +25,5 @@ nix develop -c tailwind-watch # Allows tailwind to rebuild CSS classes
 In a third terminal edit a transcription file... 
 
 ```bash
-# See existing files in ./content for examples
 vim ./assets/YYYY-MM-DD-title-of-new-transcription.md
 ```
