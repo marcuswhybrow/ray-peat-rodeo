@@ -14,7 +14,7 @@ git clone git@github.com:marcuswhybrow/ray-peat-rodeo.git
 cd ray-peat-rodeo
 
 nix develop -c modd # Starts auto-reloading dev server
-``
+```
 
 In a second terminal...
 
