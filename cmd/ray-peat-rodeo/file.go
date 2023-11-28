@@ -2,23 +2,29 @@ package main
 
 import (
 	"bytes"
-	"io/fs"
+	"context"
+	"fmt"
 	"log"
+	"net/url"
 	"os"
 	"path"
 	"path/filepath"
 	"slices"
-	"sort"
 	"strings"
-	"text/template"
 
+	"github.com/gernest/front"
+	"github.com/mitchellh/mapstructure"
+	"github.com/yuin/goldmark"
+	gparser "github.com/yuin/goldmark/parser"
+
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 )
 
 // Markdown input file
 type File struct {
-	FrontMatter   ast.FrontMatter
+	FrontMatter   FrontMatter
 	IsTodo        bool
 	Path          string
 	ID            string
@@ -31,25 +37,84 @@ type File struct {
 	Mentions      Mentions
 	Mentionables  ByMentionable[Mentions]
 	Issues        []int
+	Speakers      []*Speaker
 }
 
-func NewFile(filePath string) *File {
+type FrontMatter struct {
+	Source struct {
+		Series   string
+		Title    string
+		Url      string
+		Kind     string
+		Duration string
+	}
+	Speakers        map[string]string
+	PrimarySpeakers []string
+	Transcription   struct {
+		Url    string
+		Kind   string
+		Date   string
+		Author string
+	}
+	Added struct {
+		Date   string
+		Author string
+	}
+}
+
+func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*File, error) {
 	fileName := filepath.Base(filePath)
 	fileStem := strings.TrimSuffix(fileName, filepath.Ext(filePath))
 
-	markdownBytes, err := os.ReadFile(filePath)
+	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
-		log.Panicf("Failed to read markdown file '%v': %v", filePath, err)
+		return nil, fmt.Errorf("Failed to read file: %v", err)
 	}
+
+	// 🔗 Details
 
 	id := fileStem[11:]
 	permalink := "/" + id
 	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", filePath)
-	outPath := path.Join(BUILD, id, "index.html")
+	outPath := path.Join(OUTPUT, id, "index.html")
 	parentPath := path.Dir(filePath)
 	parentName := path.Base(parentPath)
 
-	return &File{
+	// 📄 FrontMatter
+
+	matter := front.NewMatter()
+	matter.Handle("---", front.YAMLHandler)
+	rawFMatter, _, err := matter.Parse(strings.NewReader(string(fileBytes)))
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse frontmatter: %v", err)
+	}
+
+	frontMatter := FrontMatter{}
+	err = mapstructure.Decode(rawFMatter, &frontMatter)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to decode YAML frontmatter: %v", err)
+	}
+
+	// 👨👱 Speakers & Avatars
+
+	speakers := []*Speaker{}
+	for id, name := range frontMatter.Speakers {
+		var isPrimarySpeaker bool
+		if len(frontMatter.PrimarySpeakers) == 0 {
+			isPrimarySpeaker = id == "RP"
+		} else {
+			isPrimarySpeaker = slices.Contains(frontMatter.PrimarySpeakers, id)
+		}
+
+		speakers = append(speakers, &Speaker{
+			ID:               id,
+			Name:             name,
+			AvatarPath:       avatarPaths.Get(name),
+			IsPrimarySpeaker: isPrimarySpeaker,
+		})
+	}
+
+	file := &File{
 		ID:            id,
 		Path:          filePath,
 		OutPath:       outPath,
@@ -57,13 +122,51 @@ func NewFile(filePath string) *File {
 		Permalink:     permalink,
 		EditPermalink: editPermalink,
 		IsTodo:        parentName == "todo",
-		Markdown:      markdownBytes,
+		FrontMatter:   frontMatter,
+		Markdown:      fileBytes,
 		Mentions:      Mentions{},
 		Mentionables:  ByMentionable[Mentions]{},
+		Speakers:      speakers,
 	}
+
+	// 🖥 HTML
+
+	parserContext := gparser.NewContext()
+	parserContext.Set(ast.FileKey, file)
+	parserContext.Set(ast.HTTPCacheKey, httpCache)
+
+	var html bytes.Buffer
+	err = markdownParser.Convert(file.Markdown, &html, gparser.WithContext(parserContext))
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse markdown: %v", err)
+	}
+	file.Html = html.Bytes()
+
+	return file, nil
 }
 
-// For ast.File interface
+// Writes file to f.outPath
+func (f *File) Render() error {
+	parentDir := filepath.Dir(f.OutPath)
+	err := os.MkdirAll(parentDir, 0755)
+	if err != nil {
+		return fmt.Errorf("Failed to create parent directory: %v", err)
+	}
+
+	outFile, err := os.Create(f.OutPath)
+	if err != nil {
+		return fmt.Errorf("Failed to create file': %v", err)
+	}
+
+	err = RenderChat(f).Render(context.Background(), outFile)
+	if err != nil {
+		return fmt.Errorf("Failed to render template: %v", err)
+	}
+
+	return nil
+}
+
+// Implement ast.File interface
 
 func (f *File) GetMarkdown() []byte {
 	return f.Markdown
@@ -79,27 +182,31 @@ func (f *File) RegisterMention(mention *ast.Mention) {
 	f.Mentionables[mention.Mentionable] = append(f.Mentionables[mention.Mentionable], mention)
 }
 
-type MentionCount struct {
-	Mention *ast.Mention
-	Count   int
-}
-
-type ByMostMentioned []MentionCount
-
-func (m ByMostMentioned) Len() int { return len(m) }
-
-func (m ByMostMentioned) Less(i, j int) bool {
-	if m[i].Count > m[j].Count {
-		return true
-	} else if m[i].Count == m[j].Count {
-		iCardinal := m[i].Mention.Mentionable.Ultimate().Cardinal
-		jCardinal := m[j].Mention.Mentionable.Ultimate().Cardinal
-		return len(iCardinal) < len(jCardinal)
+func (f *File) GetSpeakers() []ast.Speaker {
+	speakers := make([]ast.Speaker, len(f.Speakers))
+	for i, s := range f.Speakers {
+		speakers[i] = s
 	}
-	return false
+	return speakers
 }
 
-func (m ByMostMentioned) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
+func (f *File) GetSourceURL() string {
+	return f.FrontMatter.Source.Url
+}
+
+func (f *File) RegisterIssue(id int) {
+	f.Issues = append(f.Issues, id)
+}
+
+func (f *File) GetID() string {
+	return f.ID
+}
+
+func (f *File) GetPermalink() string {
+	return f.Permalink
+}
+
+// Other
 
 func (f *File) TopMentions() []MentionCount {
 	results := []MentionCount{}
@@ -121,31 +228,9 @@ func (f *File) TopMentions() []MentionCount {
 		}
 	}
 
-	sort.Sort(ByMostMentioned(results))
+	slices.SortFunc(results, mostMentioned)
 	return results
 }
-
-type MentionablePartCount struct {
-	MentionablePart ast.MentionablePart
-	Count           int
-}
-
-type ByMostMentionedPrimary []MentionablePartCount
-
-func (m ByMostMentionedPrimary) Len() int { return len(m) }
-
-func (m ByMostMentionedPrimary) Less(i, j int) bool {
-	if m[i].Count > m[j].Count {
-		return true
-	} else if m[i].Count == m[j].Count {
-		iCardinal := m[i].MentionablePart.Cardinal
-		jCardinal := m[j].MentionablePart.Cardinal
-		return len(iCardinal) < len(jCardinal)
-	}
-	return false
-}
-
-func (m ByMostMentionedPrimary) Swap(i, j int) { m[i], m[j] = m[j], m[i] }
 
 func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 	results := []MentionablePartCount{}
@@ -164,7 +249,7 @@ func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 		}
 	}
 
-	sort.Sort(ByMostMentionedPrimary(results))
+	slices.SortFunc(results, mostMentionedPrimary)
 	return results
 }
 
@@ -176,204 +261,115 @@ func (f *File) HasIssues() bool {
 	return f.IssueCount() > 0
 }
 
-func (f *File) RegisterIssue(id int) {
-	f.Issues = append(f.Issues, id)
-}
+func (f *File) TopSpeakers() []*Speaker {
+	speakers := make([]*Speaker, len(f.Speakers))
+	copy(speakers, f.Speakers)
 
-func (f *File) GetID() string {
-	return f.ID
-}
-
-func (f *File) GetPermalink() string {
-	return f.Permalink
-}
-
-func (f *File) TopSpeakers() []Speaker {
-	speakers := []Speaker{}
-	for key, name := range f.FrontMatter.Speakers {
-		avatar, _ := SpeakerAvatar(name)
-		speakers = append(speakers, Speaker{
-			Key:    key,
-			Name:   name,
-			Avatar: avatar,
-		})
-	}
-	slices.SortFunc(speakers, func(a, b Speaker) int {
+	slices.SortFunc(speakers, func(a, b *Speaker) int {
 		// Prefer speakers with avatars
-		if len(a.Avatar) > 0 && len(b.Avatar) == 0 {
-			return -1
+		aScore := 0
+		bScore := 0
+
+		if len(a.AvatarPath) > 0 {
+			aScore += 1
 		}
-		if len(b.Avatar) > 0 && len(a.Avatar) == 0 {
-			return 1
+		if len(b.AvatarPath) > 0 {
+			bScore += 1
 		}
 
-		// Prefer speakers without parenthesis: "Audience Member (Male)"
-		if strings.Contains(a.Name, "(") && !strings.Contains(b.Name, "(") {
-			return -1
+		if !strings.Contains(a.Name, "(") {
+			aScore += 1
 		}
-		if strings.Contains(b.Name, "(") && !strings.Contains(a.Name, "(") {
-			return 1
+		if !strings.Contains(b.Name, "(") {
+			bScore += 1
 		}
 
-		return 0
+		if a.IsPrimarySpeaker {
+			aScore += 1
+		}
+		if b.IsPrimarySpeaker {
+			bScore += 1
+		}
+
+		if aScore > bScore {
+			return -1
+		} else if aScore == bScore {
+			return 0
+		} else {
+			return 1
+		}
 	})
 	return speakers
 }
 
-type Speaker struct {
-	Key    string
-	Name   string
-	Avatar string
+type MentionCount struct {
+	Mention *ast.Mention
+	Count   int
 }
 
-type ByDate []*File
-
-func (f ByDate) Len() int { return len(f) }
-
-func (f ByDate) Less(i, j int) bool {
-	return f[i].Date > f[j].Date
+func mostMentioned(a, b MentionCount) int {
+	if a.Count > b.Count {
+		return 1
+	} else if a.Count == b.Count {
+		aCardinal := a.Mention.Mentionable.Ultimate().Cardinal
+		bCardinal := b.Mention.Mentionable.Ultimate().Cardinal
+		if aCardinal == bCardinal {
+			return 0
+		} else if len(aCardinal) > len(bCardinal) {
+			return 1
+		} else {
+			return -1
+		}
+	}
+	return -1
 }
 
-func (f ByDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
-
-type ByTranscriptionDate []*File
-
-func (f ByTranscriptionDate) Len() int { return len(f) }
-
-func (f ByTranscriptionDate) Less(i, j int) bool {
-	return f[i].FrontMatter.Transcription.Date > f[j].FrontMatter.Transcription.Date
+type MentionablePartCount struct {
+	MentionablePart ast.MentionablePart
+	Count           int
 }
 
-func (f ByTranscriptionDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
-
-type ByAddedDate []*File
-
-func (f ByAddedDate) Len() int { return len(f) }
-
-func (f ByAddedDate) Less(i, j int) bool {
-	return f[i].FrontMatter.Added.Date > f[j].FrontMatter.Added.Date
+func mostMentionedPrimary(a, b MentionablePartCount) int {
+	if a.Count > b.Count {
+		return 1
+	} else if a.Count == b.Count {
+		aCardinal := a.MentionablePart.Cardinal
+		bCardinal := b.MentionablePart.Cardinal
+		if len(aCardinal) > len(bCardinal) {
+			return 1
+		} else if aCardinal == bCardinal {
+			return 0
+		} else {
+			return -1
+		}
+	}
+	return -1
 }
 
-func (f ByAddedDate) Swap(i, j int) { f[i], f[j] = f[j], f[i] }
-
-type Mentions = []*ast.Mention
-type ByFile[T any] map[*File]T
-type ByPart[T any] map[ast.MentionablePart]T
-type ByMentionable[T any] map[ast.Mentionable]T
-
-type Files struct {
-	Popups  ByMentionable[ByFile[Mentions]]
-	Catalog ByPart[ByPart[ByFile[Mentions]]]
-	Files   []*File
-}
-
-func NewFiles() *Files {
-	return &Files{
-		Popups:  ByMentionable[ByFile[Mentions]]{},
-		Catalog: ByPart[ByPart[ByFile[Mentions]]]{},
-		Files:   []*File{},
+func filesByDate(a *File, b *File) int {
+	if a.Date > b.Date {
+		return -1
+	} else if a.Date < b.Date {
+		return 1
+	} else {
+		return 0
 	}
 }
 
-func (f *Files) Add(file *File) {
-	f.Files = append(f.Files, file)
-
-	for mentionable, mentions := range file.Mentionables {
-		for existingMentionable, existingByFile := range f.Popups {
-			if mentionable.IsDuplicate(existingMentionable) {
-				if mentionable.IsMoreComplex(existingMentionable) {
-					suspect := anyValue(existingByFile)[0]
-					suggestion := mentions[0]
-					collisionPanic(suspect, suggestion)
-				} else {
-					suspect := mentions[0]
-					suggestion := anyValue(existingByFile)[0]
-					collisionPanic(suspect, suggestion)
-				}
-			}
-		}
-
-		if f.Popups[mentionable] == nil {
-			f.Popups[mentionable] = ByFile[Mentions]{}
-		}
-		f.Popups[mentionable][file] = mentions
-
-		if f.Catalog[mentionable.Primary] == nil {
-			f.Catalog[mentionable.Primary] = ByPart[ByFile[Mentions]]{}
-		}
-		if f.Catalog[mentionable.Primary][mentionable.Secondary] == nil {
-			f.Catalog[mentionable.Primary][mentionable.Secondary] = ByFile[Mentions]{}
-		}
-		f.Catalog[mentionable.Primary][mentionable.Secondary][file] = mentions
+func filesByDateAdded(a *File, b *File) int {
+	if a.FrontMatter.Added.Date > b.FrontMatter.Added.Date {
+		return -1
+	} else if a.FrontMatter.Added.Date < b.FrontMatter.Added.Date {
+		return 1
+	} else {
+		return 0
 	}
 }
 
-func anyValue[Key comparable, Val any](m map[Key]Val) Val {
-	for _, v := range m {
-		return v
-	}
-	panic("Failed to find any entries in map")
-}
-
-func collisionPanic(suspect, suggestion *ast.Mention) {
-	t, err := template.New("AmbiguousMentionable").Parse(`
-Found mention collision for...
-  {{ .SuspectTag }}
-{{ .Suspect.Source.Row }}:{{ .Suspect.Source.Col }} {{ .Suspect.File.GetPath }}
-
-It has the same logical name as...
-  {{ .SuggestionTag }}
-{{ .Suggestion.Source.Row }}:{{ .Suggestion.Source.Col }} {{ .Suggestion.File.GetPath }}
-
-Two mentions collide if they have different prefixes but identical conclusions.
-For example, these three have the same conclusion "P. G. Wodehouse":
-
-  [[P. G. Wodehouse]]
-  [[Wodehouse, P. G.]]
-  [[G. Wodehouse, P.]]
-
-If the collision indeed refers to two different entities, consider making one 
-more specific. For example:
-
-  [[Wodehouse (1881), P. G.]]
-
-`)
+func unencode(filePath string) string {
+	str, err := url.QueryUnescape(filePath)
 	if err != nil {
-		panic("Failed to render collision panic template.")
+		log.Panicf("Failed to unescape path '%v': %v", filePath, err)
 	}
-
-	var b bytes.Buffer
-	t.Execute(&b, map[string]interface{}{
-		"SuspectTag":    string(suspect.Source.Segment.Value(suspect.File.GetMarkdown())),
-		"Suspect":       suspect,
-		"SuggestionTag": string(suggestion.Source.Segment.Value(suggestion.File.GetMarkdown())),
-		"Suggestion":    suggestion,
-	})
-	panic(b.String())
-
-}
-
-func AtMost[T any](ts []T, i int) []T {
-	if len(ts) > i {
-		return ts[:i]
-	}
-	return ts
-}
-
-func SpeakerAvatar(speakerName string) (string, bool) {
-	speakerName = strings.ToLower(speakerName)
-	speakerName = strings.ReplaceAll(speakerName, " ", "-")
-	found := ""
-
-	fs.WalkDir(os.DirFS("./internal"), "assets/images/avatars", func(filePath string, entry fs.DirEntry, err error) error {
-		fileStem := path.Base(filePath)
-		ext := path.Ext(fileStem)
-		fileName, _ := strings.CutSuffix(fileStem, ext)
-
-		if speakerName == fileName {
-			found = "/" + filePath
-		}
-		return nil
-	})
-	return found, len(found) > 0
+	return str
 }

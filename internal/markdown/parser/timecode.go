@@ -2,6 +2,10 @@ package parser
 
 import (
 	"bytes"
+	"fmt"
+	"log"
+	"net/url"
+	"slices"
 	"strconv"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
@@ -62,7 +66,48 @@ func (w *TimecodeParser) Parse(parent gmAst.Node, block text.Reader, pc parser.C
 	}
 	timecode.Hours = hours
 
+	file := ast.GetFile(pc)
+
+	sourceURLStr := file.GetSourceURL()
+	timecode.ExternalURL = externalUrl(sourceURLStr, timecode.Seconds, timecode.Minutes, timecode.Hours)
+
 	block.Advance(consumed)
 
 	return timecode
+}
+
+func externalUrl(sourceURLStr string, seconds, minutes, hours int) string {
+	sourceUrl, err := url.Parse(sourceURLStr)
+	if err != nil {
+		log.Panicf("Failed to parse frontmatter source url: %v", err)
+	}
+
+	var timecode string
+	if slices.Contains([]string{
+		"www.youtube.com",
+		"youtube.com",
+		"youtu.be",
+	}, sourceUrl.Hostname()) {
+
+		// Youtube timecodes: 1h12m32s
+		if hours == 0 && minutes == 0 {
+			timecode = fmt.Sprintf("%ds", seconds)
+		} else if hours == 0 {
+			timecode = fmt.Sprintf("%dm%ds", minutes, seconds)
+		} else {
+			timecode = fmt.Sprintf("%dh%dm%ds", hours, minutes, seconds)
+		}
+
+	} else {
+		// Everyone else: 01:12:32
+		timecode = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+	}
+
+	newUrl := *sourceUrl
+	query := newUrl.Query()
+	query.Del("t")
+	query.Add("t", timecode)
+	newUrl.RawQuery = query.Encode()
+
+	return newUrl.String()
 }

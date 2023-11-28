@@ -1,8 +1,6 @@
 package ast
 
 import (
-	"strings"
-
 	gast "github.com/yuin/goldmark/ast"
 )
 
@@ -10,46 +8,22 @@ type Utterance struct {
 	BaseBlock
 	FileNode
 
-	// Initials definied at the start of a paragraph used to lookup a full name.
-	//
-	// # Example
-	//   ---
-	//   speakers:
-	//     RP: Ray Peat
-	//   ---
-	//   RP: Hi, Ray Here.
-	//
-	// RP is the SpeakerID, which refers to speakers.RP in the front matter.
-	SpeakerID string
-
-	// Is first definition of this speaker ID.
+	Speaker      Speaker
 	IsNewSpeaker bool
-}
-
-func NewSpeaker() *Utterance {
-	return &Utterance{}
 }
 
 func (s *Utterance) Dump(source []byte, level int) {
 	gast.DumpHelper(s, source, level, nil, nil)
 }
 
-var KindSpeaker = gast.NewNodeKind("Speaker")
+var KindUtterance = gast.NewNodeKind("Utterance")
 
 func (s *Utterance) Kind() gast.NodeKind {
-	return KindSpeaker
-}
-
-func (u *Utterance) SpeakerName() string {
-	return u.FrontMatter().Speakers[u.SpeakerID]
-}
-
-func (s *Utterance) IsRay() bool {
-	return strings.Trim(s.SpeakerID, " ") == "RP"
+	return KindUtterance
 }
 
 func (u *Utterance) IsSpeaker(id string) bool {
-	return id == u.SpeakerID
+	return id == u.Speaker.GetID()
 }
 
 func (u *Utterance) IsSandwichedBetween(speakerId string) bool {
@@ -65,15 +39,15 @@ func (u *Utterance) PrevAndNextIsSameSpeaker() bool {
 	if prev == nil || next == nil {
 		return false
 	}
-	return next.IsSpeaker(prev.SpeakerID)
+	return next.IsSpeaker(prev.Speaker.GetID())
 }
 
-func (u *Utterance) IsSendwichingPrevious() bool {
+func (u *Utterance) IsSandwichingPrevious() bool {
 	prev := u.Prev()
 	if prev == nil {
 		return false
 	}
-	return prev.IsSandwichedBetween(u.SpeakerID)
+	return prev.IsSandwichedBetween(u.Speaker.GetID())
 }
 
 func (u *Utterance) Prev() *Utterance {
@@ -86,19 +60,19 @@ func (u *Utterance) Next() *Utterance {
 	return next
 }
 
-func (u *Utterance) PrevIsRay() bool {
+func (u *Utterance) PrevIsPrimarySpeaker() bool {
 	prev := u.Prev()
 	if prev == nil {
 		return false
 	}
-	return prev.IsRay()
+	return prev.Speaker.GetIsPrimarySpeaker()
 }
 
-func IsRaySpeaking(node gast.Node) bool {
+func IsPrimarySpeaker(node gast.Node) bool {
 	for parent := node.Parent(); parent != nil; parent = parent.Parent() {
-		speaker, ok := parent.(*Utterance)
+		utterance, ok := parent.(*Utterance)
 		if ok {
-			return speaker.IsRay()
+			return utterance.Speaker.GetIsPrimarySpeaker()
 		}
 	}
 

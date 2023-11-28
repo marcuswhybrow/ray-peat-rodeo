@@ -83,14 +83,14 @@ templ openChat(file *File) {
 }
 
 templ prioritiseThisChat() {
-	<a data-pagefind-ignore href={ global.SPONSOR_LINK } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+	<a data-pagefind-ignore href={ global.SPONSOR_LINK } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] text-sm relative leading-5 tracking-tight">
 		<span class="block text-green-900 font-bold mr-0.5 text-xl tracking-tight">Prioritise This Chat</span>
 		<span class="text-green-800"><strong>$50</strong> supports Marcus preserving the works of Ray Peat, and makes this chat a priority transcription.</span>
 	</a>
 }
 
 templ sponsorThisChat() {
-	<div data-pagefind-ignore class="block z-10 transition-all m-2 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+	<div data-pagefind-ignore class="block z-10 transition-all m-2 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] text-sm relative leading-5 tracking-tight">
 		<a href={ global.SPONSOR_LINK } class="hover:bg-white/20">
 			<span class="block text-green-900 font-bold px-4 pt-2 text-xl tracking-tight">Your Name Here</span>
 			<span class="block text-green-800 px-4 pb-4">$5 supports Marcus preserving the public works of Ray Peat. $50 gets your name or logo here.</span>
@@ -99,7 +99,7 @@ templ sponsorThisChat() {
 }
 
 templ contributeToThisChat(file *File) {
-	<a data-pagefind-ignore href={ templ.URL(file.EditPermalink) } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+	<a data-pagefind-ignore href={ templ.URL(file.EditPermalink) } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] text-sm relative leading-5 tracking-tight">
 		<span class="text-green-700">
 			<img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4"/>
 			Or, <strong>contribute</strong> to this page on GitHub.
@@ -115,7 +115,7 @@ templ attribution(file *File) {
 		} else {
 			href={ templ.URL(file.FrontMatter.Source.Url) }
 		}
- 		class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
+ 		class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] text-sm relative leading-5 tracking-tight"
 	>
 		if file.FrontMatter.Transcription.Author != "" {
 			<span class="text-green-700">
@@ -264,23 +264,27 @@ templ RenderChat(file *File) {
 					} else {
 						data-has-issues="No"
 					}
- 					data-issue-count={ fmt.Sprint(file.IssueCount) }
+ 					data-issue-count={ fmt.Sprint(file.IssueCount()) }
  					data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
 				>{ file.FrontMatter.Source.Title }</h1>
 			</header>
 			<main style="counter-reset:sidenote">
 				<style> mark { background-color: #fef08a } </style>
-				if file.IsTodo {
-					@prioritiseThisChat()
-					@contributeToThisChat(file)
-				} else {
-					@sponsorThisChat()
-					@attribution(file)
-				}
+				<div class="w-1/3 float-right clear-both">
+					if file.IsTodo {
+						@prioritiseThisChat()
+						@contributeToThisChat(file)
+					} else {
+						@sponsorThisChat()
+						@attribution(file)
+					}
+				</div>
 				@Unsafe(string(file.Html))
-				@SpeakerStatusChange(file.FrontMatter.Speakers) {
-					left the chat
-				}
+				<div class="mt-16">
+					@SpeakerStatusChange(file.FrontMatter.Speakers) {
+						left the chat
+					}
+				</div>
 				@helloFromMarcus(file)
 			</main>
 		</article>

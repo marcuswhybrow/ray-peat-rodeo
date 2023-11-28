@@ -124,7 +124,7 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
 
 		t.Execute(w, map[string]interface{}{
 			"Mention":       mention,
-			"IsRaySpeaking": ast.IsRaySpeaking(mention),
+			"IsRaySpeaking": ast.IsPrimarySpeaker(mention),
 			"Label":         label,
 		})
 	} else {
