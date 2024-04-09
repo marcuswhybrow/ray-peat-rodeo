@@ -6,6 +6,7 @@
     flake-utils.url = "github:numtide/flake-utils";
     templ.url = "github:a-h/templ";
     gomod2nix.url = "github:nix-community/gomod2nix";
+    tailwind-scrollbar.url = "github:marcuswhybrow/tailwind-scrollbar";
   };
 
   outputs = inputs: with inputs; flake-utils.lib.eachDefaultSystem (system: let
@@ -30,41 +31,13 @@
         '';
       };
 
-      tailwind-scrollbar = pkgs.buildNpmPackage rec {
-        pname = "tailwind-scrollbar";
-        version = "3.0.5";
-
-        src = pkgs.fetchFromGitHub {
-          owner = "adoxography";
-          repo = pname;
-          rev = "v${version}";
-          hash = "sha256-i3tWZmchE+jYoPwOkyUR3j1d7imJNdN+fzC3ainJj8A=";
-        };
-
-        npmDepsHash = "sha256-iht2umjqANBwkZR57Y8P+KtH/JkvNTOLj8tR9m91eKo=";
-
-        dontNpmBuild = true;
-
-        # The prepack script runs the build script, which we'd rather do in the build phase.
-        #npmPackFlags = [ "--ignore-scripts" ];
-
-        NODE_OPTIONS = "";
-
-        meta = with pkgs.lib; {
-          description = "Scrollbar plugin for Tailwind CSS";
-          homepage = "https://github.com/adoxography/tailwind-scrollbar";
-          license = licenses.mit;
-          maintainers = [ "Marcus Whybrow <marcus@whybrow.uk>" ];
-        };
-      };
-    
       build = pkgs.stdenv.mkDerivation {
         pname = "build";
         version = "unstable";
         src = ./.;
 
         buildInputs = [
-          inputs.self.packages.${system}.tailwind-scrollbar
+          inputs.tailwind-scrollbar.packages.x86_64-linux.default
           pkgs.nodejs_20
         ];
 
@@ -122,7 +95,7 @@
         nodejs_20
 
         # Scrollbar styling plugin for TaildindCSS
-        inputs.self.packages.${system}.tailwind-scrollbar
+        inputs.tailwind-scrollbar.packages.x86_64-linux.default
 
         # Builds CSS utility classes by inspecting template source code
         nodePackages.tailwindcss
