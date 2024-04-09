@@ -5,8 +5,8 @@ schema = 3
     version = "v1.8.1"
     hash = "sha256-z2RaB8PVPEzSJdMUfkfNjT616yXWTjW2gkhNOh989ZU="
   [mod."github.com/a-h/templ"]
-    version = "v0.2.432"
-    hash = "sha256-x7qqOsIIId7i9THgVkZVTj6S+wM+/V66Xu4bPqfTf/8="
+    version = "v0.2.648"
+    hash = "sha256-s5z0VUXQd7JUGhNMrNA7Txfn4qS6eTIakLgmn0xOy88="
   [mod."github.com/andybalholm/cascadia"]
     version = "v1.3.1"
     hash = "sha256-M0u22DXSeXUaYtl1KoW1qWL46niFpycFkraCEQ/luYA="
@@ -26,8 +26,8 @@ schema = 3
     version = "v1.1.0"
     hash = "sha256-Q/kRP4rpS3r24HYBvPTiuKNbf+PUMVsEp2m6yOblth0="
   [mod."golang.org/x/net"]
-    version = "v0.9.0"
-    hash = "sha256-EG5GRDq282twyce8uugsDTjMz1pNn6zPcyVTZmSiJ14="
+    version = "v0.19.0"
+    hash = "sha256-3M5rKEvJx4cO/q+06cGjR5sxF5JpnUWY0+fQttrWdT4="
   [mod."golang.org/x/text"]
     version = "v0.14.0"
     hash = "sha256-yh3B0tom1RfzQBf1RNmfdNWF1PtiqxV41jW1GVS6JAg="

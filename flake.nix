@@ -4,7 +4,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-    templ.url = "github:a-h/templ";
     gomod2nix.url = "github:nix-community/gomod2nix";
     tailwind-scrollbar.url = "github:marcuswhybrow/tailwind-scrollbar";
   };
@@ -25,7 +24,7 @@
 
         buildPhase = ''
           mkdir -p $out/bin
-          ${inputs.templ.packages.${system}.templ}/bin/templ generate
+          ${pkgs.templ}/bin/templ generate
           go build ./cmd/ray-peat-rodeo
           mv ray-peat-rodeo $out/bin/ray-peat-rodeo
         '';
@@ -86,7 +85,7 @@
         gomod2nix
 
         # Compiles .templ files into .go files
-        inputs.templ.packages.${system}.templ
+        templ
 
         # Builds JS search API by inspecting HTML build by this package
         pagefind 
