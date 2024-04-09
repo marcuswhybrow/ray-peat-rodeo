@@ -52,6 +52,19 @@
         '';
       };
 
+      whisper-json2md = pkgs.buildGoApplication {
+        name = "whisper-json2md";
+        pwd = ./.;
+        src = ./.;
+        modules = ./gomod2nix.toml;
+
+        buildPhase = ''
+          mkdir -p $out/bin
+          go build ./cmd/whisper-json2md
+          mv whisper-json2md $out/bin/whisper-json2md
+        '';
+      };
+
       default = build;
     };
 
@@ -109,6 +122,12 @@
 
         # Dev HTTP server with auto page reload on file changes
         devd 
+
+        # AI transcription of audio files
+        openai-whisper
+
+        # For download's audio files from any URL
+        yt-dlp
       ];
     };
   });

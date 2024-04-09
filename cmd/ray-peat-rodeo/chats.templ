@@ -52,18 +52,18 @@ func numDone(files []*File) int {
 
 templ DoneFile(file *File) {
 	<a
- 		href={ templ.URL(file.Permalink) }
- 		class="block p-8 rounded rounded-lg shadow-lg bg-white mb-8 mt-8"
+		href={ templ.URL(file.Permalink) }
+		class="block p-8 rounded rounded-lg shadow-lg bg-white mb-8 mt-8"
 	>
 		<div class="md:float-right">
 			@SpeakerCards(file)
 			if file.HasIssues() {
 				<div
- 					class="relative inline-block align-top overflow-hidden w-16 h-20 rounded-lg shadow rotate-3 text-center bg-gradient-to-br from-yellow-100 to-amber-200"
- 					title={ fmt.Sprint(file.IssueCount()) + " GitHub issue" + pluralise(file.IssueCount(), "s") }
+					class="relative inline-block align-top overflow-hidden w-16 h-20 rounded-lg shadow rotate-3 text-center bg-gradient-to-br from-yellow-100 to-amber-200"
+					title={ fmt.Sprint(file.IssueCount()) + " GitHub issue" + pluralise(file.IssueCount(), "s") }
 				>
 					<span
- 						class="relative top-4 text-yellow-500 text-3xl"
+						class="relative top-4 text-yellow-500 text-3xl"
 					>
 						{ fmt.Sprint(file.IssueCount()) }
 					</span>
@@ -78,16 +78,16 @@ templ DoneFile(file *File) {
 				}
 				<li class="inline-block mb-2 mr-2 last:mr-0">
 					<span
- 						class="text-gray-400/90 uppercase trakcing-wider"
- 						title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+						class="text-gray-400/90 uppercase trakcing-wider"
+						title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
 					>{ mentionCount.MentionablePart.Cardinal }</span>
 				</li>
 			}
 			<span class="mr-2 text-rose-300/90">/</span>
 			<li
- 				class="inline-block mb-2 mr-2 last:mr-0 text-gray-400/90 tracking-wider uppercase"
- 				title="Date of conversation"
- 				_="install RelativeDate"
+				class="inline-block mb-2 mr-2 last:mr-0 text-gray-400/90 tracking-wider uppercase"
+				title="Date of conversation"
+				_="install RelativeDate"
 			>{ file.Date }</li>
 		</ol>
 		<h3 class="tracking-tighter text-3xl font-bold text-gray-500 mb-2">{ file.FrontMatter.Source.Title }</h3>
@@ -98,9 +98,14 @@ templ DoneFile(file *File) {
 templ TodoFile(file *File) {
 	<div class="mb-1.5">
 		<a
- 			href={ templ.URL(file.Permalink) }
- 			class="text-gray-500 hover:text-gray-600 hover:underline"
-		>{ file.FrontMatter.Source.Title }</a>
+			href={ templ.URL(file.Permalink) }
+			class="text-gray-500 hover:text-gray-600 hover:underline"
+		>
+			{ file.FrontMatter.Source.Title }
+		</a>
+		if len(file.FrontMatter.Transcription.Date) > 0 {
+			<span title="AI Generated Transcript Available" class="border-gray-300 border px-2 pt-0.5 pb-1 rounded-full text-gray-300 cursor-help ml-1">AI</span>
+		}
 	</div>
 }
 
@@ -109,8 +114,8 @@ templ Chats(allFiles []*File) {
 		<div class="relative mb-8">
 			<h2 class="text-4xl font-bold mt-16 text-gray-700">{ fmt.Sprint(year.Year) }</h2>
 			<div
- 				title={ fmt.Sprint(numDone(year.Files)) + " / " + fmt.Sprint(len(year.Files)) + " for " + fmt.Sprint(year.Year) }
- 				class={
+				title={ fmt.Sprint(numDone(year.Files)) + " / " + fmt.Sprint(len(year.Files)) + " for " + fmt.Sprint(year.Year) }
+				class={
 					templ.SafeClass("absolute right-0 top-0 w-10 h-10 rounded-full"),
 					templ.SafeClass("[background:radial-gradient(closest-side,white_69%,transparent_70%_100%),conic-gradient(hotpink_" + fmt.Sprint(max(percentDone(year.Files), 1)) + "%,pink_0)]"),
 				}
@@ -129,8 +134,8 @@ templ Chats(allFiles []*File) {
 templ SpeakerCards(file *File) {
 	for _, speaker := range AtMost(file.TopSpeakers(), 3) {
 		<div
- 			title={ speaker.Name }
- 			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 last:mr-0 rotate-2"
+			title={ speaker.Name }
+			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 last:mr-0 rotate-2"
 		>
 			if imgSrc, found := SpeakerAvatar(speaker.Name); found {
 				<div class="w-[9999px] h-20">
@@ -143,11 +148,11 @@ templ SpeakerCards(file *File) {
 	}
 	if len(file.FrontMatter.Speakers) > 3 {
 		<div
- 			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 rotate-2"
- 			title={ fmt.Sprint(len(file.FrontMatter.Speakers)-3) + " more speakers" }
+			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 rotate-2"
+			title={ fmt.Sprint(len(file.FrontMatter.Speakers)-3) + " more speakers" }
 		>
 			<span
- 				class="font-bold text-gray-300 text-xl relative relative top-6"
+				class="font-bold text-gray-300 text-xl relative relative top-6"
 			>
 				+{ fmt.Sprint(len(file.FrontMatter.Speakers)-3) }
 			</span>

@@ -6,283 +6,314 @@ import "golang.org/x/text/cases"
 import "golang.org/x/text/language"
 
 type MapEnumeration[V any] struct {
-	Index   int
-	Key     string
-	Value   V
-	IsFirst bool
-	IsLast  bool
+Key string
+Index int
+Value V
+IsFirst bool
+IsLast bool
 }
 
 func EnumerateMap[V any](m map[string]V) []MapEnumeration[V] {
-	i := 0
-	l := len(m)
-	var results []MapEnumeration[V]
+i := 0
+l := len(m)
+var results []MapEnumeration[V]
 
-	for key, value := range m {
-		results = append(results, MapEnumeration[V]{
-			Index:   i,
-			Key:     key,
-			Value:   value,
-			IsFirst: i == 0,
-			IsLast:  i == l-1,
-		})
-		i++
-	}
+for key, value := range m {
+results = append(results, MapEnumeration[V]{
+Index: i,
+Key: key,
+Value: value,
+IsFirst: i == 0,
+IsLast: i == l-1,
+})
+i++
+}
 
-	return results
+return results
 }
 
 templ SpeakerStatusChange(speakers map[string]string) {
-	if len(speakers) > 0 {
-		<div data-pagefind-ignore class="text-sm mt-4 text-gray-400 w-2/3 mx-auto text-center">
-			<span class="mr-2">
-				for _, speaker := range EnumerateMap(speakers) {
-					if !speaker.IsFirst {
-						if !speaker.IsLast {
-							{ ", " }
-						} else {
-							{ " and " }
-						}
-					}
-					<span class="text-gray-800">{ speaker.Value }</span>
-				}
-			</span>
-			{ children... }
-		</div>
-	}
+if len(speakers) > 0 {
+<div data-pagefind-ignore class="text-sm mt-4 text-gray-400 w-2/3 mx-auto text-center">
+  <span class="mr-2">
+    for _, speaker := range EnumerateMap(speakers) {
+    if !speaker.IsFirst {
+    if !speaker.IsLast {
+    { ", " }
+    } else {
+    { " and " }
+    }
+    }
+    <span class="text-gray-800">{ speaker.Value }</span>
+    }
+  </span>
+  { children... }
+</div>
+}
 }
 
 templ StatusChange() {
-	<div data-pagefind-ignore class="text-sm text-gray-400 w-2/3 mx-auto text-center">
-		{ children... }
-	</div>
+<div data-pagefind-ignore class="text-sm text-gray-400 w-2/3 mx-auto text-center">
+  { children... }
+</div>
 }
 
 templ pinnedOriginal(file *File) {
-	@StatusChange() {
-		📌 Pinned 
-		<a
- 			data-pagefind-ignore
- 			data-pagefind-filter={ "Medium:" + cases.Title(language.English).String(file.FrontMatter.Source.Kind) }
- 			href={ templ.URL(file.FrontMatter.Source.Url) }
- 			class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2"
-		>
-			original { cases.Lower(language.English).String(file.FrontMatter.Source.Kind) }
-		</a>
-	}
+@StatusChange() {
+📌 Pinned
+<a data-pagefind-ignore data-pagefind-filter={ "Medium:" +
+  cases.Title(language.English).String(file.FrontMatter.Source.Kind) } href={ templ.URL(file.FrontMatter.Source.Url) }
+  class="text-gray-800 hover:text-gray-900 border-gray-400 hover:border-gray-900 border-b hover:border-b-2">
+  original { cases.Lower(language.English).String(file.FrontMatter.Source.Kind) }
+</a>
+}
 }
 
 templ openChat(file *File) {
-	@StatusChange() {
-		<span
- 			data-pagefind-filter="Host"
- 			class="text-gray-800 hover:text-gray-900 border-gray-400"
-		>{ file.FrontMatter.Source.Series }</span>
-		started a chat
-	}
+@StatusChange() {
+<span data-pagefind-filter="Host" class="text-gray-800 hover:text-gray-900 border-gray-400">
+  {
+  file.FrontMatter.Source.Series }
+</span>
+started a chat
+}
 }
 
 templ prioritiseThisChat() {
-	<a data-pagefind-ignore href={ global.SPONSOR_LINK } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
-		<span class="block text-green-900 font-bold mr-0.5 text-xl tracking-tight">Prioritise This Chat</span>
-		<span class="text-green-800"><strong>$50</strong> supports Marcus preserving the works of Ray Peat, and makes this chat a priority transcription.</span>
-	</a>
+<a data-pagefind-ignore href={ global.SPONSOR_LINK }
+  class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+  <span class="block text-green-900 font-bold mr-0.5 text-xl tracking-tight">Prioritise This Chat</span>
+  <span class="text-green-800">
+    <strong>$50</strong> supports Marcus preserving the works of Ray Peat, and makes this
+    chat a priority transcription.
+  </span>
+</a>
 }
 
 templ sponsorThisChat() {
-	<div data-pagefind-ignore class="block z-10 transition-all m-2 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
-		<a href={ global.SPONSOR_LINK } class="hover:bg-white/20">
-			<span class="block text-green-900 font-bold px-4 pt-2 text-xl tracking-tight">Your Name Here</span>
-			<span class="block text-green-800 px-4 pb-4">$5 supports Marcus preserving the public works of Ray Peat. $50 gets your name or logo here.</span>
-		</a>
-	</div>
+<div data-pagefind-ignore
+  class="block z-10 transition-all m-2 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+  <a href={ global.SPONSOR_LINK } class="hover:bg-white/20">
+    <span class="block text-green-900 font-bold px-4 pt-2 text-xl tracking-tight">Your Name Here</span>
+    <span class="block text-green-800 px-4 pb-4">
+      $5 supports Marcus preserving the public works of Ray Peat. $50 gets
+      your name or logo here.
+    </span>
+  </a>
+</div>
 }
 
 templ contributeToThisChat(file *File) {
-	<a data-pagefind-ignore href={ templ.URL(file.EditPermalink) } class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
-		<span class="text-green-700">
-			<img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4"/>
-			Or, <strong>contribute</strong> to this page on GitHub.
-		</span>
-	</a>
+<a data-pagefind-ignore href={ templ.URL(file.EditPermalink) }
+  class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+  <span class="text-green-700">
+    <img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4" />
+    Or, <strong>contribute</strong> to this page on GitHub.
+  </span>
+</a>
+}
+
+templ improveThisAutoGeneratedChat(file *File) {
+<a data-pagefind-ignore href={ templ.URL(file.EditPermalink) }
+  class="block z-10 transition-all m-4 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+  <span class="text-green-700">
+    <img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4" />
+    Transcribed by <strong>artificial inteligence</strong>.
+    Click here to edit this chat on GitHub.
+  </span>
+</a>
 }
 
 templ attribution(file *File) {
-	<a
- 		data-pagefind-ignore
- 		if file.FrontMatter.Transcription.Url != "" {
-			href={ templ.URL(file.FrontMatter.Transcription.Url) }
-		} else {
-			href={ templ.URL(file.FrontMatter.Source.Url) }
-		}
- 		class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
-	>
-		if file.FrontMatter.Transcription.Author != "" {
-			<span class="text-green-700">
-				if file.FrontMatter.Transcription.Author == "Marcus Whybrow" {
-					<span class="font-bold">{ file.FrontMatter.Transcription.Author }</span> transcribed this interview, { file.FrontMatter.Transcription.Date }.
-				} else {
-					Transcription modified from an earlier version by <span class="font-bold">{ file.FrontMatter.Transcription.Author }</span>, { file.FrontMatter.Transcription.Date }.
-				}
-			</span>
-		} else {
-			<span class="text-green-700">
-				Written interview from <span class="font-bold">{ file.FrontMatter.Source.Series }</span>.
-			</span>
-		}
-	</a>
+<a data-pagefind-ignore if file.FrontMatter.Transcription.Url !="" { href={
+  templ.URL(file.FrontMatter.Transcription.Url) } } else { href={ templ.URL(file.FrontMatter.Source.Url) } }
+  class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+  if file.FrontMatter.Transcription.Author != "" {
+  <span class="text-green-700">
+    if file.FrontMatter.Transcription.Author == "Marcus Whybrow" {
+    <span class="font-bold">{ file.FrontMatter.Transcription.Author }</span> transcribed this interview, {
+    file.FrontMatter.Transcription.Date }.
+    } else {
+    Transcription modified from an earlier version by
+    <span class="font-bold">
+      { file.FrontMatter.Transcription.Author }
+    </span>, { file.FrontMatter.Transcription.Date }.
+    }
+  </span>
+  } else {
+  <span class="text-green-700">
+    Written interview from <span class="font-bold">{ file.FrontMatter.Source.Series }</span>.
+  </span>
+  }
+</a>
 }
 
 templ Handle() {
-	<div class="text-sm text-gray-400 mb-2 mt-8">
-		{ children... }
-	</div>
+<div class="text-sm text-gray-400 mb-2 mt-8">
+  { children... }
+</div>
 }
 
 templ Message() {
-	<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">
-		{ children... }
-	</div>
+<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">
+  { children... }
+</div>
 }
 
 templ MarcusMessage() {
-	<div class="rounded shadow p-8 bg-gradient-to-b from-yellow-200 to-amber-200 text-yellow-900">
-		{ children... }
-	</div>
+<div class="rounded shadow p-8 bg-gradient-to-b from-yellow-200 to-amber-200 text-yellow-900">
+  { children... }
+</div>
 }
 
 templ todoAfterwards(file *File) {
-	<div data-pagefind-ignore class="mr-16 mb-8">
-		@Handle() {
-			marcus
-		}
-		if file.FrontMatter.Transcription.Url != "" {
-			@Message() {
-				<p>
-					Hi, Marcus here. I've yet to add this chat to Ray Peat Rodeo. However, there is an <a href={ templ.URL(file.FrontMatter.Transcription.Url) } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">existing transcript</a>
-					if file.FrontMatter.Transcription.Kind == "auto-generated" {
-						that's AI generated (as opposed to written by a human).
-					} else if file.FrontMatter.Transcription.Kind == "text" {
-						by a human being (not auto-generated).
-					} else {
-						I've yet to look at.
-					}
-				</p>
-				<p class="mt-4">
-					If you're familiar with Markdown, you can <a href={ templ.URL(file.EditPermalink) } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">add it</a> to the website yourself via GitHub. Or you may support me on <a href={ global.SPONSOR_LINK } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">GitHub Sponsors</a> and I'll make this transcript a priority, along with other goodies.
-				</p>
-			}
-		} else {
-			@Message() {
-				<p>Hi, Marcus here. I've yet to add this chat to Ray Peat Rodeo and I'm not aware of any existing transcriptions.</p>
-				<p class="mt-4">If you yourself have a transcription, please <a href={ templ.URL(file.EditPermalink) } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">edit this page</a> on GitHub. Or you can support me on <a href={ global.SPONSOR_LINK } class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">GitHub Sponsors</a> and I'll make this transcript a priority, along with other goodies.</p>
-			}
-		}
-	</div>
+<div data-pagefind-ignore class="mr-16 mb-8">
+  @Handle() {
+  marcus
+  }
+  if file.FrontMatter.Transcription.Url != "" {
+  @Message() {
+  <p>
+    Hi, Marcus here. I've yet to add this chat to Ray Peat Rodeo. However, there is an <a href={
+      templ.URL(file.FrontMatter.Transcription.Url) }
+      class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">existing transcript</a>
+    if file.FrontMatter.Transcription.Kind == "auto-generated" {
+    that's AI generated (as opposed to written by a human).
+    } else if file.FrontMatter.Transcription.Kind == "text" {
+    by a human being (not auto-generated).
+    } else {
+    I've yet to look at.
+    }
+  </p>
+  <p class="mt-4">
+    If you're familiar with Markdown, you can <a href={ templ.URL(file.EditPermalink) }
+      class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">add it</a> to the website yourself via
+    GitHub. Or you may support me on <a href={ global.SPONSOR_LINK }
+      class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">GitHub Sponsors</a> and I'll make this
+    transcript a priority, along with other goodies.
+  </p>
+  }
+  } else {
+  @Message() {
+  <p>Hi, Marcus here. I've yet to add this chat to Ray Peat Rodeo and I'm not aware of any existing transcriptions.</p>
+  <p class="mt-4">
+    If you yourself have a transcription, please <a href={ templ.URL(file.EditPermalink) }
+      class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">edit this page</a> on GitHub. Or you can
+    support me on <a href={ global.SPONSOR_LINK }
+      class="font-bold text-gray-800 underline decoration-2 hover:decoration-4">GitHub Sponsors</a> and I'll make this
+    transcript a priority, along with other goodies.
+  </p>
+  }
+  }
+</div>
 }
 
 templ callToActionAfterwards(file *File) {
-	<div data-pagefind-ignore class="mr-16 mb-24">
-		<div class="text-sm text-gray-400 mb-2 mt-8">Marcus</div>
-		<div class="rounded shadow p-8 bg-gradient-to-b from-yellow-200 to-amber-200 text-yellow-900">
-			<p>
-				if !file.IsTodo {
-					Hi, Marcus here. 
-				} else {
-					If we haven't met, my name's Marcus. 
-				}
-				I'm a programmer, muscian and admirer of Ray Peat. Since his passing, I felt my skills could go towards making Ray's ideas more discoverable.
-			</p>
-			<p class="mt-4">{ "Ray Peat Rodeo is my project to gather up the public interviews of Ray Peat and supercharge them for discoverability." }</p>
-			if !file.IsTodo {
-				<p class="mt-4">Everything is open source { "for" } longevity and collaboration. You can contribute interview transcripts to the project on <a href={ global.GITHUB_LINK } class="font-bold underline decoration-2 decoration-amber-700 hover:decoration-4">GitHub</a>, and { "if" } you code, send me a pull request.</p>
-				<p class="mt-4">You can by me a coffee (or carrot salad) via <a href={ global.SPONSOR_LINK } class="font-bold underline decoration-2 decoration-amber-700 hover:decoration-4">GitHub Sponsors</a>.</p>
-			}
-		</div>
-	</div>
+<div data-pagefind-ignore class="mr-16 mb-24">
+  <div class="text-sm text-gray-400 mb-2 mt-8">Marcus</div>
+  <div class="rounded shadow p-8 bg-gradient-to-b from-yellow-200 to-amber-200 text-yellow-900">
+    <p>
+      if !file.IsTodo {
+      Hi, Marcus here.
+      } else {
+      If we haven't met, my name's Marcus.
+      }
+      I'm a programmer, muscian and admirer of Ray Peat. Since his passing, I felt my skills could go towards making
+      Ray's ideas more discoverable.
+    </p>
+    <p class="mt-4">
+      Ray Peat Rodeo is my project to gather up the public interviews of Ray Peat and supercharge them
+      { "for" } discoverability."
+    </p>
+    if !file.IsTodo {
+    <p class="mt-4">
+      Everything is open source { "for" } longevity and collaboration. You can contribute interview
+      transcripts to the project on <a href={ global.GITHUB_LINK }
+        class="font-bold underline decoration-2 decoration-amber-700 hover:decoration-4">GitHub</a>, and { "if" } you
+      code, send me a pull request.
+    </p>
+    <p class="mt-4">
+      You can by me a coffee (or carrot salad) via <a href={ global.SPONSOR_LINK }
+        class="font-bold underline decoration-2 decoration-amber-700 hover:decoration-4">GitHub Sponsors</a>.
+    </p>
+    }
+  </div>
+</div>
 }
 
 templ helloFromMarcus(file *File) {
-	<div data-pagefind-ignore class="text-sm mb-16 text-gray-400 text-center px-8">
-		<span class="text-gray-800">Marcus</span> joined the chat
-	</div>
-	if file.IsTodo {
-		@todoAfterwards(file)
-	}
-	@callToActionAfterwards(file)
+<div data-pagefind-ignore class="text-sm mb-16 text-gray-400 text-center px-8 mt-8">
+  <span class="text-gray-800">Marcus</span> joined the chat
+</div>
+if file.IsTodo && len(file.FrontMatter.Transcription.Date) == 0 {
+@todoAfterwards(file)
+}
+@callToActionAfterwards(file)
 }
 
 templ Sidenote(name string) {
-	<label
- 		for={ "sidenote-" + name }
- 		class="[counter-increment:sidenote] after:content-[counter(sidenote)] after:-top-1 after:left-0 after:align-baseline after:text-sm after:relative font-serif after:bg-white after:rounded-md after:shadow after:text-gray-600 after:py-1 after:px-2"
-	></label>
-	<span
- 		id={ "sidenote-" + name }
- 		class="z-20 block bg-white rounded-md shadow w-1/2 mr-[-5%] sm:mr-[-10%] md:mr-[-15%] lg:mr-[-25%] float-right clear-right text-sm relative p-4 before:content-[counter(sidenote)_&#39;.&#39;] before:float-left m-2 before:mr-1 before:text-gray-500 leading-5 align-middle transition-all"
-	>
-		{ children... }
-	</span>
+<label for={ "sidenote-" + name }
+  class="[counter-increment:sidenote] after:content-[counter(sidenote)] after:-top-1 after:left-0 after:align-baseline after:text-sm after:relative font-serif after:bg-white after:rounded-md after:shadow after:text-gray-600 after:py-1 after:px-2"></label>
+<span id={ "sidenote-" + name }
+  class="z-20 block bg-white rounded-md shadow w-1/2 mr-[-5%] sm:mr-[-10%] md:mr-[-15%] lg:mr-[-25%] float-right clear-right text-sm relative p-4 before:content-[counter(sidenote)_'.'] before:float-left m-2 before:mr-1 before:text-gray-500 leading-5 align-middle transition-all">
+  { children... }
+</span>
 }
 
 templ GitHubSidenoteLink(url string, title string) {
-	<a
- 		href={ templ.URL(url) }
- 		class="z-10 block transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-yellow-800/20 hover:shadow-yellow-600/40 rounded-md bg-gradient-to-br from-yellow-200 from-10% to-amber-200 hover:from-yellow-100 hover:from-70% hover:to-amber-200 xl:block w-2/5 mr-[-5%] md:mr-[-10%] lg:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
-	>
-		<span class="text-yellow-900 font-bold mr-0.5">
-			<img src="/assets/images/github-mark.svg" class="h-4 w-4 inline-block relative top-[-1px] mr-0.5"/> { title }
-		</span>
-		<span class="text-yellow-800">
-			{ children... }
-		</span>
-	</a>
+<a href={ templ.URL(url) }
+  class="z-10 block transition-all m-2 p-4 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-yellow-800/20 hover:shadow-yellow-600/40 rounded-md bg-gradient-to-br from-yellow-200 from-10% to-amber-200 hover:from-yellow-100 hover:from-70% hover:to-amber-200 xl:block w-2/5 mr-[-5%] md:mr-[-10%] lg:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight">
+  <span class="text-yellow-900 font-bold mr-0.5">
+    <img src="/assets/images/github-mark.svg" class="h-4 w-4 inline-block relative top-[-1px] mr-0.5" /> { title }
+  </span>
+  <span class="text-yellow-800">
+    { children... }
+  </span>
+</a>
 }
 
 templ RenderChat(file *File) {
-	@Base(file.FrontMatter.Source.Title) {
-		<article class="p-8 relative max-w-2xl mx-auto" data-pagefind-body>
-			<header class="ml-1 border-solid border-slate-200 text-center">
-				@openChat(file)
-				<div class="mb-4">
-					@SpeakerStatusChange(file.FrontMatter.Speakers) {
-						joined the chat
-					}
-				</div>
-				<div class="mb-16">
-					@pinnedOriginal(file)
-				</div>
-				<h1
- 					class="font-bold mt-4 mb-20 text-4xl text-center text-transparent bg-clip-text bg-gradient-to-br from-sky-500 to-purple-500 w-3/5 mx-auto"
- 					if file.IsTodo {
-						data-todo="Todo"
-					} else {
-						data-todo="Complete"
-					}
- 					if file.HasIssues() {
-						data-has-issues="Yes"
-					} else {
-						data-has-issues="No"
-					}
- 					data-issue-count={ fmt.Sprint(file.IssueCount) }
- 					data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
-				>{ file.FrontMatter.Source.Title }</h1>
-			</header>
-			<main style="counter-reset:sidenote">
-				<style> mark { background-color: #fef08a } </style>
-				if file.IsTodo {
-					@prioritiseThisChat()
-					@contributeToThisChat(file)
-				} else {
-					@sponsorThisChat()
-					@attribution(file)
-				}
-				@Unsafe(string(file.Html))
-				@SpeakerStatusChange(file.FrontMatter.Speakers) {
-					left the chat
-				}
-				@helloFromMarcus(file)
-			</main>
-		</article>
-	}
+@Base(file.FrontMatter.Source.Title) {
+<article class="p-8 relative max-w-2xl mx-auto" data-pagefind-body>
+  <header class="ml-1 border-solid border-slate-200 text-center">
+    @openChat(file)
+    <div class="mb-4">
+      @SpeakerStatusChange(file.FrontMatter.Speakers) {
+      joined the chat
+      }
+    </div>
+    <div class="mb-16">
+      @pinnedOriginal(file)
+    </div>
+    <h1
+      class="font-bold mt-4 mb-20 text-4xl text-center text-transparent bg-clip-text bg-gradient-to-br from-sky-500 to-purple-500 w-3/5 mx-auto"
+      if file.IsTodo { data-todo="Todo" } else { data-todo="Complete" } if file.HasIssues() { data-has-issues="Yes" }
+      else { data-has-issues="No" } data-issue-count={ fmt.Sprint(file.IssueCount()) }
+      data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]">{ file.FrontMatter.Source.Title }</h1>
+  </header>
+  <main style="counter-reset:sidenote">
+    <style>
+      mark {
+        background-color: #fef08a
+      }
+    </style>
+    if file.IsTodo {
+    if len(file.FrontMatter.Transcription.Date) > 0 {
+    @improveThisAutoGeneratedChat(file)
+    } else {
+    @prioritiseThisChat()
+    @contributeToThisChat(file)
+    }
+    } else {
+    @sponsorThisChat()
+    @attribution(file)
+    }
+    @Unsafe(string(file.Html))
+    @SpeakerStatusChange(file.FrontMatter.Speakers) {
+    left the chat
+    }
+    @helloFromMarcus(file)
+  </main>
+</article>
+}
 }
