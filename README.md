@@ -42,7 +42,7 @@ every transcript-less interview for which a URL is known. What follows is an
 example of my AI workflow to grab the audio from that URL, use AI to transcribe 
 it, and wrangle it into custom markdown.
 
-```
+```bash
 # Inside project directory, launch shell with necessary tools in environment
 nix develop 
 
