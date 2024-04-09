@@ -32,6 +32,8 @@ func (t *Timecode) ExternalUrl() (*url.URL, error) {
 		return nil, fmt.Errorf("Failed to parse frontmatter source url: %v", err)
 	}
 
+	newUrl := *sourceUrl
+
 	var timecode string
 	if slices.Contains([]string{
 		"www.youtube.com",
@@ -39,7 +41,7 @@ func (t *Timecode) ExternalUrl() (*url.URL, error) {
 		"youtu.be",
 	}, sourceUrl.Hostname()) {
 
-		// Youtube timecodes: 1h12m32s
+		// Youtube timecodes: ?t=1h12m32s
 		if t.Hours == 0 && t.Minutes == 0 {
 			timecode = fmt.Sprintf("%ds", t.Seconds)
 		} else if t.Hours == 0 {
@@ -48,16 +50,16 @@ func (t *Timecode) ExternalUrl() (*url.URL, error) {
 			timecode = fmt.Sprintf("%dh%dm%ds", t.Hours, t.Minutes, t.Seconds)
 		}
 
+		query := newUrl.Query()
+		query.Del("t")
+		query.Add("t", timecode)
+		newUrl.RawQuery = query.Encode()
+
 	} else {
-		// Everyone else: 01:12:32
-		timecode = fmt.Sprintf("%02d:%02d:%02d", t.Hours, t.Minutes, t.Seconds)
+		// Everyone else: #t=01:12:32
+		newUrl.Fragment = fmt.Sprintf("t=%02d:%02d:%02d", t.Hours, t.Minutes, t.Seconds)
 	}
 
-	newUrl := *sourceUrl
-	query := newUrl.Query()
-	query.Del("t")
-	query.Add("t", timecode)
-	newUrl.RawQuery = query.Encode()
 	return &newUrl, nil
 }
 
