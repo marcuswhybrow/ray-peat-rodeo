@@ -57,21 +57,21 @@ direnv allow
 1. Round up every Ray Peat interview, article, newsletter and book.
 2. Use AI to quickly transcribe interviews.
 3. Store each interview (etc.) as human readable markdown.
-4. Generate an website from those markdown source files.
+4. Generate a website from those markdown source files.
 5. Site-wide search of all assets.
 6. Tooltips for all mentioned topics and people linking to all other mentions.
 7. Timestamps linking to specific times in original audio or video.
 8. Sidenote annotations for clarifications and issues to be resolved.
 
 What this amounts to is using AI to quickly transcribe all interviews, then 
-storing the results in markdown. Next one improves and augments each markdown 
+storing the results in markdown. Next, one improves and augments each markdown 
 file with corrections, formatting and tagging all mentions and timecodes. 
 
 Formatting is part of the markdown standard, but what I'm calling "mentions", 
 "timecodes", and "issues" are extensions to the markdown syntax written 
 specifically for this project. With custom markdown syntax any functionality
-can be realised, whilst keeping the markdown documents human readible for 
-archival purposed, and portability to other projects.
+can be realised whilst keeping the markdown documents human readible for 
+archival purposes, and portability to other projects.
 
 
 # AI Transcription
@@ -82,7 +82,7 @@ result by hand into existing markdown files inside of `./assets/todo/`. The
 following commands are all in the nix dev shell (which you can enter using 
 `nix develop` if your not using direnv).
 
-First I pick a file from ./assets/todo which doesn't have a transcript. Say,
+First I pick a file from `./assets/todo` that doesn't have a transcript. Say
 the filename begins with the date 2022-02-02. Well, I copy the url from it's 
 frontmatter key `source.url` and use `yt-dlp` to download the audio stream
 and output the result to a file with that date as it's name:
@@ -95,25 +95,25 @@ Sometimes the output file will be called `2022-02-02.opus` or some other
 extension, sometimes it will have no extension. Let's assume it's `.opus`.
 
 I then ask Whisper AI to transcribe the audio file and output a JSON file 
-describing the results. I believe it's faster to tell Whisper it's and English 
+describing the results. I believe it's faster to tell Whisper it's an English 
 language conversion:
 
 ```bash
 whisper --language English --output_format json 2022-02-02.opus
 ```
 
-This takes a while, and great while on old laptops. But once it's done you 
-shoud have a file in the same directory called `2022-02-02.json`. I've chosen
-JSON for it's flexibility in the next step.
+This takes a while, and a great while on old laptops. But once it's done you 
+shoud have a file in the same directory called `2022-02-02.json`. Whisper has 
+many output formats, but I've chosen JSON for it's flexibility in the next step.
 
 The closest format whisper can output is `txt`. But this has no timestamp data 
 in the output text. I'd like to pepper in timestamps (which whisper knows 
 about) every minute or so into the resulting output. And I want them to adhere 
-to out custom markdown extension: `[h:mm:ss]` e.g. `[1:23:45]`. The square 
-brackets are important too.
+to our custom markdown extension format: `[h:mm:ss]` e.g. `[1:23:45]`. The 
+square brackets are important.
 
 So I call a custom tool written for this project that reads the JSON, ouputting
-text in the way I've just descibed. I use linux redirection to append the that 
+text in the way I've just descibed. I use linux redirection to append that 
 result to the end of the markdown file I started with:
 
 ```bash
@@ -124,7 +124,7 @@ Then I have a look at this markdown file, and check it out in the browser
 (which would be https://localhost:8000/example in this example).
 
 Finally I update the frontmatter to reflect the new state of this asset.
-I add the follow:
+I add the following:
 
 ```yaml
 transcription:
