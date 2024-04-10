@@ -52,34 +52,90 @@ cat "use flake" > .envrc
 direnv allow
 ```
 
+# Project Goals
+
+1. Round up every Ray Peat interview, article, newsletter and book.
+2. Use AI to quickly transcribe interviews.
+3. Store each interview (etc.) as human readable markdown.
+4. Generate an website from those markdown source files.
+5. Site-wide search of all assets.
+6. Tooltips for all mentioned topics and people linking to all other mentions.
+7. Timestamps linking to specific times in original audio or video.
+8. Sidenote annotations for clarifications and issues to be resolved.
+
+What this amounts to is using AI to quickly transcribe all interviews, then 
+storing the results in markdown. Next one improves and augments each markdown 
+file with corrections, formatting and tagging all mentions and timecodes. 
+
+Formatting is part of the markdown standard, but what I'm calling "mentions", 
+"timecodes", and "issues" are extensions to the markdown syntax written 
+specifically for this project. With custom markdown syntax any functionality
+can be realised, whilst keeping the markdown documents human readible for 
+archival purposed, and portability to other projects.
+
+
 # AI Transcription
 
-This project aims to create transcripts of Ray Peat's interviews in order to 
-then augment them with metadata and annotations, this is slow.
+Perhaps a fully automated process will be forthcomming, but for now I'm 
+manually running commands to transcribe audio files with AI, and copying the 
+result by hand into existing markdown files inside of `./assets/todo/`. The 
+following commands are all in the nix dev shell (which you can enter using 
+`nix develop` if your not using direnv).
 
-A similar project exists called [The Ray Peat Archive](https://github.com/0x2447196/raypeatarchive) 
-which is much faster. It uses AI to transcribe the audio, and it's fast.
-RPA has the far superior quantity of transcription.
-
-This project will catch up by copying their approach. `./assets/todo` contains
-every transcript-less interview for which a URL is known. What follows is an 
-example of my AI workflow to grab the audio from that URL, use AI to transcribe 
-it, and wrangle it into custom markdown.
+First I pick a file from ./assets/todo which doesn't have a transcript. Say,
+the filename begins with the date 2022-02-02. Well, I copy the url from it's 
+frontmatter key `source.url` and use `yt-dlp` to download the audio stream
+and output the result to a file with that date as it's name:
 
 ```bash
-# Inside project directory, launch shell with necessary tools in environment
-nix develop 
-
-# Pick a markdown file from ./assets/todo and copy the source URL.
-# This command downloads that URL as an audio file called "source-audio"
-yt-dlp -x "https://website.com/some-video-or-audio-file-url" -o source-audio
-
-# Next we get OpenAI's Whisper to transcribe the audio file into a JSON file.
-# This takes a while, and creates "source-audio.json"
-whisper --language English --output_format json source-audio
-
-# Finally, transform the resulting JSON into markdown.
-# This command outputs markdown to stdout, so here we redirect stdout to append 
-# to whichever markdown file we took the original audio URL from
-whisper-json2md source-audio.json >> ./assets/todo/2022-08-19-example.md
+yt-dlp -x "https://website.com/some-video-or-audio-file-url" -o 2022-02-02
 ```
+
+Sometimes the output file will be called `2022-02-02.opus` or some other 
+extension, sometimes it will have no extension. Let's assume it's `.opus`.
+
+I then ask Whisper AI to transcribe the audio file and output a JSON file 
+describing the results. I believe it's faster to tell Whisper it's and English 
+language conversion:
+
+```bash
+whisper --language English --output_format json 2022-02-02.opus
+```
+
+This takes a while, and great while on old laptops. But once it's done you 
+shoud have a file in the same directory called `2022-02-02.json`. I've chosen
+JSON for it's flexibility in the next step.
+
+The closest format whisper can output is `txt`. But this has no timestamp data 
+in the output text. I'd like to pepper in timestamps (which whisper knows 
+about) every minute or so into the resulting output. And I want them to adhere 
+to out custom markdown extension: `[h:mm:ss]` e.g. `[1:23:45]`. The square 
+brackets are important too.
+
+So I call a custom tool written for this project that reads the JSON, ouputting
+text in the way I've just descibed. I use linux redirection to append the that 
+result to the end of the markdown file I started with:
+
+```bash
+whisper-json2md source-audio.json >> ./assets/todo/2022-02-02-example.md
+```
+
+Then I have a look at this markdown file, and check it out in the browser 
+(which would be https://localhost:8000/example in this example).
+
+Finally I update the frontmatter to reflect the new state of this asset.
+I add the follow:
+
+```yaml
+transcription:
+    date: 2024-04-10 # todays date
+    author: Whisper AI 
+    kind: auto-generated
+
+added:
+    date: 2024-04-10
+    author: Marcus Whybrow # or your name instead
+```
+
+When the website is deployed this metadata makes sure everything looks right,
+and the appropriate descriptions and details are available.
