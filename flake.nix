@@ -128,6 +128,9 @@
 
         # For download's audio files from any URL
         yt-dlp
+
+        # Custom tool to convert Whisper JSON output to our markdown format
+        inputs.self.packages.x86_64-linux.whisper-json2md
       ];
     };
   });
