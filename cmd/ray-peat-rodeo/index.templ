@@ -15,9 +15,14 @@ templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 			<section class="mb-24">
 				<div class="text-center mx-8 mt-8">
 					<p class="text-4xl font-bold tracking-wide leading-10 text-slate-500">
-						Ray Peat's <span class="text-transparent bg-clip-text bg-gradient-to-br from-sky-300 to-blue-400">interviews</span>
+						Ray Peat's <span
+	class="text-transparent bg-clip-text bg-gradient-to-br from-sky-300 to-blue-400"
+>interviews</span>
 						<br/>
-						<span class="text-transparent bg-clip-text bg-gradient-to-r from-red-300 via-yellow-300 to-green-300 italic">supercharged</span> { "for" } discoverability.
+						<span
+							class="text-transparent bg-clip-text bg-gradient-to-r from-red-300 via-yellow-300 to-green-300 italic"
+						>supercharged</span>
+						{ "for" } discoverability.
 					</p>
 				</div>
 				<div class="mt-16 mb-48">
@@ -26,7 +31,11 @@ templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 			</section>
 			<section class="mb-8 max-w-screen-lg mx-auto">
 				<div class="mx-8">
-					<h2 class="-rotate-3 text-pink-400/90 text-4xl uppercase border-4 border-pink-400/90 p-4 inline-block relative top-12 left-16 rounded-lg">New</h2>
+					<h2
+						class="-rotate-3 text-pink-400/90 text-4xl uppercase border-4 border-pink-400/90 p-4 inline-block relative top-12 left-16 rounded-lg"
+					>
+						New
+					</h2>
 					@DoneFile(latest[0])
 					<p class="text-gray-400 text-right relative -top-4 pr-16">
 						added by { latest[0].FrontMatter.Added.Author }
@@ -35,17 +44,12 @@ templ Index(allFiles, latest, humanTrascripts []*File, progress float32) {
 				</div>
 			</section>
 			<section class="max-w-screen-lg mx-auto px-8 mb-32">
-				<a
- 					href={ templ.URL(global.SPONSOR_LINK) }
- 					class="block rounded-lg bg-white shadow-lg px-8 py-4"
-				>
-					<h2
- 						class="float-right text-4xl text-gray-300 mt-2 tracking-tight uppercase tracking-wider italic"
-					>Supporters</h2>
+				<a href={ templ.URL(global.SPONSOR_LINK) } class="block rounded-lg bg-white shadow-lg px-8 py-4">
+					<h2 class="float-right text-4xl text-gray-300 mt-2 tracking-tight uppercase tracking-wider italic">Supporters</h2>
 					<img
- 						class="w-14 h-14 rounded-lg rotate-3 border inline-block mr-6 align-top"
- 						src="https://avatars.githubusercontent.com/u/151856434"
- 						title="HayesKim"
+						class="w-14 h-14 rounded-lg rotate-3 border inline-block mr-6 align-top"
+						src="https://avatars.githubusercontent.com/u/151856434"
+						title="HayesKim"
 					/>
 					<span class="inline-block mt-4 text-gray-500 uppercase tracking-wider italic">become a sponsor</span>
 				</a>
