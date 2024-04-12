@@ -6,5 +6,4 @@ build
 /ray-peat-rodeo
 
 /.direnv
-/.envrc
 /node_modules
