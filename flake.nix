@@ -50,6 +50,14 @@
           cp -r ./internal/assets/* ./build/assets
           mv ./build $out
         '';
+
+        meta = {
+          description = "Takes a Whisper IA JSON file as it's first arguent & outputs markdown to stdout appropriate to append to Ray Peat Rodeo markdown file.";
+          homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
+          maintainers = [
+            "Marcus Whybrow <marcus@whybrow.uk>"
+          ];
+        };
       };
 
       whisper-json2md = pkgs.buildGoApplication {
@@ -64,6 +72,42 @@
           mv whisper-json2md $out/bin/whisper-json2md
         '';
       };
+
+      transcribe = pkgs.writeScriptBin "transcribe" ''
+        set -o xtrace
+
+        asset_path="$1"
+        author="$2"
+
+        asset_name=$(basename "$asset_path")
+        source_url=$(${pkgs.yq-go}/bin/yq ".source.url | select(.)" "$asset_path")
+
+        tmp_dir_audio=$(mktemp --directory)
+        audio_path="$tmp_dir_audio/$asset_name"
+
+        ${pkgs.yt-dlp}/bin/yt-dlp -x "$source_url" -o "$audio_path"
+        audio_name_actual=$(ls -AU "$tmp_dir_audio" | head -1)
+        audio_path_actual="$tmp_dir_audio/$audio_name_actual"
+
+        ls "$tmp_dir_audio"
+
+        tmp_dir_json=$(mktemp --directory)
+        ${pkgs.openai-whisper}/bin/whisper --language English --output_format json --output_dir "$tmp_dir_json" "$audio_path_actual"
+        json_name=$(ls -AU "$tmp_dir_json" | head -1)
+        json_path="$tmp_dir_json/$json_name"
+
+        today=$(date +"%Y-%m-%d")
+        yq="${pkgs.yq-go}/bin/yq --front-matter process --inplace"
+        $yq ".transcription.date = \"$today\"" "$asset_path"
+        $yq ".transcription.author = \"Whisper AI\"" "$asset_path"
+        $yq ".transcription.kind = \"auto-generated\"" "$asset_path"
+        $yq ".added.author = \"$author\"" "$asset_path"
+        $yq ".added.date = \"$today\"" "$asset_path"
+        ${inputs.self.packages.x86_64-linux.whisper-json2md}/bin/whisper-json2md "$json_path" >> "$asset_path"
+
+        # rm -r "$tmp_dir_audio"
+        # rm -r "$tmp_dir_json"
+      '';
 
       default = build;
     };
@@ -131,6 +175,10 @@
 
         # Custom tool to convert Whisper JSON output to our markdown format
         inputs.self.packages.x86_64-linux.whisper-json2md
+
+        # Convenience bash script using yt-dlp, whisper & whisper-json2md to 
+        # transcribe and update assets with a `source.url` in the frontmatter.
+        inputs.self.packages.x86_64-linux.transcribe
       ];
     };
   });

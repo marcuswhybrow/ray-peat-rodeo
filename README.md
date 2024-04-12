@@ -76,66 +76,12 @@ archival purposes, and portability to other projects.
 
 # AI Transcription
 
-Perhaps a fully automated process will be forthcomming, but for now I'm 
-manually running commands to transcribe audio files with AI, and copying the 
-result by hand into existing markdown files inside of `./assets/todo/`. The 
-following commands are all in the nix dev shell (which you can enter using 
-`nix develop` if your not using direnv).
+`flake.nix` packages a `bash` script named `transcribe`. It downloads the source audio of any file in `./assets`, transcribes it, then updates the asset with the transcription, and updates the frontmatter data to reflect this change.
 
-First I pick a file from `./assets/todo` that doesn't have a transcript. Say
-the filename begins with the date 2022-02-02. Well, I copy the url from it's 
-frontmatter key `source.url` and use `yt-dlp` to download the audio stream
-and output the result to a file with that date as it's name:
+1. Argument #1 is the markdown file to transcribe and update.
+2. Arguument #2 is your name, to log in the assets metadata.
 
 ```bash
-yt-dlp -x "https://website.com/some-video-or-audio-file-url" -o 2022-02-02
+nix run github:marcuswhybrow/ray-peat-rodeo#transcribe -- ./assets/todo/2024-10-12-example.md "Marcus Whybrow"
 ```
 
-Sometimes the output file will be called `2022-02-02.opus` or some other 
-extension, sometimes it will have no extension. Let's assume it's `.opus`.
-
-I then ask Whisper AI to transcribe the audio file and output a JSON file 
-describing the results. I believe it's faster to tell Whisper it's an English 
-language conversion:
-
-```bash
-whisper --language English --output_format json 2022-02-02.opus
-```
-
-This takes a while, and a great while on old laptops. But once it's done you 
-shoud have a file in the same directory called `2022-02-02.json`. Whisper has 
-many output formats, but I've chosen JSON for it's flexibility in the next step.
-
-The closest format whisper can output is `txt`. But this has no timestamp data 
-in the output text. I'd like to pepper in timestamps (which whisper knows 
-about) every minute or so into the resulting output. And I want them to adhere 
-to our custom markdown extension format: `[h:mm:ss]` e.g. `[1:23:45]`. The 
-square brackets are important.
-
-So I call a custom tool written for this project that reads the JSON, ouputting
-text in the way I've just descibed. I use linux redirection to append that 
-result to the end of the markdown file I started with:
-
-```bash
-whisper-json2md source-audio.json >> ./assets/todo/2022-02-02-example.md
-```
-
-Then I have a look at this markdown file, and check it out in the browser 
-(which would be https://localhost:8000/example in this example).
-
-Finally I update the frontmatter to reflect the new state of this asset.
-I add the following:
-
-```yaml
-transcription:
-    date: 2024-04-10 # todays date
-    author: Whisper AI 
-    kind: auto-generated
-
-added:
-    date: 2024-04-10
-    author: Marcus Whybrow # or your name instead
-```
-
-When the website is deployed this metadata makes sure everything looks right,
-and the appropriate descriptions and details are available.
