@@ -81,7 +81,7 @@
           '';
 
         meta = {
-          description = "Takes a Whisper IA JSON file as it's first arguent & outputs markdown to stdout appropriate to append to Ray Peat Rodeo markdown file.";
+          description = "Takes a Whisper AI JSON file and your name and outputs markdown to stdout appropriate to append to Ray Peat Rodeo markdown file.";
           homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
           maintainers = [
             "Marcus Whybrow <marcus@whybrow.uk>"
