@@ -28,6 +28,14 @@
           go build ./cmd/ray-peat-rodeo
           mv ray-peat-rodeo $out/bin/ray-peat-rodeo
         '';
+
+        meta = {
+          description = "Custom static-site-generator. Ran from this repo it consumes markdown files in `./assets` and produces HTML files in `./build`.";
+          maintainers = [
+            "Marcus Whybrow <marcus@whybrow.uk>"
+          ];
+          homepage = "https://raypeat.rodeo";
+        };
       };
 
       build = pkgs.stdenv.mkDerivation {
@@ -52,11 +60,11 @@
         '';
 
         meta = {
-          description = "Takes a Whisper IA JSON file as it's first arguent & outputs markdown to stdout appropriate to append to Ray Peat Rodeo markdown file.";
-          homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
+          description = "Creates the final website deployment by running ray-peat-rodeo, pagefind static search, tailwind CSS processing, and copying raw assets into place.";
           maintainers = [
             "Marcus Whybrow <marcus@whybrow.uk>"
           ];
+          homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
         };
       };
 
@@ -70,7 +78,15 @@
           mkdir -p $out/bin
           go build ./cmd/whisper-json2md
           mv whisper-json2md $out/bin/whisper-json2md
-        '';
+          '';
+
+        meta = {
+          description = "Takes a Whisper IA JSON file as it's first arguent & outputs markdown to stdout appropriate to append to Ray Peat Rodeo markdown file.";
+          homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
+          maintainers = [
+            "Marcus Whybrow <marcus@whybrow.uk>"
+          ];
+        };
       };
 
       transcribe = pkgs.writeScriptBin "transcribe" ''
