@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Untitled Interview 2021-09-18
+  title: Ask Your Herb Doctor, September 2021
   url: https://www.toxinless.com/kmud-210917.mp3
   kind: audio
 transcription:

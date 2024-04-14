@@ -1,7 +1,7 @@
 ---
 source:
     series: Ask Your Herb Doctor
-    title: Untitled Interview 2022-11-18
+    title: Ask Your Herb Doctor, November 2022
     url: https://www.toxinless.com/kmud-221118.mp3
     kind: audio
 
