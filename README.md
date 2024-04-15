@@ -255,24 +255,24 @@ person is unclear. In this case one may
 [create an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new)
 in the GitHub project and title it as a question to which others may know the 
 answer. For example "Which 1986 biology paper is Ray refering to?" Add to the 
-issues description any pertenant context and submit the issue.
+issue's description any pertenant context and submit the issue.
 
 Once created, take note of the issue's unique numerical ID displayed near the 
 issue's title. Refer to this ID using a `#` inside of a sidenote:
 
 ```markdown
-RP: In 1986 they showed that {#51} ...
+RP: In 1986 they showed {#51} that even though...
 ```
 
 When a sidenote contains a `#` and a number, a golden, call to action, issue 
-bubble containing the isse title will be show to readers. In this case the 
+bubble containing the issue title will be shown to readers. In this case the 
 bubble will read "#51 Which 1986 biology paper is Ray refering to?" Clicking 
-the bubble take readers to the GitHub issue itself.
+the bubble takes readers to the GitHub issue itself.
 
 GitHub issues are a great way to keep track of opportunities for improving
 the clarity of readability for new readers, and serve to invite and organise 
 the expertese of those who might fill in the gaps.
 
-I like to use isses liberrally. If I'm unsure of a mention, or don't know how 
-to word a sidenote I create an issue and move on. This keeps transcription 
+I like to use issues liberally. If I'm unsure of a mention, or don't know how 
+to word a sidenote, I create an issue and move on. This keeps transcription 
 fluent, leaving future me, or someone better educated, to fix the issue later.
