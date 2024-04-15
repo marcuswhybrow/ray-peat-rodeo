@@ -276,3 +276,10 @@ the expertese of those who might fill in the gaps.
 I like to use issues liberally. If I'm unsure of a mention, or don't know how 
 to word a sidenote, I create an issue and move on. This keeps transcription 
 fluent, leaving future me, or someone better educated, to fix the issue later.
+
+# Similar Projects 
+
+- [The Ray Peat Archive](https://github.com/0x2447196/raypeatarchive) has a very large collection of AI transcriptions stored in a plain text subtitle format callled WebVTT.
+- [Bioenergetic Life](https://bioenergetic.life/) is an interactive search engine for The Ray Peat Archive's data set, with side-by-side text and audio snippets.
+
+[Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if I've missed a similar project.
