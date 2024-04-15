@@ -77,10 +77,10 @@ archival purposes, and portability to other projects.
 
 Go to `./assets/todo`. Every file in this directory is a 
 [Markdown](https://www.markdownguide.org) file. Each one repesenting a unique
-Ray Peat interview to one day transcribe. Each filename is formatted in 
+Ray Peat interview awaiting transcription. Each filename is formatted in 
 [Kebab Case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case) and 
 begins with the date as `YYYY-MM-DD` (ISO 8601 format) followed by the title of 
-this interview.
+the interview.
 
 Ray Peat Rodeo will respect whatever date is declared in the file name, and use 
 it across the website. The title portion, verbatim, becomes the URL at which 
@@ -89,14 +89,12 @@ this interview will exist.
 For example...
 
 ```bash
-cd ./assets/todo 
-touch 2008-07-02-an-example.md
+touch ./assets/todo/2008-07-02-an-example.md
 ```
 
-... will become a web page accessible at `raypeat.rodeo/an-example/` and it's 
-shown in the 2008 section, as having taken place on July 2nd. 
-
-The contents of the file must begin like this...
+... will become a web page accessible at `raypeat.rodeo/an-example/` and will 
+appear in the 2008 section, as having taken place on July 2nd. The contents of 
+the file must begin with the following [YAML](https://yaml.org/) frontmatter.
 
 ```markdown 
 ---
@@ -108,27 +106,28 @@ source:
 ---
 ```
 
-The `series` is used to group interviews by the show/host, so make 
-sure you match the series _exactly_ to existing series in other interviews.
-The `title` can contain any characters and appears at the top of the interview 
-page, and on the homepage listing. The `url` is used to link to the original 
-source URL, and is used to constuct "timestamp" links to allow readers to click 
-through from a given point in the interview diectly to that time in the source 
-audio or video. `kind` can be either `audio` or `video` and is offered as a 
-filter when searching Ray Peat Rodeo.
+- The `series` is used to group interviews by the show/host, so make sure you 
+match the series _exactly_ to existing series in other interviews.
+- The `title` can contain any characters and appears at the top of the 
+interview page, and on the homepage listing. 
+- The `url` is used to link to the original source URL, and to constuct 
+"timestamp" links to allow readers to click through from a given point in the 
+interview diectly to that time in the source audio or video. 
+- `kind` can be either `audio` or `video` and is offered as a filter when 
+searching Ray Peat Rodeo.
 
-**Done**. Next you may use the `transcribe` tool to automatically add an AI 
+**Done**. Next one may use the `transcribe` tool to automatically add an AI 
 transcription to this file (see [AI Transcription](#ai-transcription)).
 
 # AI Transcription
 
 `flake.nix` packages a `bash` script named `transcribe`. It downloads the 
-source audio of any file in `./assets`, transcribes it, then updates the asset 
-with the transcription, and updates the frontmatter data to reflect this 
+source audio of any file in `./assets/todo`, transcribes it, then updates the 
+asset with the transcription, and updates the frontmatter data to reflect this 
 change.
 
-1. Argument #1 is the markdown file to transcribe and update.
-2. Arguument #2 is your name, to log in the assets metadata.
+1. Argument **#1** is the markdown file to transcribe and update.
+2. Argument **#2** is your name, to log in the assets metadata.
 
 ```bash
 nix run github:marcuswhybrow/ray-peat-rodeo#transcribe -- ./assets/todo/2024-10-12-example.md "Marcus Whybrow"
@@ -142,7 +141,7 @@ to take it to the next level (see
 
 # Augmenting and Completing A Transcript
 
-**Who's Speaking?**
+## Who's Speaking?
 
 Prefixing sentences with the speakers initials when the speaker changes, such 
 as `RP:` for Ray Peat, allows Ray Peat Rodeo to separate the transcript into 
@@ -163,7 +162,7 @@ MW: Hi Ray, how are you?
 RP: Very good, thank you.
 ```
 
-**What Time Is It?**
+## What Time Is It?
 
 Interspersing timestamps within the transcript, such as `[12:34]`, allows 
 readers to jump staight to that point in the original source audio or video. 
@@ -178,11 +177,11 @@ RP: I think...
 
 *Tip: Timestamps can express hours too: `[2:01:12]`*
 
-**Mentions**
+## Mentions
 
 When a person, topic, chemical, hormone, book, website, or any *thing* is 
 mentioned, marking it as a "mention" gives readers a little popup bubble that 
-gives provides a mini summary of where else it's been discussed. Surround the 
+provides a mini summary of where else it's been discussed. Surround the 
 mentioned thing in double square bracets like this...
 
 ```markdown 
@@ -200,10 +199,10 @@ This backwards convension helps Ray Peat Rodeo know how to order every mention
 alphabetically. RPR is smart enough to output the name the right way around to 
 the reader...
 
-> **Pelham Grenville Wodehouse** was thee creator of Jeeves and Wooster...
+> **Pelham Grenville Wodehouse** was the creator of Jeeves and Wooster...
 
 *Note: The first comma always has this effect. Commas must be otherwise 
-avoided.*
+avoided in mention names.*
 
 To tailor the displayed text to your liking use the `|` character...
 
@@ -229,17 +228,17 @@ associations bound together via unique conversations.
 
 *Tip: A mention or submention may be a URL or email address. In these speacial 
 cases, the popup summary will also contain a direct link to the URL, or a 
-"mailto" link to open the readers email client directly.*
+"mailto" link to open the reader's email client directly.*
 
 *Tip: Mentioning a scientific paper by it's DOI URL (https://doi.org/...) 
 automatically grabs the papers full title from the DOI database to display to 
 the reader. See this [real example](https://raypeat.rodeo/john-william-gofman/#https%3A%2F%2Fdoi.org%2F10.5860%2Fchoice.37-5129).*
 
-**Is That Clear?**
+## Is That Clear?
 
 When someone new to Ray Peat may not understand a reference or term, one can 
-add a sidenote that appears distinct from the main text in a little bubble. 
-For example...
+add a sidenote, using curly brackets, that appears distinct from the main text
+in a little bubble. For example...
 
 ```markdown 
 RP: PUFA {Polyunsaturated Fats} were originally...
@@ -247,9 +246,9 @@ RP: PUFA {Polyunsaturated Fats} were originally...
 
 I like to clarify a term this way the first time it's used in a transcript, 
 then trust the reader to recall it's definition, or refer back to it. 
-This serves to keep interruptions to a minimum, and let Ray take center stage.
+This serves to keep interruptions to a minimum and let Ray take center stage.
 
-**What' That?**
+## Huh?
 
 Sometimes a Ray mentions something ambiguously, or the full name of paper or 
 person is unclear to the transcriber. 
