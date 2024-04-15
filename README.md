@@ -279,7 +279,24 @@ fluent, leaving future me, or someone better educated, to fix the issue later.
 
 # Similar Projects 
 
-- [The Ray Peat Archive](https://github.com/0x2447196/raypeatarchive) has a very large collection of AI transcriptions stored in a plain text subtitle format callled WebVTT.
-- [Bioenergetic Life](https://bioenergetic.life/) is an interactive search engine for The Ray Peat Archive's data set, with side-by-side text and audio snippets.
+- [The Ray Peat Archive](https://github.com/0x2447196/raypeatarchive) has a 
+very large collection of AI transcriptions stored in a plain text subtitle 
+format callled WebVTT.
+- [Bioenergetic Life](https://bioenergetic.life/) is an interactive search 
+engine for The Ray Peat Archive's data set, with side-by-side text and audio 
+snippets.
 
-[Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if I've missed a similar project.
+[Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
+I've missed a similar project.
+
+# Cheers
+
+At the momemt I'm just one Marcus working on Ray Peat Rodeo; chugging along in 
+my spare time. Thanks for your interest in the project, even if you can't help 
+out with the code. Giving the project a star if you want!
+
+If you want to sponsor my work see 
+[my GitHub sponsors page](https://github.com/sponsors/marcuswhybrow).
+
+Cheers,
+Marcuus
