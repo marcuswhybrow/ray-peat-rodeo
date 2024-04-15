@@ -250,31 +250,28 @@ This serves to keep interruptions to a minimum and let Ray take center stage.
 
 ## Huh?
 
-Sometimes a Ray mentions something ambiguously, or the full name of paper or 
+Sometimes a Ray mentions something ambiguously, or the full name of a paper or 
 person is unclear to the transcriber. 
 [Create an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new)
 in the GitHub project titled as a question that others may know the answer to,
-for example "Which 1986 biology paper is Ray refering to?"
+for example "Which 1986 biology paper is Ray refering to?" Add whatever context 
+is pertenant to the issues description and submit the new issue. 
 
-Add whatever context is pertenant to the issues description and submit the new 
-issue. 
-
-Take note of the isse's unique numerical id displayed after the issue title 
-once created. Referring to an issue id in the transcript adds a golden "issue"
-sidenote containing the title as a call to action to all readers, and linking 
-them directly to that particular GitHub issue as a place to discuss a solution.
-For example...
+Once created, take note of the issue's unique numerical ID displayed near the 
+issue's title. Refer to this ID using a `#` inside of a sidenote:
 
 ```markdown
 RP: In 1986 they showed that {#51} ...
 ```
 
-This creates a golden, call to action, issue bubble entitled "#51 Which 1986 
-biology paper is Ray refering to?"
+When a sidenote contains a `#` and a number, a golden, call to action, issue 
+bubble containing the isse title will be show to readers. In this case the 
+bubble will read "#51 Which 1986 biology paper is Ray refering to?" Clicking 
+the bubble take readers to the GitHub issue itself.
 
-GitHub issus are a great way to keep track of all opportunities for improving
+GitHub issues are a great way to keep track of opportunities for improving
 the clarity of readability for new readers, and serve to invite and organise 
-the expertese of those who might know the answers to these gaps in knowledge.
+the expertese of those who might fill in the gaps.
 
 I like to use isses liberrally. If I'm unsure of a mention, or don't know how 
 to word a sidenote I create an issue and move on. This keeps transcription 
