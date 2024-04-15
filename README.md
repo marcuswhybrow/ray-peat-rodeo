@@ -293,10 +293,10 @@ I've missed a similar project.
 
 At the momemt I'm just one Marcus working on Ray Peat Rodeo; chugging along in 
 my spare time. Thanks for your interest in the project, even if you can't help 
-out with the code. Giving the project a star if you want!
+out with the code. Go on, give the project a star! 😉
 
 If you want to sponsor my work see 
 [my GitHub sponsors page](https://github.com/sponsors/marcuswhybrow).
 
-Cheers,
+Cheers,  
 Marcuus
