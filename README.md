@@ -73,10 +73,59 @@ specifically for this project. With custom markdown syntax any functionality
 can be realised whilst keeping the markdown documents human readible for 
 archival purposes, and portability to other projects.
 
+# Adding "Todo" Ray Peat Interviews
+
+Go to `./assets/todo`. Every file in this directory is a 
+[Markdown](https://www.markdownguide.org) file. Each one repesenting a unique
+Ray Peat interview to one day transcribe. Each filename is formatted in 
+[Kebab Case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case) and 
+begins with the date as `YYYY-MM-DD` (ISO 8601 format) followed by the title of 
+this interview.
+
+Ray Peat Rodeo will respect whatever date is declared in the file name, and use 
+it across the website. The title portion, verbatim, becomes the URL at which 
+this interview will exist.
+
+For example...
+
+```bash
+cd ./assets/todo 
+touch 2008-07-02-an-example.md
+```
+
+... will become a web page accessible at `raypeat.rodeo/an-example/` and it's 
+shown in the 2008 section, as having taken place on July 2nd. 
+
+The contents of the file must begin like this...
+
+```markdown 
+---
+source:
+    series: The name of the show Ray is appearing on 
+    title: Human readable title (similar to filename title but more flexible)
+    url: https://example.com/the-original-audio-or-video
+    kind: audio
+---
+```
+
+The `series` is used to group interviews by the show/host, so make 
+sure you match the series _exactly_ to existing series in other interviews.
+The `title` can contain any characters and appears at the top of the interview 
+page, and on the homepage listing. The `url` is used to link to the original 
+source URL, and is used to constuct "timestamp" links to allow readers to click 
+through from a given point in the interview diectly to that time in the source 
+audio or video. `kind` can be either `audio` or `video` and is offered as a 
+filter when searching Ray Peat Rodeo.
+
+**Done**. Next you may use the `transcribe` tool to automatically add an AI 
+transcription to this file (see [AI Transcription](#ai-transcription)).
 
 # AI Transcription
 
-`flake.nix` packages a `bash` script named `transcribe`. It downloads the source audio of any file in `./assets`, transcribes it, then updates the asset with the transcription, and updates the frontmatter data to reflect this change.
+`flake.nix` packages a `bash` script named `transcribe`. It downloads the 
+source audio of any file in `./assets`, transcribes it, then updates the asset 
+with the transcription, and updates the frontmatter data to reflect this 
+change.
 
 1. Argument #1 is the markdown file to transcribe and update.
 2. Arguument #2 is your name, to log in the assets metadata.
@@ -85,3 +134,149 @@ archival purposes, and portability to other projects.
 nix run github:marcuswhybrow/ray-peat-rodeo#transcribe -- ./assets/todo/2024-10-12-example.md "Marcus Whybrow"
 ```
 
+**Done**. Once you've added the AI transcript it's contents will be available to 
+the site-wide search engine, helping readers to further explore Ray's ideas. 
+Finally, and optionally, one may augment the transcript with special formatting 
+to take it to the next level (see 
+[Augmenting and Completing A Transcript](#augmenting-and-completing-a-transcript)).
+
+# Augmenting and Completing A Transcript
+
+**Who's Speaking?**
+
+Prefixing sentences with the speakers initials when the speaker changes, such 
+as `RP:` for Ray Peat, allows Ray Peat Rodeo to separate the transcript into 
+different speach bubbles.
+
+Make sure to define the full name for each initials used in the YAML 
+frontmatter at the top of the markdown file like so:
+
+```markdown
+---
+speakers:
+    RP: Ray Peat
+    MW: Marcus Whybrow
+---
+
+MW: Hi Ray, how are you?
+
+RP: Very good, thank you.
+```
+
+**What Time Is It?**
+
+Interspersing timestamps within the transcript, such as `[12:34]`, allows 
+readers to jump staight to that point in the original source audio or video. 
+I like to use timestamps sparingly to indicate a change in topic or a new 
+question being asked. For example...
+
+```markdown 
+MW: That's great. [12:34] And what do you think about that, Ray?
+
+RP: I think...
+```
+
+*Tip: Timestamps can express hours too: `[2:01:12]`*
+
+**Mentions**
+
+When a person, topic, chemical, hormone, book, website, or any *thing* is 
+mentioned, marking it as a "mention" gives readers a little popup bubble that 
+gives provides a mini summary of where else it's been discussed. Surround the 
+mentioned thing in double square bracets like this...
+
+```markdown 
+RP: The history of [[Estrogen]] reesearch...
+```
+
+For mentioned people, put their surname first, then a comma, then their given 
+names (without titles such as Sir or Doctor). For example...
+
+```markdown
+MW: [[Wodehouse, Pelham Grenville]] was the creater of Jeeves and Wooster...
+```
+
+This backwards convension helps Ray Peat Rodeo know how to order every mention 
+alphabetically. RPR is smart enough to output the name the right way around to 
+the reader...
+
+> **Pelham Grenville Wodehouse** was thee creator of Jeeves and Wooster...
+
+*Note: The first comma always has this effect. Commas must be otherwise 
+avoided.*
+
+To tailor the displayed text to your liking use the `|` character...
+
+```markdown 
+MW: I've been reading [[Blake, William|an author]] that...
+```
+
+Which becomes...
+
+> I've been reading **an author** that...
+
+And finally, you can associate books with their authors using the `>` 
+character. For example...
+
+```markdown
+MW: and I discovered he wrote [[Blake, William > Jerusalem]] around then...
+```
+
+`Jerusalem` is known as a "sub mention", and it'll be included included in the 
+popup summary for William Blake, and *vise versa*. Sub mentions are a powereful 
+way to help new readers explore Ray's influences by hopping around these 
+associations bound together via unique conversations. 
+
+*Tip: A mention or submention may be a URL or email address. In these speacial 
+cases, the popup summary will also contain a direct link to the URL, or a 
+"mailto" link to open the readers email client directly.*
+
+*Tip: Mentioning a scientific paper by it's DOI URL (https://doi.org/...) 
+automatically grabs the papers full title from the DOI database to display to 
+the reader. See this [real example](https://raypeat.rodeo/john-william-gofman/#https%3A%2F%2Fdoi.org%2F10.5860%2Fchoice.37-5129).*
+
+**Is That Clear?**
+
+When someone new to Ray Peat may not understand a reference or term, one can 
+add a sidenote that appears distinct from the main text in a little bubble. 
+For example...
+
+```markdown 
+RP: PUFA {Polyunsaturated Fats} were originally...
+``` 
+
+I like to clarify a term this way the first time it's used in a transcript, 
+then trust the reader to recall it's definition, or refer back to it. 
+This serves to keep interruptions to a minimum, and let Ray take center stage.
+
+**What' That?**
+
+Sometimes a Ray mentions something ambiguously, or the full name of paper or 
+person is unclear to the transcriber. 
+[Create an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new)
+in the GitHub project titled as a question that others may know the answer to,
+for example "Which 1986 biology paper is Ray refering to?"
+
+Add whatever context is pertenant to the issues description and submit the new 
+issue. 
+
+Take note of the isse's unique numerical id displayed after the issue title 
+once created. Referring to an issue id in the transcript adds a golden "issue"
+sidenote containing the title as a call to action to all readers, and linking 
+them directly to that particular GitHub issue as a place to discuss a solution.
+For example...
+
+```markdown
+RP: In 1986 they showed that {#51} ...
+```
+
+This creates a golden, call to action, issue bubble entitled "#51 Which 1986 
+biology paper is Ray refering to?"
+
+GitHub issus are a great way to keep track of all opportunities for improving
+the clarity of readability for new readers, and serve to invite and organise 
+the expertese of those who might know the answers to these gaps in knowledge.
+
+I like to use isses liberrally. If I'm unsure of a mention, or don't know how 
+to word a sidenote I create an issue and move on. This keeps transcription 
+fluent, leaving future me, or someone better educated, to fix the issue later.
