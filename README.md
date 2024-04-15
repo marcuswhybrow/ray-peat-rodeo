@@ -250,12 +250,12 @@ This serves to keep interruptions to a minimum and let Ray take center stage.
 
 ## Huh?
 
-Sometimes a Ray mentions something ambiguously, or the full name of a paper or 
-person is unclear to the transcriber. 
-[Create an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new)
-in the GitHub project titled as a question that others may know the answer to,
-for example "Which 1986 biology paper is Ray refering to?" Add whatever context 
-is pertenant to the issues description and submit the new issue. 
+Sometimes Ray's mentions are ambiguous, or the full name of a paper or 
+person is unclear. In this case one may  
+[create an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new)
+in the GitHub project and title it as a question to which others may know the 
+answer. For example "Which 1986 biology paper is Ray refering to?" Add to the 
+issues description any pertenant context and submit the issue.
 
 Once created, take note of the issue's unique numerical ID displayed near the 
 issue's title. Refer to this ID using a `#` inside of a sidenote:
