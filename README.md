@@ -299,4 +299,4 @@ If you want to sponsor my work see
 [my GitHub sponsors page](https://github.com/sponsors/marcuswhybrow).
 
 Cheers,  
-Marcuus
+Marcus
