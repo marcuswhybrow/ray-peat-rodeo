@@ -81,13 +81,13 @@ templ Base(title string) {
       </script>
 		</head>
 		<body
- 			class="
+			class="
         pt-20
         scrollbar
         scrollbar-thumb-purple-300
         scrollbar-track-pink-50
       "
- 			_="
+			_="
         behavior RelativeDate
           on load 
             set buildDate to my innerHTML then
@@ -97,13 +97,13 @@ templ Base(title string) {
           end
         end
 
-        on keydown[key==&#39;/&#39;] 
+        on keydown[key=='/'] 
           if #search matches .hidden then 
             send openSearch to me
             halt the event
           end
 
-        on keydown[key==&#39;Escape&#39;] send closeSearch to me
+        on keydown[key=='Escape'] send closeSearch to me
 
         on toggleSearch
           if #search matches .hidden then
@@ -128,10 +128,10 @@ templ Base(title string) {
 						<a href="/" class="py-2 inline-block mx-auto no-underline opacity-30 text-black text-3xl font-light uppercase tracking-widest hover:opacity-60">Ray Peat Rodeo</a>
 						<style>input[type="checkbox"]:checked~div{display:block}</style>
 						<img
- 							class="transition-all inline-block absolute w-6 h-6 top-[15px] -right-14 opacity-60 hover:opacity-100 cursor-pointer hover:drop-shadow"
- 							title="Search (Press &#39;/&#39;)"
- 							src="/assets/images/magnifying-glass-icon.svg"
- 							_="on click trigger openSearch"
+							class="transition-all inline-block absolute w-6 h-6 top-[15px] -right-14 opacity-60 hover:opacity-100 cursor-pointer hover:drop-shadow"
+							title="Search (Press '/')"
+							src="/assets/images/magnifying-glass-icon.svg"
+							_="on click trigger openSearch"
 						/>
 					</div>
 					<div class="h-px bg-gradient-to-r from-slate-200/0 via-slate-200 to-slate-200/0"></div>
@@ -140,19 +140,19 @@ templ Base(title string) {
 			{ children... }
 			<footer class="max-w-screen-xl mx-auto px-8">
 				<div class="flex mb-16 flex-col sm:flex-row">
-					<div class="flex-auto border-t-8 border-gray-100 sm:mr-32 pt-8 mb-8 w-1/2">
-						<h2 class="text-4xl mb-8">Support</h2>
+					<div class="flex-auto border-t-8 border-gray-100 sm:mr-32 pt-8 mb-8 sm:w-1/2">
+						<h2 class="text-4xl mb-8 mt-2">Support</h2>
 						<p class="mb-2">
 							<a
- 								href="https://github.com/sponsors/marcuswhybrow"
- 								class="font-bold hover:underline"
+								href="https://github.com/sponsors/marcuswhybrow"
+								class="font-bold hover:underline"
 							>Support Ray Peat Rodeo</a>
 							on GitHub Sponsors.
 						</p>
 						<p class="mb-2">
 							<a
- 								class="font-bold hover:underline"
- 								href={ global.GITHUB_LINK }
+								class="font-bold hover:underline"
+								href={ global.GITHUB_LINK }
 							>Star the project</a> on GitHub.
 						</p>
 						<p>
@@ -162,14 +162,14 @@ templ Base(title string) {
 							</span>.
 						</p>
 					</div>
-					<div class="flex-auto border-t-8 border-gray-100 pt-8 mb-8 w-1/2">
-						<h2 class="text-4xl mb-8">Blog & Chat</h2>
+					<div class="flex-auto border-t-8 border-gray-100 pt-8 mb-8 sm:w-1/2">
+						<h2 class="text-4xl mb-8 mt-2">Blog & Chat</h2>
 						<p class="mb-2">Blog comming soon.</p>
 						<p>
 							Say hello on the 
 							<a
- 								class="font-bold hover:underline"
- 								href="https://discord.gg/quBQjmU5"
+								class="font-bold hover:underline"
+								href="https://discord.gg/quBQjmU5"
 							>Discord server</a>.
 						</p>
 					</div>
