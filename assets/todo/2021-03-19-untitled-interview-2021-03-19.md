@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Untitled Interview 2021-03-19
+  title: Ask Your Herb Doctor, March 2021
   url: https://www.toxinless.com/kmud-210319.mp3
   kind: audio
 transcription:
