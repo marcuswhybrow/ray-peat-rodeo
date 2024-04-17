@@ -14,16 +14,16 @@ func formatedDate(blogPost *BlogPost) string {
 
 templ BlogDate(blogPost *BlogPost) {
 	<span
- 		_="install RelativeDate"
- 		title={ formatedDate(blogPost) }
+		_="install RelativeDate"
+		title={ formatedDate(blogPost) }
 	>{ formatedDate(blogPost) }</span>
 }
 
 templ RenderBlogPost(blogPost *BlogPost) {
 	@Base(blogPost.Title) {
 		<article
- 			class="max-w-screen-md px-8 mx-auto mt-32 mb-32"
- 			data-pagefind-body
+			class="max-w-screen-md px-8 mx-auto mt-32 mb-32"
+			data-pagefind-body
 		>
 			<div class="mb-16 bg-pink-100 rounded-lg p-8 text-pink-500">
 				<div class="float-left">
@@ -39,7 +39,7 @@ templ RenderBlogPost(blogPost *BlogPost) {
 				</p>
 			</div>
 			<div
- 				class={ templ.SafeClass(`
+				class={ templ.SafeClass(`
           [&>p]:mb-4
           [&>ol]:list-decimal 
           [&>ol]:mb-4 
@@ -50,12 +50,11 @@ templ RenderBlogPost(blogPost *BlogPost) {
 			>
 				@Unsafe(string(blogPost.HTML))
 			</div>
-			<a
- 				href="/blog"
- 				class="block p-8 rounded-lg border mt-16 text-center text-4xl"
-			>
-				More from the blog
-			</a>
+			<div class="text-center mt-16">
+				<a href="/blog" class="inline-block mx-auto px-8 py-4 rounded-full text-xl hover:bg-gradient-to-tl from-fuchsia-900 to-pink-600 text-gray-600 hover:text-white font-bold border-2 hover:border-white hover:border-solid border-gray-300 border-dashed">
+					More from the blog
+				</a>
+			</div>
 		</article>
 	}
 }

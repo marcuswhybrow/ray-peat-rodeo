@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
-	"fmt"
 )
 
 func pluralise(i int, s string) string {
@@ -23,83 +22,46 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 						<span class="text-transparent bg-clip-text bg-gradient-to-r from-red-300 via-yellow-300 to-green-300 italic">supercharged</span> { "for" } discoverability.
 					</p>
 				</div>
-				<div class="mt-16 mb-48">
-					@demo()
-				</div>
 			</section>
-			<section class="mb-8 max-w-screen-lg mx-auto flex">
+			<section class="mb-8 max-w-screen-lg mx-auto flex hidden">
 				<div class="mx-8 flex-initial w-2/3">
 					<!-- Latest File Showcase -->
-					<a href={ templ.URL(latestFile.Permalink) } class="block p-8 rounded rounded-lg shadow-lg bg-white mb-8 mt-8">
-						<div class="">
-							@SpeakerCards(latestFile)
-							if latestFile.HasIssues() {
-								<div
-									class="relative inline-block align-top overflow-hidden w-16 h-20 rounded-lg shadow rotate-3 text-center bg-gradient-to-br from-yellow-100 to-amber-200"
-									title={ fmt.Sprint(latestFile.IssueCount()) + " GitHub issue" + pluralise(latestFile.IssueCount(), "s") }
-								>
-									<span class="relative top-4 text-yellow-500 text-3xl">
-										{ fmt.Sprint(latestFile.IssueCount()) }
-									</span>
-									<span class="text-sm absolute bottom-2 left-0 right-0 text-center text-yellow-500">
-										issue{ 
-                pluralise(latestFile.IssueCount(), "s") }
-									</span>
+				</div>
+			</section>
+			<section class="max-w-screen-lg mx-auto mb-32 relative">
+				<!-- Side bubbles -->
+				<div class="2xl:absolute 2xl:-right-64 2xl:w-[200px] z-30">
+					<div class="grid grid-cols-3 2xl:grid-cols-1 2xl-grid-rows-3 gap-4">
+						<!-- Latest File -->
+						<a href={ templ.URL(latestFile.Permalink) } class="block p-8 rounded rounded-lg shadow-md bg-white">
+							<p class="text-sm uppercase text-gray-500 mb-4">Latest Addition</p>
+							<h3 class="tracking-tighter text-xl font-bold text-gray-500 mb-2">{ latestFile.FrontMatter.Source.Title }</h3>
+							<div class="tracking-wider text-gray-500">{ latestFile.FrontMatter.Source.Series }</div>
+						</a>
+						<!-- Latest Blog post -->
+						<a href={ templ.URL(latestBlogPost.Permalink) } class="block p-8 rounded-lg bg-pink-100 shadow-md">
+							<div class="float-left">
+								<div class="pr-4">
+									@Avatar(latestBlogPost.AuthorAvatarPath, "?", latestBlogPost.Author)
 								</div>
-							}
-						</div>
-						<ol class="mb-0">
-							for i, mentionCount := range AtMost(latestFile.TopPrimaryMentionables(), 3) {
-								if i > 0 && i < 3 {
-									<span class="mr-2 text-rose-300/90">/</span>
-								}
-								<li class="inline-block mb-2 mr-2 last:mr-0">
-									<span
-										class="text-gray-400/90 uppercase trakcing-wider"
-										title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
-									>{ mentionCount.MentionablePart.Cardinal }</span>
-								</li>
-							}
-							<span class="mr-2 text-rose-300/90">/</span>
-							<li
-								class="inline-block mb-2 mr-2 last:mr-0 text-gray-400/90 tracking-wider uppercase"
-								title="Date of conversation"
-								_="install RelativeDate"
-							>{ latestFile.Date }</li>
-						</ol>
-						<h3 class="tracking-tighter text-3xl font-bold text-gray-500 mb-2">{ latestFile.FrontMatter.Source.Title }</h3>
-						<div class="tracking-wider text-gray-500">{ latestFile.FrontMatter.Source.Series }</div>
-					</a>
-					<p class="text-gray-400 text-right relative -top-4 pr-16">
-						added by { latestFile.FrontMatter.Added.Author }
-						<span _="install RelativeDate">{ latestFile.FrontMatter.Added.Date }</span>
-					</p>
-				</div>
-				<div class="flex-initial w-1/3">
-					<a href={ templ.URL(latestBlogPost.Permalink) } class="block p-8 rounded-lg bg-pink-100 mb-8 mt-8">
-						<div class="float-left">
-							<div class="pr-4">
-								@Avatar(latestBlogPost.AuthorAvatarPath, "?", latestBlogPost.Author)
 							</div>
-						</div>
-						<p class="text-sm uppercase text-pink-500 pt-12">From the Blog</p>
-						<h3 class="tracking-tighter text-3xl font-bold text-pink-500 mb-2">{ latestBlogPost.Title }</h3>
-						<div class="tracking-wider text-pink-500">{ latestBlogPost.Author }</div>
-					</a>
+							<p class="text-sm uppercase text-pink-500 pt-2">From the Blog</p>
+							<h3 class="tracking-tighter text-xl font-bold text-pink-500 mb-2">{ latestBlogPost.Title }</h3>
+							<div class="tracking-wider text-pink-500 clear-left">{ latestBlogPost.Author }</div>
+						</a>
+						<!-- Supporters -->
+						<a href={ templ.URL(global.SPONSOR_LINK) } class="block px-8 py-8 bg-gradient-to-tl from-blue-300 to-sky-100 rounded-lg shadow-md">
+							<img
+								class="w-14 h-14 rounded-lg rotate-3 border inline-block ml-4 align-top float-right"
+								src="https://avatars.githubusercontent.com/u/151856434"
+								title="Thank you to HayesKim, for sponsoring Ray Peat Rodeo on GitHub Sponsors"
+							/>
+							<p class="text-sm uppercase text-sky-500 pt-2">Thanks to...</p>
+							<span class="inline-block mt-4 text-gray-500 uppercase tracking-wider italic">{ "for" } supporting Ray Peat Rodeo on <strong>GitHub Sponsors</strong></span>
+						</a>
+					</div>
 				</div>
-			</section>
-			<section class="max-w-screen-lg mx-auto px-8 mb-32">
-				<a href={ templ.URL(global.SPONSOR_LINK) } class="block rounded-lg bg-white shadow-lg px-8 py-4">
-					<h2 class="float-right text-4xl text-gray-300 mt-2 tracking-tight uppercase tracking-wider italic">Supporters</h2>
-					<img
-						class="w-14 h-14 rounded-lg rotate-3 border inline-block mr-6 align-top"
-						src="https://avatars.githubusercontent.com/u/151856434"
-						title="HayesKim"
-					/>
-					<span class="inline-block mt-4 text-gray-500 uppercase tracking-wider italic">become a sponsor</span>
-				</a>
-			</section>
-			<section class="max-w-screen-lg mx-auto mb-32">
+				<!-- Assets -->
 				<div class="mx-8">
 					@Chats(allFiles)
 				</div>
