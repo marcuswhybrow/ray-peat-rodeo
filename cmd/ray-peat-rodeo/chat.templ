@@ -85,10 +85,10 @@ templ RenderChat(file *File) {
 							>
 								if imgSrc, found := SpeakerAvatar(speaker.Name); found {
 									<div class="w-[9999px] h-10">
-										<img src={ imgSrc } alt={ speaker.Name } class="h-full "/>
+										<img src={ imgSrc } alt={ speaker.GetName() } class="h-full "/>
 									</div>
 								} else {
-									<span class="font-bold text-gray-500 text-sm relative top-1.5 cursor-default" title={ speaker.Name }>{ speaker.Key }</span>
+									<span class="font-bold text-gray-500 text-sm relative top-1.5 cursor-default" title={ speaker.GetName() }>{ speaker.GetID() }</span>
 								}
 							</div>
 						}

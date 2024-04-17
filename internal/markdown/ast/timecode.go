@@ -2,6 +2,8 @@ package ast
 
 import (
 	"fmt"
+	"net/url"
+	"slices"
 
 	gast "github.com/yuin/goldmark/ast"
 )
