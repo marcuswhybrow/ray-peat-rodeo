@@ -163,7 +163,7 @@ This is the essential nurturing marriage: human readable, non proprietory, porta
 
 I see Ray Peat Rodeo as something that _needs_ to exist, and for free, just like Ray spoke for free. Equally, everyone has bills, and I have ideas for optional paid extra for those who wish to support this kind of thing: maybe a nice PDF or eBook containing the whole thing for offline reading, something tangential like that.
 
-My main focus is getting as many interviews into the system as possible, to that end I'm using artificial intelligence to quickly get a a large quantity of low-quality transcription, with a view to improving them over time.
+My main focus is getting as many interviews into the system as possible, to that end I'm using artificial intelligence to quickly get a large quantity of low-quality transcription, with a view to improving them over time.
 
 Thanks for your interest in the project, you can [support me on GitHub Sponsors](https://github.com/sponsors/marcuswhybrow).
 
