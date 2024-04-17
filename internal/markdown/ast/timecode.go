@@ -2,20 +2,20 @@ package ast
 
 import (
 	"fmt"
-	"net/url"
-	"slices"
 
-	"github.com/yuin/goldmark/ast"
+	gast "github.com/yuin/goldmark/ast"
 )
 
 type Timecode struct {
 	BaseInline
 	FileNode
 
-	Hours   int
-	Minutes int
-	Seconds int
-	Source  string
+	Hours       int
+	Minutes     int
+	Seconds     int
+	Source      string
+	ExternalURL string
+	Permalink   string
 }
 
 func (t *Timecode) Terse() string {
@@ -64,12 +64,12 @@ func (t *Timecode) ExternalUrl() (*url.URL, error) {
 }
 
 func (t *Timecode) Dump(source []byte, level int) {
-	ast.DumpHelper(t, source, level, nil, nil)
+	gast.DumpHelper(t, source, level, nil, nil)
 }
 
-var KindTimecode = ast.NewNodeKind("Timecode")
+var KindTimecode = gast.NewNodeKind("Timecode")
 
-func (n *Timecode) Kind() ast.NodeKind {
+func (n *Timecode) Kind() gast.NodeKind {
 	return KindTimecode
 }
 

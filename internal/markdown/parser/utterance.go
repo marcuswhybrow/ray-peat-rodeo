@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bytes"
+	"log"
 	"slices"
 	"strings"
 
@@ -13,7 +14,6 @@ import (
 )
 
 var prevSpeakersKey = parser.NewContextKey()
-var isRaySpeakingKey = parser.NewContextKey()
 
 type UtteranceParser struct{}
 
@@ -30,59 +30,74 @@ func (s *UtteranceParser) Trigger() []byte {
 	}
 }
 
-func getShortName(line []byte) ([]byte, int) {
-	colon := bytes.Index(line, []byte{':'})
-	if colon < 0 {
+func getSpeakerID(line []byte) ([]byte, int) {
+	colonPos := bytes.Index(line, []byte{':'})
+	if colonPos < 0 {
 		return nil, 0
 	}
 
-	for _, byte := range line[:colon] {
+	for _, byte := range line[:colonPos] {
 		if !util.IsAlphaNumeric(byte) {
 			return nil, 0
 		}
 	}
 
-	return line[:colon], colon + 1
+	return line[:colonPos], colonPos + 1
 }
 
 func (s *UtteranceParser) Open(parent gmAst.Node, reader text.Reader, pc parser.Context) (gmAst.Node, parser.State) {
 	line, _ := reader.PeekLine()
-	shortName, bytesConsumed := getShortName(line)
+	lineNumber, _ := reader.Position()
+	lineNumber += 1
 
-	speaker := ast.NewSpeaker()
-	speaker.SpeakerID = strings.Trim(string(shortName), " ")
+	speakerID, bytesConsumed := getSpeakerID(line)
+	speakerIDStr := strings.Trim(string(speakerID), " ")
 
-	pc.Set(isRaySpeakingKey, speaker.IsRay())
-
-	if len(speaker.SpeakerID) <= 0 {
-		return nil, parser.HasChildren | parser.Continue
+	if len(speakerIDStr) <= 0 {
+		return nil, parser.Continue
 	}
 
-	var prevSpeakers []*ast.Utterance
-	prevSpeakersVal := pc.Get(prevSpeakersKey)
-	if prevSpeakersVal == nil {
-		prevSpeakers = []*ast.Utterance{}
-	} else {
-		prevSpeakers = *prevSpeakersVal.(*[]*ast.Utterance)
-	}
+	file := ast.GetFile(pc)
+	speakers := file.GetSpeakers()
 
-	speaker.IsNewSpeaker = !slices.ContainsFunc(prevSpeakers, func(s *ast.Utterance) bool {
-		return s.SpeakerID == speaker.SpeakerID
+	i := slices.IndexFunc(speakers, func(s ast.Speaker) bool {
+		return s.GetID() == speakerIDStr
 	})
+	if i < 0 {
+		log.Panicf("Failed to find speaker ID '%s' (line %v) in frontmatter of %v:\n\n%s\n", speakerIDStr, lineNumber, file.GetPath(), line)
+	}
+	speaker := speakers[i]
 
-	prevSpeakers = append(prevSpeakers, speaker)
-	pc.Set(prevSpeakersKey, &prevSpeakers)
+	prevSpeakers := pc.ComputeIfAbsent(prevSpeakersKey, func() interface{} {
+		return &[]*ast.Utterance{}
+	}).(*[]*ast.Utterance)
+
+	isNewSpeaker := true
+	for _, prev := range *prevSpeakers {
+		if prev.Speaker.GetID() == speakerIDStr {
+			isNewSpeaker = false
+			break
+		}
+	}
+
+	utterance := &ast.Utterance{
+		Speaker:      speaker,
+		IsNewSpeaker: isNewSpeaker,
+	}
+
+	*prevSpeakers = append(*prevSpeakers, utterance)
+	pc.Set(prevSpeakersKey, prevSpeakers)
 
 	reader.Advance(bytesConsumed)
-	return speaker, parser.HasChildren
+	return utterance, parser.HasChildren
 }
 
 func (s *UtteranceParser) Continue(node gmAst.Node, reader text.Reader, pc parser.Context) parser.State {
 	speaker := node.(*ast.Utterance)
 	line, _ := reader.PeekLine()
-	shortName, bytesConsumed := getShortName(line)
+	shortName, bytesConsumed := getSpeakerID(line)
 
-	if shortName != nil && string(shortName) != speaker.SpeakerID {
+	if shortName != nil && string(shortName) != speaker.Speaker.GetID() {
 		return parser.Close
 	}
 

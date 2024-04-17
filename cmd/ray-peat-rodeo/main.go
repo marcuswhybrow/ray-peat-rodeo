@@ -1,46 +1,73 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io/fs"
 	"log"
-	"net/url"
 	"os"
 	"path"
 	"path/filepath"
-	"sort"
+	"slices"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
-	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark"
 	meta "github.com/yuin/goldmark-meta"
 	gmExtension "github.com/yuin/goldmark/extension"
-	gparser "github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer/html"
 	"gopkg.in/yaml.v3"
 )
 
-const BUILD = "./build"
+const OUTPUT = "./build"
 const ASSETS = "./assets"
 const CACHE_PATH = "./internal/http_cache.yml"
 
 func main() {
-	fmt.Println("Building Ray Peat Rodeo...")
+	start := time.Now()
 
-	if err := os.MkdirAll("build", os.ModePerm); err != nil {
+	fmt.Println("Running Ray Peat Rodeo")
+
+	workDir, err := os.Getwd()
+	if err != nil {
+		log.Panicf("Failed to determine current working direction: %v", err)
+	}
+	fmt.Printf("Source: \"%v\"\n", workDir)
+	fmt.Printf("Output: \"%v\"\n", OUTPUT)
+
+	if err := os.MkdirAll(OUTPUT, os.ModePerm); err != nil {
 		log.Fatalf("Failed to create output directory: %v", err)
 	}
 
+	// err := os.RemoveAll(OUTPUT)
+	// if err != nil {
+	// 	log.Panicf("Failed to clean output directory: %v", err)
+	// }
+
+	// 📶 Get HTTP Cache from file
+
+	cacheData, err := cache.DataFromYAMLFile(CACHE_PATH)
+	if err != nil {
+		log.Panicf("Failed to read cache file '%v': %v", CACHE_PATH, err)
+	}
+
+	httpCache := cache.NewHTTPCache(cacheData)
+
+	// 👨👱 Speaker Avatars
+
+	avatarPaths := NewAvatarPaths()
+
+	// 🗃 Catalog
+
 	markdownParser := goldmark.New(
+		goldmark.WithRendererOptions(html.WithUnsafe()),
 		goldmark.WithExtensions(
-			extension.Mentions,
-			gmExtension.Typographer,
 			meta.New(meta.WithStoresInDocument()),
+			gmExtension.Typographer,
+			extension.Mentions,
 			extension.Timecodes,
 			extension.Speakers,
 			extension.Sidenotes,
@@ -48,196 +75,106 @@ func main() {
 		),
 	)
 
-	log.Printf("Scanning files in %v\n", ASSETS)
+	catalog := &Catalog{
+		MarkdownParser:    markdownParser,
+		HttpCache:         httpCache,
+		AvatarPaths:       avatarPaths,
+		ByMentionable:     ByMentionable[ByFile[Mentions]]{},
+		ByMentionablePart: ByPart[ByPart[ByFile[Mentions]]]{},
+		Files:             []*File{},
+	}
 
-	filePaths := []string{}
-	err := fs.WalkDir(os.DirFS(ASSETS), ".", func(filePath string, entry fs.DirEntry, err error) error {
+	// 📂 Read Files
+
+	fmt.Println("\n[Files]")
+	fmt.Printf("Source \"%v\"\n", ASSETS)
+
+	filePaths := files(ASSETS, ".", func(filePath string) (*string, error) {
+		base := path.Base(filePath)
+		baseLower := strings.ToLower(base)
+
+		if baseLower == "readme.md" {
+			return nil, nil
+		}
+
+		outPath := path.Join(ASSETS, filePath)
+		return &outPath, nil
+	})
+
+	parallel(filePaths, func(filePath string) error {
+		err := catalog.NewFile(filePath)
 		if err != nil {
-			return fmt.Errorf("Failed to obtain dir entry: %v", err)
+			return fmt.Errorf("Failed to retrieve file '%v': %v", filePath, err)
 		}
-
-		if !entry.IsDir() {
-			base := path.Base(filePath)
-			baseLower := strings.ToLower(base)
-
-			if baseLower == "readme.md" {
-				return nil
-			}
-
-			outPath := path.Join(ASSETS, filePath)
-			filePaths = append(filePaths, outPath)
-		}
-
 		return nil
 	})
 
-	if err != nil {
-		log.Panicf("Failed to read assets: %v", err)
-	}
+	completedFiles := catalog.CompletedFiles()
+	fmt.Printf("Found %v markdown files of which %v are completed.\n", len(filePaths), len(completedFiles))
 
-	// err = os.RemoveAll(build)
-	// if err != nil {
-	// 	log.Panicf("Failed to remove build directory: %v", err)
-	// }
+	// 👉 Future processing to be added here 👈
 
-	// INIT HTTP CACHE
+	// 📝 Write files
 
-	cacheBytes, err := os.ReadFile(CACHE_PATH)
-	if err != nil {
-		panic(fmt.Sprintf("Failed to read cache file '%v': %v", CACHE_PATH, err))
-	}
+	parallel(catalog.Files, func(file *File) error {
+		file.Render()
+		if err != nil {
+			return fmt.Errorf("Failed to render file '%v': %v", file.Path, err)
+		}
+		return nil
+	})
 
-	cacheData := map[string]map[string]string{}
-	err = yaml.Unmarshal(cacheBytes, cacheData)
-	if err != nil {
-		panic(fmt.Sprintf("Failed to parse YAML contents of cache file '%v': %v", CACHE_PATH, err))
-	}
+	catalog.SortFilesByDate()
+	catalog.RenderMentionPages()
+	catalog.RenderPopups()
 
-	httpCache := cache.NewHTTPCache(cacheData)
+	slices.SortFunc(completedFiles, filesByDateAdded)
 
-	// PARSE MARKDOWN ASYNC
+	progress := float32(len(completedFiles)) / float32(len(catalog.Files))
+	latestFile := completedFiles[0]
 
-	var waitGroup sync.WaitGroup
+	// 📢 Blog
 
-	filesChannel := make(chan *File, len(filePaths))
-	for _, filePath := range filePaths {
-		waitGroup.Add(1)
-
-		go func(filePath string) {
-			defer waitGroup.Done()
-
-			file := NewFile(filePath)
-
-			parserContext := gparser.NewContext()
-			parserContext.Set(ast.FileKey, file)
-			parserContext.Set(ast.HTTPCacheKey, httpCache)
-
-			var html bytes.Buffer
-			err = markdownParser.Convert(file.Markdown, &html, gparser.WithContext(parserContext))
-			if err != nil {
-				log.Panicf("Failed to parse markdown for file '%v': %v", file.Path, err)
-			}
-
-			var frontMatter ast.FrontMatter
-			err = mapstructure.Decode(meta.Get(parserContext), &frontMatter)
-			if err != nil {
-				log.Panicf("Failed to decode markdown front matter for '%v': %v", file.Path, err)
-			}
-			file.FrontMatter = frontMatter
-			file.Html = html.Bytes()
-
-			os.MkdirAll(filepath.Dir(file.OutPath), 0755)
-			outFile, err := os.Create(file.OutPath)
-			if err != nil {
-				log.Panicf("Failed to create file '%v': %v", file.OutPath, err)
-			}
-
-			RenderChat(file).Render(context.Background(), outFile)
-
-			filesChannel <- file
-		}(filePath)
-	}
-
-	waitGroup.Wait()
-	close(filesChannel)
-
-	allFiles := NewFiles()
-	for file := range filesChannel {
-		allFiles.Add(file)
-		log.Printf("Wrote '%v'\n", file.OutPath)
-	}
-
-	// CATALOG
-
-	for primary, mentionsByFileBySecondary := range allFiles.Catalog {
-		primaries := mentionsByFileBySecondary[ast.EmptyMentionablePart]
-		delete(mentionsByFileBySecondary, ast.EmptyMentionablePart)
-
-		file, outPath := createBuildHTMLFile(unencode(primary.ID()))
-		component := MentionPage(primary, primaries, mentionsByFileBySecondary, httpCache)
-		component.Render(context.Background(), file)
-		log.Printf("Wrote %v", outPath)
-	}
-
-	// POPUPS
-
-	for mentionable, mentionsByFile := range allFiles.Popups {
-		location, _ := strings.CutPrefix(mentionable.PopupPermalink(), "/")
-
-		otherMentionables := []ast.Mentionable{}
-		for m := range allFiles.Popups {
-			samePrimary := m.Primary == mentionable.Primary
-			identical := m.Secondary == mentionable.Secondary
-			if samePrimary && !identical {
-				otherMentionables = append(otherMentionables, m)
-			}
+	postPaths := files(".", "internal/blog", func(filePath string) (*string, error) {
+		ext := filepath.Ext(filePath)
+		if strings.ToLower(ext) != ".md" {
+			return nil, nil
 		}
 
-		f, outPath := createBuildHTMLFile(unencode(location))
-		component := MentionablePopup(mentionable, mentionsByFile, otherMentionables)
-		component.Render(context.Background(), f)
-		log.Printf("Wrote %v", outPath)
-	}
+		return &filePath, nil
+	})
 
-	// HOMEPAGE
+	blogPosts := parallel(postPaths, func(filePath string) *BlogPost {
+		blogPost := NewBlogPost(filePath, avatarPaths)
+		blogPost.Render()
+		return blogPost
+	})
 
-	indexFile, err := os.Create(path.Join(BUILD, "index.html"))
-	if err != nil {
-		log.Panicf("Failed to create index.html: %v", err)
-	}
+	latestBlogPost := blogPosts[0]
 
-	sort.Sort(ByDate(allFiles.Files))
+	blogPage, _ := makePage("blog")
+	component := BlogArchive(blogPosts)
+	component.Render(context.Background(), blogPage)
 
-	var done []*File
-	var todo []*File
-	for _, file := range allFiles.Files {
-		if !file.IsTodo {
-			done = append(done, file)
-		} else {
-			todo = append(todo, file)
-		}
-	}
+	// 🏠 Homepage
 
-	latest := make([]*File, len(done))
-	copy(latest, done)
-	sort.Sort(ByAddedDate(latest))
-	sort.Sort(ByDate(done))
-	sort.Sort(ByDate(todo))
+	indexPage, _ := makePage(".")
+	component = Index(catalog.Files, latestFile, progress, latestBlogPost)
+	component.Render(context.Background(), indexPage)
 
-	var humanTranscripts []*File
-	for _, file := range allFiles.Files {
-		if file.IsTodo && file.FrontMatter.Transcription.Kind == "text" {
-			humanTranscripts = append(humanTranscripts, file)
-		}
-	}
-	if len(humanTranscripts) > 2 {
-		humanTranscripts = humanTranscripts[:2]
-	}
+	// 📶 HTTP Cache
 
-	var aiTranscripts []*File
-	for _, file := range allFiles.Files {
-		if file.IsTodo && file.FrontMatter.Transcription.Kind == "auto-generated" {
-			aiTranscripts = append(aiTranscripts, file)
-		}
-	}
+	fmt.Println("\n[HTTP Requests]")
 
-	progress := float32(len(latest)) / float32(len(allFiles.Files))
+	httpCacheMisses := httpCache.GetRequestsMissed()
+	cacheRequests := httpCache.GetRequestsMade()
 
-	component := Index(allFiles.Files, latest, humanTranscripts, progress)
-	component.Render(context.Background(), indexFile)
-
-	fmt.Println("\nEpilogue")
-	fmt.Println("  ✅ Created Ray Peat Rodeo HTML in " + BUILD)
-
-	// DUMP HTTP CACHE
-
-	misses := httpCache.GetRequestsMissed()
-	if len(misses) == 0 {
-		fmt.Println("  ✅ HTTP Cache fulfilled all requests")
+	if len(httpCacheMisses) == 0 {
+		fmt.Printf("HTTP Cache fulfilled %v requests.\n", len(cacheRequests))
 	} else {
-		fmt.Printf("  ❌ HTTP Cache rectified %v miss(es)\n", len(misses))
-		for url, keys := range misses {
-			fmt.Print("    - Missed ")
+		fmt.Printf("❌ HTTP Cache rectified %v miss(es):\n", len(httpCacheMisses))
+		for url, keys := range httpCacheMisses {
+			fmt.Print(" - Missed ")
 			for i, key := range keys {
 				if i > 0 {
 					fmt.Print(", ")
@@ -248,7 +185,6 @@ func main() {
 		}
 	}
 
-	cacheRequests := httpCache.GetRequestsMade()
 	newCache, err := yaml.Marshal(cacheRequests)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to marshal cache hits to YAML: %v", err))
@@ -259,12 +195,19 @@ func main() {
 		panic(fmt.Sprintf("Failed to write cache hits to file '%v': %v", CACHE_PATH, err))
 	}
 
-	fmt.Print("\nDone. 🎉\n\n")
+	// 🏁 Done
+
+	fmt.Printf("\nFinished in %v.\n", time.Since(start))
 }
 
-// Convenience function to create path and file in build directory
-func createBuildFile(outPath string) (*os.File, string) {
-	buildPath := path.Join(BUILD, outPath)
+// Convenience function to output HTML page
+func makePage(outPath string) (*os.File, string) {
+	return makeFile(path.Join(outPath, "index.html"))
+}
+
+// Convenience function to output file
+func makeFile(outPath string) (*os.File, string) {
+	buildPath := path.Join(OUTPUT, outPath)
 	parent := filepath.Dir(buildPath)
 
 	err := os.MkdirAll(parent, 0755)
@@ -280,15 +223,57 @@ func createBuildFile(outPath string) (*os.File, string) {
 	return f, buildPath
 }
 
-// Convenience function to create dir at path with index.html inside
-func createBuildHTMLFile(outPath string) (*os.File, string) {
-	return createBuildFile(path.Join(outPath, "index.html"))
+// Runs func in parallel for each entry in slice and awaits all results
+func parallel[Item, Result any](slice []Item, f func(Item) Result) []Result {
+	var waitGroup sync.WaitGroup
+
+	count := len(slice)
+	results := make(chan Result, count)
+	waitGroup.Add(count)
+
+	for _, item := range slice {
+		go func(i Item) {
+			defer waitGroup.Done()
+			results <- f(i)
+		}(item)
+	}
+
+	waitGroup.Wait()
+	close(results)
+
+	allResults := []Result{}
+	for result := range results {
+		allResults = append(allResults, result)
+	}
+
+	return allResults
 }
 
-func unencode(filePath string) string {
-	str, err := url.QueryUnescape(filePath)
+func files[Result any](pwd, scope string, f func(filePath string) (*Result, error)) []Result {
+	results := []Result{}
+
+	err := fs.WalkDir(os.DirFS(pwd), scope, func(filePath string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return fmt.Errorf("Failed to walk dir: %v", err)
+		}
+
+		if !entry.IsDir() {
+			result, err := f(filePath)
+			if err != nil {
+				return err
+			}
+
+			if result != nil {
+				results = append(results, *result)
+			}
+		}
+
+		return nil
+	})
+
 	if err != nil {
-		log.Panicf("Failed to unescape path '%v': %v", filePath, err)
+		log.Panicf("Failed to read directory '%v': %v", path.Join(pwd, scope), err)
 	}
-	return str
+
+	return results
 }

@@ -56,8 +56,8 @@ templ mentions(files map[*File][]*ast.Mention) {
 				<blockquote
  					class={
 						"mt-4 p-8 rounded shadow",
-						templ.KV("text-gray-900 bg-gray-100", ast.IsRaySpeaking(mention)),
-						templ.KV("text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200", !ast.IsRaySpeaking(mention)),
+						templ.KV("text-gray-900 bg-gray-100", ast.IsPrimarySpeaker(mention)),
+						templ.KV("text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200", !ast.IsPrimarySpeaker(mention)),
 					}
 				>
 					@Unsafe(string(mention.VignetteHTML(file.Markdown, 100)))

@@ -80,7 +80,7 @@ func (m *Mention) Permalink() string {
 
 func (m *Mention) VignetteHTML(source []byte, radius int) string {
 	for p := m.Parent(); p != nil; p = p.Parent() {
-		if p.Kind() == KindSpeaker {
+		if p.Kind() == KindUtterance {
 			before, after, _ := cutText(source, p, m, false)
 
 			rBefore := []rune(before)
@@ -108,7 +108,7 @@ func (m *Mention) VignetteHTML(source []byte, radius int) string {
 			return string(result)
 		}
 	}
-	panic("Failed to find parent speaker block for mention node")
+	panic("Failed to find parent utterance block for mention node")
 }
 
 func (m *Mention) Dump(source []byte, level int) {

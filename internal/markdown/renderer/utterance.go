@@ -28,52 +28,49 @@ func NewUtteranceHTMLRenderer(opts ...html.Option) renderer.NodeRenderer {
 }
 
 func (r *UtteranceHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
-	reg.Register(ast.KindSpeaker, r.renderSpeaker)
+	reg.Register(ast.KindUtterance, r.renderSpeaker)
 }
 
 var SpeakerAttributeFilter = html.GlobalAttributeFilter
+
+func isShort(utterance *ast.Utterance, source []byte) bool {
+	speakerId := utterance.Speaker.GetID()
+
+	if utterance.IsNewSpeaker {
+		return false
+	}
+
+	if len(utterance.Text(source)) > 50 {
+		return false
+	}
+
+	if !utterance.Prev().IsSandwichedBetween(speakerId) {
+		return false
+	}
+
+	return utterance.Speaker.GetIsPrimarySpeaker() != utterance.PrevIsPrimarySpeaker()
+}
+
+func showAvatar(utterance *ast.Utterance, source []byte) bool {
+	if utterance.IsNewSpeaker {
+		return true
+	}
+
+	return len(utterance.Text(source)) > 50
+}
 
 func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, node gast.Node, entering bool) (gast.WalkStatus, error) {
 	if entering {
 		utterance := node.(*ast.Utterance)
 
-		// It's pleasant to visually squish many small replies together if it's
-		// obvious who's speaking by the context alone.
-		isShort := func() bool {
-			if utterance.IsNewSpeaker {
-				return false
-			}
-
-			if !utterance.PrevAndNextIsSameSpeaker() {
-				return false
-			}
-
-			if len(utterance.Text(source)) > 50 {
-				return false
-			}
-
-			// Utterances by other speakers may only be squished if Ray was
-			// previously speaking. That's because all utterances by other speakers
-			// are visually indistinguisable when squished.
-			if !utterance.IsRay() {
-				return utterance.PrevIsRay()
-			}
-
-			// However Ray's utterances are always visually distinguishable from any
-			// utterance by another speaker.
-			return true
-		}()
-
-		t, err := template.New("openSpeaker").Parse(`
+		t, err := template.New("openUtterance").Parse(`
       <div 
+        title="{{ .Utterance.Speaker.GetName }}"
         class="
-          font-sans relative first:mt-0
+          utterance
+          font-sans relative first:mt-0 relative
 
-          {{ if .Utterance.IsNewSpeaker }} 
-            hello
-          {{ end }}
-
-          {{ if .Utterance.IsRay }}
+          {{ if .Utterance.Speaker.GetIsPrimarySpeaker }}
             is-ray ml-1 mr-16
           {{ else }} 
             ml-16 mr-1
@@ -87,22 +84,35 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
         "
       >
         {{ if not .IsShort }}
+          {{ if .Utterance.Speaker.GetAvatarPath }}
+            <div class="speaker-avatar w-8 h-8 rounded-full inline-bock shadow float-left mr-4 mb-0 overflow-hidden absolute -left-12 -top-1">
+              <div class="w-[9999px]">
+                <img
+                  class="h-8"
+                  src="{{ .Utterance.Speaker.GetAvatarPath }}"
+                  alt="{{ .Utterance.Speaker.GetName }}"
+                />
+              </div>
+            </div>
+          {{ end }}
           <div 
             class="
+              speaker-name
               text-sm mt-8 mb-4 block
 
-              {{ if .Utterance.IsRay }} 
+              {{ if .Utterance.Speaker.GetIsPrimarySpeaker }} 
                 text-gray-400
               {{ else }} 
                 text-sky-400
               {{ end }}
             "
-          >{{ .Utterance.SpeakerName }}</div>
+          >{{ .Utterance.Speaker.GetName }}</div>
         {{ end }}
 
         <div 
           class="
-            p-8 rounded shadow [&>*]:mb-6 [&>*:last-child]:mb-0 [&>blockquote]:pl-4 [&>blockquote]:text-sm 
+            utterance-body
+            p-8 rounded shadow [&>p]:mb-6 [&>*:last-child]:mb-0 [&>blockquote]:pl-4 [&>blockquote]:text-sm 
 
             {{ if .IsShort }} 
               inline-block
@@ -110,7 +120,7 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
               block
             {{ end }}
 
-            {{ if .Utterance.IsRay }} 
+            {{ if .Utterance.Speaker.GetIsPrimarySpeaker }} 
               text-gray-900 bg-gray-100
             {{ else }} 
               text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200
@@ -124,8 +134,9 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
 		}
 
 		t.Execute(w, map[string]interface{}{
-			"IsShort":   isShort,
-			"Utterance": utterance,
+			"IsShort":    isShort(utterance, source),
+			"ShowAvatar": showAvatar(utterance, source),
+			"Utterance":  utterance,
 		})
 	} else {
 		_, _ = w.WriteString("</div></div>")

@@ -75,10 +75,6 @@ templ Base(title string) {
           return origStr
         }
       </script>
-			<script type="module">
-        await import('/pagefind/pagefind-highlight.js');
-        new PagefindHighlight({ highlightParam: "highlight" });
-      </script>
 		</head>
 		<body
 			class="
@@ -146,7 +142,7 @@ templ Base(title string) {
 								href="https://github.com/sponsors/marcuswhybrow"
 								class="font-bold hover:underline"
 							>Support Ray Peat Rodeo</a>
-							on GitHub Sponsors.
+							on GitHub Sponsors
 						</p>
 						<p class="mb-2">
 							<a
@@ -158,7 +154,13 @@ templ Base(title string) {
 							Written in Golang. Last updated 
 							<span _="install RelativeDate">
 								{ time.Now().Format("2006-01-02") }
-							</span>.
+							</span>
+						</p>
+						<p class="mb-2">
+							<a
+								class="font-bold hover:underline"
+								href="/blog"
+							>Blog</a>.
 						</p>
 					</div>
 				</div>

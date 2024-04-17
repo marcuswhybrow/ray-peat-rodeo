@@ -22,23 +22,18 @@ func (r *TimecodeHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegist
 func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, node gmAst.Node, entering bool) (gmAst.WalkStatus, error) {
 	timecode := node.(*ast.Timecode)
 
-	timecodeExtUrl, err := timecode.ExternalUrl()
-	if err != nil {
-		return gmAst.WalkStop, fmt.Errorf("Failed to determine timecode external URL: %v", err)
-	}
-
 	linkClass := "text-sm px-2 py-1 rounded-md "
-	if ast.IsRaySpeaking(timecode) {
+	if ast.IsPrimarySpeaker(timecode) {
 		linkClass += "is-not-ray bg-gray-300 hover:bg-gray-500 text-gray-50"
 	} else {
 		linkClass += "is-ray bg-sky-300 hover:bg-sky-500 text-sky-50"
 	}
 
 	if entering {
-		w.WriteString(`<span class="timecode text-right">`)
+		w.WriteString(`<span class="timecode text-right absolute right-[calc(100%+24px)]">`)
 		w.WriteString(fmt.Sprintf(
 			`<a href="%v" class="%v">`,
-			timecodeExtUrl.String(),
+			timecode.ExternalURL,
 			linkClass,
 		))
 		w.WriteString(timecode.Terse())

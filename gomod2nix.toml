@@ -10,12 +10,9 @@ schema = 3
   [mod."github.com/andybalholm/cascadia"]
     version = "v1.3.1"
     hash = "sha256-M0u22DXSeXUaYtl1KoW1qWL46niFpycFkraCEQ/luYA="
-  [mod."github.com/gomarkdown/markdown"]
-    version = "v0.0.0-20230922112808-5421fefb8386"
-    hash = "sha256-N3qjdMq0L4toiTu2rut9sSPR/cA7bEe/bZ1iEVNzXOE="
-  [mod."github.com/gosimple/slug"]
-    version = "v1.13.1"
-    hash = "sha256-+PBC4QOfBJt3w9BH3yRc61yTVFeJGTjrUMCEV65xTgM="
+  [mod."github.com/gernest/front"]
+    version = "v0.0.0-20210301115436-8a0b0a782d0a"
+    hash = "sha256-BEU4gWt6rB5ahof+6e/FCW2M/UYVlmEKGNZ+JRGZ7+I="
   [mod."github.com/mitchellh/mapstructure"]
     version = "v1.5.0"
     hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="

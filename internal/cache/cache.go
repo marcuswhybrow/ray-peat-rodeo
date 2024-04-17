@@ -3,10 +3,27 @@ package cache
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/PuerkitoBio/goquery"
+	"gopkg.in/yaml.v3"
 )
+
+func DataFromYAMLFile(filePath string) (map[string]map[string]string, error) {
+	cacheBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to read cache file: %v", err)
+	}
+
+	cacheData := map[string]map[string]string{}
+	err = yaml.Unmarshal(cacheBytes, cacheData)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse YAML contents of cache file: %v", err)
+	}
+
+	return cacheData, nil
+}
 
 type HTTPCache struct {
 	// Known values derrived from previous HTTP responses.
