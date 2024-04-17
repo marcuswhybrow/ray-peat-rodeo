@@ -133,20 +133,44 @@ func main() {
 	progress := float32(len(completedFiles)) / float32(len(catalog.Files))
 	latestFile := completedFiles[0]
 
+	// 📢 Blog
+
+	postPaths := files(".", "internal/blog", func(filePath string) (*string, error) {
+		ext := filepath.Ext(filePath)
+		if strings.ToLower(ext) != ".md" {
+			return nil, nil
+		}
+
+		return &filePath, nil
+	})
+
+	blogPosts := parallel(postPaths, func(filePath string) *BlogPost {
+		blogPost := NewBlogPost(filePath, avatarPaths)
+		blogPost.Render()
+		return blogPost
+	})
+
+	latestBlogPost := blogPosts[0]
+
+	blogPage, _ := makePage("blog")
+	component := BlogArchive(blogPosts)
+	component.Render(context.Background(), blogPage)
+
 	// 🏠 Homepage
 
-	indexFile, _ := makePage(".")
-	component := Index(catalog.Files, latestFile, progress)
-	component.Render(context.Background(), indexFile)
+	indexPage, _ := makePage(".")
+	component = Index(catalog.Files, latestFile, progress, latestBlogPost)
+	component.Render(context.Background(), indexPage)
 
 	// 📶 HTTP Cache
 
 	fmt.Println("\n[HTTP Requests]")
 
 	httpCacheMisses := httpCache.GetRequestsMissed()
+	cacheRequests := httpCache.GetRequestsMade()
 
 	if len(httpCacheMisses) == 0 {
-		fmt.Println("HTTP Cache fulfilled all requests.")
+		fmt.Printf("HTTP Cache fulfilled %v requests.\n", len(cacheRequests))
 	} else {
 		fmt.Printf("❌ HTTP Cache rectified %v miss(es):\n", len(httpCacheMisses))
 		for url, keys := range httpCacheMisses {
@@ -161,7 +185,6 @@ func main() {
 		}
 	}
 
-	cacheRequests := httpCache.GetRequestsMade()
 	newCache, err := yaml.Marshal(cacheRequests)
 	if err != nil {
 		panic(fmt.Sprintf("Failed to marshal cache hits to YAML: %v", err))

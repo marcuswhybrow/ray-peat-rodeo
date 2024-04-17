@@ -84,6 +84,17 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
         "
       >
         {{ if not .IsShort }}
+          {{ if .Utterance.Speaker.GetAvatarPath }}
+            <div class="speaker-avatar w-8 h-8 rounded-full inline-bock shadow float-left mr-4 mb-0 overflow-hidden absolute -left-12 -top-1">
+              <div class="w-[9999px]">
+                <img
+                  class="h-8"
+                  src="{{ .Utterance.Speaker.GetAvatarPath }}"
+                  alt="{{ .Utterance.Speaker.GetName }}"
+                />
+              </div>
+            </div>
+          {{ end }}
           <div 
             class="
               speaker-name
@@ -106,9 +117,6 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
             {{ if .IsShort }} 
               inline-block
             {{ else }}
-              {{ if and .ShowAvatar .Utterance.Speaker.GetAvatarPath }}
-                min-h-[9rem]
-              {{ end }}
               block
             {{ end }}
 
@@ -119,21 +127,6 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
             {{ end }}
           "
         >
-          {{ if not .IsShort }}
-            {{ if .ShowAvatar }}
-              {{ if .Utterance.Speaker.GetAvatarPath }}
-                <div class="speaker-avatar w-16 h-20 rounded-lg inline-bock shadow float-left mr-4 mb-0 overflow-hidden">
-                  <div class="w-[9999px]">
-                    <img
-                      class="h-20"
-                      src="{{ .Utterance.Speaker.GetAvatarPath }}"
-                      alt="{{ .Utterance.Speaker.GetName }}"
-                    />
-                  </div>
-                </div>
-              {{ end }}
-            {{ end }}
-          {{ end }}
     `)
 
 		if err != nil {

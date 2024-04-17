@@ -30,7 +30,7 @@ func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, n
 	}
 
 	if entering {
-		w.WriteString(`<span class="timecode text-right">`)
+		w.WriteString(`<span class="timecode text-right absolute right-[calc(100%+24px)]">`)
 		w.WriteString(fmt.Sprintf(
 			`<a href="%v" class="%v">`,
 			timecode.ExternalURL,

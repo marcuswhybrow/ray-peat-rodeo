@@ -134,39 +134,40 @@ templ Base(title string) {
 				</div>
 			</div>
 			{ children... }
-			<footer class="max-w-screen-xl mx-auto px-8">
+			<footer class="max-w-screen-lg mx-auto px-8">
 				<div class="flex mb-16 flex-col sm:flex-row">
 					<div class="flex-auto border-t-8 border-gray-100 sm:mr-32 pt-8 mb-8 w-1/2">
-						<h2 class="text-4xl mb-8">Support</h2>
+						<h2 class="text-4xl mb-8">Sponsor</h2>
 						<p class="mb-2">
 							<a
  								href="https://github.com/sponsors/marcuswhybrow"
  								class="font-bold hover:underline"
 							>Support Ray Peat Rodeo</a>
-							on GitHub Sponsors.
+							on GitHub Sponsors
 						</p>
 						<p class="mb-2">
 							<a
  								class="font-bold hover:underline"
  								href={ global.GITHUB_LINK }
-							>Star the project</a> on GitHub.
+							>Star the project</a> on GitHub
 						</p>
 						<p>
 							Written in Golang. Last updated 
 							<span _="install RelativeDate">
 								{ time.Now().Format("2006-01-02") }
-							</span>.
+							</span>
 						</p>
 					</div>
 					<div class="flex-auto border-t-8 border-gray-100 pt-8 mb-8 w-1/2">
 						<h2 class="text-4xl mb-8">Blog & Chat</h2>
-						<p class="mb-2">Blog comming soon.</p>
+						<p class="mb-4">
+							<a href="/blog" class="font-bold hover:underline">Blog</a>
+						</p>
 						<p>
-							Say hello on the 
 							<a
  								class="font-bold hover:underline"
  								href="https://discord.gg/quBQjmU5"
-							>Discord server</a>.
+							>Discord server</a>
 						</p>
 					</div>
 				</div>

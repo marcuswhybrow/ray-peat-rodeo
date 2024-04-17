@@ -3,6 +3,7 @@ module.exports = {
   content: [
     './cmd/ray-peat-rodeo/**/*.{templ,go}',
     './internal/**/*.{templ,go}',
+    './internal/blog/**/*.md',
     './build/index.html'
   ],
   theme: {
