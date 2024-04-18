@@ -25,7 +25,7 @@ func main() {
 	var whisperData WhisperData
 	json.Unmarshal(jsonContent, &whisperData)
 
-	prevSegmentStart := float32(-1)
+	prevSegmentStart := float32(-TimecodePeriod * 2)
 	for _, segment := range whisperData.Segments {
 		if segment.Start > prevSegmentStart+TimecodePeriod {
 			prevSegmentStart = segment.Start
