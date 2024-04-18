@@ -146,12 +146,6 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 		return nil, fmt.Errorf("Failed to parse markdown: %v", err)
 	}
 	file.Html = html.Bytes()
-
-	fmt.Printf("File: %v\n", file.Path)
-	for i, m := range file.Mentions {
-		fmt.Printf("%v - %v\n", i, m.ID())
-	}
-
 	return file, nil
 }
 
@@ -250,8 +244,6 @@ func (f *File) TopMentions() []MentionCount {
 func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 	results := []MentionablePartCount{}
 
-	fmt.Printf("TopPrimaryMentionables: %v (%v mentions)\n", f.Path, len(f.Mentions))
-
 	for _, m := range f.Mentions {
 		i := slices.IndexFunc(results, func(ms MentionablePartCount) bool {
 			return ms.MentionablePart == m.Mentionable.Primary
@@ -267,11 +259,6 @@ func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 	}
 
 	slices.SortFunc(results, mostMentionedPrimary)
-
-	for _, r := range results {
-		fmt.Printf("%v - %v\n", r.MentionablePart.Cardinal, r.Count)
-	}
-
 	return results
 }
 
