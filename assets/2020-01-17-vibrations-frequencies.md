@@ -11,7 +11,7 @@ transcription:
 added:
   author: Marcus Whybrow
   date: "2024-04-18"
-completed:
+completion:
   content: true
 ---
 
