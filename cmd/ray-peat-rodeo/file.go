@@ -147,11 +147,15 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	}
 	file.Html = html.Bytes()
 
+	fmt.Printf("File: %v\n", file.Path)
+	for i, m := range file.Mentions {
+		fmt.Printf("%v - %v\n", i, m.ID())
+	}
+
 	return file, nil
 }
 
 func (f *File) IsComplete() bool {
-	fmt.Printf("File: %v\n", f.FrontMatter.Completion)
 	c := f.FrontMatter.Completion
 	return c.Content && c.ContentVerified && c.Mentions && c.Issues && c.Notes && c.Timestamps
 }
@@ -246,6 +250,8 @@ func (f *File) TopMentions() []MentionCount {
 func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 	results := []MentionablePartCount{}
 
+	fmt.Printf("TopPrimaryMentionables: %v (%v mentions)\n", f.Path, len(f.Mentions))
+
 	for _, m := range f.Mentions {
 		i := slices.IndexFunc(results, func(ms MentionablePartCount) bool {
 			return ms.MentionablePart == m.Mentionable.Primary
@@ -261,6 +267,11 @@ func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 	}
 
 	slices.SortFunc(results, mostMentionedPrimary)
+
+	for _, r := range results {
+		fmt.Printf("%v - %v\n", r.MentionablePart.Cardinal, r.Count)
+	}
+
 	return results
 }
 
@@ -331,41 +342,45 @@ type MentionCount struct {
 
 func mostMentioned(a, b MentionCount) int {
 	if a.Count > b.Count {
-		return 1
+		return -1
 	} else if a.Count == b.Count {
 		aCardinal := a.Mention.Mentionable.Ultimate().Cardinal
 		bCardinal := b.Mention.Mentionable.Ultimate().Cardinal
 		if aCardinal == bCardinal {
 			return 0
 		} else if len(aCardinal) > len(bCardinal) {
-			return 1
-		} else {
 			return -1
+		} else {
+			return 1
 		}
 	}
-	return -1
+	return 1
 }
 
+// Struct for counting mentionable parts
 type MentionablePartCount struct {
 	MentionablePart ast.MentionablePart
 	Count           int
 }
 
+// Comparison function used to order MentionablePartCount's
+// Orders first the MPart with the highest count.
+// In a tie, the one with a shorter cardinal is prefered.
 func mostMentionedPrimary(a, b MentionablePartCount) int {
 	if a.Count > b.Count {
-		return 1
+		return -1
 	} else if a.Count == b.Count {
 		aCardinal := a.MentionablePart.Cardinal
 		bCardinal := b.MentionablePart.Cardinal
-		if len(aCardinal) > len(bCardinal) {
-			return 1
+		if len(aCardinal) < len(bCardinal) {
+			return -1
 		} else if aCardinal == bCardinal {
 			return 0
 		} else {
-			return -1
+			return 1
 		}
 	}
-	return -1
+	return 1
 }
 
 func filesByDate(a *File, b *File) int {
