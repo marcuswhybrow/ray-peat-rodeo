@@ -32,6 +32,25 @@ func MapToSlice[V any](m map[string]V) []MapEnumeration[V] {
 	return results
 }
 
+func kindToFilter(kind string) string {
+	switch kind {
+	case "audio":
+		return "Audio Interview"
+	case "video":
+		return "Video Interview"
+	case "text":
+		return "Written Interview"
+	case "article":
+		return "Article"
+	case "newsletter":
+		return "Newsletter"
+	case "book":
+		return "Book"
+	default:
+		return kind
+	}
+}
+
 // Small note in the flow of, but distinct from, speaker messages.
 templ StatusChange() {
 	<div data-pagefind-ignore class="text-sm text-gray-400 w-2/3 mx-auto text-center">
@@ -55,10 +74,13 @@ templ RenderChat(file *File) {
 						<a
 							class="text-fuchsia-900/70 tracking-wider hover:underline hover:text-fuchsia-950"
 							href={ templ.SafeURL(file.FrontMatter.Source.Url) }
+							data-medium={ kindToFilter(file.FrontMatter.Source.Kind) }
+							data-pagefind-filter="Medium[data-medium]"
 						>
 							{ file.Date }
 						</a>
 						<span
+							data-pagefind-filter="Author"
 							class="text-fuchsia-900/80 rounded bg-white/20 py-1 px-4 ml-4 tracking-wide"
 						>{ file.FrontMatter.Source.Series }</span>
 					</p>
