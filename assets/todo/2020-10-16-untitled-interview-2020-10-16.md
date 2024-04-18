@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Untitled Interview 2020-10-16
+  title: Ask Your Herb Doctor, October 2020
   url: https://www.toxinless.com/kmud-201016.mp3
   kind: audio
 transcription:
