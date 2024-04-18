@@ -680,7 +680,7 @@ AM: Hah, that's right, there we go. Well welcome and thank you to [[Redwood Comm
 
 We've been doing this show since 2003. I looked the other day and 2003 was when we first started doing our radio shows, once a month on the third Friday of every month. So, again, once more, to [[Peat, Raymond|Dr Peat]] out there in the stars. Yhank you so much for your time here on Earth and I know lots of people have taken some good advice, and we continue to propagate the truth, and people bear out witness to that in terms of being helped, seriously helped.
 
-So, you can visit our website [[Western Botanical Medicine > https://www.westernbotanicalmedicine.com | westernbotanicalmedicine.com]]. We have a [[Wester Botanical Medicine > https://www.youtube.com/@westernbotanicalmedicine | YouTube channel]] and a [[Western Botanical Medicine > https://twitter.com/WBMherb | Twitter feed]], and until the third Friday of next month–it'll be real close to Christmas folks–Happy Thanksgiving to all of you out there! 
+So, you can visit our website [[Western Botanical Medicine > https://www.westernbotanicalmedicine.com | westernbotanicalmedicine.com]]. We have a [[Western Botanical Medicine > https://www.youtube.com/@westernbotanicalmedicine | YouTube channel]] and a [[Western Botanical Medicine > https://twitter.com/WBMherb | Twitter feed]], and until the third Friday of next month–it'll be real close to Christmas folks–Happy Thanksgiving to all of you out there! 
 
 And we can be reached at 1888-WBM-HERB, Monday through Friday. And also, our website address for my email is [[Western Botanical Medicine > andrew@westernbotanicalmedicine.com | andrew@westernbotanicalmedicine.com]]. 
 
