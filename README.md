@@ -17,8 +17,7 @@ cd ray-peat-rodeo
 nix develop -c modd
 ```
 
-- `./assets` contains a markdown file for each article or transcription.
-- `./assets/todo` contains a markdown file for assets without transcriptions.
+- `./assets` contains a markdown file for each known article or transcription.
 - `./github/workflows/gh-pages` auto deploys this repo to https://raypeat.rodeo
 - `./cmd/ray-peat-rodeo` is the code that builds the website from the markdown 
 assets.
@@ -73,11 +72,11 @@ specifically for this project. With custom markdown syntax any functionality
 can be realised whilst keeping the markdown documents human readible for 
 archival purposes, and portability to other projects.
 
-# Adding "Todo" Ray Peat Interviews
+# Adding Interviews
 
-Go to `./assets/todo`. Every file in this directory is a 
+Go to `./assets`. Every file in this directory is a 
 [Markdown](https://www.markdownguide.org) file. Each one repesenting a unique
-Ray Peat interview awaiting transcription. Each filename is formatted in 
+Ray Peat interview. Each filename is formatted in 
 [Kebab Case](https://developer.mozilla.org/en-US/docs/Glossary/Kebab_case) and 
 begins with the date as `YYYY-MM-DD` (ISO 8601 format) followed by the title of 
 the interview.
@@ -89,7 +88,7 @@ this interview will exist.
 For example...
 
 ```bash
-touch ./assets/todo/2008-07-02-an-example.md
+touch ./assets/2008-07-02-an-example.md
 ```
 
 ... will become a web page accessible at `raypeat.rodeo/an-example/` and will 
