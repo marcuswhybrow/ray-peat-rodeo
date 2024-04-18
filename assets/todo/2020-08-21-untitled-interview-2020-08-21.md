@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Untitled Interview 2020-08-21
+  title: Ask Your Herb Doctor, August 2020
   url: https://www.toxinless.com/kmud-200821.mp3
   kind: audio
 transcription:
