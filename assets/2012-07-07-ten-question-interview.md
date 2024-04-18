@@ -4,14 +4,19 @@ source:
   title: Ten Question Interview
   url: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
   kind: text
-
 added:
   date: 2023-02-22
   author: Marcus Whybrow
-
 speakers:
   KM: Karen Mcc
   RP: Ray Peat
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 KM: How long have you been making yourself accessible through emails? {Editor's note: The source material doesn't mention the author of the questions. However [[Roddy, Danny > https://web.archive.org/web/20130612080631/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat | this article]] describes [[Mcc, Karen]] as the primary author, also thanking [[Kurra, Heath]], [[Waitt, Greg]], and the [[Ray Peat Fans Facebook Group > https://web.archive.org/web/20130612080631/https://www.facebook.com/pages/Ray-Peat-Fans/179593648758146 | Ray Peat Fans Facebook Group]].}

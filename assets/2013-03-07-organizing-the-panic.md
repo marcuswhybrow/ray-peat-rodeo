@@ -4,14 +4,19 @@ source:
   series: Ray Peat Insight
   url: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
   kind: text
-
 added:
   date: 2023-02-22
   author: Marcus Whybrow
-
 speakers:
-    KM: Karen Mcc
-    RP: Ray Peat
+  KM: Karen Mcc
+  RP: Ray Peat
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 KM: Vision and Acceptance is excited to present an interview with Dr. Ray Peat, “Organizing the Panic”. {Ray Peat standing. ![Ray Peat Standing](/assets/images/2013-03-07-ray-peat-standing.jpg)} This phrase is in reference to a line we quoted from him in one of our previous posts where he said, “Panic isn’t inappropriate when looking at nearly any part of what’s happening in the world, but we have to get the panic organized, so it can be productive.” So V & A conducted this interview with the intention of creating opportunities for awareness and discussion about where our world is headed and why. This will hopefully generate momentum toward action. {Editor's note: The source material doesn't mention the name of the interviewer. However, Karen Mcc is [known](https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii) to write articles for the website which originally published this interview.}

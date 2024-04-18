@@ -99,10 +99,10 @@ templ RenderChat(file *File) {
 							templ.KV("text-4xl", len(file.FrontMatter.Source.Title) < 20),
 							"font-bold text-3xl text-fuchsia-950/90 tracking-wide mt-6 hover:underline hover:text-fuchsia-950 mt-0",
 						}
-						if file.IsTodo {
-							data-todo="Todo"
-						} else {
+						if file.IsComplete() {
 							data-todo="Complete"
+						} else {
+							data-todo="Todo"
 						}
 						if file.HasIssues() {
 							data-has-issues="Yes"
@@ -180,7 +180,7 @@ templ RenderChat(file *File) {
 						</span>
 					</a>
 				}
-				if !file.IsTodo {
+				if file.IsComplete() {
 					<!-- Attribution -->
 					<a
 						data-pagefind-ignore
@@ -212,7 +212,7 @@ templ RenderChat(file *File) {
 				}
 				<!-- Content -->
 				@Unsafe(string(file.Html))
-				if file.IsTodo && len(file.FrontMatter.Transcription.Date) == 0 {
+				if !file.FrontMatter.Completion.Content {
 					<div data-pagefind-ignore class="mr-16 mb-32">
 						<!-- Message -->
 						<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">

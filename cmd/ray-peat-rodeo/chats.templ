@@ -43,7 +43,7 @@ func percentDone(files []*File) int {
 func numDone(files []*File) int {
 	done := 0
 	for _, file := range files {
-		if !file.IsTodo {
+		if file.IsComplete() {
 			done += 1
 		}
 	}
@@ -103,7 +103,7 @@ templ TodoFile(file *File) {
 		>
 			{ file.FrontMatter.Source.Title }
 		</a>
-		if len(file.FrontMatter.Transcription.Date) > 0 {
+		if file.FrontMatter.Completion.Content && file.FrontMatter.Transcription.Kind == "auto-generated" {
 			<span title="AI Generated Transcript Available" class="border-gray-300 border px-2 pt-0.5 pb-1 rounded-full text-gray-300 cursor-help ml-1">AI</span>
 		}
 	</div>
@@ -122,10 +122,10 @@ templ Chats(allFiles []*File) {
 			></div>
 		</div>
 		for _, file := range year.Files {
-			if file.IsTodo {
-				@TodoFile(file)
-			} else {
+			if file.IsComplete() {
 				@DoneFile(file)
+			} else {
+				@TodoFile(file)
 			}
 		}
 	}

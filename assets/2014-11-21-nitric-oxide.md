@@ -1,28 +1,32 @@
 ---
 source:
-    series: Ask Your Herb Doctor
-    title: Nitric Oxide
-    url: https://www.youtube.com/watch?v=D34CrlP5ZIc
-    # also https://www.toxinless.com/kmud-141121-nitric-oxide.mp3
-    kind: audio
-
+  series: Ask Your Herb Doctor
+  title: Nitric Oxide
+  url: https://www.youtube.com/watch?v=D34CrlP5ZIc
+  # also https://www.toxinless.com/kmud-141121-nitric-oxide.mp3
+  kind: audio
 transcription:
-    author: Sheila
-    date: 2014-12-30
-    url: https://raypeatforum.com/community/threads/nitric-oxide-kmud-2014.5532/
-    kind: text
-
+  author: Sheila
+  date: 2014-12-30
+  url: https://raypeatforum.com/community/threads/nitric-oxide-kmud-2014.5532/
+  kind: text
 added:
-    date: 2023-10-10
-    author: Marcus Whybrow
-
+  date: 2023-10-10
+  author: Marcus Whybrow
 speakers:
-    AM: Andrew Murray
-    RP: Ray Peat
-    E: Sound Engineer
-    C1: First Caller (Male)
-    C2: Second Caller (Male)
-    C3: Third Caller (Female)
+  AM: Andrew Murray
+  RP: Ray Peat
+  E: Sound Engineer
+  C1: First Caller (Male)
+  C2: Second Caller (Male)
+  C3: Third Caller (Female)
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 AM: Well thank you once again, this is Ask Your Herb Doctor. KMUD Garberville. 91.1 FM. My name's Andrew Murray, and for those of you who've, perhaps, never listened to the show, which runs every third Friday of the month from 7 till 8PM, I'm a liscensed medical herbalist who trained in England, and graduated there with a degree in herbal medicine. My wife and I run a clinic in Garberville where we consult with clients about a wide range of conditions and recommend herbal medicines and dietary advice, and has become very consistent with the last couple of years, Dr. Peat is happily joining us on the show to share his latest discoveries in his research. 

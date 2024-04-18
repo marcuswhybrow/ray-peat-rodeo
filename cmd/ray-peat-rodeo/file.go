@@ -26,7 +26,6 @@ import (
 // Markdown input file
 type File struct {
 	FrontMatter   FrontMatter
-	IsTodo        bool
 	Path          string
 	ID            string
 	OutPath       string
@@ -61,6 +60,14 @@ type FrontMatter struct {
 		Date   string
 		Author string
 	}
+	Completion struct {
+		Content         bool
+		ContentVerified bool `mapstructure:"content-verified"`
+		Mentions        bool
+		Issues          bool
+		Notes           bool
+		Timestamps      bool
+	}
 }
 
 func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*File, error) {
@@ -78,8 +85,6 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	permalink := "/" + id
 	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", filePath)
 	outPath := path.Join(OUTPUT, id, "index.html")
-	parentPath := path.Dir(filePath)
-	parentName := path.Base(parentPath)
 
 	// 📄 FrontMatter
 
@@ -122,7 +127,6 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 		Date:          fileStem[:10],
 		Permalink:     permalink,
 		EditPermalink: editPermalink,
-		IsTodo:        parentName == "todo",
 		FrontMatter:   frontMatter,
 		Markdown:      fileBytes,
 		Mentions:      Mentions{},
@@ -144,6 +148,12 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	file.Html = html.Bytes()
 
 	return file, nil
+}
+
+func (f *File) IsComplete() bool {
+	fmt.Printf("File: %v\n", f.FrontMatter.Completion)
+	c := f.FrontMatter.Completion
+	return c.Content && c.ContentVerified && c.Mentions && c.Issues && c.Notes && c.Timestamps
 }
 
 // Writes file to f.outPath

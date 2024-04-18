@@ -119,7 +119,7 @@ func (c *Catalog) SortFilesByDate() {
 func (c *Catalog) CompletedFiles() []*File {
 	var files []*File
 	for _, file := range c.Files {
-		if !file.IsTodo {
+		if file.IsComplete() {
 			files = append(files, file)
 		}
 	}

@@ -4,14 +4,19 @@ source:
   title: Mind-Body Connection
   url: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
   kind: text
-
 added:
   date: 2023-02-22
   author: Marcus Whybrow
-
 speakers:
   KM: Karen Mcc
   RP: Ray Peat
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 KM: What is good health? {Editor's note: Although the source material doesn't mention the name of the interviewer, [[Roddy, Danny > https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii | this]] article says it "was conducted by the amazing [[Mcc, Karen]] with help from [[Labosco, Matt]]" and also thanks "[[Kurra, Heath]], [[Waitt, Greg]], [[Curran, Wayde]], and [[Mariam]]."}

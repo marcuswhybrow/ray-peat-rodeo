@@ -7,19 +7,23 @@ source:
   # also https://180degreehealth.com/thyroid-deficiency-and-common-health-problems/
   kind: audio
   duration: 58:30
-
 transcription:
   url: https://raypeatforum.com/community/threads/ray-peat-1996-interview.4351/
   author: ilovethesea
   date: 2014-07-25
-
 added:
   date: 2023-02-24
   author: Marcus Whybrow
-
 speakers:
   GN: Gary Null
   RP: Ray Peat
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 GN: [05:42] I'm Gary Null and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.

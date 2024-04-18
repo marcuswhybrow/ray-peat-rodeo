@@ -1,32 +1,35 @@
 ---
 source:
-    url: https://www.youtube.com/watch?v=Ghbb5ARiZQE
-    title: Tribute to Dr. Raymond Peat
-    kind: audio
-    series: Ask Your Herb Doctor
-
+  url: https://www.youtube.com/watch?v=Ghbb5ARiZQE
+  title: Tribute to Dr. Raymond Peat
+  kind: audio
+  series: Ask Your Herb Doctor
 transcription:
-    date: 2023-11-27
-    author: Marcus Whybrow
-
+  date: 2023-11-27
+  author: Marcus Whybrow
 added:
-    date: 2024-04-18
-    author: Marcus Whybrow
-
+  date: 2024-04-18
+  author: Marcus Whybrow
 speakers:
-    E: Engineer
-    AM: Andrew Murray
-    SJM: Sarah Johannesen Murray
-    W: Wanita
-    F: Female Caller
-    M: Marine County (Male)
-    C: San Francisco (Female)
-    B: Brendon
-    KM: Kathy Miller
-    MC: Mendocino County (Female)
-    FC: Final Caller (Male)
-
+  E: Engineer
+  AM: Andrew Murray
+  SJM: Sarah Johannesen Murray
+  W: Wanita
+  F: Female Caller
+  M: Marine County (Male)
+  C: San Francisco (Female)
+  B: Brendon
+  KM: Kathy Miller
+  MC: Mendocino County (Female)
+  FC: Final Caller (Male)
 primarySpeakers: [E, AM, SJM]
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 E: As always on reviews and opinions expressed throughout the broadcast day, are those of the speakers and not necessarily those of [[Redwood Community Radio|the station]], it's staff, its board, it's Underwriters it's Hangers On or anyone else involved, thank you so much for joining us. Our phone number is 923 3911 where you are to be calling soon with your memories of [[Peat, Raymond|Dr Peat]]. And here's our theme song. {Pipe music plays.}

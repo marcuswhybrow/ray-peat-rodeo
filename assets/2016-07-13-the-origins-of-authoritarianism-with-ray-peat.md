@@ -1,22 +1,26 @@
 ---
 source:
-    series: Generative Energy Podcast
-    title: The Origins of Authoritarianism
-    episode: 28
-    url: https://www.youtube.com/watch?v=MBsFWsHgSCY
-    kind: audio
-
+  series: Generative Energy Podcast
+  title: The Origins of Authoritarianism
+  episode: 28
+  url: https://www.youtube.com/watch?v=MBsFWsHgSCY
+  kind: audio
 transcription:
-    author: Marcus Whybrow
-    date: 2023-10-04
-
+  author: Marcus Whybrow
+  date: 2023-10-04
 added:
-    author: Marcus Whybrow
-    date: 2023-10-04 
-
+  author: Marcus Whybrow
+  date: 2023-10-04
 speakers:
-    RP: Ray Peat
-    DR: Danny Roddy
+  RP: Ray Peat
+  DR: Danny Roddy
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 DR: [0:20] Hello everyone I'm Danny Roddy of [dannroddy.com](https://dannyroddy.com), and today I'm talking with painter, philosopher, biologist Raymond Peat. In this half hour long episode we'll talk about the history and origins of authoritarianism and how the philosophy is baked into our cultural political and medical systems. In addition to thanking Ray for talking with me today I'd like to thank my patrons for making this show and all the content I produce possible. If you would like to become a patron please go to [patreon.com/dannyroddy](https://patreon.com/dannyroddy). As always, please do your own research and come to your own conclusions, and in the spirit of [[Blake, William]], the true method of knowledge is experiment. Without further ado here is the show.

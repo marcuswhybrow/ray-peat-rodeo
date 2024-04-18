@@ -131,7 +131,11 @@ func main() {
 	slices.SortFunc(completedFiles, filesByDateAdded)
 
 	progress := float32(len(completedFiles)) / float32(len(catalog.Files))
-	latestFile := completedFiles[0]
+
+	var latestFile *File = nil
+	if len(completedFiles) > 0 {
+		latestFile = completedFiles[0]
+	}
 
 	// 📢 Blog
 

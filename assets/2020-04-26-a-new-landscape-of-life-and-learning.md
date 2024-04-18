@@ -1,21 +1,24 @@
----
 source:
   series: Butter Living Podcast
   title: A New Landscape of Life and Learning
   url: https://www.youtube.com/watch?v=CI5xhBtrj6Y
   kind: audio
-
 transcription:
   author: Marcus Whybrow
   date: 2023-02-19
-
 added:
   author: Marcus Whybrow
   date: 2023-02-19
-
 speakers:
   DB: David Butterworth
   RP: Ray Peat
+completion:
+  timestamps: true
+  notes: true
+  issues: true
+  mentions: true
+  content-verified: true
+  content: true
 ---
 
 DB: [0:02] Hi Ray, how are you doing?
