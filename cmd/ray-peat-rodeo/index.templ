@@ -25,8 +25,8 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 			</section>
 			<section class="max-w-screen-lg mx-auto mb-32 relative">
 				<!-- Side bubbles -->
-				<div class="2xl:absolute 2xl:-right-64 2xl:w-[200px] z-30">
-					<div class="grid grid-cols-3 2xl:grid-cols-1 2xl-grid-rows-3 gap-4">
+				<div class="2xl:absolute 2xl:-right-64 2xl:w-[200px] z-30 mx-8 2xl:mx-0">
+					<div class="grid grid-cols-1 sm:grid-cols-3 2xl:grid-cols-1 2xl-grid-rows-3 gap-4">
 						<!-- Latest File -->
 						<a href={ templ.URL(latestFile.Permalink) } class="block p-8 rounded rounded-lg shadow-md bg-white">
 							<p class="text-sm uppercase text-gray-500 mb-4">Latest Addition</p>
