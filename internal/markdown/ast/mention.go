@@ -80,7 +80,7 @@ func (m *Mention) Permalink() string {
 
 func (m *Mention) VignetteHTML(source []byte, radius int) string {
 	for p := m.Parent(); p != nil; p = p.Parent() {
-		if p.Kind() == KindUtterance {
+		if p.Kind() == gast.KindParagraph {
 			before, after, _ := cutText(source, p, m, false)
 
 			rBefore := []rune(before)
