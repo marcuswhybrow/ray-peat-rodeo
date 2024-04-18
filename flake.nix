@@ -119,7 +119,7 @@
         $yq ".transcription.kind = \"auto-generated\"" "$asset_path"
         $yq ".added.author = \"$author\"" "$asset_path"
         $yq ".added.date = \"$today\"" "$asset_path"
-        $yq ".completed.content = true" "$asset_path"
+        $yq ".completion.content = true" "$asset_path"
         ${inputs.self.packages.x86_64-linux.whisper-json2md}/bin/whisper-json2md "$json_path" >> "$asset_path"
 
         rm -r "$tmp_dir_audio"
