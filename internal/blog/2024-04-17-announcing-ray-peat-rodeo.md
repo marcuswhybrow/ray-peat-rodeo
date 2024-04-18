@@ -70,7 +70,7 @@ At the top you'll notice another convention I landed upon. I define a little dat
 
 I think that looks pretty nice, but the real beauty is this: now we've standardised the format for timestamps, mentions, notes, issues, and speakers, a computer program can understand what everything in this file means. And that's the second leg upon which Ray Peat Rodeo stands, it converts that markdown interview into a web page, like this:
 
-<div class="mt-8 mb-16 inline-block align-top w-[90%] lg:w-[900px] 2xl:w-[700px] text-left backdrop-blur-2xl bg-gradient-to-br from-white/90 to-gray-100/30 rounded-lg shadow-2xl shadow-purple-700/20 " >
+<div class="mt-8 mb-16 inline-block align-top text-left w-full backdrop-blur-2xl bg-gradient-to-br from-white/90 to-gray-100/30 rounded-lg shadow-2xl shadow-purple-700/20 " >
     <div class="py-4 bg-gradient-to-r from-blue-200 to-purple-300 rounded-t-lg">
         <div class="h-8 w-3/5 mx-auto bg-gradient-to-br from-white/60 to-white/50 rounded"></div>
     </div>
@@ -126,7 +126,7 @@ I think that looks pretty nice, but the real beauty is this: now we've standardi
                             "
                     >
                         <span
-                            class=" label font-mono font-bold tracking-normal drop-shadow-md box-decoration-clone border-b hover:border-b-2 text-sky-800 hover:text-sky-900 shadow-pink-300 border-sky-800 inline-block rotate-0 transition-all "
+                            class=" label font-mono font-bold tracking-normal drop-shadow-md box-decoration-clone border-b text-sky-800 hover:text-sky-900 shadow-pink-300 border-sky-800 inline-block rotate-0 transition-all "
                         >William Blake</span>?
                         <span
                             class="
