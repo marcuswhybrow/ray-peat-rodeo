@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Untitled Interview 2020-05-15
+  title: Ask Your Herb Doctor, May 2020
   url: https://www.toxinless.com/kmud-200515.mp3
   kind: audio
 transcription:
