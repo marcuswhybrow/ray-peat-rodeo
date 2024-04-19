@@ -45,8 +45,7 @@ templ Base(title string) {
             }
           });
         });
-      </script>
-			<script>
+
         function relativeDate(origStr) {
           let buildDate = Date.parse(origStr);
           let delta = Date.now() - buildDate;
@@ -74,6 +73,10 @@ templ Base(title string) {
 
           return origStr
         }
+      </script>
+			<script type="module">
+        await import('/pagefind/pagefind-highlight.js');
+        new PagefindHighlight({ highlightParam: 'highlight' });
       </script>
 		</head>
 		<body
