@@ -82,14 +82,17 @@ func externalUrl(sourceURLStr string, seconds, minutes, hours int) string {
 		log.Panicf("Failed to parse frontmatter source url: %v", err)
 	}
 
+	newUrl := *sourceUrl
+
 	var timecode string
-	if slices.Contains([]string{
+	isYouTube := slices.Contains([]string{
 		"www.youtube.com",
 		"youtube.com",
 		"youtu.be",
-	}, sourceUrl.Hostname()) {
+	}, sourceUrl.Hostname())
 
-		// Youtube timecodes: 1h12m32s
+	if isYouTube {
+		// Youtube timecodes: ?t=1h12m32s
 		if hours == 0 && minutes == 0 {
 			timecode = fmt.Sprintf("%ds", seconds)
 		} else if hours == 0 {
@@ -98,16 +101,14 @@ func externalUrl(sourceURLStr string, seconds, minutes, hours int) string {
 			timecode = fmt.Sprintf("%dh%dm%ds", hours, minutes, seconds)
 		}
 
+		query := newUrl.Query()
+		query.Del("t")
+		query.Add("t", timecode)
+		newUrl.RawQuery = query.Encode()
 	} else {
-		// Everyone else: 01:12:32
-		timecode = fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+		// Everyone else: #t=01:12:32
+		newUrl.Fragment = fmt.Sprintf("t=%02d:%02d:%02d", hours, minutes, seconds)
 	}
-
-	newUrl := *sourceUrl
-	query := newUrl.Query()
-	query.Del("t")
-	query.Add("t", timecode)
-	newUrl.RawQuery = query.Encode()
 
 	return newUrl.String()
 }
