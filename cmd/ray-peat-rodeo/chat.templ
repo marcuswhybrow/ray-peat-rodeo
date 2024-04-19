@@ -89,7 +89,83 @@ templ StatusChange() {
 
 templ RenderChat(file *File) {
 	@Base(file.FrontMatter.Source.Title) {
-		<article class="p-8 relative" data-pagefind-body>
+		<article
+			class="p-8 relative"
+			data-pagefind-body
+			_="
+        set :gap to 16
+        set :newIssueLink to 'https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new'
+        set :domain to 'https://raypeat.rodeo'
+        set :newline to '\n\n'
+
+        on mouseup or touchend
+          measure my top
+          set anchorTop to top
+          measure my left
+          set anchorLeft to left
+          set selection to getSelection()
+          set selectedText to selection as a String
+
+          if selectedText
+            set boundingBox to selection.getRangeAt(0).getBoundingClientRect()
+            remove .hidden from #new-issue-popup 
+            set newTop to (boundingBox.bottom + :gap) - anchorTop
+            set newLeft to boundingBox.left - anchorLeft
+            set #new-issue-popup's *top to newTop + 'px'
+            set #new-issue-popup's *left to newLeft + 'px'
+
+            set assetLink to :domain + window.location.pathname
+            set assetTitle to the textContent of the first <h1/>
+            set bodyPre to 'Hi, I\\'ve found an issue with this text from [' + assetTitle + '](' + assetLink + '):' + :newline
+            set bodyMain to '> ' + selectedText
+            set bodyPost to :newline + '[consider describing the issue here]'
+
+            set body to encodeURIComponent(bodyPre + bodyMain + bodyPost)
+            set title to encodeURIComponent(assetTitle)
+            set newQuotedIssueLink to :newIssueLink + '?title=' + title + '&body=' + body
+
+            set #new-issue-popup @href to newQuotedIssueLink
+          else
+            add .hidden to #new-issue-popup
+          end
+      "
+		>
+			<a
+				id="new-issue-popup"
+				class="
+          hidden absolute bg-yellow-200 rounded-lg p-8 pb-6 z-40 transition-all
+          shadow-lg shadow-yellow-400/50
+          hover:shadow-2xl hover:shadow-yellow-600/60
+          hover:scale-110
+          [&:hover_img]:opacity-75
+          [&:hover_div]:border-black/75
+          [&:hover_div]:text-black/65
+        "
+				href="https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new"
+				target="_blank"
+			>
+				<div class="grid grid-cols-2 gap-4">
+					<div
+						class="
+              p-4 mb-4
+              border-2 border-black/50 border-dashed 
+              rounded-lg
+            "
+					>
+						<img
+							src="/assets/images/plus-line-icon.svg"
+							alt="Plus icon"
+							class="block w-8 mx-auto opacity-50"
+						/>
+					</div>
+					<div class="italic w-20 leading-snug text-black/60">
+						Spotted an issue with this text?
+					</div>
+				</div>
+				<div class="font-bold uppercase text-center text-black/50 tracking-wider text-sm">
+					New Issue From Quote
+				</div>
+			</a>
 			<header class="max-w-3xl mx-auto">
 				<!-- Interview title -->
 				<div
@@ -338,7 +414,9 @@ templ RenderChat(file *File) {
 					</div>
 				</div>
 				<!-- Content -->
-				@Unsafe(string(file.Html))
+				<div class="relative">
+					@Unsafe(string(file.Html))
+				</div>
 				if !file.FrontMatter.Completion.Content {
 					<div data-pagefind-ignore class="mr-16 mb-32">
 						<!-- Message -->
