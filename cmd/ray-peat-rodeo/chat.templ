@@ -2,6 +2,7 @@ package main
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 import "fmt"
+import "strings"
 
 type MapEnumeration[V any] struct {
 	Key     string
@@ -48,6 +49,34 @@ func kindToFilter(kind string) string {
 		return "Book"
 	default:
 		return kind
+	}
+}
+
+func kindToNaturalLanguageDescription(file *File) string {
+	kind := file.FrontMatter.Source.Kind
+	switch kind {
+	case "audio", "article":
+		return fmt.Sprintf("an %v", strings.ToLower(kindToFilter(kind)))
+	default:
+		return fmt.Sprintf("a %v", strings.ToLower(kindToFilter(kind)))
+	}
+}
+
+func kindToNaturalLanguageAssociateWithRayPeat(file *File) string {
+	kind := file.FrontMatter.Source.Kind
+	switch kind {
+	case "article", "newsletter", "book":
+		return "by Ray Peat"
+	default:
+		if !file.FrontMatter.Completion.SpeakersIdentified {
+			return "to do with Ray Peat"
+		}
+		fullName, ok := file.FrontMatter.Speakers["RP"]
+		if ok && (fullName == "Ray Peat" || fullName == "Raymond Peat") {
+			return "with Ray Peat"
+		} else {
+			return "about Ray Peat"
+		}
 	}
 }
 
@@ -164,6 +193,35 @@ templ RenderChat(file *File) {
 
         </style>
 				<!-- Top side-bubbles -->
+				<!-- Sponsor Project -->
+				<a
+					data-pagefind-ignore
+					href={ global.SPONSOR_LINK }
+					class="
+            block z-10 transition-all m-2 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight
+            p-4
+          "
+				>
+					<img
+						src="/assets/images/avatars/marcus-whybrow.jpg"
+						class="block rounded-full h-20 border-4 border-yellow-200 shadow-lg shadow-green-600/70 float-right ml-2 mb-2"
+						alt="A picture of Marcus Whybrow, creator of Ray Peat Rodeo"
+						title="Marcus Whybow, creator of Ray Peat Rodeo"
+					/>
+					<span class="block text-green-900 font-bold text-xl tracking-tight mb-2">From Marcus</span>
+					<span class="block text-green-800">
+						This is <em>{ kindToNaturalLanguageDescription(file) }</em>
+						{ kindToNaturalLanguageAssociateWithRayPeat(file) }
+						from { file.Date[:4] }. 
+						<br/>
+					</span>
+					<span class="block text-green-800 mt-2">
+						It's part of my effort to archive and augment Ray's complete works within this website, Ray Peat Rodeo.
+					</span>
+					<span class="block text-green-800 mt-2">
+						You can <strong class="font-bold underline hover:text-black">donate to the project on GitHub sponsors</strong>, cheers 🥰.
+					</span>
+				</a>
 				if !file.IsComplete() {
 					<!-- Report Card -->
 					<div
@@ -228,18 +286,6 @@ templ RenderChat(file *File) {
 						</ul>
 					</div>
 				}
-				<!-- Sponsor Project -->
-				<div
-					data-pagefind-ignore
-					class="block z-10 transition-all m-2 hover:translate-y-1 shadow-xl hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-lime-200 from-10% to-green-200 hover:from-lime-200 hover:from-70% hover:to-green-200 hover:scale-110 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
-				>
-					<a href={ global.SPONSOR_LINK } class="hover:bg-white/20">
-						<span class="block text-green-900 font-bold px-4 pt-2 text-xl tracking-tight">Help Out</span>
-						<span class="block text-green-800 px-4 pb-4">
-							Support Ray Peat Rodeo by sponsoring Marcus on GitHub.
-						</span>
-					</a>
-				</div>
 				<!-- Edit / Download Asset -->
 				<div
 					data-pagefind-ignore
@@ -303,7 +349,7 @@ templ RenderChat(file *File) {
 							<span class="text-green-700">
 								if file.FrontMatter.Transcription.Author == "Marcus Whybrow" {
 									<span class="font-bold">{ file.FrontMatter.Transcription.Author }</span>
-									transcribed this interview, { file.FrontMatter.Transcription.Date }.
+									transcribed this { strings.ToLower(kindToFilter(file.FrontMatter.Source.Kind)) }, { file.FrontMatter.Transcription.Date }.
 								} else {
 									Transcription modified from an earlier version by
 									<span class="font-bold">
