@@ -106,7 +106,12 @@ templ RenderChat(file *File) {
           set selection to getSelection()
           set selectedText to selection as a String
 
-          if selectedText
+          -- Allows selection.isCollapsed to adjust. Otherwise removing a 
+          -- selection by clicking on it doesn't register. I don't think 
+          -- there's a dedicated event that bubbles for closed selections.
+          wait 1ms
+
+          if not selection.isCollapsed
             set boundingBox to selection.getRangeAt(0).getBoundingClientRect()
             remove .hidden from #new-issue-popup 
             set newTop to (boundingBox.bottom + :gap) - anchorTop
