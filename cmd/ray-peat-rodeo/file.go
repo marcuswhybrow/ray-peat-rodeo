@@ -155,7 +155,8 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 
 func (f *File) IsComplete() bool {
 	c := f.FrontMatter.Completion
-	return c.Content && c.ContentVerified && c.Mentions && c.Issues && c.Notes && c.Timestamps
+	return c.Content && c.ContentVerified && c.SpeakersIdentified &&
+		c.Mentions && c.Issues && c.Notes && c.Timestamps
 }
 
 // Writes file to f.outPath

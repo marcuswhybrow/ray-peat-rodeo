@@ -51,6 +51,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 H: [0:12] I just want ot point out that Ray has a PhD in Biology and Biochemistry with a specialisation in Physiology from the the University of Oregon. From '59 to the early 80's he taught courses in Anthropology, Biology, Physics, Nutrition, Immunology, Metabolism, and Psychology, and colledged in Oregon and Mexico, and he also conducts private nutritional counciling.

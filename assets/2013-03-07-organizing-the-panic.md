@@ -17,6 +17,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 KM: Vision and Acceptance is excited to present an interview with Dr. Ray Peat, “Organizing the Panic”. {Ray Peat standing. ![Ray Peat Standing](/assets/images/2013-03-07-ray-peat-standing.jpg)} This phrase is in reference to a line we quoted from him in one of our previous posts where he said, “Panic isn’t inappropriate when looking at nearly any part of what’s happening in the world, but we have to get the panic organized, so it can be productive.” So V & A conducted this interview with the intention of creating opportunities for awareness and discussion about where our world is headed and why. This will hopefully generate momentum toward action. {Editor's note: The source material doesn't mention the name of the interviewer. However, Karen Mcc is [known](https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii) to write articles for the website which originally published this interview.}

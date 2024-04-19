@@ -17,6 +17,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 KM: What is good health? {Editor's note: Although the source material doesn't mention the name of the interviewer, [[Roddy, Danny > https://web.archive.org/web/20130922063825/http://www.dannyroddy.com/main/an-interview-with-dr-raymond-peat-part-ii | this]] article says it "was conducted by the amazing [[Mcc, Karen]] with help from [[Labosco, Matt]]" and also thanks "[[Kurra, Heath]], [[Waitt, Greg]], [[Curran, Wayde]], and [[Mariam]]."}

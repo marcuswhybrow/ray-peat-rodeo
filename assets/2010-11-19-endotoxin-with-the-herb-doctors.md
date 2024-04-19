@@ -26,6 +26,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 AM: [2:35] Well welcome to this months "Ask Your Herb Doctor", my name's Andrew Murray.

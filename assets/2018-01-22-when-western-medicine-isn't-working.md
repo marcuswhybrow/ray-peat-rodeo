@@ -17,6 +17,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 NB: In what arenas, specifically, do you think our ever-popular Western Medicine is mistaken and why?
 

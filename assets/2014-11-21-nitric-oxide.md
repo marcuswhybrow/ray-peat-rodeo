@@ -27,6 +27,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 AM: Well thank you once again, this is Ask Your Herb Doctor. KMUD Garberville. 91.1 FM. My name's Andrew Murray, and for those of you who've, perhaps, never listened to the show, which runs every third Friday of the month from 7 till 8PM, I'm a liscensed medical herbalist who trained in England, and graduated there with a degree in herbal medicine. My wife and I run a clinic in Garberville where we consult with clients about a wide range of conditions and recommend herbal medicines and dietary advice, and has become very consistent with the last couple of years, Dr. Peat is happily joining us on the show to share his latest discoveries in his research. 

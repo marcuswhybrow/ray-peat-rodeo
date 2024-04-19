@@ -24,6 +24,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 GN: [05:42] I'm Gary Null and I'd like to welcome you to our program. As you may know, if you listen with any frequency, we talk about health issues. In this segment we're gonna talk about something that effects everyone. From children to senior citizens. Thin to the overweight. And that is the thyroid gland. To share insights on the thyroid gland I've invited Dr. Ray Peat.

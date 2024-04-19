@@ -30,6 +30,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 E: As always on reviews and opinions expressed throughout the broadcast day, are those of the speakers and not necessarily those of [[Redwood Community Radio|the station]], it's staff, its board, it's Underwriters it's Hangers On or anyone else involved, thank you so much for joining us. Our phone number is 923 3911 where you are to be calling soon with your memories of [[Peat, Raymond|Dr Peat]]. And here's our theme song. {Pipe music plays.}
