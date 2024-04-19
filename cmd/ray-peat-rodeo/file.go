@@ -33,6 +33,7 @@ type File struct {
 	Markdown      []byte
 	Html          []byte
 	EditPermalink string
+	RawPermalink  string
 	Permalink     string
 	Mentions      Mentions
 	Mentionables  ByMentionable[Mentions]
@@ -85,6 +86,7 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	id := fileStem[11:]
 	permalink := "/" + id
 	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", filePath)
+	rawPermalink := global.GITHUB_LINK + path.Join("/raw/main", filePath)
 	outPath := path.Join(OUTPUT, id, "index.html")
 
 	// 📄 FrontMatter
@@ -128,6 +130,7 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 		Date:          fileStem[:10],
 		Permalink:     permalink,
 		EditPermalink: editPermalink,
+		RawPermalink:  rawPermalink,
 		FrontMatter:   frontMatter,
 		Markdown:      fileBytes,
 		Mentions:      Mentions{},

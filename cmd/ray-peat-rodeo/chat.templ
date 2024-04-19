@@ -240,17 +240,54 @@ templ RenderChat(file *File) {
 						</span>
 					</a>
 				</div>
-				<!-- Contribute to Project -->
-				<a
+				<!-- Edit / Download Asset -->
+				<div
 					data-pagefind-ignore
-					href={ templ.URL(file.EditPermalink) }
-					class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
+					class="
+            block z-10 transition-all m-2 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md  hover:from-green-50 hover:from-70% hover:to-green-100 w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight overflow-hidden
+          "
 				>
-					<span class="text-green-700">
-						<img src="/assets/images/github-mark.svg" class="w-11 h-11 float-left mr-4"/>
-						Or, <strong>contribute</strong> to this page on GitHub.
-					</span>
-				</a>
+					<div class="grid grid-flow-col grid-cols-2 tracking-wider">
+						<a
+							class="
+                block p-4 
+                [&:hover_span]:opacity-65 [&:hover_img]:opacity-75
+                bg-gradient-to-bl from-stone-200 from-10% to-stone-300 
+                hover:bg-gradient-to-b hover:from-40% hover:from-yellow-200 hover:to-orange-300
+                grid grid-flow-row
+                transition-all
+                border-r border-stone-300
+              "
+							href={ templ.URL(file.EditPermalink) }
+							title="Edit this page on GitHub"
+						>
+							<img
+								src="/assets/images/edit-round-icon.svg"
+								alt="Edit pencil upon a black disc"
+								class="h-10 mx-auto opacity-50 mt-4 mb-2"
+							/>
+							<span class="uppercase text-center mb-2 text-black opacity-50 font-bold">Edit</span>
+						</a>
+						<a
+							class="
+                block p-4 
+                [&:hover_span]:opacity-65 [&:hover_img]:opacity-75
+                grid grid-flow-row 
+                bg-gradient-to-br from-stone-200 from-10% to-stone-300
+                hover:bg-gradient-to-br hover:from-40% hover:from-sky-200 hover:to-indigo-300
+              "
+							href={ templ.URL(file.RawPermalink) }
+							title="Download this page as raw Markdown"
+						>
+							<img
+								src="/assets/images/round-line-bottom-arrow-icon.svg"
+								alt="Downwards arrow within a circle"
+								class="h-10 mx-auto opacity-50 mt-4 mb-2 bg-clip-text bg-blue-400"
+							/>
+							<span class="uppercase text-center mb-2 text-black opacity-50 font-bold">Save</span>
+						</a>
+					</div>
+				</div>
 				if file.IsComplete() {
 					<!-- Attribution -->
 					<a
