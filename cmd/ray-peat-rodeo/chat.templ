@@ -337,36 +337,6 @@ templ RenderChat(file *File) {
 						</a>
 					</div>
 				</div>
-				if file.IsComplete() {
-					<!-- Attribution -->
-					<a
-						data-pagefind-ignore
-						if file.FrontMatter.Transcription.Url !="" {
-							href={ templ.URL(file.FrontMatter.Transcription.Url) }
-						} else {
-							href={ templ.URL(file.FrontMatter.Source.Url) }
-						}
-						class="block z-10 transition-all m-2 p-4 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md bg-gradient-to-br from-green-100 from-10% to-green-100 hover:from-green-50 hover:from-70% hover:to-green-100 xl:block w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight"
-					>
-						if file.FrontMatter.Transcription.Author != "" {
-							<span class="text-green-700">
-								if file.FrontMatter.Transcription.Author == "Marcus Whybrow" {
-									<span class="font-bold">{ file.FrontMatter.Transcription.Author }</span>
-									transcribed this { strings.ToLower(kindToFilter(file.FrontMatter.Source.Kind)) }, { file.FrontMatter.Transcription.Date }.
-								} else {
-									Transcription modified from an earlier version by
-									<span class="font-bold">
-										{ file.FrontMatter.Transcription.Author }
-									</span>, { file.FrontMatter.Transcription.Date }.
-								}
-							</span>
-						} else {
-							<span class="text-green-700">
-								Written interview from <span class="font-bold">{ file.FrontMatter.Source.Series }</span>.
-							</span>
-						}
-					</a>
-				}
 				<!-- Content -->
 				@Unsafe(string(file.Html))
 				if !file.FrontMatter.Completion.Content {
