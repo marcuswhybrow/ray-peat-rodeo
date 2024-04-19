@@ -89,8 +89,8 @@ templ StatusChange() {
 
 templ RenderChat(file *File) {
 	@Base(file.FrontMatter.Source.Title) {
-		<article class="p-8 relative max-w-2xl mx-auto" data-pagefind-body>
-			<header class="ml-1 border-solid border-slate-200 text-center">
+		<article class="p-8 relative" data-pagefind-body>
+			<header class="max-w-3xl mx-auto">
 				<!-- Interview title -->
 				<div
 					class="p-12 pt-10 pb-16 mb-12 mt-16 rounded bg-gradient-to-br from-sky-200 to-purple-300 text-right relative"
@@ -167,7 +167,10 @@ templ RenderChat(file *File) {
 					</h1>
 				</div>
 			</header>
-			<main style="counter-reset:sidenote" class="mb-32">
+			<main
+				style="counter-reset:sidenote"
+				class="mb-32 max-w-2xl mx-auto relative"
+			>
 				<style>
           mark {
             background-color: #fef08a
@@ -290,7 +293,7 @@ templ RenderChat(file *File) {
 				<div
 					data-pagefind-ignore
 					class="
-            block z-10 transition-all m-2 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-green-800/20 hover:shadow-green-600/40 rounded-md  hover:from-green-50 hover:from-70% hover:to-green-100 w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight overflow-hidden
+            block z-10 transition-all m-2 hover:translate-y-1 shadow-lg hover:shadow-2xl shadow-stone-800/20 hover:shadow-stone-600/40 rounded-md w-2/5 mr-[-10px] lg:mr-[-10%] xl:mr-[-20%] float-right clear-right text-sm relative leading-5 tracking-tight overflow-hidden
           "
 				>
 					<div class="grid grid-flow-col grid-cols-2 tracking-wider">
@@ -413,7 +416,7 @@ templ RenderChat(file *File) {
 					</div>
 				}
 			</main>
-			<div class="text-center">
+			<div class="text-center max-w-2xl mx-auto">
 				<a href="/" class="mb-16 inline-block mx-auto px-8 py-4 rounded-full text-xl hover:bg-gradient-to-tl from-fuchsia-900 to-pink-600 text-gray-400 hover:text-white font-bold border-2 hover:border-white hover:border-solid border-gray-300 border-dashed">
 					More Interviews
 				</a>
