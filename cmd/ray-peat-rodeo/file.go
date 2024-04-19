@@ -61,12 +61,13 @@ type FrontMatter struct {
 		Author string
 	}
 	Completion struct {
-		Content         bool
-		ContentVerified bool `mapstructure:"content-verified"`
-		Mentions        bool
-		Issues          bool
-		Notes           bool
-		Timestamps      bool
+		Content            bool
+		ContentVerified    bool `mapstructure:"content-verified"`
+		SpeakersIdentified bool `mapstructure:"speakers-identified"`
+		Mentions           bool
+		Issues             bool
+		Notes              bool
+		Timestamps         bool
 	}
 }
 

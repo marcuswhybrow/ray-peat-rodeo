@@ -186,6 +186,15 @@ templ RenderChat(file *File) {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Content unverified</span>
 								}
 							</li>
+							if file.FrontMatter.Source.Kind == "audio" || file.FrontMatter.Source.Kind == "video" {
+								<li>
+									if file.FrontMatter.Completion.SpeakersIdentified {
+										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Speakers identified</span>
+									} else {
+										<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Speakers unidentified</span>
+									}
+								</li>
+							}
 							<li>
 								if file.FrontMatter.Completion.Mentions {
 									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Mentions added</span>
