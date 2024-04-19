@@ -50,7 +50,7 @@ And hopefully there, amongst the stars and the bright light, his soul will conti
 
 He was so anti-corruption, and he was so _keen_ to expose the truth in _science_, and in _fact_, for people to hear the truth, that sometimes it seemed incredulous. 
 
-I was just reflecting on the radio shows that we had done with Dr Peat since 2008 when we first met met him. And there's over 136 radio shows that we have recorded with him. The bulk of which, except some of those that happened during covid, which is still yet to get put up, are on our website, [westernbotanicalmedicine.com](https://www.westernbotanicalmedicine.com/) under the "Ask Your Herb Doctor" link. 
+I was just reflecting on the radio shows that we had done with Dr Peat since 2008 when we first met met him. And there's over 136 radio shows that we have recorded with him. The bulk of which, except some of those that happened during covid, which is still yet to get put up, are on our website, [[Western Botanical Medicine > https://www.westernbotanicalmedicine.com | westernbotanicalmedicine.com]] under the "Ask Your Herb Doctor" link. 
 
 So those 136 or more one hour shows that Dr Peat was just very much altruistic in his whole perspective on life, and bringing people of the truth, and not charging money. <span title="laughs" style="font-size:1.5rem; line-height:1rem; position:relative; top: 3px;">😂</span> He was definitely not very financially motivated. He loved what he did, and he was just very much immersed into it, and he was probably one of the greatest Minds that I've ever had the pleasure of speaking to. 
 
