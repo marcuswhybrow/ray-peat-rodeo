@@ -287,6 +287,7 @@ snippets.
 - [Chadnet Ray Peat Wiki](https://wiki.chadnet.org/ray-peat) is a quite 
 comprehensive backup of Ray's interviews, books, articles, newsletters, and 
 miscellaneous assets such as his PhD work.
+- [Functional Performance Systems](https://www.functionalps.com/blog/tag/ray-peat) has many blog posts collating Ray Peat quotes on numerous topics as well as entire articles.
 
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
 I've missed a similar project.
