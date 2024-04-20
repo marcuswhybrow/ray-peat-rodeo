@@ -284,6 +284,8 @@ format callled WebVTT.
 - [Bioenergetic Life](https://bioenergetic.life/) is an interactive search 
 engine for The Ray Peat Archive's data set, with side-by-side text and audio 
 snippets.
+- [Chadnet Ray Peat Wiki](https://wiki.chadnet.org/ray-peat) Huge backup of 
+Ray's interviews, books, articles, newsletters, and miscellaneous assets.
 
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
 I've missed a similar project.
