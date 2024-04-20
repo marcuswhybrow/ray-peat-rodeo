@@ -281,7 +281,7 @@ fluent, leaving future me, or someone better educated, to fix the issue later.
 - [The Ray Peat Archive](https://github.com/0x2447196/raypeatarchive) has a 
 very large collection of AI transcriptions stored in a plain text subtitle 
 format callled WebVTT.
-- [Bioenergetic Life](https://bioenergetic.life/) is an interactive search 
+- [Bioenergetic Life](https://bioenergetic.life) is an interactive search 
 engine for The Ray Peat Archive's data set, with side-by-side text and audio 
 snippets.
 - [Chadnet Ray Peat Wiki](https://wiki.chadnet.org/ray-peat) Huge backup of 
