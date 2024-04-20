@@ -1,4 +1,4 @@
-`./internal`, is the [official convention](https://go.dev/doc/modules/layout#package-or-command-with-supporting-packages) for code that's reusable within this project, but not outside of it. In our case, this code does the heavy lifting for the user-facing commands in [`./cmd`](https://github.com/marcuswhybrow/ray-peat-rodeo/tree/main/cmd).
+`internal`, is the [official convention](https://go.dev/doc/modules/layout#package-or-command-with-supporting-packages) for code that's reusable within this project, but not outside of it. In our case, this code does the heavy lifting for the user-facing commands in [`./cmd`](https://github.com/marcuswhybrow/ray-peat-rodeo/tree/main/cmd).
 
 `./assets/` is a dumb directory of files that get's directly copied to `./build/assets/`. Once `./build` is deployed as `https://raypeat.rodeo` our assets are accessible at `https://raypeat.rodeo/assets/`. So we can drop any images, or CSS styles we may need in here.
 
