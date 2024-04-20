@@ -45,6 +45,7 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
                     put result[0].sha.substring(0,7) into .github-latest-commit-sha's innerHTML
                     put result[0].author.login into .github-latest-commit-login's innerHTML
                     put result[0].author.avatar_url into .github-latest-commit-avatar's @src
+                    put result[0].author.html_url into .github-latest-commit-avatar-link's @href
                     set commitsBy to 'https://github.com/marcuswhybrow/ray-peat-rodeo/commits?author=' + result[0].author.login
                     put commitsBy into .github-latest-commit-login's @href
                     put result[0].html_url into .github-latest-commit-sha's @href
@@ -62,7 +63,7 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 							<div class="text-sm absolute top-10 right-10">
 								<a
 									class="inline-block mr-2"
-									href="https://github.com/marcuswhybrow/ray-peat-rodeo"
+									href="https://github.com/marcuswhybrow/ray-peat-rodeo/stargazers"
 									title="GitHub Stars"
 								>
 									<span class="github-stars font-bold opacity-60">2</span>
@@ -73,7 +74,7 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 								</a>
 								<a
 									class="inline-block mr-2"
-									href="https://github.com/marcuswhybrow/ray-peat-rodeo"
+									href="https://github.com/marcuswhybrow/ray-peat-rodeo/fork"
 									title="GitHub Forks"
 								>
 									<span class="github-forks font-bold opacity-60">0</span>
@@ -95,7 +96,10 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 								</a>
 							</div>
 							<div class="px-8">
-								<a href="">
+								<a
+									class="github-latest-commit-avatar-link"
+									href=""
+								>
 									<img class="inline-block github-latest-commit-avatar w-6 h-6 rounded-full overflow-hidden"/>
 								</a>
 								<a
