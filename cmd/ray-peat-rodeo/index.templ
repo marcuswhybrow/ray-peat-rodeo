@@ -1,8 +1,6 @@
 package main
 
-import (
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
-)
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 
 func pluralise(i int, s string) string {
 	if i != 1 {
@@ -27,12 +25,95 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 				<!-- Side bubbles -->
 				<div class="z-30 mx-8 2xl:mx-0">
 					<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 transition-all">
-						<!-- Latest File -->
-						<a href={ templ.URL(latestFile.Permalink) } class="block p-8 rounded rounded-lg shadow-md bg-white">
-							<p class="text-sm uppercase text-gray-500 mb-4">Latest Addition</p>
-							<h3 class="tracking-tighter text-xl font-bold text-gray-500 mb-2">{ latestFile.FrontMatter.Source.Title }</h3>
-							<div class="tracking-wider text-gray-500">{ latestFile.FrontMatter.Source.Series }</div>
-						</a>
+						<!-- Latest GitHub commit -->
+						<div
+							class="block bg-stone-100 rounded-lg shadow-md relative"
+							_="
+                -- on load 
+                  -- fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo as json
+                  -- if result.stargazers_count 
+                    -- put result.stargazers_count into .github-stars's innerHTML
+                    -- put result.watchers_count into .github-watchers's innerHTML
+                    -- put result.forks_count into .github-forks's innerHTML
+                    -- put result.open_issues_count into .github-issues's innerHTML
+                  -- end
+
+                on load 
+                  fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo/commits as json
+                  if result[0].sha
+                    put result[0].commit.message into .github-latest-commit-message's innerHTML
+                    put result[0].sha.substring(0,7) into .github-latest-commit-sha's innerHTML
+                    put result[0].author.login into .github-latest-commit-login's innerHTML
+                    put result[0].author.avatar_url into .github-latest-commit-avatar's @src
+                    set commitsBy to 'https://github.com/marcuswhybrow/ray-peat-rodeo/commits?author=' + result[0].author.login
+                    put commitsBy into .github-latest-commit-login's @href
+                    put result[0].html_url into .github-latest-commit-sha's @href
+                    put result[0].html_url into .github-latest-commit-message's @href
+                  end
+              "
+						>
+							<div class="p-8 pb-4">
+								<img src="/assets/images/github-logo.png" class="h-10 relative -left-1"/>
+								<a
+									href="https://github.com/marcuswhybrow/ray-peat-rodeo"
+									class="font-bold text-sky-500 hover:underline"
+								>marcuswhybrow/ray-peat-rodeo</a>
+							</div>
+							<div class="text-sm absolute top-10 right-10">
+								<a
+									class="inline-block mr-2"
+									href="https://github.com/marcuswhybrow/ray-peat-rodeo"
+									title="GitHub Stars"
+								>
+									<span class="github-stars font-bold opacity-60">2</span>
+									<img
+										src="/assets/images/star-full-icon.svg"
+										class="h-4 inline-block relative -top-0.5 opacity-50 ml-1"
+									/>
+								</a>
+								<a
+									class="inline-block mr-2"
+									href="https://github.com/marcuswhybrow/ray-peat-rodeo"
+									title="GitHub Forks"
+								>
+									<span class="github-forks font-bold opacity-60">0</span>
+									<img
+										src="/assets/images/branching-icon.svg"
+										class="h-4 inline-block relative top-[-1px] opacity-50 ml-1"
+									/>
+								</a>
+								<a
+									class="inline-block"
+									href="https://github.com/marcuswhybrow/ray-peat-rodeo/issues"
+									title="GitHub Issues"
+								>
+									<span class="github-issues font-bold opacity-60">38</span>
+									<img
+										src="/assets/images/exclamation-round-icon.svg"
+										class="h-4 inline-block relative top-[-1px] opacity-40 ml-1"
+									/>
+								</a>
+							</div>
+							<div class="px-8">
+								<a href="">
+									<img class="inline-block github-latest-commit-avatar w-6 h-6 rounded-full overflow-hidden"/>
+								</a>
+								<a
+									class="github-latest-commit-login ml-1 text-sm font-bold hover:underline"
+									href=""
+								></a>
+								<a
+									class="github-latest-commit-sha font-mono tracking-wide text-gray-600 hover:underline"
+									href=""
+								></a>
+							</div>
+							<div class="p-8 pt-1">
+								<a
+									class="github-latest-commit-message text-sm hover:underline"
+									href=""
+								></a>
+							</div>
+						</div>
 						<!-- Latest Blog post -->
 						<a href={ templ.URL(latestBlogPost.Permalink) } class="block p-8 rounded-lg bg-pink-100 shadow-md">
 							<div class="float-left">
