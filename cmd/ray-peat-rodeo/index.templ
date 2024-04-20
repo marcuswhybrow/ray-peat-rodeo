@@ -29,14 +29,14 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 						<div
 							class="block bg-stone-100 rounded-lg shadow-md relative"
 							_="
-                -- on load 
-                  -- fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo as json
-                  -- if result.stargazers_count 
-                    -- put result.stargazers_count into .github-stars's innerHTML
-                    -- put result.watchers_count into .github-watchers's innerHTML
-                    -- put result.forks_count into .github-forks's innerHTML
-                    -- put result.open_issues_count into .github-issues's innerHTML
-                  -- end
+                on load 
+                  fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo as json
+                  if result.stargazers_count 
+                    put result.stargazers_count into .github-stars's innerHTML
+                    put result.watchers_count into .github-watchers's innerHTML
+                    put result.forks_count into .github-forks's innerHTML
+                    put result.open_issues_count into .github-issues's innerHTML
+                  end
 
                 on load 
                   fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo/commits as json
