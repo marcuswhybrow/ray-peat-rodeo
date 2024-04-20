@@ -323,7 +323,7 @@ templ RenderChat(file *File) {
 							</li>
 							<li>
 								if file.FrontMatter.Completion.ContentVerified {
-									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Content verified</span>
+									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Content verified</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Content unverified</span>
 								}
@@ -331,7 +331,7 @@ templ RenderChat(file *File) {
 							if file.FrontMatter.Source.Kind == "audio" || file.FrontMatter.Source.Kind == "video" {
 								<li>
 									if file.FrontMatter.Completion.SpeakersIdentified {
-										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Speakers identified</span>
+										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Speakers identified</span>
 									} else {
 										<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Speakers unidentified</span>
 									}
@@ -339,21 +339,21 @@ templ RenderChat(file *File) {
 							}
 							<li>
 								if file.FrontMatter.Completion.Mentions {
-									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Mentions added</span>
+									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Mentions added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Mentions incomplete</span>
 								}
 							</li>
 							<li>
 								if file.FrontMatter.Completion.Issues {
-									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Issues added</span>
+									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Issues added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Issues incomplete</span>
 								}
 							</li>
 							<li>
 								if file.FrontMatter.Completion.Notes {
-									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Notes added</span>
+									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Notes added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Notes incomplete</span>
 								}
@@ -361,7 +361,7 @@ templ RenderChat(file *File) {
 							if file.FrontMatter.Source.Kind == "audio" || file.FrontMatter.Source.Kind == "video" {
 								<li>
 									if file.FrontMatter.Completion.Timestamps {
-										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 ml-3 relative"></span> <span class="text-green-700">Timestamps added</span>
+										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Timestamps added</span>
 									} else {
 										<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Timestamps incomplete</span>
 									}
