@@ -8,9 +8,9 @@
 
 The point of a mention is to build a global index of all mentions, so the URL is a great unique identifier for a web page. Ray Peat Rodeo automatically scrapes the title of mentioned URLs to display to readers as well. 
 
-Scraping the title of every mentioned URL on every build would slow the dev server to a crawl, and make GitHub deployments non-deterministic. i.e. if a website returns a valid title from my home internet during development, it may be block requests from GitHub's servers when they build the same code for deployment to GitHub pages.
+Scraping the title of every mentioned URL on every build would slow the dev server to a crawl, and make GitHub deployments non-deterministic. i.e. if a website returns a valid title from my home internet during development, it may block requests from GitHub's servers when they build the same code for deployment to GitHub pages.
 
-The solution is to cache all scraped data to a file during development, commit it into source control, then use that (deterministic/static) data during the build.
+My solution is to cache all scraped data to a file during development, commit it into source control, then use that (deterministic/static) data during the build.
 
 `./global` contains a few centralised constants for use by all other modules.
 
