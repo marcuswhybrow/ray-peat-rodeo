@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Cellular Energy: Inflammation, Autoimmunity & Estrogen
+  title: "Cellular Energy: Inflammation, Autoimmunity & Estrogen"
   url: https://www.youtube.com/watch?v=KmhGEm2KNMA
   mirrors:
     - https://www.toxinless.com/kmud-161216-food.mp3
