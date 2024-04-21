@@ -41,7 +41,7 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
                 on load 
                   fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo/commits as json
                   if result[0].sha
-                    put result[0].commit.message into .github-latest-commit-message's innerHTML
+                    put result[0].commit.message.split('\n')[0] into .github-latest-commit-message's innerHTML
                     put result[0].sha.substring(0,7) into .github-latest-commit-sha's innerHTML
                     put result[0].author.login into .github-latest-commit-login's innerHTML
                     put result[0].author.avatar_url into .github-latest-commit-avatar's @src
