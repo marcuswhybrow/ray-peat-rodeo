@@ -1,7 +1,7 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Authoritarianism
+  title: "Authoritarianism: Freedom of Expression, Religion & Assembly"
   url: https://www.youtube.com/watch?v=J7fCjpZyGgo
   # also https://www.toxinless.com/kmud-160617-authoritarianism.mp3
   kind: audio
