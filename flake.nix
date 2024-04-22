@@ -26,10 +26,6 @@
         src = ./.;
         modules = ./gomod2nix.toml;
 
-        installPhase = ''
-          cp -r $src/.git $out
-        '';
-
         buildPhase = ''
           mkdir -p $out/bin
           ${pkgs.templ}/bin/templ generate
