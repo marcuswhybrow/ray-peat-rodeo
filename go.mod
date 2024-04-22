@@ -6,7 +6,6 @@ require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/a-h/templ v0.2.663
 	github.com/gernest/front v0.0.0-20210301115436-8a0b0a782d0a
-	github.com/libgit2/git2go/v34 v34.0.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/yuin/goldmark v1.6.0
 	github.com/yuin/goldmark-meta v1.1.0

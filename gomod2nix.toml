@@ -13,9 +13,6 @@ schema = 3
   [mod."github.com/gernest/front"]
     version = "v0.0.0-20210301115436-8a0b0a782d0a"
     hash = "sha256-BEU4gWt6rB5ahof+6e/FCW2M/UYVlmEKGNZ+JRGZ7+I="
-  [mod."github.com/libgit2/git2go/v34"]
-    version = "v34.0.0"
-    hash = "sha256-q4s2kGdMcOt92YUedMMgaF7hR+P+Xm/UsOiawrcZWuc="
   [mod."github.com/mitchellh/mapstructure"]
     version = "v1.5.0"
     hash = "sha256-ztVhGQXs67MF8UadVvG72G3ly0ypQW0IRDdOOkjYwoE="

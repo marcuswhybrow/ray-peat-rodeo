@@ -13,7 +13,6 @@ import (
 	"sync"
 	"time"
 
-	git "github.com/libgit2/git2go/v34"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
 	"github.com/yuin/goldmark"
@@ -281,32 +280,4 @@ func files[Result any](pwd, scope string, f func(filePath string) (*Result, erro
 	}
 
 	return results
-}
-
-// Descibes data from GitHub's REST API relevant to a particular Git commit
-type GitCommitGitHubData struct {
-	CommitLink            string
-	AuthorRepoCommitsLink string
-	AuthorProfileLink     string
-	AuthorLogin           string
-	AuthorAvatar          string
-}
-
-// Describes a Git commit
-type GitCommit struct {
-	SanitizedMessage string
-	Commit           *git.Commit
-	GitHub           GitCommitGitHubData
-}
-
-// Descibes data returned by GitHub's REST API user search endpoint
-type GithubUserSearchData struct {
-	Items []GithubUserSearchUser
-}
-
-// Descibes data returned by GitHub's REST API user search for a single user.
-type GithubUserSearchUser struct {
-	ID       int64
-	Login    string
-	HTML_url string
 }
