@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.11";
     flake-utils.url = "github:numtide/flake-utils";
     gomod2nix.url = "github:nix-community/gomod2nix";
     tailwind-scrollbar.url = "github:marcuswhybrow/tailwind-scrollbar";
@@ -10,6 +11,10 @@
 
   outputs = inputs: with inputs; flake-utils.lib.eachDefaultSystem (system: let
     pkgs = import inputs.nixpkgs {
+      overlays = [inputs.gomod2nix.overlays.default];
+      inherit system;
+    };
+    pkgs-stable = import inputs.nixpkgs-stable {
       overlays = [inputs.gomod2nix.overlays.default];
       inherit system;
     };
@@ -46,6 +51,8 @@
         buildInputs = [
           inputs.tailwind-scrollbar.packages.x86_64-linux.default
           pkgs.nodejs_20
+          pkgs-stable.libgit2_1_5 # used by git2go golang module for git bindings
+          pkgs.pkg-config # used by git2go to find libgit2
         ];
 
         buildPhase = ''
@@ -196,6 +203,12 @@
         # Convenience bash script using yt-dlp, whisper & whisper-json2md to 
         # transcribe and update assets with a `source.url` in the frontmatter.
         inputs.self.packages.x86_64-linux.transcribe
+
+        # Used by git2go Golang module to get repo git data
+        pkgs-stable.libgit2_1_5
+
+        # Used by git2go Golang module to find libgit2
+        pkg-config
       ];
     };
   });

@@ -9,7 +9,7 @@ func pluralise(i int, s string) string {
 	return ""
 }
 
-templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost *BlogPost) {
+templ Index(latestCommit GitCommit, allFiles []*File, latestFile *File, progress float32, latestBlogPost *BlogPost) {
 	@Base("Ray Peat Rodeo") {
 		<article class="pt-16 overflow-x-hidden">
 			<section class="mb-24">
@@ -36,20 +36,6 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
                     put result.watchers_count into .github-watchers's innerHTML
                     put result.forks_count into .github-forks's innerHTML
                     put result.open_issues_count into .github-issues's innerHTML
-                  end
-
-                on load 
-                  fetch https://api.github.com/repos/marcuswhybrow/ray-peat-rodeo/commits as json
-                  if result[0].sha
-                    put result[0].commit.message.split('\n')[0] into .github-latest-commit-message's innerHTML
-                    put result[0].sha.substring(0,7) into .github-latest-commit-sha's innerHTML
-                    put result[0].author.login into .github-latest-commit-login's innerHTML
-                    put result[0].author.avatar_url into .github-latest-commit-avatar's @src
-                    put result[0].author.html_url into .github-latest-commit-avatar-link's @href
-                    set commitsBy to 'https://github.com/marcuswhybrow/ray-peat-rodeo/commits?author=' + result[0].author.login
-                    put commitsBy into .github-latest-commit-login's @href
-                    put result[0].html_url into .github-latest-commit-sha's @href
-                    put result[0].html_url into .github-latest-commit-message's @href
                   end
               "
 						>
@@ -93,7 +79,7 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 								</a>
 								<a
 									class="inline-block"
-									href="https://github.com/marcuswhybrow/ray-peat-rodeo/issues"
+									href={ global.GITHUB_LINK + "/issues" }
 									title="GitHub Issues"
 								>
 									<span class="github-issues font-bold opacity-60">38</span>
@@ -106,24 +92,40 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 							<div class="px-8">
 								<a
 									class="github-latest-commit-avatar-link"
-									href=""
+									href={ templ.SafeURL(latestCommit.GitHub.AuthorProfileLink) }
+									title={ latestCommit.GitHub.AuthorLogin + "'s GitHub profile" }
 								>
-									<img class="inline-block github-latest-commit-avatar w-6 h-6 rounded-full overflow-hidden"/>
+									<img
+										class="inline-block github-latest-commit-avatar w-6 h-6 rounded-full overflow-hidden"
+										src={ latestCommit.GitHub.AuthorAvatar }
+									/>
 								</a>
 								<a
 									class="github-latest-commit-login ml-1 text-sm font-bold hover:underline"
-									href=""
-								></a>
+									href={ templ.SafeURL(latestCommit.GitHub.AuthorRepoCommitsLink) }
+									title={ latestCommit.GitHub.AuthorLogin + " authored this commit" }
+								>
+									if len(latestCommit.GitHub.AuthorLogin) > 0 {
+										{ latestCommit.GitHub.AuthorLogin }
+									} else {
+										{ latestCommit.Commit.Author().Name }
+									}
+								</a>
 								<a
-									class="github-latest-commit-sha font-mono tracking-wide text-gray-600 hover:underline"
-									href=""
-								></a>
+									class="github-latest-commit-when font-mono tracking-wide text-gray-600 hover:underline"
+									href={ templ.SafeURL(latestCommit.GitHub.CommitLink) }
+									title={ latestCommit.Commit.Author().When.Format("Commited Feb 01, 2006") }
+									_="install RelativeDate"
+								>
+									{ latestCommit.Commit.Author().When.Format("2006-01-02") }
+								</a>
 							</div>
 							<div class="p-8 pt-1">
 								<a
 									class="github-latest-commit-message text-sm hover:underline"
-									href=""
-								></a>
+									href={ templ.SafeURL(latestCommit.GitHub.CommitLink) }
+									title="Commit message"
+								>{ latestCommit.SanitizedMessage }</a>
 							</div>
 						</div>
 						<!-- Latest Blog post -->
