@@ -2,12 +2,9 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io"
 	"io/fs"
 	"log"
-	"net/http"
 	"os"
 	"path"
 	"path/filepath"
@@ -166,69 +163,8 @@ func main() {
 
 	// 🏠 Homepage
 
-	repo, err := git.InitRepository(".", false)
-	if err != nil {
-		panic(fmt.Sprintf("Failed to initialise git repository for current working directory. %v", err))
-	}
-	repoHead, err := repo.Head()
-	if err != nil {
-		panic(fmt.Sprintf("Failed to get HEAD of git respository in current working directory. %v", err))
-	}
-	repoHeadObj, err := repoHead.Peel(git.ObjectCommit)
-	if err != nil {
-		panic(fmt.Sprintf("HEAD of repository in the current working directory is not a commit. %v", err))
-	}
-	repoHeadCommit, err := repoHeadObj.AsCommit()
-	if err != nil {
-		panic(fmt.Sprintf("Could not get HEAD of repository in current working directory as a commit. %v", err))
-	}
-
-	githubUserSearch := "https://api.github.com/search/users?q=" + repoHeadCommit.Author().Email
-	githubLogin := <-httpCache.GetJSON(githubUserSearch, "login", func(res *http.Response) string {
-		body, err := io.ReadAll(res.Body)
-		if err != nil {
-			panic(fmt.Sprintf("Failed to read body of HTTP response for url '%v': %v", githubUserSearch, err))
-		}
-
-		data := GithubUserSearchData{}
-		err = json.Unmarshal(body, &data)
-		if err != nil {
-			panic(fmt.Sprintf("Failed to unmarshal JSON response for url '%v': %v", githubUserSearch, err))
-		}
-
-		if len(data.Items) > 0 {
-			return data.Items[0].Login
-		}
-
-		// Email address matches no given GitHub has no account
-		return ""
-	})
-
-	githubAvatar := ""
-	if len(githubLogin) > 0 {
-		githubAvatar = fmt.Sprintf("https://github.com/%v.png", githubLogin)
-	}
-
-	gitMessageSanitized := ""
-	gitMessageLines := strings.Split(repoHeadCommit.Message(), "\n")
-	if len(gitMessageLines) > 0 {
-		gitMessageSanitized = gitMessageLines[0]
-	}
-
-	latestCommit := GitCommit{
-		SanitizedMessage: gitMessageSanitized,
-		Commit:           repoHeadCommit,
-		GitHub: GitCommitGitHubData{
-			CommitLink:            "https://github.com/marcuswhybrow/ray-peat-rodeo/commit/" + repoHeadCommit.Id().String(),
-			AuthorRepoCommitsLink: "https://github.com/marcuswhybrow/ray-peat-rodeo/commits?author=" + githubLogin,
-			AuthorProfileLink:     "https://github.com/" + githubLogin,
-			AuthorLogin:           githubLogin,
-			AuthorAvatar:          githubAvatar,
-		},
-	}
-
 	indexPage, _ := makePage(".")
-	component = Index(latestCommit, catalog.Files, latestFile, progress, latestBlogPost)
+	component = Index(catalog.Files, latestFile, progress, latestBlogPost)
 	component.Render(context.Background(), indexPage)
 
 	// 📶 HTTP Cache
