@@ -52,7 +52,7 @@ With these features, we get something like this:
                 <br/>
                 <span class="text-red-500">RP:</span>
                 <span class="text-purple-500">[18:32]</span>
-                There was an Austrailian study 
+                There was an Australian study 
                 <span class="text-purple-500">{#12}</span>
                 around that time.
             </p>
