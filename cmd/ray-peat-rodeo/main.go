@@ -204,7 +204,7 @@ func main() {
 				}
 				fmt.Printf("'%v'", key)
 			}
-			fmt.Printf(" for %v", url)
+			fmt.Printf(" for %v\n", url)
 		}
 	}
 
