@@ -19,5 +19,5 @@ completion:
   timestamps: false
 ray-peat-rodeo:
   prev-paths:
-    - "/you-are-what-you-eat"
+    - /you-are-what-you-eat
 ---
