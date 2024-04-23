@@ -70,6 +70,9 @@ type FrontMatter struct {
 		Notes              bool
 		Timestamps         bool
 	}
+	RayPeatRodeo struct {
+		PrevPaths []string `mapstructure:"prev-paths"`
+	} `mapstructure:"ray-peat-rodeo"`
 }
 
 func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*File, error) {

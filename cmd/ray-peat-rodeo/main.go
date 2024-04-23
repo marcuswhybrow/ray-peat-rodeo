@@ -122,10 +122,23 @@ func main() {
 
 	// 📝 Write files
 
+	// When an asset filename changes, it's URL changes.
+	// It's nice to redirect old URL's to the new ones.
+	// N.B. this data is currently collected, but not acted upon
+	redirections := map[string][]*File{}
+
 	parallel(catalog.Files, func(file *File) error {
 		file.Render()
 		if err != nil {
 			return fmt.Errorf("Failed to render file '%v': %v", file.Path, err)
+		}
+
+		for _, prevPath := range file.FrontMatter.RayPeatRodeo.PrevPaths {
+			existing, ok := redirections[prevPath]
+			if !ok {
+				existing = []*File{}
+			}
+			redirections[prevPath] = append(existing, file)
 		}
 		return nil
 	})
