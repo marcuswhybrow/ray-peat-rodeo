@@ -294,6 +294,8 @@ entire articles.
 two unique search engines.
 - [MarshmalloW](https://www.selftestable.com/ray-peat-stuff/sites) is a big 
 list of articles, interviews, blogs, emails exchanges, forums & other tools.
+- [Notes From A Subterranean Library In Oregon](https://t3uncoupled.substack.com/p/notes-from-a-subterranean-library) 
+is a 90 page PDF collection of Ray's writing ranging from 1967 to 1999.
 
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
 I've missed a similar project.
