@@ -11,4 +11,7 @@ completion:
   issues: false
   notes: false
   timestamps: false
+ray-peat-rodeo:
+  prev-paths:
+    - /questions-and-answers-two
 ---
