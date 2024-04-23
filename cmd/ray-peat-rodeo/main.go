@@ -60,7 +60,7 @@ func main() {
 
 	avatarPaths := NewAvatarPaths()
 
-	// 🗃 Catalog
+	// 🖹🧩 Markdown + Extensions
 
 	markdownParser := goldmark.New(
 		goldmark.WithRendererOptions(html.WithUnsafe()),
@@ -75,6 +75,12 @@ func main() {
 		),
 	)
 
+	// 🗃 Catalog
+
+	// The catalog is a singleton for global data derived from assets.
+	// It's in charge of creating assets from the source markdown files.
+	// In so doing, it builds an in memory store of higher-order data.
+	// This higher-order data is used to create other pages for our readers.
 	catalog := &Catalog{
 		MarkdownParser:    markdownParser,
 		HttpCache:         httpCache,
