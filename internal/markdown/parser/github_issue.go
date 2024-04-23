@@ -61,8 +61,8 @@ func (p *githubIssueParser) Parse(parent gast.Node, block text.Reader, pc gparse
 	}
 	title := <-httpCache.Get(url, key, handler)
 
-	file := ast.GetFile(pc)
-	file.RegisterIssue(id)
+	asset := ast.GetAsset(pc)
+	asset.RegisterIssue(id)
 
 	block.Advance(len(inside) + 2)
 	return ast.NewGitHubIssue(id, title)

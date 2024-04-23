@@ -190,7 +190,7 @@ templ Index(allAssets []*Asset, latestAsset *Asset, progress float32, latestBlog
 						for _, file := range year.Assets {
 							if file.FrontMatter.Completion.SpeakersIdentified {
 								<a
-									href={ templ.URL(file.Permalink) }
+									href={ templ.URL(file.UrlAbsPath) }
 									class="block p-8 rounded rounded-lg shadow-lg bg-white mb-8 mt-8"
 								>
 									<div class="md:float-right">
@@ -245,7 +245,7 @@ templ Index(allAssets []*Asset, latestAsset *Asset, progress float32, latestBlog
 							if !file.FrontMatter.Completion.SpeakersIdentified {
 								<div class="mb-1.5">
 									<a
-										href={ templ.URL(file.Permalink) }
+										href={ templ.URL(file.UrlAbsPath) }
 										class="text-gray-500 hover:text-gray-600 hover:underline"
 									>
 										{ file.FrontMatter.Source.Title }

@@ -47,7 +47,7 @@ templ mentions(assets map[*Asset][]*ast.Mention) {
 			<div class="mb-4">
 				<a
 					class="border-b hover:border-b-2"
-					href={ templ.URL(asset.Permalink) }
+					href={ templ.URL(asset.UrlAbsPath) }
 				>
 					{ asset.FrontMatter.Source.Title }
 				</a>

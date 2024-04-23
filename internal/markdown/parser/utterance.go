@@ -57,14 +57,14 @@ func (s *UtteranceParser) Open(parent gmAst.Node, reader text.Reader, pc parser.
 		return nil, parser.Continue
 	}
 
-	file := ast.GetFile(pc)
-	speakers := file.GetSpeakers()
+	asset := ast.GetAsset(pc)
+	speakers := asset.GetSpeakers()
 
 	i := slices.IndexFunc(speakers, func(s ast.Speaker) bool {
 		return s.GetID() == speakerIDStr
 	})
 	if i < 0 {
-		log.Panicf("Failed to find speaker ID '%s' (line %v) in frontmatter of %v:\n\n%s\n", speakerIDStr, lineNumber, file.GetPath(), line)
+		log.Panicf("Failed to find speaker ID '%s' (line %v) in frontmatter of %v:\n\n%s\n", speakerIDStr, lineNumber, asset.GetPath(), line)
 	}
 	speaker := speakers[i]
 

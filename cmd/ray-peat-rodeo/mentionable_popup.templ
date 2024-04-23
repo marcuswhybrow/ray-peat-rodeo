@@ -27,7 +27,7 @@ templ MentionablePopup(mentionable ast.Mentionable, mentionsByAsset ByAsset[Ment
 							>
 								<a
 									class="text-slate-600 hover:text-slate-800 hover:underline"
-									href={ templ.URL(file.Permalink) }
+									href={ templ.URL(file.UrlAbsPath) }
 								>
 									{ file.FrontMatter.Source.Title }
 								</a>

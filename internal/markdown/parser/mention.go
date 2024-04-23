@@ -72,8 +72,8 @@ func (p *mentionParser) Parse(parent gast.Node, block text.Reader, pc gparser.Co
 
 	block.Advance(4 + len(inside))
 
-	mention.File = ast.GetFile(pc)
-	mention.File.RegisterMention(mention)
+	mention.Asset = ast.GetAsset(pc)
+	mention.Asset.RegisterMention(mention)
 
 	return mention
 }

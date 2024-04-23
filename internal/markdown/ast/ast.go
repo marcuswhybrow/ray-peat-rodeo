@@ -27,17 +27,17 @@ type FrontMatter struct {
 	}
 }
 
-var FileKey = parser.NewContextKey()
+var AssetKey = parser.NewContextKey()
 var SourceKey = parser.NewContextKey()
 var HTTPCacheKey = parser.NewContextKey()
 var AvatarsKey = parser.NewContextKey()
 
-type File interface {
+type Asset interface {
 	GetMarkdown() []byte
 	GetPath() string
 	RegisterMention(mention *Mention)
 	RegisterIssue(id int)
-	GetID() string
+	GetSlug() string
 	GetPermalink() string
 	GetSpeakers() []Speaker
 	GetSourceURL() string
@@ -62,8 +62,8 @@ func (n *FileNode) FrontMatter() FrontMatter {
 	return frontMatter
 }
 
-func GetFile(pc parser.Context) File {
-	file, ok := pc.Get(FileKey).(File)
+func GetAsset(pc parser.Context) Asset {
+	file, ok := pc.Get(AssetKey).(Asset)
 	if !ok {
 		panic("Failed to coerce FileKey in parser context to File interface")
 	}

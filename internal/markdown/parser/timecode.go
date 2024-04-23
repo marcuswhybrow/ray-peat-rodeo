@@ -66,9 +66,9 @@ func (w *TimecodeParser) Parse(parent gmAst.Node, block text.Reader, pc parser.C
 	}
 	timecode.Hours = hours
 
-	file := ast.GetFile(pc)
+	asset := ast.GetAsset(pc)
 
-	sourceURLStr := file.GetSourceURL()
+	sourceURLStr := asset.GetSourceURL()
 	timecode.ExternalURL = externalUrl(sourceURLStr, timecode.Seconds, timecode.Minutes, timecode.Hours)
 
 	block.Advance(consumed)

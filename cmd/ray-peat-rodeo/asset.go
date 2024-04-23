@@ -25,20 +25,51 @@ import (
 
 // Markdown input file
 type Asset struct {
-	FrontMatter   AssetFrontMatter
-	Path          string
-	ID            string
-	OutPath       string
-	Date          string
-	Markdown      []byte
-	Html          []byte
-	EditPermalink string
-	RawPermalink  string
-	Permalink     string
-	Mentions      Mentions
-	Mentionables  ByMentionable[Mentions]
-	Issues        []int
-	Speakers      []*Speaker
+	// YAML frontmatter contained at the start of the asset file's contents
+	FrontMatter AssetFrontMatter
+
+	// The asset's full path relative to the project root
+	Path string
+
+	// The date defined by the first 10 characters of the filename, formatted as
+	// YYYY-MM-DD.
+	Date string
+
+	// The asset's filename with the first 10 characters (the date) and the
+	// extension (".md") removed. This value, verbatim, becomes the path at
+	// which this asset is located via HTTP.
+	Slug string
+
+	// The location to which this asset will be written, relative to the build
+	// directory.
+	OutPath string
+
+	// The markdown body of the asset following the YAML frontmatter
+	Markdown []byte
+
+	// The HTML representation of the asset's markdown content.
+	Html []byte
+
+	// A URL to the asset's file in the GitHub tree, opened in edit mode.
+	GitHubEditUrl string
+
+	// A URL to the asset's file in the GitHub tree, opened in raw mode.
+	GithubRawUrl string
+
+	// The Ray Peat Rodeo URL where this asset will be available.
+	UrlAbsPath string
+
+	// The actual Mentions derived from this asset's markdown.
+	Mentions Mentions
+
+	// Dervied view of markdown Mentions ordered by each unique Mentionable.
+	Mentionables ByMentionable[Mentions]
+
+	// A list of GitHub issues referenced in this asset's markdown.
+	Issues []int
+
+	// A list of Speaker's derrvied from this asset's frontmatter.
+	Speakers []*Speaker
 }
 
 type AssetFrontMatter struct {
@@ -87,7 +118,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	// 🔗 Details
 
 	id := fileStem[11:]
-	permalink := "/" + id
+	urlAbsPath := "/" + id
 	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", assetPath)
 	rawPermalink := global.GITHUB_LINK + path.Join("/raw/main", assetPath)
 	outPath := path.Join(id, "index.html")
@@ -127,13 +158,13 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	}
 
 	asset := &Asset{
-		ID:            id,
+		Slug:          id,
 		Path:          assetPath,
 		OutPath:       outPath,
 		Date:          fileStem[:10],
-		Permalink:     permalink,
-		EditPermalink: editPermalink,
-		RawPermalink:  rawPermalink,
+		UrlAbsPath:    urlAbsPath,
+		GitHubEditUrl: editPermalink,
+		GithubRawUrl:  rawPermalink,
 		FrontMatter:   frontMatter,
 		Markdown:      assetBytes,
 		Mentions:      Mentions{},
@@ -144,7 +175,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	// 🖥 HTML
 
 	parserContext := gparser.NewContext()
-	parserContext.Set(ast.FileKey, asset)
+	parserContext.Set(ast.AssetKey, asset)
 	parserContext.Set(ast.HTTPCacheKey, httpCache)
 
 	var html bytes.Buffer
@@ -209,12 +240,12 @@ func (a *Asset) RegisterIssue(id int) {
 	a.Issues = append(a.Issues, id)
 }
 
-func (a *Asset) GetID() string {
-	return a.ID
+func (a *Asset) GetSlug() string {
+	return a.Slug
 }
 
 func (a *Asset) GetPermalink() string {
-	return a.Permalink
+	return a.UrlAbsPath
 }
 
 // Other

@@ -158,9 +158,9 @@ more specific. For example:
 
 	var b bytes.Buffer
 	t.Execute(&b, map[string]interface{}{
-		"SuspectTag":    string(suspect.Source.Segment.Value(suspect.File.GetMarkdown())),
+		"SuspectTag":    string(suspect.Source.Segment.Value(suspect.Asset.GetMarkdown())),
 		"Suspect":       suspect,
-		"SuggestionTag": string(suggestion.Source.Segment.Value(suggestion.File.GetMarkdown())),
+		"SuggestionTag": string(suggestion.Source.Segment.Value(suggestion.Asset.GetMarkdown())),
 		"Suggestion":    suggestion,
 	})
 	panic(b.String())

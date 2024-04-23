@@ -240,7 +240,7 @@ templ RenderAsset(asset *Asset) {
 						data-issue-count={ fmt.Sprint(asset.IssueCount()) }
 						data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
 					>
-						<a href={ templ.SafeURL(asset.Permalink) }>{ asset.FrontMatter.Source.Title }</a>
+						<a href={ templ.SafeURL(asset.UrlAbsPath) }>{ asset.FrontMatter.Source.Title }</a>
 					</h1>
 				</div>
 			</header>
@@ -384,7 +384,7 @@ templ RenderAsset(asset *Asset) {
                 transition-all
                 border-r border-stone-300
               "
-							href={ templ.URL(asset.EditPermalink) }
+							href={ templ.URL(asset.GitHubEditUrl) }
 							title="Edit this page on GitHub"
 						>
 							<img
@@ -402,7 +402,7 @@ templ RenderAsset(asset *Asset) {
                 bg-gradient-to-br from-stone-200 from-10% to-stone-300
                 hover:bg-gradient-to-br hover:from-40% hover:from-sky-200 hover:to-indigo-300
               "
-							href={ templ.URL(asset.RawPermalink) }
+							href={ templ.URL(asset.GithubRawUrl) }
 							title="Download this page as raw Markdown"
 						>
 							<img
@@ -438,7 +438,7 @@ templ RenderAsset(asset *Asset) {
 									}
 									If you're familiar with Markdown, you can 
 									<a
-										href={ templ.URL(asset.EditPermalink) }
+										href={ templ.URL(asset.GitHubEditUrl) }
 										class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
 									>add it</a>
 									to the website yourself via GitHub. Or you may support me on 
@@ -451,7 +451,7 @@ templ RenderAsset(asset *Asset) {
 								<p>
 									This interview is missing from Ray Peat Rodeo. If you have a transcription, please 
 									<a
-										href={ templ.URL(asset.EditPermalink) }
+										href={ templ.URL(asset.GitHubEditUrl) }
 										class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
 									>edit this page</a>
 									on GitHub, or sponsor me on 

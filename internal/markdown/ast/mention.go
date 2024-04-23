@@ -28,8 +28,8 @@ type Mention struct {
 	// The number of mentions before this, + 1
 	Position int
 
-	// The file this mention is in
-	File File
+	// The asset this mention is in
+	Asset Asset
 
 	// The markdown source which created this mention
 	Source Source
@@ -54,13 +54,13 @@ func NewMention(pc gparser.Context, mentionable Mentionable, label string) *Ment
 	count[mentionable] += 1
 	pc.Set(countKey, count)
 
-	file := GetFile(pc)
+	file := GetAsset(pc)
 
 	return &Mention{
 		BaseInline:  BaseInline{},
 		Mentionable: mentionable,
 		Label:       label,
-		File:        file,
+		Asset:       file,
 		Occurance:   count[mentionable],
 	}
 }
@@ -79,12 +79,12 @@ func (m *Mention) LocalID() string {
 
 // A globally unique ID for this mention in this file.
 func (m *Mention) ID() string {
-	return m.LocalID() + "@" + m.File.GetID()
+	return m.LocalID() + "@" + m.Asset.GetSlug()
 }
 
 // A URL that links directly to this mention using an HTTP fragment.
 func (m *Mention) Permalink() string {
-	return m.File.GetPermalink() + "#" + m.LocalID()
+	return m.Asset.GetPermalink() + "#" + m.LocalID()
 }
 
 // Returns a mention in plain text (formatting removed), surrounded by a
