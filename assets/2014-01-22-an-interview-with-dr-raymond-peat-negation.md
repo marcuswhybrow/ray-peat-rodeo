@@ -7,18 +7,10 @@ source:
 # Karen Mcc
 
 completion:
-  content: true
+  content: false
   content-verified: false
   mentions: false
   issues: false
   notes: false
   timestamps: false
-transcription:
-  date: "2024-04-23"
-  author: Whisper AI
-  kind: auto-generated
-added:
-  author: Marcus Whybrow
-  date: "2024-04-23"
 ---
-read /tmp/nix-shell.Rs3Hgd/tmp.K8npOXSDj5/: is a directory
