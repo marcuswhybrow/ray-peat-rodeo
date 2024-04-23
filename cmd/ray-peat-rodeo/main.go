@@ -144,8 +144,8 @@ func main() {
 	})
 
 	catalog.SortFilesByDate()
-	catalog.RenderMentionPages()
-	catalog.RenderPopups()
+	catalog.WriteMentionPages()
+	catalog.WritePopups()
 
 	slices.SortFunc(completedFiles, filesByDateAdded)
 
@@ -163,17 +163,14 @@ func main() {
 		if strings.ToLower(ext) != ".md" {
 			return nil, nil
 		}
-
 		return &filePath, nil
 	})
 
 	blogPosts := parallel(postPaths, func(filePath string) *BlogPost {
 		blogPost := NewBlogPost(filePath, avatarPaths)
-		blogPost.Render()
+		blogPost.Write()
 		return blogPost
 	})
-
-	latestBlogPost := blogPosts[0]
 
 	blogPage, _ := MakePage("blog")
 	component := BlogArchive(blogPosts)
@@ -182,7 +179,7 @@ func main() {
 	// 🏠 Homepage
 
 	indexPage, _ := MakePage(".")
-	component = Index(catalog.Assets, latestFile, progress, latestBlogPost)
+	component = Index(catalog.Assets, latestFile, progress, blogPosts[0])
 	component.Render(context.Background(), indexPage)
 
 	// 📶 HTTP Cache

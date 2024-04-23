@@ -90,7 +90,7 @@ func NewBlogPost(filePath string, avatarPaths *AvatarPaths) *BlogPost {
 	}
 }
 
-func (b *BlogPost) Render() error {
+func (b *BlogPost) Write() error {
 	buildFile, _ := MakeFile(b.OutPath)
 
 	err := RenderBlogPost(b).Render(context.Background(), buildFile)

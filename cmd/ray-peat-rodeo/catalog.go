@@ -74,7 +74,7 @@ func (c *Catalog) NewFile(filePath string) error {
 	return nil
 }
 
-func (c *Catalog) RenderMentionPages() error {
+func (c *Catalog) WriteMentionPages() error {
 	for primary, mentionsByFileBySecondary := range c.ByMentionablePart {
 		primaries := mentionsByFileBySecondary[ast.EmptyMentionablePart]
 		delete(mentionsByFileBySecondary, ast.EmptyMentionablePart)
@@ -90,7 +90,7 @@ func (c *Catalog) RenderMentionPages() error {
 	return nil
 }
 
-func (c *Catalog) RenderPopups() error {
+func (c *Catalog) WritePopups() error {
 	for mentionable, mentionsByFile := range c.ByMentionable {
 		location, _ := strings.CutPrefix(mentionable.PopupPermalink(), "/")
 
