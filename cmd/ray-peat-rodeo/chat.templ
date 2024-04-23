@@ -3,6 +3,8 @@ package main
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 import "fmt"
 import "strings"
+import "golang.org/x/text/cases"
+import "golang.org/x/text/language"
 
 type MapEnumeration[V any] struct {
 	Key     string
@@ -41,14 +43,8 @@ func kindToFilter(kind string) string {
 		return "Video Interview"
 	case "text":
 		return "Written Interview"
-	case "article":
-		return "Article"
-	case "newsletter":
-		return "Newsletter"
-	case "book":
-		return "Book"
 	default:
-		return kind
+		return cases.Title(language.English, cases.Compact).String(kind)
 	}
 }
 
