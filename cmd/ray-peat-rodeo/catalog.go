@@ -15,7 +15,7 @@ import (
 )
 
 type Mentions = []*ast.Mention
-type ByFile[T any] map[*File]T
+type ByAsset[T any] map[*Asset]T
 type ByPart[T any] map[ast.MentionablePart]T
 type ByMentionable[T any] map[ast.Mentionable]T
 
@@ -23,14 +23,14 @@ type Catalog struct {
 	MarkdownParser    goldmark.Markdown
 	HttpCache         *cache.HTTPCache
 	AvatarPaths       *AvatarPaths
-	ByMentionable     ByMentionable[ByFile[Mentions]]
-	ByMentionablePart ByPart[ByPart[ByFile[Mentions]]]
-	Files             []*File
+	ByMentionable     ByMentionable[ByAsset[Mentions]]
+	ByMentionablePart ByPart[ByPart[ByAsset[Mentions]]]
+	Assets            []*Asset
 	Mutex             sync.RWMutex
 }
 
 func (c *Catalog) NewFile(filePath string) error {
-	file, err := NewFile(filePath, c.MarkdownParser, c.HttpCache, c.AvatarPaths)
+	file, err := NewAsset(filePath, c.MarkdownParser, c.HttpCache, c.AvatarPaths)
 	if err != nil {
 		return fmt.Errorf("Failed to instantiate file: %v", err)
 	}
@@ -39,7 +39,7 @@ func (c *Catalog) NewFile(filePath string) error {
 	// This requires locking and unlocking using the Mutex technique
 	c.Mutex.Lock()
 
-	c.Files = append(c.Files, file)
+	c.Assets = append(c.Assets, file)
 
 	for mentionable, mentions := range file.Mentionables {
 		for existingMentionable, existingByFile := range c.ByMentionable {
@@ -57,15 +57,15 @@ func (c *Catalog) NewFile(filePath string) error {
 		}
 
 		if c.ByMentionable[mentionable] == nil {
-			c.ByMentionable[mentionable] = ByFile[Mentions]{}
+			c.ByMentionable[mentionable] = ByAsset[Mentions]{}
 		}
 		c.ByMentionable[mentionable][file] = mentions
 
 		if c.ByMentionablePart[mentionable.Primary] == nil {
-			c.ByMentionablePart[mentionable.Primary] = ByPart[ByFile[Mentions]]{}
+			c.ByMentionablePart[mentionable.Primary] = ByPart[ByAsset[Mentions]]{}
 		}
 		if c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] == nil {
-			c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] = ByFile[Mentions]{}
+			c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] = ByAsset[Mentions]{}
 		}
 		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][file] = mentions
 	}
@@ -116,12 +116,12 @@ func (c *Catalog) RenderPopups() error {
 }
 
 func (c *Catalog) SortFilesByDate() {
-	slices.SortFunc(c.Files, filesByDate)
+	slices.SortFunc(c.Assets, filesByDate)
 }
 
-func (c *Catalog) CompletedFiles() []*File {
-	var files []*File
-	for _, file := range c.Files {
+func (c *Catalog) CompletedFiles() []*Asset {
+	var files []*Asset
+	for _, file := range c.Assets {
 		if file.IsComplete() {
 			files = append(files, file)
 		}

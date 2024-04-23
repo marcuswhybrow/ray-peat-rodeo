@@ -85,9 +85,9 @@ func main() {
 		MarkdownParser:    markdownParser,
 		HttpCache:         httpCache,
 		AvatarPaths:       avatarPaths,
-		ByMentionable:     ByMentionable[ByFile[Mentions]]{},
-		ByMentionablePart: ByPart[ByPart[ByFile[Mentions]]]{},
-		Files:             []*File{},
+		ByMentionable:     ByMentionable[ByAsset[Mentions]]{},
+		ByMentionablePart: ByPart[ByPart[ByAsset[Mentions]]]{},
+		Assets:            []*Asset{},
 	}
 
 	// 📂 Read Files
@@ -125,10 +125,10 @@ func main() {
 	// When an asset filename changes, it's URL changes.
 	// It's nice to redirect old URL's to the new ones.
 	// N.B. this data is currently collected, but not acted upon
-	redirections := map[string][]*File{}
+	redirections := map[string][]*Asset{}
 
-	parallel(catalog.Files, func(file *File) error {
-		file.Render()
+	parallel(catalog.Assets, func(file *Asset) error {
+		file.Write()
 		if err != nil {
 			return fmt.Errorf("Failed to render file '%v': %v", file.Path, err)
 		}
@@ -136,7 +136,7 @@ func main() {
 		for _, prevPath := range file.FrontMatter.RayPeatRodeo.PrevPaths {
 			existing, ok := redirections[prevPath]
 			if !ok {
-				existing = []*File{}
+				existing = []*Asset{}
 			}
 			redirections[prevPath] = append(existing, file)
 		}
@@ -149,9 +149,9 @@ func main() {
 
 	slices.SortFunc(completedFiles, filesByDateAdded)
 
-	progress := float32(len(completedFiles)) / float32(len(catalog.Files))
+	progress := float32(len(completedFiles)) / float32(len(catalog.Assets))
 
-	var latestFile *File = nil
+	var latestFile *Asset = nil
 	if len(completedFiles) > 0 {
 		latestFile = completedFiles[0]
 	}
@@ -182,7 +182,7 @@ func main() {
 	// 🏠 Homepage
 
 	indexPage, _ := MakePage(".")
-	component = Index(catalog.Files, latestFile, progress, latestBlogPost)
+	component = Index(catalog.Assets, latestFile, progress, latestBlogPost)
 	component.Render(context.Background(), indexPage)
 
 	// 📶 HTTP Cache

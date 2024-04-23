@@ -10,7 +10,7 @@ func pluralise(i int, s string) string {
 	return ""
 }
 
-templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost *BlogPost) {
+templ Index(allAssets []*Asset, latestAsset *Asset, progress float32, latestBlogPost *BlogPost) {
 	@Base("Ray Peat Rodeo") {
 		<article class="pt-16 overflow-x-hidden">
 			<section class="mb-24">
@@ -167,7 +167,7 @@ templ Index(allFiles []*File, latestFile *File, progress float32, latestBlogPost
 				</div>
 				<!-- Assets -->
 				<div class="mx-8">
-					@Chats(allFiles)
+					@Chats(allAssets)
 				</div>
 			</section>
 		</article>

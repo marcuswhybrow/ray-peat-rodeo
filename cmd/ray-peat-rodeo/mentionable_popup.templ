@@ -2,7 +2,7 @@ package main
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 
-templ MentionablePopup(mentionable ast.Mentionable, mentionsByFile ByFile[Mentions], otherMentionables []ast.Mentionable) {
+templ MentionablePopup(mentionable ast.Mentionable, mentionsByAsset ByAsset[Mentions], otherMentionables []ast.Mentionable) {
 	<html data-pagefind-ignore>
 		<head>
 			<link rel="stylesheet" href="/assets/tailwind.css"/>
@@ -14,10 +14,10 @@ templ MentionablePopup(mentionable ast.Mentionable, mentionsByFile ByFile[Mentio
 					<div class="text-sm text-center px-8 mb-6">
 						<span class="relative py-4 px-8 top-[-11px] bg-slate-100 text-slate-400 rounded-full">mentioned in</span>
 					</div>
-					for file, mentions := range mentionsByFile {
+					for file, mentions := range mentionsByAsset {
 						<div>
 							<div
- 								class="
+								class="
                   px-8
                   pt-2 
                   text-center sticky top-0 
@@ -26,8 +26,8 @@ templ MentionablePopup(mentionable ast.Mentionable, mentionsByFile ByFile[Mentio
                 "
 							>
 								<a
- 									class="text-slate-600 hover:text-slate-800 hover:underline"
- 									href={ templ.URL(file.Permalink) }
+									class="text-slate-600 hover:text-slate-800 hover:underline"
+									href={ templ.URL(file.Permalink) }
 								>
 									{ file.FrontMatter.Source.Title }
 								</a>
@@ -36,7 +36,7 @@ templ MentionablePopup(mentionable ast.Mentionable, mentionsByFile ByFile[Mentio
 							<div class="pt-4 pb-4">
 								for _, mention := range mentions {
 									<blockquote
- 										class={ "px-8 pb-4 text-sm text-slate-700" }
+										class={ "px-8 pb-4 text-sm text-slate-700" }
 									>
 										@Unsafe(string(mention.VignetteHTML(file.Markdown, 50)))
 									</blockquote>
@@ -55,14 +55,14 @@ templ header(mentionable ast.Mentionable) {
 	<div class="pt-10 px-8 pb-8 bg-slate-100 z-20">
 		if mentionable.HasSecondary() {
 			<div
- 				class={
+				class={
 					"text-sm text-center text-slate-500 hover:text-slate-800 hover:underline",
 					templ.KV("break-all", mentionable.Primary.IsURL()),
 				}
 			>
 				<a
- 					href={ templ.URL(mentionable.PermalinkForPrimary()) }
- 					class={
+					href={ templ.URL(mentionable.PermalinkForPrimary()) }
+					class={
 						templ.SafeClass("text-slate-500 hover:text-slate-800 hover:underline"),
 						templ.KV("break-all", mentionable.Ultimate().IsURL()),
 					}
@@ -73,8 +73,8 @@ templ header(mentionable ast.Mentionable) {
 		}
 		<h3 class="text-center text-xl pb-2 tracking-wide">
 			<a
- 				href={ templ.URL(mentionable.Permalink()) }
- 				class={
+				href={ templ.URL(mentionable.Permalink()) }
+				class={
 					templ.SafeClass("text-slate-500 hover:text-slate-800 hover:underline"),
 					templ.KV("break-all", mentionable.Ultimate().IsURL()),
 				}
@@ -84,15 +84,15 @@ templ header(mentionable ast.Mentionable) {
 		</h3>
 		if mentionable.Ultimate().IsURL() {
 			<a
- 				href={ templ.URL(mentionable.Ultimate().Cardinal) }
- 				class="px-4 py-2 mt-4 mb-4 text-slate-600 hover:text-slate-50 bg-slate-300 hover:bg-slate-400 rounded-lg block text-center"
+				href={ templ.URL(mentionable.Ultimate().Cardinal) }
+				class="px-4 py-2 mt-4 mb-4 text-slate-600 hover:text-slate-50 bg-slate-300 hover:bg-slate-400 rounded-lg block text-center"
 			>
 				Visit Link
 			</a>
 		} else if mentionable.Ultimate().IsEmailAddress() {
 			<a
- 				href={ templ.URL("mailto:" + mentionable.Ultimate().Cardinal) }
- 				class="px-4 py-2 mt-4 mb-4 text-slate-600 hover:text-slate-50 bg-slate-300 hover:bg-slate-400 rounded-lg block text-center"
+				href={ templ.URL("mailto:" + mentionable.Ultimate().Cardinal) }
+				class="px-4 py-2 mt-4 mb-4 text-slate-600 hover:text-slate-50 bg-slate-300 hover:bg-slate-400 rounded-lg block text-center"
 			>
 				Send Email
 			</a>
@@ -111,8 +111,8 @@ templ related(otherMentionables []ast.Mentionable) {
 					<span class="text-slate-300">{ " • " }</span>
 				}
 				<a
- 					href={ templ.URL(mentionable.Permalink()) }
- 					class="text-sm text-slate-700 hover:text-slate-800 hover:border-b hover:border-b-slate-800"
+					href={ templ.URL(mentionable.Permalink()) }
+					class="text-sm text-slate-700 hover:text-slate-800 hover:border-b hover:border-b-slate-800"
 				>
 					{ mentionable.Ultimate().PrefixFirst() }
 				</a>

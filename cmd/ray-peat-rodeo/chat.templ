@@ -48,8 +48,8 @@ func kindToFilter(kind string) string {
 	}
 }
 
-func kindToNaturalLanguageDescription(file *File) string {
-	kind := file.FrontMatter.Source.Kind
+func kindToNaturalLanguageDescription(asset *Asset) string {
+	kind := asset.FrontMatter.Source.Kind
 	switch kind {
 	case "audio", "article":
 		return fmt.Sprintf("an %v", strings.ToLower(kindToFilter(kind)))
@@ -58,16 +58,16 @@ func kindToNaturalLanguageDescription(file *File) string {
 	}
 }
 
-func kindToNaturalLanguageAssociateWithRayPeat(file *File) string {
-	kind := file.FrontMatter.Source.Kind
+func kindToNaturalLanguageAssociateWithRayPeat(asset *Asset) string {
+	kind := asset.FrontMatter.Source.Kind
 	switch kind {
 	case "article", "newsletter", "book":
 		return "by Ray Peat"
 	default:
-		if !file.FrontMatter.Completion.SpeakersIdentified {
+		if !asset.FrontMatter.Completion.SpeakersIdentified {
 			return "to do with Ray Peat"
 		}
-		fullName, ok := file.FrontMatter.Speakers["RP"]
+		fullName, ok := asset.FrontMatter.Speakers["RP"]
 		if ok && (fullName == "Ray Peat" || fullName == "Raymond Peat") {
 			return "with Ray Peat"
 		} else {
@@ -83,8 +83,8 @@ templ StatusChange() {
 	</div>
 }
 
-templ RenderChat(file *File) {
-	@Base(file.FrontMatter.Source.Title) {
+templ RenderChat(asset *Asset) {
+	@Base(asset.FrontMatter.Source.Title) {
 		<article
 			class="p-8 relative"
 			data-pagefind-body
@@ -179,20 +179,20 @@ templ RenderChat(file *File) {
 					<p class="text-right mt-2">
 						<a
 							class="text-fuchsia-900/70 tracking-wider hover:underline hover:text-fuchsia-950"
-							href={ templ.SafeURL(file.FrontMatter.Source.Url) }
-							data-medium={ kindToFilter(file.FrontMatter.Source.Kind) }
+							href={ templ.SafeURL(asset.FrontMatter.Source.Url) }
+							data-medium={ kindToFilter(asset.FrontMatter.Source.Kind) }
 							data-pagefind-filter="Medium[data-medium]"
 						>
-							{ file.Date }
+							{ asset.Date }
 						</a>
 						<span
 							data-pagefind-filter="Author"
 							class="text-fuchsia-900/80 rounded bg-white/20 py-1 px-4 ml-4 tracking-wide"
-						>{ file.FrontMatter.Source.Series }</span>
+						>{ asset.FrontMatter.Source.Series }</span>
 					</p>
 					<!-- Top mentionables -->
 					<ol class="mb-0">
-						for i, mentionCount := range AtMost(file.TopPrimaryMentionables(), 3) {
+						for i, mentionCount := range AtMost(asset.TopPrimaryMentionables(), 3) {
 							if i > 0 && i < 3 {
 								<span class="mr-2 text-fuchsia-900/50">/</span>
 							}
@@ -206,7 +206,7 @@ templ RenderChat(file *File) {
 					</ol>
 					<!-- Speakers -->
 					<div class="mt-6">
-						for _, speaker := range file.TopSpeakers() {
+						for _, speaker := range asset.TopSpeakers() {
 							<div
 								title={ speaker.Name }
 								class="inline-block rounded-full overflow-hidden bg-slate-200/60 w-10 h-10 text-center shadow mr-2 mb-4 last:mr-0 rotate-2 cursor-default"
@@ -224,23 +224,23 @@ templ RenderChat(file *File) {
 					<!-- Title -->
 					<h1
 						class={
-							templ.KV("text-4xl", len(file.FrontMatter.Source.Title) < 20),
+							templ.KV("text-4xl", len(asset.FrontMatter.Source.Title) < 20),
 							"font-bold text-3xl text-fuchsia-950/90 tracking-wide mt-6 hover:underline hover:text-fuchsia-950 mt-0",
 						}
-						if file.IsComplete() {
+						if asset.IsComplete() {
 							data-todo="Complete"
 						} else {
 							data-todo="Todo"
 						}
-						if file.HasIssues() {
+						if asset.HasIssues() {
 							data-has-issues="Yes"
 						} else {
 							data-has-issues="No"
 						}
-						data-issue-count={ fmt.Sprint(file.IssueCount()) }
+						data-issue-count={ fmt.Sprint(asset.IssueCount()) }
 						data-pagefind-filter="Has Issues[data-has-issues], Todo[data-todo]"
 					>
-						<a href={ templ.SafeURL(file.Permalink) }>{ file.FrontMatter.Source.Title }</a>
+						<a href={ templ.SafeURL(asset.Permalink) }>{ asset.FrontMatter.Source.Title }</a>
 					</h1>
 				</div>
 			</header>
@@ -290,9 +290,9 @@ templ RenderChat(file *File) {
 					/>
 					<span class="block text-green-900 font-bold text-xl tracking-tight mb-2">From Marcus</span>
 					<span class="block text-green-800">
-						This is <em>{ kindToNaturalLanguageDescription(file) }</em>
-						{ kindToNaturalLanguageAssociateWithRayPeat(file) }
-						from { file.Date[:4] }. 
+						This is <em>{ kindToNaturalLanguageDescription(asset) }</em>
+						{ kindToNaturalLanguageAssociateWithRayPeat(asset) }
+						from { asset.Date[:4] }. 
 						<br/>
 					</span>
 					<span class="block text-green-800 mt-2">
@@ -302,7 +302,7 @@ templ RenderChat(file *File) {
 						You can <strong class="font-bold underline hover:text-black">donate to the project on GitHub sponsors</strong>, cheers<span class="text-lg leading-3 relative top-0.5">🥰</span>.
 					</span>
 				</a>
-				if !file.IsComplete() {
+				if !asset.IsComplete() {
 					<!-- Report Card -->
 					<div
 						data-pagefind-ignore
@@ -311,22 +311,22 @@ templ RenderChat(file *File) {
 						<h3 class="text-left uppercase tracking-wide text-lg mb-1 text-gray-600">Report Card</h3>
 						<ul class="ml-3">
 							<li>
-								if file.FrontMatter.Completion.Content {
+								if asset.FrontMatter.Completion.Content {
 									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Content added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Content missing</span>
 								}
 							</li>
 							<li>
-								if file.FrontMatter.Completion.ContentVerified {
+								if asset.FrontMatter.Completion.ContentVerified {
 									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Content verified</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Content unverified</span>
 								}
 							</li>
-							if file.FrontMatter.Source.Kind == "audio" || file.FrontMatter.Source.Kind == "video" {
+							if asset.FrontMatter.Source.Kind == "audio" || asset.FrontMatter.Source.Kind == "video" {
 								<li>
-									if file.FrontMatter.Completion.SpeakersIdentified {
+									if asset.FrontMatter.Completion.SpeakersIdentified {
 										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Speakers identified</span>
 									} else {
 										<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Speakers unidentified</span>
@@ -334,29 +334,29 @@ templ RenderChat(file *File) {
 								</li>
 							}
 							<li>
-								if file.FrontMatter.Completion.Mentions {
+								if asset.FrontMatter.Completion.Mentions {
 									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Mentions added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Mentions incomplete</span>
 								}
 							</li>
 							<li>
-								if file.FrontMatter.Completion.Issues {
+								if asset.FrontMatter.Completion.Issues {
 									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Issues added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Issues incomplete</span>
 								}
 							</li>
 							<li>
-								if file.FrontMatter.Completion.Notes {
+								if asset.FrontMatter.Completion.Notes {
 									<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Notes added</span>
 								} else {
 									<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Notes incomplete</span>
 								}
 							</li>
-							if file.FrontMatter.Source.Kind == "audio" || file.FrontMatter.Source.Kind == "video" {
+							if asset.FrontMatter.Source.Kind == "audio" || asset.FrontMatter.Source.Kind == "video" {
 								<li>
-									if file.FrontMatter.Completion.Timestamps {
+									if asset.FrontMatter.Completion.Timestamps {
 										<span class="inline-block w-2 h-2 rounded-full bg-green-600 shadow-lime-200 mr-3 relative"></span> <span class="text-green-700">Timestamps added</span>
 									} else {
 										<span class="inline-block w-2 h-2 rounded-full bg-gray-300 mr-3"></span> <span class="text-gray-500">Timestamps incomplete</span>
@@ -384,7 +384,7 @@ templ RenderChat(file *File) {
                 transition-all
                 border-r border-stone-300
               "
-							href={ templ.URL(file.EditPermalink) }
+							href={ templ.URL(asset.EditPermalink) }
 							title="Edit this page on GitHub"
 						>
 							<img
@@ -402,7 +402,7 @@ templ RenderChat(file *File) {
                 bg-gradient-to-br from-stone-200 from-10% to-stone-300
                 hover:bg-gradient-to-br hover:from-40% hover:from-sky-200 hover:to-indigo-300
               "
-							href={ templ.URL(file.RawPermalink) }
+							href={ templ.URL(asset.RawPermalink) }
 							title="Download this page as raw Markdown"
 						>
 							<img
@@ -416,29 +416,29 @@ templ RenderChat(file *File) {
 				</div>
 				<!-- Content -->
 				<div class="relative">
-					@Unsafe(string(file.Html))
+					@Unsafe(string(asset.Html))
 				</div>
-				if !file.FrontMatter.Completion.Content {
+				if !asset.FrontMatter.Completion.Content {
 					<div data-pagefind-ignore class="mr-16 mb-32">
 						<!-- Message -->
 						<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">
-							if file.FrontMatter.Transcription.Url != "" {
+							if asset.FrontMatter.Transcription.Url != "" {
 								<p>
 									This interview is missing from Ray Peat Rodeo. However, there is an 
 									<a
-										href={ templ.URL(file.FrontMatter.Transcription.Url) }
+										href={ templ.URL(asset.FrontMatter.Transcription.Url) }
 										class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
 									>existing transcript</a>
-									if file.FrontMatter.Transcription.Kind == "auto-generated" {
+									if asset.FrontMatter.Transcription.Kind == "auto-generated" {
 										that's AI generated.
-									} else if file.FrontMatter.Transcription.Kind == "text" {
+									} else if asset.FrontMatter.Transcription.Kind == "text" {
 										by a human being.
 									} else {
 										I've yet to look at.
 									}
 									If you're familiar with Markdown, you can 
 									<a
-										href={ templ.URL(file.EditPermalink) }
+										href={ templ.URL(asset.EditPermalink) }
 										class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
 									>add it</a>
 									to the website yourself via GitHub. Or you may support me on 
@@ -451,7 +451,7 @@ templ RenderChat(file *File) {
 								<p>
 									This interview is missing from Ray Peat Rodeo. If you have a transcription, please 
 									<a
-										href={ templ.URL(file.EditPermalink) }
+										href={ templ.URL(asset.EditPermalink) }
 										class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
 									>edit this page</a>
 									on GitHub, or sponsor me on 

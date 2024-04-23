@@ -24,8 +24,8 @@ import (
 )
 
 // Markdown input file
-type File struct {
-	FrontMatter   FrontMatter
+type Asset struct {
+	FrontMatter   AssetFrontMatter
 	Path          string
 	ID            string
 	OutPath       string
@@ -41,7 +41,7 @@ type File struct {
 	Speakers      []*Speaker
 }
 
-type FrontMatter struct {
+type AssetFrontMatter struct {
 	Source struct {
 		Series   string
 		Title    string
@@ -75,11 +75,11 @@ type FrontMatter struct {
 	} `mapstructure:"ray-peat-rodeo"`
 }
 
-func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*File, error) {
-	fileName := filepath.Base(filePath)
-	fileStem := strings.TrimSuffix(fileName, filepath.Ext(filePath))
+func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*Asset, error) {
+	fileName := filepath.Base(assetPath)
+	fileStem := strings.TrimSuffix(fileName, filepath.Ext(assetPath))
 
-	fileBytes, err := os.ReadFile(filePath)
+	assetBytes, err := os.ReadFile(assetPath)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read file: %v", err)
 	}
@@ -88,20 +88,20 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 
 	id := fileStem[11:]
 	permalink := "/" + id
-	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", filePath)
-	rawPermalink := global.GITHUB_LINK + path.Join("/raw/main", filePath)
+	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", assetPath)
+	rawPermalink := global.GITHUB_LINK + path.Join("/raw/main", assetPath)
 	outPath := path.Join(id, "index.html")
 
 	// 📄 FrontMatter
 
 	matter := front.NewMatter()
 	matter.Handle("---", front.YAMLHandler)
-	rawFMatter, _, err := matter.Parse(strings.NewReader(string(fileBytes)))
+	rawFMatter, _, err := matter.Parse(strings.NewReader(string(assetBytes)))
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse frontmatter: %v", err)
 	}
 
-	frontMatter := FrontMatter{}
+	frontMatter := AssetFrontMatter{}
 	err = mapstructure.Decode(rawFMatter, &frontMatter)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to decode YAML frontmatter: %v", err)
@@ -126,16 +126,16 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 		})
 	}
 
-	file := &File{
+	asset := &Asset{
 		ID:            id,
-		Path:          filePath,
+		Path:          assetPath,
 		OutPath:       outPath,
 		Date:          fileStem[:10],
 		Permalink:     permalink,
 		EditPermalink: editPermalink,
 		RawPermalink:  rawPermalink,
 		FrontMatter:   frontMatter,
-		Markdown:      fileBytes,
+		Markdown:      assetBytes,
 		Mentions:      Mentions{},
 		Mentionables:  ByMentionable[Mentions]{},
 		Speakers:      speakers,
@@ -144,30 +144,30 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	// 🖥 HTML
 
 	parserContext := gparser.NewContext()
-	parserContext.Set(ast.FileKey, file)
+	parserContext.Set(ast.FileKey, asset)
 	parserContext.Set(ast.HTTPCacheKey, httpCache)
 
 	var html bytes.Buffer
-	err = markdownParser.Convert(file.Markdown, &html, gparser.WithContext(parserContext))
+	err = markdownParser.Convert(asset.Markdown, &html, gparser.WithContext(parserContext))
 	if err != nil {
 		return nil, fmt.Errorf("Failed to parse markdown: %v", err)
 	}
-	file.Html = html.Bytes()
-	return file, nil
+	asset.Html = html.Bytes()
+	return asset, nil
 }
 
 // True if all known frontmatter `completion` fields are true
-func (f *File) IsComplete() bool {
-	c := f.FrontMatter.Completion
+func (a *Asset) IsComplete() bool {
+	c := a.FrontMatter.Completion
 	return c.Content && c.ContentVerified && c.SpeakersIdentified &&
 		c.Mentions && c.Issues && c.Notes && c.Timestamps
 }
 
 // Writes file to f.outPath
-func (f *File) Render() error {
-	buildFile, _ := MakeFile(f.OutPath)
+func (a *Asset) Write() error {
+	file, _ := MakeFile(a.OutPath)
 
-	err := RenderChat(f).Render(context.Background(), buildFile)
+	err := RenderChat(a).Render(context.Background(), file)
 	if err != nil {
 		return fmt.Errorf("Failed to render template: %v", err)
 	}
@@ -178,51 +178,51 @@ func (f *File) Render() error {
 // Implement ast.File interface
 
 // Returns the raw source markdown (without any file frontmatter)
-func (f *File) GetMarkdown() []byte {
-	return f.Markdown
+func (a *Asset) GetMarkdown() []byte {
+	return a.Markdown
 }
 
 // Returns the source file path
-func (f *File) GetPath() string {
-	return f.Path
+func (a *Asset) GetPath() string {
+	return a.Path
 }
 
-func (f *File) RegisterMention(mention *ast.Mention) {
-	f.Mentions = append(f.Mentions, mention)
-	mention.Position = len(f.Mentions)
-	f.Mentionables[mention.Mentionable] = append(f.Mentionables[mention.Mentionable], mention)
+func (a *Asset) RegisterMention(mention *ast.Mention) {
+	a.Mentions = append(a.Mentions, mention)
+	mention.Position = len(a.Mentions)
+	a.Mentionables[mention.Mentionable] = append(a.Mentionables[mention.Mentionable], mention)
 }
 
-func (f *File) GetSpeakers() []ast.Speaker {
-	speakers := make([]ast.Speaker, len(f.Speakers))
-	for i, s := range f.Speakers {
+func (a *Asset) GetSpeakers() []ast.Speaker {
+	speakers := make([]ast.Speaker, len(a.Speakers))
+	for i, s := range a.Speakers {
 		speakers[i] = s
 	}
 	return speakers
 }
 
-func (f *File) GetSourceURL() string {
-	return f.FrontMatter.Source.Url
+func (a *Asset) GetSourceURL() string {
+	return a.FrontMatter.Source.Url
 }
 
-func (f *File) RegisterIssue(id int) {
-	f.Issues = append(f.Issues, id)
+func (a *Asset) RegisterIssue(id int) {
+	a.Issues = append(a.Issues, id)
 }
 
-func (f *File) GetID() string {
-	return f.ID
+func (a *Asset) GetID() string {
+	return a.ID
 }
 
-func (f *File) GetPermalink() string {
-	return f.Permalink
+func (a *Asset) GetPermalink() string {
+	return a.Permalink
 }
 
 // Other
 
-func (f *File) TopMentions() []MentionCount {
+func (a *Asset) TopMentions() []MentionCount {
 	results := []MentionCount{}
 
-	for _, m := range f.Mentions {
+	for _, m := range a.Mentions {
 		i := slices.IndexFunc(results, func(ms MentionCount) bool {
 			return ms.Mention.Mentionable == m.Mentionable
 		})
@@ -243,10 +243,10 @@ func (f *File) TopMentions() []MentionCount {
 	return results
 }
 
-func (f *File) TopPrimaryMentionables() []MentionablePartCount {
+func (a *Asset) TopPrimaryMentionables() []MentionablePartCount {
 	results := []MentionablePartCount{}
 
-	for _, m := range f.Mentions {
+	for _, m := range a.Mentions {
 		i := slices.IndexFunc(results, func(ms MentionablePartCount) bool {
 			return ms.MentionablePart == m.Mentionable.Primary
 		})
@@ -264,17 +264,17 @@ func (f *File) TopPrimaryMentionables() []MentionablePartCount {
 	return results
 }
 
-func (f *File) IssueCount() int {
-	return len(f.Issues)
+func (a *Asset) IssueCount() int {
+	return len(a.Issues)
 }
 
-func (f *File) HasIssues() bool {
-	return f.IssueCount() > 0
+func (a *Asset) HasIssues() bool {
+	return a.IssueCount() > 0
 }
 
-func (f *File) TopSpeakers() []*Speaker {
-	speakers := make([]*Speaker, len(f.Speakers))
-	copy(speakers, f.Speakers)
+func (a *Asset) TopSpeakers() []*Speaker {
+	speakers := make([]*Speaker, len(a.Speakers))
+	copy(speakers, a.Speakers)
 
 	slices.SortFunc(speakers, func(a, b *Speaker) int {
 		// Prefer speakers with avatars
@@ -313,8 +313,8 @@ func (f *File) TopSpeakers() []*Speaker {
 	return speakers
 }
 
-func (f *File) IsAutoGenerated() bool {
-	fm := f.FrontMatter
+func (a *Asset) IsAutoGenerated() bool {
+	fm := a.FrontMatter
 	return fm.Completion.Content && fm.Transcription.Kind == "auto-generated"
 }
 
@@ -372,7 +372,7 @@ func mostMentionedPrimary(a, b MentionablePartCount) int {
 	return 1
 }
 
-func filesByDate(a *File, b *File) int {
+func filesByDate(a *Asset, b *Asset) int {
 	if a.Date > b.Date {
 		return -1
 	} else if a.Date < b.Date {
@@ -382,7 +382,7 @@ func filesByDate(a *File, b *File) int {
 	}
 }
 
-func filesByDateAdded(a *File, b *File) int {
+func filesByDateAdded(a *Asset, b *Asset) int {
 	if a.FrontMatter.Added.Date > b.FrontMatter.Added.Date {
 		return -1
 	} else if a.FrontMatter.Added.Date < b.FrontMatter.Added.Date {

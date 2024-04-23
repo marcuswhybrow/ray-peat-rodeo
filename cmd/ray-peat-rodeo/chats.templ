@@ -5,13 +5,13 @@ import "slices"
 import "strconv"
 
 type Year struct {
-	Year  int
-	Files []*File
+	Year   int
+	Assets []*Asset
 }
 
-func splitByYear(files []*File) []Year {
+func splitByYear(assets []*Asset) []Year {
 	results := []Year{}
-	for _, file := range files {
+	for _, file := range assets {
 		yearStr := file.Date[:4]
 		year, err := strconv.Atoi(yearStr)
 		if err != nil {
@@ -25,24 +25,24 @@ func splitByYear(files []*File) []Year {
 		foundYear := index >= 0
 		if !foundYear {
 			results = append(results, Year{
-				Year:  year,
-				Files: []*File{file},
+				Year:   year,
+				Assets: []*Asset{file},
 			})
 		} else {
-			results[index].Files = append(results[index].Files, file)
+			results[index].Assets = append(results[index].Assets, file)
 		}
 	}
 	return results
 }
 
-func percentDone(files []*File) int {
-	done := numDone(files)
-	return int((float32(done) / float32(len(files))) * 100)
+func percentDone(assets []*Asset) int {
+	done := numDone(assets)
+	return int((float32(done) / float32(len(assets))) * 100)
 }
 
-func numDone(files []*File) int {
+func numDone(assets []*Asset) int {
 	done := 0
-	for _, file := range files {
+	for _, file := range assets {
 		if file.IsComplete() {
 			done += 1
 		}
@@ -50,8 +50,8 @@ func numDone(files []*File) int {
 	return done
 }
 
-templ Chats(allFiles []*File) {
-	for _, year := range splitByYear(allFiles) {
+templ Chats(allAssets []*Asset) {
+	for _, year := range splitByYear(allAssets) {
 		<div class="relative mb-8">
 			<h2 class="text-4xl font-bold mt-16 text-gray-700">
 				if year.Year == 0 {
@@ -61,14 +61,14 @@ templ Chats(allFiles []*File) {
 				}
 			</h2>
 			<div
-				title={ fmt.Sprint(numDone(year.Files)) + " / " + fmt.Sprint(len(year.Files)) + " for " + fmt.Sprint(year.Year) }
+				title={ fmt.Sprint(numDone(year.Assets)) + " / " + fmt.Sprint(len(year.Assets)) + " for " + fmt.Sprint(year.Year) }
 				class={
 					templ.SafeClass("absolute right-0 top-0 w-10 h-10 rounded-full"),
-					templ.SafeClass("[background:radial-gradient(closest-side,white_69%,transparent_70%_100%),conic-gradient(hotpink_" + fmt.Sprint(max(percentDone(year.Files), 1)) + "%,pink_0)]"),
+					templ.SafeClass("[background:radial-gradient(closest-side,white_69%,transparent_70%_100%),conic-gradient(hotpink_" + fmt.Sprint(max(percentDone(year.Assets), 1)) + "%,pink_0)]"),
 				}
 			></div>
 		</div>
-		for _, file := range year.Files {
+		for _, file := range year.Assets {
 			if file.FrontMatter.Completion.SpeakersIdentified {
 				<a
 					href={ templ.URL(file.Permalink) }
@@ -155,23 +155,23 @@ templ Avatar(imgPath, initials, name string) {
 	</div>
 }
 
-templ SpeakerCards(file *File) {
-	if len(file.FrontMatter.Speakers) <= 4 {
-		for _, speaker := range AtMost(file.TopSpeakers(), 4) {
+templ SpeakerCards(asset *Asset) {
+	if len(asset.FrontMatter.Speakers) <= 4 {
+		for _, speaker := range AtMost(asset.TopSpeakers(), 4) {
 			@Avatar(speaker.AvatarPath, speaker.ID, speaker.Name)
 		}
 	} else {
-		for _, speaker := range AtMost(file.TopSpeakers(), 3) {
+		for _, speaker := range AtMost(asset.TopSpeakers(), 3) {
 			@Avatar(speaker.AvatarPath, speaker.ID, speaker.Name)
 		}
 		<div
 			class="inline-block rounded-lg overflow-hidden bg-slate-200/60 w-16 h-20 text-center shadow mr-4 mb-4 rotate-2"
-			title={ fmt.Sprint(len(file.FrontMatter.Speakers)-3) + " more speaker" + pluralise(len(file.FrontMatter.Speakers)-3, "s") }
+			title={ fmt.Sprint(len(asset.FrontMatter.Speakers)-3) + " more speaker" + pluralise(len(asset.FrontMatter.Speakers)-3, "s") }
 		>
 			<span
 				class="font-bold text-gray-300 text-xl relative relative top-6"
 			>
-				+{ fmt.Sprint(len(file.FrontMatter.Speakers)-3) }
+				+{ fmt.Sprint(len(asset.FrontMatter.Speakers)-3) }
 			</span>
 		</div>
 	}
