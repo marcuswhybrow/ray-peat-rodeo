@@ -296,6 +296,8 @@ two unique search engines.
 list of articles, interviews, blogs, emails exchanges, forums & other tools.
 - [Notes From A Subterranean Library In Oregon](https://t3uncoupled.substack.com/p/notes-from-a-subterranean-library) 
 is a 90 page PDF collection of Ray's writing ranging from 1967 to 1999.
+- [Expulsia](https://expulsia.com/health) reckons it's the "largest Ray Peat 
+directory on the internet!" Challenge accepted!
 
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
 I've missed a similar project.
