@@ -3,6 +3,8 @@ source:
   series: Townsend Letter for Doctors & Patients
   title: The Bean Syndrome
   url: https://www.toxinless.com/ray-peat-the-bean-syndrome.pdf
+  mirrors:
+    - https://wiki.chadnet.org/files/the-bean-syndrome.pdf
   kind: article
 completion:
   content: false

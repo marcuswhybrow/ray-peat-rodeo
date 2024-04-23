@@ -1,3 +1,4 @@
+---
 source:
   series: Butter Living Podcast
   title: A New Landscape of Life and Learning
@@ -19,6 +20,7 @@ completion:
   mentions: true
   content-verified: true
   content: true
+  speakers-identified: true
 ---
 
 DB: [0:02] Hi Ray, how are you doing?

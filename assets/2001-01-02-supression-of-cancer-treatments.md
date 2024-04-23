@@ -2,7 +2,10 @@
 source:
   series: Politics & Science
   title: Suppression of Cancer Treatments
-  url: https://www.toxinless.com/polsci-010102-suppression-of-cancer.mp3
+  url: https://www.youtube.com/watch?v=9NJgekVDbZo
+  mirrors:
+    - https://www.youtube.com/watch?v=4dhXhI--ON0
+    - https://www.toxinless.com/polsci-010102-suppression-of-cancer.mp3
   kind: audio
 transcription:
   url: https://www.toxinless.com/polsci-suppression-of-cancer-treatments-transcription.pdf

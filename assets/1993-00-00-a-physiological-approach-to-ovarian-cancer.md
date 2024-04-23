@@ -3,6 +3,8 @@ source:
   series: Townsend Letter for Doctors & Patients
   title: A Physiological Approach to Ovarian Cancer
   url: https://web.archive.org/web/20100103100715/http://www.encognitive.com/node/3675
+  mirrors:
+    - https://wiki.chadnet.org/files/a-physiological-approach-to-ovarian-cancer.pdf
   kind: newsletter
 completion:
   content: false
