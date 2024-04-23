@@ -167,7 +167,7 @@ func (a *Asset) IsComplete() bool {
 func (a *Asset) Write() error {
 	file, _ := MakeFile(a.OutPath)
 
-	err := RenderChat(a).Render(context.Background(), file)
+	err := RenderAsset(a).Render(context.Background(), file)
 	if err != nil {
 		return fmt.Errorf("Failed to render template: %v", err)
 	}
