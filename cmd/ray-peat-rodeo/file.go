@@ -87,7 +87,7 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	permalink := "/" + id
 	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", filePath)
 	rawPermalink := global.GITHUB_LINK + path.Join("/raw/main", filePath)
-	outPath := path.Join(OUTPUT, id, "index.html")
+	outPath := path.Join(id, "index.html")
 
 	// 📄 FrontMatter
 
@@ -153,6 +153,7 @@ func NewFile(filePath string, markdownParser goldmark.Markdown, httpCache *cache
 	return file, nil
 }
 
+// True if all known frontmatter `completion` fields are true
 func (f *File) IsComplete() bool {
 	c := f.FrontMatter.Completion
 	return c.Content && c.ContentVerified && c.SpeakersIdentified &&
@@ -161,18 +162,9 @@ func (f *File) IsComplete() bool {
 
 // Writes file to f.outPath
 func (f *File) Render() error {
-	parentDir := filepath.Dir(f.OutPath)
-	err := os.MkdirAll(parentDir, 0755)
-	if err != nil {
-		return fmt.Errorf("Failed to create parent directory: %v", err)
-	}
+	buildFile, _ := MakeFile(f.OutPath)
 
-	outFile, err := os.Create(f.OutPath)
-	if err != nil {
-		return fmt.Errorf("Failed to create file': %v", err)
-	}
-
-	err = RenderChat(f).Render(context.Background(), outFile)
+	err := RenderChat(f).Render(context.Background(), buildFile)
 	if err != nil {
 		return fmt.Errorf("Failed to render template: %v", err)
 	}
@@ -182,10 +174,12 @@ func (f *File) Render() error {
 
 // Implement ast.File interface
 
+// Returns the raw source markdown (without any file frontmatter)
 func (f *File) GetMarkdown() []byte {
 	return f.Markdown
 }
 
+// Returns the source file path
 func (f *File) GetPath() string {
 	return f.Path
 }

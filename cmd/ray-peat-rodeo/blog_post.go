@@ -78,7 +78,7 @@ func NewBlogPost(filePath string, avatarPaths *AvatarPaths) *BlogPost {
 
 	return &BlogPost{
 		Path:             filePath,
-		OutPath:          path.Join(OUTPUT, "blog", id, "index.html"),
+		OutPath:          path.Join("blog", id, "index.html"),
 		ID:               id,
 		Permalink:        "/blog/" + id,
 		Date:             date,
@@ -91,18 +91,9 @@ func NewBlogPost(filePath string, avatarPaths *AvatarPaths) *BlogPost {
 }
 
 func (b *BlogPost) Render() error {
-	parentDir := filepath.Dir(b.OutPath)
-	err := os.MkdirAll(parentDir, 0755)
-	if err != nil {
-		return fmt.Errorf("Failed to create parent directory: %v", err)
-	}
+	buildFile, _ := MakeFile(b.OutPath)
 
-	outFile, err := os.Create(b.OutPath)
-	if err != nil {
-		return fmt.Errorf("Failed to create file': %v", err)
-	}
-
-	err = RenderBlogPost(b).Render(context.Background(), outFile)
+	err := RenderBlogPost(b).Render(context.Background(), buildFile)
 	if err != nil {
 		return fmt.Errorf("Failed to render template: %v", err)
 	}

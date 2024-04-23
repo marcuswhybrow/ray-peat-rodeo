@@ -35,7 +35,10 @@ func (c *Catalog) NewFile(filePath string) error {
 		return fmt.Errorf("Failed to instantiate file: %v", err)
 	}
 
+	// Catalog is designed to handle asynchronous workloads
+	// This requires locking and unlocking using the Mutex technique
 	c.Mutex.Lock()
+
 	c.Files = append(c.Files, file)
 
 	for mentionable, mentions := range file.Mentionables {
@@ -76,7 +79,7 @@ func (c *Catalog) RenderMentionPages() error {
 		primaries := mentionsByFileBySecondary[ast.EmptyMentionablePart]
 		delete(mentionsByFileBySecondary, ast.EmptyMentionablePart)
 
-		file, _ := makePage(unencode(primary.ID()))
+		file, _ := MakePage(unencode(primary.ID()))
 		component := MentionPage(primary, primaries, mentionsByFileBySecondary, c.HttpCache)
 		err := component.Render(context.Background(), file)
 		if err != nil {
@@ -100,7 +103,7 @@ func (c *Catalog) RenderPopups() error {
 			}
 		}
 
-		f, _ := makePage(unencode(location))
+		f, _ := MakePage(unencode(location))
 		component := MentionablePopup(mentionable, mentionsByFile, otherMentionables)
 		err := component.Render(context.Background(), f)
 		if err != nil {

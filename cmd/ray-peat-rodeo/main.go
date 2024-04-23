@@ -162,13 +162,13 @@ func main() {
 
 	latestBlogPost := blogPosts[0]
 
-	blogPage, _ := makePage("blog")
+	blogPage, _ := MakePage("blog")
 	component := BlogArchive(blogPosts)
 	component.Render(context.Background(), blogPage)
 
 	// 🏠 Homepage
 
-	indexPage, _ := makePage(".")
+	indexPage, _ := MakePage(".")
 	component = Index(catalog.Files, latestFile, progress, latestBlogPost)
 	component.Render(context.Background(), indexPage)
 
@@ -211,12 +211,15 @@ func main() {
 }
 
 // Convenience function to output HTML page
-func makePage(outPath string) (*os.File, string) {
-	return makeFile(path.Join(outPath, "index.html"))
+func MakePage(outPath string) (*os.File, string) {
+	return MakeFile(path.Join(outPath, "index.html"))
 }
 
+var builtFiles []string
+var builtFilesMutex sync.RWMutex
+
 // Convenience function to output file
-func makeFile(outPath string) (*os.File, string) {
+func MakeFile(outPath string) (*os.File, string) {
 	buildPath := path.Join(OUTPUT, outPath)
 	parent := filepath.Dir(buildPath)
 
@@ -224,6 +227,20 @@ func makeFile(outPath string) (*os.File, string) {
 	if err != nil {
 		log.Panicf("Failed to create directory '%v': %v", parent, err)
 	}
+
+	builtFilesMutex.Lock()
+	if slices.Contains(builtFiles, buildPath) {
+		log.Panicf(
+			"Multiple writes attempted to the same build path: %v\n"+
+				"  Common reasons for this include:\n"+
+				"    - Two files in ./assets that have different dates in the filename, but the same wording after the date.\n"+
+				"    - Two mentions that have the same name, but different capitalization.\n"+
+				"    - A file in ./assets that has the same wording after the date as the wording of a mention.\n",
+			buildPath,
+		)
+	}
+	builtFiles = append(builtFiles, buildPath)
+	builtFilesMutex.Unlock()
 
 	f, err := os.Create(buildPath)
 	if err != nil {
