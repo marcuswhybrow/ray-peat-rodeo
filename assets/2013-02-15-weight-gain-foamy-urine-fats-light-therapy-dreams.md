@@ -1,11 +1,13 @@
 ---
 source:
-  series: Askl Your Herb Doctor
+  series: Ask Your Herb Doctor
   title: Weight Gain, Foamy Urine, Fats, Light Therapy, Dreams
-  url: https://www.youtube.com/watch?v=xcHLZSBTcCc
+  url: https://www.toxinless.com/kmud-130215-weight-gain.mp3
+  mirrors:
+    - https://www.youtube.com/watch?v=xcHLZSBTcCc
   kind: audio
 transcription:
-  url: https://www.youtube.com/watch?v=xcHLZSBTcCc
+  url: https://www.toxinless.com/kmud-130215-weight-gain-transcription.doc
   kind: auto-generated
   date: "2024-04-24"
   author: Whisper AI
