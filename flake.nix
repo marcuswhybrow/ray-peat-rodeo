@@ -200,6 +200,9 @@
         # Convenience bash script using yt-dlp, whisper & whisper-json2md to 
         # transcribe and update assets with a `source.url` in the frontmatter.
         inputs.self.packages.x86_64-linux.transcribe
+
+        # Get text for PDF assets that don't have it
+        ocrmypdf
       ];
     };
   });
