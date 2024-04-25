@@ -9,13 +9,6 @@ func gitHubLink() string {
 	return GITHUB_LINK
 }
 
-func Unsafe(html string) templ.Component {
-	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) (err error) {
-		_, err = io.WriteString(w, html)
-		return
-	})
-}
-
 templ Base(title string) {
 	<!DOCTYPE html>
 	<html class="scroll-pt-24">
