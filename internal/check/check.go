@@ -47,10 +47,10 @@ func Check() error {
 	fmt.Println("\n[Checking https://www.toxinless.com/peat/podcast.rss]")
 	handle(getProposals(catalog, getToxinlessAssets()))
 
-	fmt.Println("Checking https://www.selftestable.com/ray-peat-stuff/sites")
+	fmt.Println("\n[Checking https://www.selftestable.com/ray-peat-stuff/sites]")
 	handle(getProposals(catalog, getSelfTestableAssets()))
 
-	fmt.Println("Checking https://raypeatforum.com/community/forums/audio-interview-transcripts.73/")
+	fmt.Println("\n[Checking https://raypeatforum.com/community/forums/audio-interview-transcripts.73]")
 	handle(getProposals(catalog, getRayPeatForumAssets()))
 
 	// fmt.Println("\n[Checking https://www.functionalps.com/blog/tag/ray-peat]")
