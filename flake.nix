@@ -13,10 +13,6 @@
       overlays = [inputs.gomod2nix.overlays.default];
       inherit system;
     };
-    pkgs-stable = import inputs.nixpkgs-stable {
-      overlays = [inputs.gomod2nix.overlays.default];
-      inherit system;
-    };
   in {
     # https://github.com/nix-community/gomod2nix/blob/master/docs/nix-reference.md
     packages = rec {

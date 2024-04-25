@@ -1,10 +1,9 @@
-package main
+package catalog
 
 import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/fs"
 	"log"
 	"net/url"
 	"os"
@@ -21,6 +20,7 @@ import (
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 )
 
 // Markdown input file
@@ -72,14 +72,17 @@ type Asset struct {
 	Speakers []*Speaker
 }
 
+type AssetFrontMatterSource struct {
+	Series   string
+	Title    string
+	Url      string
+	Mirrors  []string
+	Kind     string
+	Duration string
+}
+
 type AssetFrontMatter struct {
-	Source struct {
-		Series   string
-		Title    string
-		Url      string
-		Kind     string
-		Duration string
-	}
+	Source          AssetFrontMatterSource
 	Speakers        map[string]string
 	PrimarySpeakers []string
 	Transcription   struct {
@@ -196,7 +199,7 @@ func (a *Asset) IsComplete() bool {
 
 // Writes file to f.outPath
 func (a *Asset) Write() error {
-	file, _ := MakeFile(a.OutPath)
+	file, _ := utils.MakeFile(a.OutPath)
 
 	err := RenderAsset(a).Render(context.Background(), file)
 	if err != nil {
@@ -270,7 +273,7 @@ func (a *Asset) TopMentions() []MentionCount {
 		}
 	}
 
-	slices.SortFunc(results, mostMentioned)
+	slices.SortFunc(results, SortMostMentioned)
 	return results
 }
 
@@ -291,7 +294,7 @@ func (a *Asset) TopPrimaryMentionables() []MentionablePartCount {
 		}
 	}
 
-	slices.SortFunc(results, mostMentionedPrimary)
+	slices.SortFunc(results, SortMentionablePartByMostMentionedPrimary)
 	return results
 }
 
@@ -360,7 +363,7 @@ type MentionCount struct {
 	Count   int
 }
 
-func mostMentioned(a, b MentionCount) int {
+func SortMostMentioned(a, b MentionCount) int {
 	if a.Count > b.Count {
 		return -1
 	} else if a.Count == b.Count {
@@ -386,7 +389,7 @@ type MentionablePartCount struct {
 // Comparison function used to order MentionablePartCount's
 // Orders first the MPart with the highest count.
 // In a tie, the one with a shorter cardinal is prefered.
-func mostMentionedPrimary(a, b MentionablePartCount) int {
+func SortMentionablePartByMostMentionedPrimary(a, b MentionablePartCount) int {
 	if a.Count > b.Count {
 		return -1
 	} else if a.Count == b.Count {
@@ -403,7 +406,7 @@ func mostMentionedPrimary(a, b MentionablePartCount) int {
 	return 1
 }
 
-func filesByDate(a *Asset, b *Asset) int {
+func SortAssetsByDate(a *Asset, b *Asset) int {
 	if a.Date > b.Date {
 		return -1
 	} else if a.Date < b.Date {
@@ -413,7 +416,7 @@ func filesByDate(a *Asset, b *Asset) int {
 	}
 }
 
-func filesByDateAdded(a *Asset, b *Asset) int {
+func SortAssetsByDateAdded(a *Asset, b *Asset) int {
 	if a.FrontMatter.Added.Date > b.FrontMatter.Added.Date {
 		return -1
 	} else if a.FrontMatter.Added.Date < b.FrontMatter.Added.Date {
@@ -429,23 +432,4 @@ func unencode(filePath string) string {
 		log.Panicf("Failed to unescape path '%v': %v", filePath, err)
 	}
 	return str
-}
-
-// For a given speaker's full name, returns path to avatar image.
-func SpeakerAvatar(speakerName string) (string, bool) {
-	speakerName = strings.ToLower(speakerName)
-	speakerName = strings.ReplaceAll(speakerName, " ", "-")
-	found := ""
-
-	fs.WalkDir(os.DirFS("./internal"), "assets/images/avatars", func(filePath string, entry fs.DirEntry, err error) error {
-		fileStem := path.Base(filePath)
-		ext := path.Ext(fileStem)
-		fileName, _ := strings.CutSuffix(fileStem, ext)
-
-		if speakerName == fileName {
-			found = "/" + filePath
-		}
-		return nil
-	})
-	return found, len(found) > 0
 }

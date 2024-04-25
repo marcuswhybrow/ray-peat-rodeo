@@ -1,10 +1,12 @@
-package main
+package catalog
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 
 templ MentionPage(primary ast.MentionablePart, primaries ByAsset[Mentions], secondaries ByPart[ByAsset[Mentions]], httpCache *cache.HTTPCache) {
-	@Base("Mention") {
+	@global.Base("Mention") {
 		<div class="max-w-2xl mx-auto popup-select mb-32">
 			<h1 class="mb-4 mt-16 text-3xl text-center">{ primary.CardinalFirst() }</h1>
 			if len(primaries) > 0 {
@@ -60,7 +62,7 @@ templ mentions(assets map[*Asset][]*ast.Mention) {
 						templ.KV("text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200", !ast.IsPrimarySpeaker(mention)),
 					}
 				>
-					@Unsafe(string(mention.VignetteHTML(asset.Markdown, 100)))
+					@utils.Unsafe(string(mention.VignetteHTML(asset.Markdown, 100)))
 				</blockquote>
 			}
 		</div>

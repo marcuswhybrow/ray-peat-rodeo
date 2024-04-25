@@ -1,4 +1,4 @@
-package main
+package blog
 
 import (
 	"bytes"
@@ -11,6 +11,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark"
 	meta "github.com/yuin/goldmark-meta"
@@ -45,7 +47,7 @@ type frontMatter struct {
 	Title  string
 }
 
-func NewBlogPost(filePath string, avatarPaths *AvatarPaths) *BlogPost {
+func NewBlogPost(filePath string, avatarPaths *catalog.AvatarPaths) *BlogPost {
 	fileBytes, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Panicf("Failed to open blog post '%v': %v", filePath, err)
@@ -91,7 +93,7 @@ func NewBlogPost(filePath string, avatarPaths *AvatarPaths) *BlogPost {
 }
 
 func (b *BlogPost) Write() error {
-	buildFile, _ := MakeFile(b.OutPath)
+	buildFile, _ := utils.MakeFile(b.OutPath)
 
 	err := RenderBlogPost(b).Render(context.Background(), buildFile)
 	if err != nil {

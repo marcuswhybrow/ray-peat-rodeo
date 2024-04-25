@@ -1,12 +1,12 @@
-package main
+package global
 
 import (
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"time"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/search"
 )
 
 func gitHubLink() string {
-	return global.GITHUB_LINK
+	return GITHUB_LINK
 }
 
 func Unsafe(html string) templ.Component {
@@ -150,7 +150,7 @@ templ Base(title string) {
 						<p class="mb-2">
 							<a
 								class="font-bold hover:underline"
-								href={ global.GITHUB_LINK }
+								href={ GITHUB_LINK }
 							>Star the project</a> on GitHub.
 						</p>
 						<p class="mb-2">
@@ -165,7 +165,7 @@ templ Base(title string) {
 					</div>
 				</div>
 			</footer>
-			@Pagefind()
+			@search.Pagefind()
 		</body>
 	</html>
 }

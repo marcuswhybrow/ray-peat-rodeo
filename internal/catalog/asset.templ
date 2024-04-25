@@ -1,10 +1,11 @@
-package main
+package catalog
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 import "fmt"
 import "strings"
 import "golang.org/x/text/cases"
 import "golang.org/x/text/language"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 
 type MapEnumeration[V any] struct {
 	Key     string
@@ -84,7 +85,7 @@ templ StatusChange() {
 }
 
 templ RenderAsset(asset *Asset) {
-	@Base(asset.FrontMatter.Source.Title) {
+	@global.Base(asset.FrontMatter.Source.Title) {
 		<article
 			class="p-8 relative"
 			data-pagefind-body
@@ -192,14 +193,14 @@ templ RenderAsset(asset *Asset) {
 					</p>
 					<!-- Top mentionables -->
 					<ol class="mb-0">
-						for i, mentionCount := range AtMost(asset.TopPrimaryMentionables(), 3) {
+						for i, mentionCount := range utils.AtMost(asset.TopPrimaryMentionables(), 3) {
 							if i > 0 && i < 3 {
 								<span class="mr-2 text-fuchsia-900/50">/</span>
 							}
 							<li class="inline-block mb-2 mr-2 last:mr-0">
 								<span
 									class="text-fuchsia-900/80 uppercase trakcing-wider"
-									title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + pluralise(mentionCount.Count, "s") + ")" }
+									title={ mentionCount.MentionablePart.PrefixFirst() + " (" + fmt.Sprint(mentionCount.Count) + " mention" + utils.Pluralise(mentionCount.Count, "s") + ")" }
 								>{ mentionCount.MentionablePart.Cardinal }</span>
 							</li>
 						}
@@ -211,7 +212,7 @@ templ RenderAsset(asset *Asset) {
 								title={ speaker.Name }
 								class="inline-block rounded-full overflow-hidden bg-slate-200/60 w-10 h-10 text-center shadow mr-2 mb-4 last:mr-0 rotate-2 cursor-default"
 							>
-								if imgSrc, found := SpeakerAvatar(speaker.Name); found {
+								if imgSrc := speaker.AvatarPath; len(imgSrc) > 0 {
 									<div class="w-[9999px] h-10">
 										<img src={ imgSrc } alt={ speaker.GetName() } class="h-full "/>
 									</div>
@@ -416,7 +417,7 @@ templ RenderAsset(asset *Asset) {
 				</div>
 				<!-- Content -->
 				<div class="relative">
-					@Unsafe(string(asset.Html))
+					@utils.Unsafe(string(asset.Html))
 				</div>
 				if !asset.FrontMatter.Completion.Content {
 					<div data-pagefind-ignore class="mr-16 mb-32">

@@ -1,12 +1,14 @@
 package cache
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
 	"sync"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"gopkg.in/yaml.v3"
 )
 
@@ -200,6 +202,40 @@ func GetH1OrTitle(res *http.Response) string {
 	}
 
 	return doc.Find("title").Text()
+}
+
+func (c *HTTPCache) Write() error {
+	fmt.Println("\n[HTTP Requests]")
+
+	httpCacheMisses := c.GetRequestsMissed()
+	cacheRequests := c.GetRequestsMade()
+
+	if len(httpCacheMisses) == 0 {
+		fmt.Printf("HTTP Cache fulfilled %v requests.\n", len(cacheRequests))
+	} else {
+		fmt.Printf("❌ HTTP Cache rectified %v miss(es):\n", len(httpCacheMisses))
+		for url, keys := range httpCacheMisses {
+			fmt.Print(" - Missed ")
+			for i, key := range keys {
+				if i > 0 {
+					fmt.Print(", ")
+				}
+				fmt.Printf("'%v'", key)
+			}
+			fmt.Printf(" for %v\n", url)
+		}
+	}
+	newCache, err := yaml.Marshal(cacheRequests)
+	if err != nil {
+		return errors.New(fmt.Sprintf("Failed to marshal cache hits to YAML: %v", err))
+	}
+
+	err = os.WriteFile(global.CACHE_PATH, newCache, 0755)
+	if err != nil {
+		return errors.New(fmt.Sprintf("Failed to write cache hits to file '%v': %v", global.CACHE_PATH, err))
+	}
+
+	return nil
 }
 
 type Responder struct {

@@ -18,45 +18,6 @@ import (
 func main() {
 	fmt.Println("[Checking chadnet.org]")
 
-	// 🗃️ Identify existing assets
-
-	existingAssetsEntries, err := os.ReadDir("./assets")
-	if err != nil {
-		log.Panicf("Failed to read Ray Peat Rodeo assets: %v\n", err)
-	}
-
-	existingUrls := []string{}
-
-	for _, entry := range existingAssetsEntries {
-		if entry.IsDir() {
-			continue
-		}
-		if entry.Name() == "README.md" {
-			continue
-		}
-		assetContent, err := os.ReadFile("./assets/" + entry.Name())
-		if err != nil {
-			log.Panicf("Failed to read asset '%v': %v\n", entry.Name(), err)
-		}
-
-		matter := front.NewMatter()
-		matter.Handle("---", front.YAMLHandler)
-
-		rawFMatter, _, err := matter.Parse(strings.NewReader(string(assetContent)))
-		if err != nil {
-			log.Panicf("Failed to read frontmatter for asset '%v': %v\n", entry.Name(), err)
-		}
-
-		frontMatter := FrontMatter{}
-		err = mapstructure.Decode(rawFMatter, &frontMatter)
-		if err != nil {
-			log.Panicf("Failed to decode YAML frontmatter in asset '%v': %v\n", entry.Name(), err)
-		}
-
-		existingUrls = append(existingUrls, frontMatter.Source.Url)
-		existingUrls = append(existingUrls, frontMatter.Source.Mirrors...)
-	}
-
 	// 🌐🎰 Download & Parse chadnet.org/ray-peat
 
 	res, err := http.Get("https://wiki.chadnet.org/ray-peat")

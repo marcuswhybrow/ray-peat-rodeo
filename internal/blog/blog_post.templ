@@ -1,7 +1,10 @@
-package main
+package blog
 
 import "time"
 import "log"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 
 func formatedDate(blogPost *BlogPost) string {
 	t, err := time.Parse("2006-01-02", blogPost.Date)
@@ -20,7 +23,7 @@ templ BlogDate(blogPost *BlogPost) {
 }
 
 templ RenderBlogPost(blogPost *BlogPost) {
-	@Base(blogPost.Title) {
+	@global.Base(blogPost.Title) {
 		<article
 			class="max-w-screen-md px-8 mx-auto mt-32 mb-32"
 			data-pagefind-body
@@ -28,7 +31,7 @@ templ RenderBlogPost(blogPost *BlogPost) {
 			<div class="mb-16 bg-pink-100 rounded-lg p-8 text-pink-500">
 				<div class="float-left">
 					<div class="pr-4">
-						@Avatar(blogPost.AuthorAvatarPath, "?", blogPost.Author)
+						@catalog.Avatar(blogPost.AuthorAvatarPath, "?", blogPost.Author)
 					</div>
 				</div>
 				<h1 class="text-4xl font-bold mb-2 tracking-tight"><a href={ templ.URL(blogPost.Permalink) }>{ blogPost.Title }</a></h1>
@@ -51,7 +54,7 @@ templ RenderBlogPost(blogPost *BlogPost) {
           text-lg
         `) }
 			>
-				@Unsafe(string(blogPost.HTML))
+				@utils.Unsafe(string(blogPost.HTML))
 			</div>
 			<div class="text-center mt-16">
 				<a href="/blog" class="inline-block mx-auto px-8 py-4 rounded-full text-xl hover:bg-gradient-to-tl from-fuchsia-900 to-pink-600 text-gray-600 hover:text-white font-bold border-2 hover:border-white hover:border-solid border-gray-300 border-dashed">

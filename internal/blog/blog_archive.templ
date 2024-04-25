@@ -1,7 +1,9 @@
-package main
+package blog
+
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 
 templ BlogArchive(blogPosts []*BlogPost) {
-	@Base("Blog") {
+	@global.Base("Blog") {
 		<div class="max-w-screen-md mx-auto px-8 mt-32 mb-32">
 			<h1 class="text-4xl text-pink-500 mb-16 font-bold">Blog</h1>
 			<div class="grid grid-cols-1">

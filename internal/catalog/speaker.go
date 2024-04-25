@@ -1,4 +1,4 @@
-package main
+package catalog
 
 type Speaker struct {
 	ID               string

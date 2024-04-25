@@ -1,6 +1,7 @@
-package main
+package catalog
 
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
+import "github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 
 templ MentionablePopup(mentionable ast.Mentionable, mentionsByAsset ByAsset[Mentions], otherMentionables []ast.Mentionable) {
 	<html data-pagefind-ignore>
@@ -38,7 +39,7 @@ templ MentionablePopup(mentionable ast.Mentionable, mentionsByAsset ByAsset[Ment
 									<blockquote
 										class={ "px-8 pb-4 text-sm text-slate-700" }
 									>
-										@Unsafe(string(mention.VignetteHTML(file.Markdown, 50)))
+										@utils.Unsafe(string(mention.VignetteHTML(file.Markdown, 50)))
 									</blockquote>
 								}
 							</div>

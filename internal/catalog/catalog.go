@@ -1,17 +1,25 @@
-package main
+package catalog
 
 import (
 	"bytes"
 	"context"
 	"fmt"
+	"log"
+	"path"
 	"slices"
 	"strings"
 	"sync"
 	"text/template"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/extension"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 	"github.com/yuin/goldmark"
+	meta "github.com/yuin/goldmark-meta"
+	gmExtension "github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
 type Mentions = []*ast.Mention
@@ -29,8 +37,72 @@ type Catalog struct {
 	Mutex             sync.RWMutex
 }
 
-func (c *Catalog) NewFile(filePath string) error {
-	file, err := NewAsset(filePath, c.MarkdownParser, c.HttpCache, c.AvatarPaths)
+func NewCatalog(assetsPath string) *Catalog {
+
+	// 📶 Get HTTP Cache from file
+
+	cacheData, err := cache.DataFromYAMLFile("./internal/http_cache.yml")
+	if err != nil {
+		log.Panicf("Failed to read cache file '%v': %v", global.CACHE_PATH, err)
+	}
+
+	httpCache := cache.NewHTTPCache(cacheData)
+
+	// 👨👱 Speaker Avatars
+
+	avatarPaths := NewAvatarPaths()
+
+	// 🖹🧩 Markdown + Extensions
+
+	markdownParser := goldmark.New(
+		goldmark.WithRendererOptions(html.WithUnsafe()),
+		goldmark.WithExtensions(
+			meta.New(meta.WithStoresInDocument()),
+			gmExtension.Typographer,
+			extension.Mentions,
+			extension.Timecodes,
+			extension.Speakers,
+			extension.Sidenotes,
+			extension.GitHubIssues,
+		),
+	)
+
+	filePaths := utils.Files(assetsPath, ".", func(filePath string) (*string, error) {
+		base := path.Base(filePath)
+		baseLower := strings.ToLower(base)
+
+		if baseLower == "readme.md" {
+			return nil, nil
+		}
+
+		outPath := path.Join(assetsPath, filePath)
+		return &outPath, nil
+	})
+
+	catalog := &Catalog{
+		MarkdownParser:    markdownParser,
+		HttpCache:         httpCache,
+		AvatarPaths:       avatarPaths,
+		ByMentionable:     ByMentionable[ByAsset[Mentions]]{},
+		ByMentionablePart: ByPart[ByPart[ByAsset[Mentions]]]{},
+		Assets:            []*Asset{},
+	}
+
+	utils.Parallel(filePaths, func(filePath string) error {
+		err := catalog.NewAsset(filePath)
+		if err != nil {
+			return fmt.Errorf("Failed to retrieve file '%v': %v", filePath, err)
+		}
+		return nil
+	})
+
+	slices.SortFunc(catalog.Assets, SortAssetsByDate)
+
+	return catalog
+}
+
+func (c *Catalog) NewAsset(filePath string) error {
+	asset, err := NewAsset(filePath, c.MarkdownParser, c.HttpCache, c.AvatarPaths)
 	if err != nil {
 		return fmt.Errorf("Failed to instantiate file: %v", err)
 	}
@@ -39,9 +111,9 @@ func (c *Catalog) NewFile(filePath string) error {
 	// This requires locking and unlocking using the Mutex technique
 	c.Mutex.Lock()
 
-	c.Assets = append(c.Assets, file)
+	c.Assets = append(c.Assets, asset)
 
-	for mentionable, mentions := range file.Mentionables {
+	for mentionable, mentions := range asset.Mentionables {
 		for existingMentionable, existingByFile := range c.ByMentionable {
 			if mentionable.IsDuplicate(existingMentionable) {
 				if mentionable.IsMoreComplex(existingMentionable) {
@@ -59,7 +131,7 @@ func (c *Catalog) NewFile(filePath string) error {
 		if c.ByMentionable[mentionable] == nil {
 			c.ByMentionable[mentionable] = ByAsset[Mentions]{}
 		}
-		c.ByMentionable[mentionable][file] = mentions
+		c.ByMentionable[mentionable][asset] = mentions
 
 		if c.ByMentionablePart[mentionable.Primary] == nil {
 			c.ByMentionablePart[mentionable.Primary] = ByPart[ByAsset[Mentions]]{}
@@ -67,7 +139,7 @@ func (c *Catalog) NewFile(filePath string) error {
 		if c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] == nil {
 			c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] = ByAsset[Mentions]{}
 		}
-		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][file] = mentions
+		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][asset] = mentions
 	}
 	c.Mutex.Unlock()
 
@@ -79,7 +151,7 @@ func (c *Catalog) WriteMentionPages() error {
 		primaries := mentionsByFileBySecondary[ast.EmptyMentionablePart]
 		delete(mentionsByFileBySecondary, ast.EmptyMentionablePart)
 
-		file, _ := MakePage(unencode(primary.ID()))
+		file, _ := utils.MakePage(unencode(primary.ID()))
 		component := MentionPage(primary, primaries, mentionsByFileBySecondary, c.HttpCache)
 		err := component.Render(context.Background(), file)
 		if err != nil {
@@ -103,7 +175,7 @@ func (c *Catalog) WritePopups() error {
 			}
 		}
 
-		f, _ := MakePage(unencode(location))
+		f, _ := utils.MakePage(unencode(location))
 		component := MentionablePopup(mentionable, mentionsByFile, otherMentionables)
 		err := component.Render(context.Background(), f)
 		if err != nil {
@@ -115,18 +187,14 @@ func (c *Catalog) WritePopups() error {
 	return nil
 }
 
-func (c *Catalog) SortFilesByDate() {
-	slices.SortFunc(c.Assets, filesByDate)
-}
-
-func (c *Catalog) CompletedFiles() []*Asset {
-	var files []*Asset
-	for _, file := range c.Assets {
-		if file.IsComplete() {
-			files = append(files, file)
+func (c *Catalog) GetCompletedAssets() []*Asset {
+	var assets []*Asset
+	for _, asset := range c.Assets {
+		if asset.IsComplete() {
+			assets = append(assets, asset)
 		}
 	}
-	return files
+	return assets
 }
 
 func collisionPanic(suspect, suggestion *ast.Mention) {
@@ -172,4 +240,53 @@ func anyValue[Key comparable, Val any](m map[Key]Val) Val {
 		return v
 	}
 	panic("Failed to find any entries in map")
+}
+
+func (c *Catalog) MatchAsset(a *Asset) (*Asset, bool) {
+	perfectMatch := true
+	partialMatch := false
+
+	var (
+		dateMatch *Asset
+		kindMatch *Asset
+		slugMatch *Asset
+	)
+
+	for _, b := range c.Assets {
+		// Compare URLs & Mirrors
+		if a.FrontMatter.Source.Url == b.FrontMatter.Source.Url {
+			return b, perfectMatch
+		}
+		if slices.Contains(b.FrontMatter.Source.Mirrors, a.FrontMatter.Source.Url) {
+			return b, perfectMatch
+		}
+		for _, m := range a.FrontMatter.Source.Mirrors {
+			if slices.Contains(b.FrontMatter.Source.Mirrors, m) {
+				return b, perfectMatch
+			}
+		}
+
+		// Date & source kind
+		if a.Date != "0000-00-00" && b.Date == a.Date {
+			if b.FrontMatter.Source.Kind == a.FrontMatter.Source.Kind {
+				if b.Slug == a.Slug {
+					slugMatch = b
+				} else {
+					kindMatch = b
+				}
+			} else {
+				dateMatch = b
+			}
+		}
+	}
+
+	if slugMatch != nil {
+		return slugMatch, partialMatch
+	} else if kindMatch != nil {
+		return kindMatch, partialMatch
+	} else if dateMatch != nil {
+		return dateMatch, partialMatch
+	}
+
+	return nil, perfectMatch
 }
