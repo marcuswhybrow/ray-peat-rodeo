@@ -298,6 +298,20 @@ list of articles, interviews, blogs, emails exchanges, forums & other tools.
 is a 90 page PDF collection of Ray's writing ranging from 1967 to 1999.
 - [Expulsia](https://expulsia.com/health) reckons it's the "largest Ray Peat 
 directory on the internet!" Challenge accepted!
+- [Ray Peat Forum Transcripts](https://raypeatforum.com/community/forums/audio-interview-transcripts.73/)
+is a place people post transcripts of Ray Peat interviews.
+- [Ray Peat Forum Projects](https://raypeatforum.com/community/forums/interview-transcript-projects.78/)
+a list of, likely dormant, efforts to transcribe Ray's interviews.
+- [Ray Peat Forum Email Exchanges](https://raypeatforum.com/community/forums/interview-transcript-projects.78/)
+is a vast list of unverified quotes from email conversations with Ray.
+- [Ray Peat Forum Glossary](https://raypeatforum.com/wiki/index.php/Ray_Peat_Glossary)
+is a large list of terms and explanations for common Ray Peat topics.
+- [Ray Peat Forum Studies](https://raypeatforum.com/wiki/index.php/Ray_Peat:_Links_to_referenced_studies)
+is a substantial list of scientific studies and abstracts on several topics.
+- [@raypeat3365 on YouTube](https://www.youtube.com/playlist?list=PLJ21ERyEQ8HHM1Y-Dvm9nb0BhhHVIT64-)
+has a play list of 71 mp3's uploaded to YouTube
+- [@RayPeatClips on YouTube](https://www.youtube.com/@RayPeatClips/videos) has 
+over 77 mp3 interviews and over 584 smaller clips.
 
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
 I've missed a similar project.
