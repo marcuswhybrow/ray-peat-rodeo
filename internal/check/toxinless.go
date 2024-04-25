@@ -58,8 +58,6 @@ func getToxinlessAssets() []*ScrapedAsset {
 		date := item.PublishedParsed.Format("2006-01-02")
 		path := fmt.Sprintf("assets/%v-%v.md", date, assetSlug)
 
-		fmt.Println(path, series, kind, title)
-
 		assets = append(assets, &ScrapedAsset{
 			ProposedAsset: &catalog.Asset{
 				Date: date,
