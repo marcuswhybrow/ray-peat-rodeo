@@ -35,17 +35,17 @@ func Check() error {
 		allNeed = append(allNeed, allNeed...)
 	}
 
-	// fmt.Println("\n[Checking https://wiki.chadnet.org/ray-peat]")
-	// handle(getProposals(catalog, getChadNetAssets()))
+	fmt.Println("\n[Checking https://wiki.chadnet.org/ray-peat]")
+	handle(getProposals(catalog, getChadNetAssets()))
 
-	// fmt.Println("\n[Checking https://expulsia.com/health]")
-	// handle(getProposals(catalog, getExpulsiaAssets()))
+	fmt.Println("\n[Checking https://expulsia.com/health]")
+	handle(getProposals(catalog, getExpulsiaAssets()))
 
-	// fmt.Println("\n[Checking https://github.com/0x2447196/raypeatarchive]")
-	// handle(getProposals(catalog, getRayPeatArchiveAssets()))
+	fmt.Println("\n[Checking https://github.com/0x2447196/raypeatarchive]")
+	handle(getProposals(catalog, getRayPeatArchiveAssets()))
 
-	// fmt.Println("\n[Checking https://www.toxinless.com/peat/podcast.rss]")
-	// handle(getProposals(catalog, getToxinlessAssets()))
+	fmt.Println("\n[Checking https://www.toxinless.com/peat/podcast.rss]")
+	handle(getProposals(catalog, getToxinlessAssets()))
 
 	fmt.Println("Checking https://www.selftestable.com/ray-peat-stuff/sites")
 	handle(getProposals(catalog, getSelfTestableAssets()))
