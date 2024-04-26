@@ -16,6 +16,8 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"github.com/yuin/goldmark"
 	gparser "github.com/yuin/goldmark/parser"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
@@ -207,6 +209,49 @@ func (a *Asset) Write() error {
 	}
 
 	return nil
+}
+
+func (a *Asset) GetFriendlyKind() string {
+	switch a.FrontMatter.Source.Kind {
+	case "audio":
+		return "Audio Interview"
+	case "video":
+		return "Video Interview"
+	case "text":
+		return "Written Interview"
+	default:
+		return cases.
+			Title(language.English, cases.Compact).
+			String(a.FrontMatter.Source.Kind)
+	}
+}
+
+func (a *Asset) GetFriendlyKindWithArticle() string {
+	kind := a.FrontMatter.Source.Kind
+	switch kind {
+	case "audio", "article":
+		return fmt.Sprintf("an %v", strings.ToLower(a.GetFriendlyKind()))
+	default:
+		return fmt.Sprintf("a %v", strings.ToLower(a.GetFriendlyKind()))
+	}
+}
+
+func (a *Asset) GetAssociationWithRayPeat() string {
+	kind := a.FrontMatter.Source.Kind
+	switch kind {
+	case "article", "newsletter", "book":
+		return "by Ray Peat"
+	default:
+		if !a.FrontMatter.Completion.SpeakersIdentified {
+			return "to do with Ray Peat"
+		}
+		fullName, ok := a.FrontMatter.Speakers["RP"]
+		if ok && (fullName == "Ray Peat" || fullName == "Raymond Peat") {
+			return "with Ray Peat"
+		} else {
+			return "about Ray Peat"
+		}
+	}
 }
 
 // Implement ast.File interface

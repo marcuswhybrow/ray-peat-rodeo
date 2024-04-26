@@ -3,8 +3,6 @@ package catalog
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 import "fmt"
 import "strings"
-import "golang.org/x/text/cases"
-import "golang.org/x/text/language"
 import "github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 
 templ RenderAsset(asset *Asset) {
@@ -104,7 +102,7 @@ templ RenderAsset(asset *Asset) {
 						<a
 							class="text-fuchsia-900/70 tracking-wider hover:underline hover:text-fuchsia-950"
 							href={ templ.SafeURL(asset.FrontMatter.Source.Url) }
-							data-medium={ kindToFilter(asset.FrontMatter.Source.Kind) }
+							data-medium={ asset.GetFriendlyKind() }
 							data-pagefind-filter="Medium[data-medium]"
 						>
 							{ asset.Date }
@@ -214,8 +212,8 @@ templ RenderAsset(asset *Asset) {
 					/>
 					<span class="block text-green-900 font-bold text-xl tracking-tight mb-2">From Marcus</span>
 					<span class="block text-green-800">
-						This is <em>{ kindToNaturalLanguageDescription(asset) }</em>
-						{ kindToNaturalLanguageAssociateWithRayPeat(asset) }
+						This is <em>{ asset.GetFriendlyKindWithArticle() }</em>
+						{ asset.GetAssociationWithRayPeat() }
 						from { asset.Date[:4] }. 
 						<br/>
 					</span>
@@ -348,7 +346,7 @@ templ RenderAsset(asset *Asset) {
 						<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">
 							<p>
 								if asset.FrontMatter.Source.Url != "" {
-									This { strings.ToLower(kindToFilter(asset.FrontMatter.Source.Kind)) } is 
+									This { strings.ToLower(asset.GetFriendlyKind()) } is 
 									<a
 										href={ templ.URL(asset.FrontMatter.Source.Url) }
 										class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
@@ -363,7 +361,7 @@ templ RenderAsset(asset *Asset) {
 										>existing transcript</a>.
 									}
 								} else {
-									This { strings.ToLower(kindToFilter(asset.FrontMatter.Source.Kind)) } is missing from Ray Peat Rodeo.
+									This { strings.ToLower(asset.GetFriendlyKind()) } is missing from Ray Peat Rodeo.
 									if asset.FrontMatter.Transcription.Url != "" {
 										However, there is an 
 										<a
@@ -426,47 +424,6 @@ func MapToSlice[V any](m map[string]V) []MapEnumeration[V] {
 	}
 
 	return results
-}
-
-func kindToFilter(kind string) string {
-	switch kind {
-	case "audio":
-		return "Audio Interview"
-	case "video":
-		return "Video Interview"
-	case "text":
-		return "Written Interview"
-	default:
-		return cases.Title(language.English, cases.Compact).String(kind)
-	}
-}
-
-func kindToNaturalLanguageDescription(asset *Asset) string {
-	kind := asset.FrontMatter.Source.Kind
-	switch kind {
-	case "audio", "article":
-		return fmt.Sprintf("an %v", strings.ToLower(kindToFilter(kind)))
-	default:
-		return fmt.Sprintf("a %v", strings.ToLower(kindToFilter(kind)))
-	}
-}
-
-func kindToNaturalLanguageAssociateWithRayPeat(asset *Asset) string {
-	kind := asset.FrontMatter.Source.Kind
-	switch kind {
-	case "article", "newsletter", "book":
-		return "by Ray Peat"
-	default:
-		if !asset.FrontMatter.Completion.SpeakersIdentified {
-			return "to do with Ray Peat"
-		}
-		fullName, ok := asset.FrontMatter.Speakers["RP"]
-		if ok && (fullName == "Ray Peat" || fullName == "Raymond Peat") {
-			return "with Ray Peat"
-		} else {
-			return "about Ray Peat"
-		}
-	}
 }
 
 // Small note in the flow of, but distinct from, speaker messages.
