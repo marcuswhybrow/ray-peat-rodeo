@@ -4,6 +4,7 @@ import (
 	"context"
 	"io"
 	"log"
+	"net/url"
 
 	"github.com/a-h/templ"
 )
@@ -18,4 +19,15 @@ func Unsafe(s string) templ.Component {
 		}
 		return
 	})
+}
+
+func UrlHostname(urlStr string) string {
+	u, err := url.Parse(urlStr)
+	if err != nil {
+		log.Fatalf("Failed to parse URL '%v' for it's hostname: %v", urlStr, err)
+	}
+	if !u.IsAbs() {
+		log.Fatalf("Failed to find absolute URL whilst attempting to extract hostname for URL '%v': %v", urlStr, err)
+	}
+	return u.Hostname()
 }
