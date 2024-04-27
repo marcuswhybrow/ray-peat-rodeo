@@ -178,7 +178,6 @@ func (c *Catalog) WritePopups() error {
 		f, _ := utils.MakePage(location)
 		component := MentionablePopup(mentionable, mentionsByFile, otherMentionables)
 		err := component.Render(context.Background(), f)
-		fmt.Println("Wrote Location: ", location)
 		if err != nil {
 			return fmt.Errorf("Failed to render template: %v", err)
 		}
