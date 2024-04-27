@@ -13,13 +13,13 @@ type AvatarPaths struct {
 
 func NewAvatarPaths() *AvatarPaths {
 	paths := map[string]string{}
-	fs.WalkDir(os.DirFS("./internal"), "assets/images/avatars", func(filePath string, entry fs.DirEntry, err error) error {
+	fs.WalkDir(os.DirFS("./web/static"), "images/avatars", func(filePath string, entry fs.DirEntry, err error) error {
 		fileStem := path.Base(filePath)
 		ext := path.Ext(fileStem)
 		fileName, _ := strings.CutSuffix(fileStem, ext)
 
 		if !entry.IsDir() {
-			paths[fileName] = filePath
+			paths[fileName] = path.Join("assets", filePath)
 		}
 
 		return nil

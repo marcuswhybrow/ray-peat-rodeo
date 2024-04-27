@@ -55,7 +55,7 @@
             --config ./tailwind.config.js \
             --minify \
             --output ./build/assets/tailwind.css
-          cp -r ./internal/assets/* ./build/assets
+          cp -r ./web/static/* ./build/assets
           mv ./build $out
         '';
 
@@ -145,7 +145,7 @@
             --config ./tailwind.config.js \
             --minify \
             --output ./build/assets/tailwind.css && \
-          cp -r ./internal/assets/* ./build/assets
+          cp -r ./web/static/* ./build/assets
         '')
 
         # Add "go" command with correct modules in environment
