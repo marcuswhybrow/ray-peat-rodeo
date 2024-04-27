@@ -30,7 +30,7 @@ jobs:
        extra_nix_config: experimental-features = nix-command flakes
     - uses: DeterminateSystems/magic-nix-cache-action@v4
     - run: nix build
-    - uses: actions/upload-pages-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         path: result
         
@@ -43,5 +43,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
 
