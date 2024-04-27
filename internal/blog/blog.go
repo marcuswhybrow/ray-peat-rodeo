@@ -10,7 +10,7 @@ import (
 )
 
 func Write(catalog *rprCatalog.Catalog) ([]*BlogPost, error) {
-	postPaths := utils.Files(".", "internal/blog", func(filePath string) (*string, error) {
+	postPaths := utils.Files(".", "assets/blog", func(filePath string) (*string, error) {
 		ext := filepath.Ext(filePath)
 		if strings.ToLower(ext) != ".md" {
 			return nil, nil
