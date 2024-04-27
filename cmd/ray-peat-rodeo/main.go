@@ -87,8 +87,16 @@ func main() {
 		return nil
 	})
 
-	catalog.WriteMentionPages()
-	catalog.WritePopups()
+	err = catalog.WriteMentionPages()
+	if err != nil {
+		log.Fatal("Failed to build mention pages:", err)
+
+	}
+	err = catalog.WritePopups()
+	if err != nil {
+		log.Fatal("Failed to build mention popup page:", err)
+
+	}
 
 	slices.SortFunc(completedAssets, rprCatalog.SortAssetsByDateAdded)
 

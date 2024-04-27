@@ -399,7 +399,7 @@ DB: Interesting. But now do you think the same opportunities would be had by peo
 
 RP: No, I've heard people express attitudes that you have to be qualified to have access to certain instruments.
 
-[1:35:40] Did you read the book [[Arp, Halton, > Seeing Red]]?
+[1:35:40] Did you read the book [[Arp, Halton > Seeing Red]]?
 
 DB: No, I have not.
 

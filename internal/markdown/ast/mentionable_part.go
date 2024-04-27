@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/gosimple/slug"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 )
 
@@ -34,13 +35,10 @@ func (m *MentionablePart) HasPrefix() bool {
 func (m *MentionablePart) ID() string {
 	id := m.Cardinal
 	if m.HasPrefix() {
-		id = m.Prefix + "-" + m.Cardinal
+		id = m.Prefix + " " + m.Cardinal
 	}
-	id = strings.ToLower(id)
-	id = strings.ReplaceAll(id, " ", "-")
-	id = strings.ReplaceAll(id, "'", "")
-	id = url.QueryEscape(id)
-	return id
+	slug.Lowercase = false
+	return slug.Make(id)
 }
 
 func (m *MentionablePart) TitleOrPrefixFirst() string {

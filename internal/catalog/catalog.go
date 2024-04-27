@@ -151,7 +151,7 @@ func (c *Catalog) WriteMentionPages() error {
 		primaries := mentionsByFileBySecondary[ast.EmptyMentionablePart]
 		delete(mentionsByFileBySecondary, ast.EmptyMentionablePart)
 
-		file, _ := utils.MakePage(unencode(primary.ID()))
+		file, _ := utils.MakePage(primary.ID())
 		component := MentionPage(primary, primaries, mentionsByFileBySecondary, c.HttpCache)
 		err := component.Render(context.Background(), file)
 		if err != nil {
@@ -175,9 +175,10 @@ func (c *Catalog) WritePopups() error {
 			}
 		}
 
-		f, _ := utils.MakePage(unencode(location))
+		f, _ := utils.MakePage(location)
 		component := MentionablePopup(mentionable, mentionsByFile, otherMentionables)
 		err := component.Render(context.Background(), f)
+		fmt.Println("Wrote Location: ", location)
 		if err != nil {
 			return fmt.Errorf("Failed to render template: %v", err)
 		}
