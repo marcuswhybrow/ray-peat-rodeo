@@ -112,6 +112,7 @@ type AssetFrontMatter struct {
 }
 
 func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*Asset, error) {
+	fmt.Println("new asset: " + assetPath)
 	fileName := filepath.Base(assetPath)
 	fileStem := strings.TrimSuffix(fileName, filepath.Ext(assetPath))
 
@@ -122,6 +123,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 
 	// 🔗 Details
 
+	fmt.Println("File stem: ", fileStem)
 	id := fileStem[11:]
 	urlAbsPath := "/" + id
 	editPermalink := global.GITHUB_LINK + path.Join("/edit/main", assetPath)

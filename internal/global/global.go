@@ -6,7 +6,7 @@ import (
 
 const BUILD_OUTPUT = "./build"
 const ASSETS = "./assets"
-const CACHE_PATH = "./internal/http_cache.yml"
+const CACHE_PATH = "./assets/data/cache.yml"
 
 const GITHUB_LINK = "https://github.com/marcuswhybrow/ray-peat-rodeo"
 const SPONSOR_LINK = "https://github.com/sponsors/marcuswhybrow"

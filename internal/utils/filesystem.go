@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -16,27 +15,24 @@ import (
 func Files[Result any](pwd, scope string, f func(filePath string) (*Result, error)) []Result {
 	results := []Result{}
 
-	err := fs.WalkDir(os.DirFS(pwd), scope, func(filePath string, entry fs.DirEntry, err error) error {
-		if err != nil {
-			return fmt.Errorf("Failed to walk dir: %v", err)
-		}
-
-		if !entry.IsDir() {
-			result, err := f(filePath)
-			if err != nil {
-				return err
-			}
-
-			if result != nil {
-				results = append(results, *result)
-			}
-		}
-
-		return nil
-	})
-
+	entries, err := fs.ReadDir(os.DirFS(pwd), scope)
 	if err != nil {
-		log.Panicf("Failed to read directory '%v': %v", path.Join(pwd, scope), err)
+		log.Fatalf("Failed to read directory '%v': %v\n", path.Join(pwd, scope), err)
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() {
+			continue
+		}
+
+		result, err := f(path.Join(scope, entry.Name()))
+		if err != nil {
+			log.Fatal("Failed to convert file entry to Result:", err)
+		}
+
+		if result != nil {
+			results = append(results, *result)
+		}
 	}
 
 	return results

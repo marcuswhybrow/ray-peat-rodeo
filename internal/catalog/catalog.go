@@ -41,7 +41,7 @@ func NewCatalog(assetsPath string) *Catalog {
 
 	// 📶 Get HTTP Cache from file
 
-	cacheData, err := cache.DataFromYAMLFile("./internal/http_cache.yml")
+	cacheData, err := cache.DataFromYAMLFile(global.CACHE_PATH)
 	if err != nil {
 		log.Panicf("Failed to read cache file '%v': %v", global.CACHE_PATH, err)
 	}
