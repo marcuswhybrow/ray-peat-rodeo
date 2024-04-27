@@ -7,6 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"slices"
+	"strings"
 	"sync"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
@@ -50,6 +51,17 @@ var builtFilesMutex sync.RWMutex
 func MakeFile(outPath string) (*os.File, string) {
 	buildPath := path.Join(global.BUILD_OUTPUT, outPath)
 	parent := filepath.Dir(buildPath)
+	illegalChars := "\":<>|*?\r\n"
+
+	if strings.ContainsAny(outPath, illegalChars) {
+		log.Fatalf("Failed to create build file '%v': "+
+			"name contains an illegal character. "+
+			"Illegal characters include: %v",
+			outPath,
+			illegalChars,
+		)
+
+	}
 
 	err := os.MkdirAll(parent, 0755)
 	if err != nil {
