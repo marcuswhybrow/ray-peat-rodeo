@@ -312,6 +312,8 @@ is a substantial list of scientific studies and abstracts on several topics.
 has a play list of 71 mp3's uploaded to YouTube
 - [@RayPeatClips on YouTube](https://www.youtube.com/@RayPeatClips/videos) has 
 over 77 mp3 interviews and over 584 smaller clips.
+- [Ray Peat Forum Audio & Radio Interviews](https://raypeatforum.com/community/categories/audio-radio-interviews.320/) 
+has hundered of threads to check for new assets.
 
 [Open an issue](https://github.com/marcuswhybrow/ray-peat-rodeo/issues/new) if 
 I've missed a similar project.
