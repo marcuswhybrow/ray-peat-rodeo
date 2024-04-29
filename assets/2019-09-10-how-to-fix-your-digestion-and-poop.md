@@ -4,6 +4,8 @@ source:
   title: How to Fix Your Digestion & Poop
   url: https://www.toxinless.com/jf-190910-how-to-fix-your-digestion-poop.mp3
   kind: audio
+  mirrors:
+    - https://raypeatforum.com/community/threads/jodellefit-how-to-fix-your-digestion-poop.30729
 completion:
   content: true
   content-verified: false
