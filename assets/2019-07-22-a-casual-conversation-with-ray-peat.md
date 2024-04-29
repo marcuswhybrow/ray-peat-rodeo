@@ -2,7 +2,10 @@
 source:
   series: Butter Living Podcast
   title: A Casual Conversation with Ray Peat
-  url: https://www.toxinless.com/blp-190722-a-casual-conversation-with-ray-peat.mp3
+  url: https://www.youtube.com/watch?v=AuYgceC-1dY
+  mirrors: 
+    - https://www.toxinless.com/blp-190722-a-casual-conversation-with-ray-peat.mp3
+    - https://raypeatforum.com/community/threads/a-casual-conversation-with-ray-peat.29970/
   kind: audio
 completion:
   content: true
