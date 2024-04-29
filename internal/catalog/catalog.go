@@ -11,6 +11,7 @@ import (
 	"sync"
 	"text/template"
 
+	// "github.com/gosimple/slug"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/markdown/ast"
@@ -33,6 +34,7 @@ type Catalog struct {
 	AvatarPaths       *AvatarPaths
 	ByMentionable     ByMentionable[ByAsset[Mentions]]
 	ByMentionablePart ByPart[ByPart[ByAsset[Mentions]]]
+	BySeries          map[string][]*Asset
 	Assets            []*Asset
 	Mutex             sync.RWMutex
 }
@@ -85,6 +87,7 @@ func NewCatalog(assetsPath string) *Catalog {
 		AvatarPaths:       avatarPaths,
 		ByMentionable:     ByMentionable[ByAsset[Mentions]]{},
 		ByMentionablePart: ByPart[ByPart[ByAsset[Mentions]]]{},
+		BySeries:          map[string][]*Asset{},
 		Assets:            []*Asset{},
 	}
 
@@ -112,6 +115,7 @@ func (c *Catalog) NewAsset(filePath string) error {
 	c.Mutex.Lock()
 
 	c.Assets = append(c.Assets, asset)
+	c.BySeries[asset.GetSeriesSlug()] = append(c.BySeries[asset.GetSeriesSlug()], asset)
 
 	for mentionable, mentions := range asset.Mentionables {
 		for existingMentionable, existingByFile := range c.ByMentionable {
@@ -141,6 +145,11 @@ func (c *Catalog) NewAsset(filePath string) error {
 		}
 		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][asset] = mentions
 	}
+
+	for series, assets := range c.BySeries {
+		fmt.Println("S:", series, len(assets))
+	}
+
 	c.Mutex.Unlock()
 
 	return nil
@@ -184,6 +193,19 @@ func (c *Catalog) WritePopups() error {
 		//log.Printf("Wrote %v", outPath)
 	}
 
+	return nil
+}
+
+func (c *Catalog) WriteSeriesPages() error {
+	for series, assets := range c.BySeries {
+		fmt.Println("Series:", series)
+		f, _ := utils.MakePage(series)
+		component := SeriesPage(assets[0].FrontMatter.Source.Series, assets)
+		err := component.Render(context.Background(), f)
+		if err != nil {
+			return fmt.Errorf("Failed to render template for asset series page '%v': %v", series, err)
+		}
+	}
 	return nil
 }
 

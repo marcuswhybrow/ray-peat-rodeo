@@ -292,6 +292,20 @@ func (a *Asset) GetSlug() string {
 	return a.Slug
 }
 
+func (a *Asset) GetSeriesSlug() string {
+	// slug.Lowercase = true
+	// series := slug.Make(asset.FrontMatter.Source.Series)
+	series := strings.ToLower(a.FrontMatter.Source.Series)
+	series = strings.ReplaceAll(series, " ", "-")
+	series = strings.ReplaceAll(series, "'", "")
+	series = strings.ReplaceAll(series, ":", "")
+	return series
+}
+
+func (a *Asset) GetSeriesAbsUrl() string {
+	return "/" + a.GetSeriesSlug()
+}
+
 func (a *Asset) GetPermalink() string {
 	return a.UrlAbsPath
 }

@@ -107,10 +107,11 @@ templ RenderAsset(asset *Asset) {
 						>
 							{ asset.Date }
 						</a>
-						<span
+						<a
 							data-pagefind-filter="Author"
-							class="text-fuchsia-900/80 rounded bg-white/20 py-1 px-4 ml-4 tracking-wide"
-						>{ asset.FrontMatter.Source.Series }</span>
+							class="text-fuchsia-900/80 rounded bg-white/20 py-1 px-4 ml-4 tracking-wide hover:underline"
+							href={ templ.SafeURL(asset.GetSeriesAbsUrl()) }
+						>{ asset.FrontMatter.Source.Series }</a>
 					</p>
 					<!-- Top mentionables -->
 					<ol class="mb-0">

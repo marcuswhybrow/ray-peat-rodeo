@@ -10,23 +10,23 @@ import (
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/blog"
 	rprCatalog "github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/check"
+	// "github.com/marcuswhybrow/ray-peat-rodeo/internal/check"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 )
 
 func main() {
-	if len(os.Args) >= 2 {
-		subcommand := os.Args[1]
-		switch subcommand {
-		case "check":
-			check.Check()
-			return
-		default:
-			fmt.Printf("'%v' is not a valid subcommand. Try: check\n", subcommand)
-			return
-		}
-	}
+	// if len(os.Args) >= 2 {
+	// 	subcommand := os.Args[1]
+	// 	switch subcommand {
+	// 	case "check":
+	// 		check.Check()
+	// 		return
+	// 	default:
+	// 		fmt.Printf("'%v' is not a valid subcommand. Try: check\n", subcommand)
+	// 		return
+	// 	}
+	// }
 
 	start := time.Now()
 
@@ -96,6 +96,10 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to build mention popup page:", err)
 
+	}
+	err = catalog.WriteSeriesPages()
+	if err != nil {
+		log.Fatal("Failed to build asset series pages:", err)
 	}
 
 	slices.SortFunc(completedAssets, rprCatalog.SortAssetsByDateAdded)
