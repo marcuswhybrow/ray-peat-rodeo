@@ -3,6 +3,8 @@ source:
   series: Hope For Health
   title: Thyroid
   url: https://www.toxinless.com/kkvv-081031-ray-peat.mp3
+  mirrors:
+    - https://raypeatforum.com/community/threads/hope-for-health-thyroid.219
   kind: audio
 completion:
   content: true
