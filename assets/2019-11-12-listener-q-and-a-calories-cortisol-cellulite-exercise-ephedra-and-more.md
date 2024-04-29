@@ -1,8 +1,11 @@
 ---
 source:
   series: Jodellefit
-  title: "Listener Q&A: Calories, Cortisol, Cellulite, Exercise, Ephedra & More"
-  url: https://www.toxinless.com/jf-191112-listener-qa.mp3
+  title: "Calories, Cortisol, Cellulite, Exercise, Ephedra & More! Q&A"
+  url: https://www.youtube.com/watch?v=dpNBRvNC488
+  mirrors: 
+    - https://www.toxinless.com/jf-191112-listener-qa.mp3
+    - https://raypeatforum.com/community/threads/jodellefit-ray-peat-q-a.31576
   kind: audio
 completion:
   content: true
