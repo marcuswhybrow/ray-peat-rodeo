@@ -157,7 +157,7 @@ I think that looks pretty nice, but the real beauty is this: now we've standardi
     </div>
 </div>
 
-Try hovering  over (or taping on, if on a phone/tablet) the mention of "William Blake." A popup appears. It summaries every other mention of "William Blake" in every other known interview. In this demo you can't click through, but on a real page, you can jump about between interviews this way, or see an index of every time Ray's mentioned ol' Blake.
+Try hovering  over (or taping on, if on a phone/tablet) the mention of "William Blake." A popup appears. It summarises every other mention of "William Blake" in every other known interview. In this demo you can't click through, but on a real page, you can jump about between interviews this way, or see an index of every time Ray's mentioned ol' Blake.
 
 This is the essential nurturing marriage: human readable, non proprietory, portable, plain text, markdown files that will survive _forever_; partnered with custom code that automatically derives a website from those simple files, enabling higher-order features.
 
