@@ -110,7 +110,7 @@ I think that looks pretty nice, but the real beauty is this: now we've standardi
                     <span
                         hx-trigger="load"
                         hx-target="find .popup"
-                        hx-get="/api/mentionable/popup/william-blake"
+                        hx-get="/api/mentionable/popup/William-Blake"
                         hx-swap="innerHTML"
                         hx-select=".hx-select"
                         class="relative cursor-pointer"
