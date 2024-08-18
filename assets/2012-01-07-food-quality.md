@@ -3,6 +3,9 @@ source:
   series: Politics & Science
   title: Food Quality
   url: https://www.toxinless.com/polsci-120107-food-quality.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-120107-food-quality.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-120107-food-quality.vtt
   kind: audio
 completion:
   content: true

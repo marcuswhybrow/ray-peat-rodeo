@@ -94,6 +94,7 @@
 
         asset_path="$1"
         author="$2"
+        start="''${3:-0}"
 
         asset_name=$(basename "$asset_path")
         source_url=$(${pkgs.yq-go}/bin/yq ".source.url | select(.)" "$asset_path")
@@ -105,10 +106,15 @@
         audio_name_actual=$(ls -AU "$tmp_dir_audio" | head -1)
         audio_path_actual="$tmp_dir_audio/$audio_name_actual"
 
+        if [ "$start" != "0" ] then
+          ${pkgs.ffmpeg}/bin/ffmpeg -ss "$start" -i "$audio_path_actual" "$audio_path_actual-trimmed"
+          audio_path_actual="$audio_path_actual-trimmed"
+        fi
+
         ls "$tmp_dir_audio"
 
         tmp_dir_json=$(mktemp --directory)
-        ${pkgs.openai-whisper}/bin/whisper --language English --output_format json --output_dir "$tmp_dir_json" "$audio_path_actual"
+        ${pkgs.openai-whisper}/bin/whisper --language English --fp16 False --output_format json --output_dir "$tmp_dir_json" "$audio_path_actual"
         json_name=$(ls -AU "$tmp_dir_json" | head -1)
         json_path="$tmp_dir_json/$json_name"
 
@@ -120,7 +126,7 @@
         $yq ".added.author = \"$author\"" "$asset_path"
         $yq ".added.date = \"$today\"" "$asset_path"
         $yq ".completion.content = true" "$asset_path"
-        ${inputs.self.packages.x86_64-linux.whisper-json2md}/bin/whisper-json2md "$json_path" >> "$asset_path"
+        ${inputs.self.packages.x86_64-linux.whisper-json2md}/bin/whisper-json2md "$json_path" "$start" >> "$asset_path"
 
         rm -r "$tmp_dir_audio"
         rm -r "$tmp_dir_json"
@@ -172,11 +178,6 @@
 
         # Builds CSS utility classes by inspecting template source code
         nodePackages.tailwindcss
-
-        # Modd should be running tailwind for us, but "watching" doesnt work
-        (pkgs.writeScriptBin "tailwind-watch" ''
-          tailwind --watch --output ./build/assets/tailwind.css
-        '')
 
         # Dev tools to watch the files system and rerun (above) commands
         modd 

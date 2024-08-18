@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Bowel Endotoxin
   url: https://www.youtube.com/watch?v=xVI-g3N45Fo
-  # also https://www.toxinless.com/kmud-090701-bowel-endotoxin.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-090701-bowel-endotoxin.mp3
+    - https://wiki.chadnet.org/kmud-090701-bowel-endotoxin.mp3
+    - https://askyourherbdoctor.com/audio/2009%20Bowel%20Endotoxin%20Part%205%20Jul%202009.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-090701-bowel-endotoxin.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=xVI-g3N45Fo

@@ -3,7 +3,10 @@ source:
   series: Rainmaking Time
   title: Energy-Protective Materials
   url: https://www.youtube.com/watch?v=H88XGaC8UvE
-  # also https://www.toxinless.com/rainmaking-140602-energy-protective-materials.mp3
+  mirrors: 
+    - https://www.toxinless.com/rainmaking-140602-energy-protective-materials.mp3
+    - https://wiki.chadnet.org/rainmaking-140602-energy-protective-materials.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/rainmaking-140602-energy-protective-materials.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=H88XGaC8UvE

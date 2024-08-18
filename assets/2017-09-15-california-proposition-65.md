@@ -1,8 +1,12 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: California Proposition 65
+  title: "California Proposition 65 & Various Q&A"
   url: https://www.toxinless.com/kmud-170915-california-proposition-65.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-170915-california-proposition-65.mp3
+    - https://askyourherbdoctor.com/audio/2017%20California%20Proposition%2065%20Various%20Q&A%20Sept%202017.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-170915-california-proposition-65.vtt
   kind: audio
 completion:
   content: true

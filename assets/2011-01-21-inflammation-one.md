@@ -3,6 +3,9 @@ source:
   series: Ask Your Herb Doctor
   title: Inflammation I
   url: https://www.toxinless.com/kmud-110121-inflammation-1.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-110121-inflammation-1.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-110121-inflammation-1.vtt
   kind: audio
 completion:
   content: true

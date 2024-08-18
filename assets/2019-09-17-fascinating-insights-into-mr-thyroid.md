@@ -3,7 +3,16 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Fascinating Insights Into Mr. Thyroid
   url: https://www.toxinless.com/orn-190917-mr-thyroid.mp3
+  mirrors:
+    # The following assets derive from a shorter mp3 which ends mid interview
+    - https://wiki.chadnet.org/682629224.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/09.17.19%20Peat%20Ray%20One%20%5B682629224%5D.vtt
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/orn-190917-mr-thyroid.vtt
   kind: audio
+  note: >
+    Various sources list a shorter recording as a seperate asset. This shorter 
+    recording begins one minute earlier but misses about one hour of material 
+    at the end of the show.
 completion:
   content: true
   content-verified: false

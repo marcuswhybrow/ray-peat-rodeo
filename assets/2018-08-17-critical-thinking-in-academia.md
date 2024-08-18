@@ -3,6 +3,9 @@ source:
   series: Ask Your Herb Doctor
   title: Critical Thinking in Academia
   url: https://www.toxinless.com/kmud-180817-critical-thinking-in-academia.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-180817-critical-thinking-in-academia.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-180817-critical-thinking-in-academia.vtt
   kind: audio
 completion:
   content: true

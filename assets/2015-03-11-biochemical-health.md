@@ -3,6 +3,9 @@ source:
   series: Politics & Science
   title: Biochemical Health
   url: https://www.toxinless.com/polsci-150311-biochemical-health.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-150311-biochemical-health.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-150311-biochemical-health.vtt
   kind: audio
 completion:
   content: true

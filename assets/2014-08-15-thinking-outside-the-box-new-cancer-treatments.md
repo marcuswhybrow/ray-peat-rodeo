@@ -1,9 +1,13 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Thinking Outside the Box - New Cancer Treatments
+  title: "Thinking Outside the Box: New Cancer Treatments"
   url: https://www.youtube.com/watch?v=Z-xoj2IDWjU
-  # also https://www.toxinless.com/kmud-140815-thinking-outside-the-box-new-cancer-treatments.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-140815-thinking-outside-the-box-new-cancer-treatments.mp3
+    - https://wiki.chadnet.org/kmud-140815-thinking-outside-the-box-new-cancer-treatments.mp3
+    - https://askyourherbdoctor.com/audio/2014%20Cancer%20Aug%202014.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-140815-thinking-outside-the-box-new-cancer-treatments.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=Z-xoj2IDWjU

@@ -3,6 +3,9 @@ source:
   series: East West
   title: Estrogen vs Progesterone
   url: https://www.toxinless.com/ewh-110315-estrogen-vs-progesterone.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-110315-estrogen-vs-progesterone.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-110315-estrogen-vs-progesterone.vtt
   kind: audio
 completion:
   content: true

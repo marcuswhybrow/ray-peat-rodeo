@@ -2,7 +2,6 @@ package blog
 
 import (
 	"context"
-	"fmt"
 	"path/filepath"
 	"strings"
 
@@ -12,7 +11,6 @@ import (
 
 func Write(catalog *rprCatalog.Catalog) ([]*BlogPost, error) {
 	postPaths := utils.Files(".", "assets/blog", func(filePath string) (*string, error) {
-		fmt.Println("Post Path:", filePath)
 		ext := filepath.Ext(filePath)
 		if strings.ToLower(ext) != ".md" {
 			return nil, nil

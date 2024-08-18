@@ -4,6 +4,9 @@ source:
   title: The Origins of Authoritarianism
   episode: 28
   url: https://www.youtube.com/watch?v=MBsFWsHgSCY
+  mirrors:
+    - https://wiki.chadnet.org/MBsFWsHgSCY.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/The%20Origins%20of%20Authoritarianism%20with%20Ray%20Peat%20%20%5BGenerative%20Energy%20%2328%5D%20%5BMBsFWsHgSCY%5D.vtt
   kind: audio
 transcription:
   author: Marcus Whybrow

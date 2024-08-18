@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Carbon Monoxide
   url: https://www.youtube.com/watch?v=_-7_Es7-wNk
-  # also https://www.toxinless.com/kmud-130118-carbon-monoxide.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-130118-carbon-monoxide.mp3
+    - https://wiki.chadnet.org/kmud-130118-carbon-monoxide.mp3
+    - https://askyourherbdoctor.com/audio/2013%20Carbon%20Monoxide%20Jan%202013.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-130118-carbon-monoxide.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=_-7_Es7-wNk

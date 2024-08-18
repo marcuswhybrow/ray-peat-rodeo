@@ -8,6 +8,7 @@ source:
     - https://player.fm/series/get-fit-with-jodelle/dr-ray-peat-cancer-asthma-hair-growth-more
     - https://raypeatforum.com/community/threads/dr-ray-peat-cancer-asthma-hair-growth-more-get-fit-with-jodelle.45842
     - https://www.ivoox.com/dr-ray-peat-cancer-asthma-hair-growth-audios-mp3_rf_85061982_1.html
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/DR%20RAY%20PEAT%20-%20Cancer%2C%20Asthma%2C%20Hair%20Growth%20%26%20more!%20Get%20Fit%20with%20Jodelle.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

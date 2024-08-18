@@ -6,6 +6,8 @@ source:
   url: https://www.youtube.com/watch?v=0oLpC6F-qIY
   mirrors:
     - https://raypeatforum.com/community/threads/dr-ray-peat-q-a-reverse-t3-hcg-emf-viruses-boosters-kids-vaccines-lung-failure-and-more.44279
+    - https://www.youtube.com/watch?v=0oLpC6F-qIY
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-15122021-q-and-a-reverse-t3-HCG-EMF-and-viruses-boosters-kid-s-vaccines-lung-failure-and-more.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

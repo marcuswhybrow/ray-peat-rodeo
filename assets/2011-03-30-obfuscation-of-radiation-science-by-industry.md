@@ -3,7 +3,11 @@ source:
   series: Politics & Science
   title: Obfuscation of Radiation Science by Industry
   url: https://www.youtube.com/watch?v=pSVhiJCSVdk
-  # also https://www.toxinless.com/polsci-110330-obfuscation-of-radiation.mp3
+  mirrors:
+    - https://www.toxinless.com/polsci-110330-obfuscation-of-radiation.mp3
+    - https://wiki.chadnet.org/polsci-110330-obfuscation-of-radiation.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-110330-obfuscation-of-radiation.vtt
+    - https://raypeatforum.com/community/threads/obfuscation-of-radiation-science-by-industry-politics-and-science-2011.9200/
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=pSVhiJCSVdk

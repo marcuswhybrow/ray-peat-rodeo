@@ -4,6 +4,9 @@ source:
   episode: 78
   title: CO2 | Art and Science | Supply Shortages | Killer Austerity | Authoritarianism
   url: https://www.youtube.com/watch?v=72Zz0TbfBAg
+  mirrors:
+    - https://wiki.chadnet.org/72Zz0TbfBAg.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2378%EF%BC%9A%20CO2%20%EF%BD%9C%20Art%20and%20Science%20%EF%BD%9C%20Supply%20Shortages%20%EF%BD%9C%20Killer%20Austerity%20%EF%BD%9C%20Authoritarianism%20with%20Ray%20Peat%20%5B72Zz0TbfBAg%5D.vtt
   kind: video
 transcription:
   kind: auto-generated

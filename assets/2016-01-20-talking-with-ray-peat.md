@@ -4,6 +4,9 @@ source:
   episode: 19
   title: Talking with Ray Peat
   url: https://www.youtube.com/watch?v=HPrIPVAD6dI
+  mirrors:
+    - https://wiki.chadnet.org/HPrIPVAD6dI.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Talking%20with%20Ray%20Peat%20%5BGenerative%20Energy%20%2319%5D%20%5BHPrIPVAD6dI%5D.vtt
   kind: audio
 completion:
   content: true

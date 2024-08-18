@@ -3,6 +3,8 @@ source:
   series: Ask Your Herb Doctor
   title: Ask Your Herb Doctor, April 2021
   url: https://www.toxinless.com/kmud-210416.mp3
+  mirrors:
+    - https://askyourherbdoctor.com/audio/2014%20Part%20of%20the%20Show%20Apr%202014.mp3
   kind: audio
 transcription:
   date: "2024-04-16"

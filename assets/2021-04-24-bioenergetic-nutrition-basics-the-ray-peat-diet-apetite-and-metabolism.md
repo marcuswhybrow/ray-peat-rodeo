@@ -4,6 +4,9 @@ source:
   episode: 55
   title: 'Bioenergetic Nutrition Basics | "The Ray Peat Diet" | Appetite and Metabolism'
   url: https://www.youtube.com/watch?v=f06rVi8iXfI
+  mirrors:
+    - https://wiki.chadnet.org/f06rVi8iXfI.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2355%EF%BC%9A%20Bioenergetic%20Nutrition%20Basics%20%EF%BD%9C%20%EF%BC%82The%20Ray%20Peat%20Diet%EF%BC%82%20%EF%BD%9C%20Appetite%20and%20Metabolism%20with%20Ray%20Peat%20%5Bf06rVi8iXfI%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=f06rVi8iXfI

@@ -3,6 +3,10 @@ source:
   series: Ask Your Herb Doctor
   title: Herbalist Sophie Lamb
   url: https://www.toxinless.com/kmud-190719-herbalist-sophie-lamb.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-190719-herbalist-sophie-lamb.mp3
+    - https://askyourherbdoctor.com/audio/2019%20July%2019th%202019%20Sophie%20Lambfritalk.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-190719-herbalist-sophie-lamb.vtt
   kind: audio
 completion:
   content: true

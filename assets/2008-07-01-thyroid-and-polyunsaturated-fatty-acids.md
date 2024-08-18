@@ -1,9 +1,13 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Thyroid and Polyunsaturated Fatty Acids
+  title: Thyroid & Polyunsaturated Fatty Acids
   url: https://www.youtube.com/watch?v=kBhuoW8zQFo
-  # also https://www.toxinless.com/kmud-080701-thyroid-and-polyunsaturated-fatty-acids.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-080701-thyroid-and-polyunsaturated-fatty-acids.mp3
+    - https://wiki.chadnet.org/kmud-080701-thyroid-and-polyunsaturated-fatty-acids.mp3
+    - https://askyourherbdoctor.com/audio/2008%20Thyroid%20and%20Polyunsaturated%20Fatty%20Acids%20Part%201%20Jul%202008.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-080701-thyroid-and-polyunsaturated-fatty-acids.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=kBhuoW8zQFo

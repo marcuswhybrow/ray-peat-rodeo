@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Menopause, Estrogen, Thyroid, Coronavirus, and Glaucoma
   url: https://www.toxinless.com/orn-200217-menopause-estrogen-thyroid-coronavirus-glaucoma.mp3
+  mirrors:
+    - https://wiki.chadnet.org/762394060.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/02.17.20%20Health%20According%20to%20Ray%20Peat%2C%20February%2017%2C%202020%20%5B762394060%5D.vtt
   kind: audio
 transcription:
   date: "2024-04-18"

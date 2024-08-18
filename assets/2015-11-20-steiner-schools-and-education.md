@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Steiner Schools and Education
   url: https://www.youtube.com/watch?v=-kaPHCfJIZE
-  # also https://www.toxinless.com/kmud-151120-steiner-schools-and-education.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-151120-steiner-schools-and-education.mp3
+    - https://wiki.chadnet.org/kmud-151120-steiner-schools-and-education.mp3
+    - https://askyourherbdoctor.com/audio/2015%20Learning.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-151120-steiner-schools-and-education.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=-kaPHCfJIZE

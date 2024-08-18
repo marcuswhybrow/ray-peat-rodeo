@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Questions & Answers
   url: https://www.youtube.com/watch?v=wKF6KXQcdrg
-  # also https://www.toxinless.com/kmud-140117-questions-and-answers.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-140117-questions-and-answers.mp3
+    - https://wiki.chadnet.org/kmud-140117-questions-and-answers.mp3
+    - https://askyourherbdoctor.com/audio/2014%20Various%20Q&A%20Jan%202014.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-140117-questions-and-answers.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=wKF6KXQcdrg

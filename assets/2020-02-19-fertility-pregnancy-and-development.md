@@ -3,6 +3,9 @@ source:
   series: Butter Living Podcast
   title: Fertility, Pregnancy, and Development
   url: https://www.toxinless.com/blp-200219-fertility-pregnancy-development.mp3
+  mirrors:
+    - https://wiki.chadnet.org/blp-200219-fertility-pregnancy-development.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/blp-200219-fertility-pregnancy-development.vtt
   kind: audio
 transcription:
   date: "2024-04-18"

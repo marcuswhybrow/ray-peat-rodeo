@@ -4,6 +4,8 @@ source:
   title: Weight Loss, Macros, Prolactin, Cancer, Cold Therapy & More, Q&A
   kind: audio
   url: https://www.youtube.com/watch?v=EK8qhzo4w9s
+  mirrors:
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-11102020-weight-loss-macros-prolactin-cancer-cold-therapy-and-more-q-and-a.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

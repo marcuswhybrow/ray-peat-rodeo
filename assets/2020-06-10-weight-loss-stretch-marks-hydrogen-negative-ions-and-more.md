@@ -6,6 +6,7 @@ source:
   url: https://www.youtube.com/watch?v=RtBGNT3JvYc
   mirrors:
     - https://raypeatforum.com/community/threads/dr-ray-peat-q-a-weight-loss-stretch-marks-hydrogen-negative-ions-and-more.34801
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-200610-q-and-a-weight-loss-stretch-marks-hydrogen-negative-ions-and-more.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

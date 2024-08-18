@@ -3,6 +3,9 @@ source:
   series: Politics & Science
   title: Ionizing Radiation in Context Part 1
   url: https://www.toxinless.com/polsci-090420-radiation-1.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-090420-radiation-1.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-090420-radiation-1.vtt
   kind: audio
 completion:
   content: true

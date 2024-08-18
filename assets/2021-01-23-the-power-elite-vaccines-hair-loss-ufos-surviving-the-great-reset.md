@@ -4,6 +4,9 @@ source:
   episode: 47
   title: The Power Elite | Vaccines | Hair Loss | UFOs | Surviving The Great Reset
   url: https://www.youtube.com/watch?v=De0fXmRnunU
+  mirrors:
+    - https://wiki.chadnet.org/De0fXmRnunU.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2347%EF%BC%9A%20The%20Power%20Elite%20%EF%BD%9C%20Vaccines%20%EF%BD%9C%20Hair%20Loss%20%EF%BD%9C%20UFOs%20%EF%BD%9C%20Surviving%20The%20Great%20Reset%20with%20Ray%20Peat%2C%20PhD%20%5BDe0fXmRnunU%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=De0fXmRnunU

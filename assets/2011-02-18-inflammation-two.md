@@ -3,7 +3,16 @@ source:
   series: Ask Your Herb Doctor
   title: Inflammation II
   url: https://www.toxinless.com/kmud-110218-inflammation-2.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-110218-inflammation-2.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-110218-inflammation-2.vtt
+    - https://www.toxinless.com/kmud-130420-hormone-replacement-therapy.mp3
+    - https://wiki.chadnet.org/kmud-130420-hormone-replacement-therapy.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-130420-hormone-replacement-therapy.vtt
   kind: audio
+  note: >
+    Various sources list this episode erroneously as from 2013-04-20 titled 
+    "Hormone Replacement Therapy".
 completion:
   content: true
   content-verified: false

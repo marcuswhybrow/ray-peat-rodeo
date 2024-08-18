@@ -3,7 +3,13 @@ source:
   series: Ask Your Herb Doctor
   title: The Metabolism of Cancer
   url: https://www.youtube.com/watch?v=SW3EdTscTUA
-  # also https://www.toxinless.com/kmud-160715-the-metabolism-of-cancer.mp3
+  mirrors:
+    - https://www.toxinless.com/kmud-160715-the-metabolism-of-cancer.mp3
+    - https://wiki.chadnet.org/kmud-160715-the-metabolism-of-cancer.mp3
+    - https://askyourherbdoctor.com/audio/2016%20Cancer%20Metabolism%20Other%20Q&A%20July%202016%20(1).mp3
+    - https://askyourherbdoctor.com/audio/2016%20Cancer%20Metabolism%20Other%20Q&A%20July%202016%20%281%29.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-160715-the-metabolism-of-cancer.vtt
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-160916-antioxidant-theory-and-continued-war-on-cancer.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=SW3EdTscTUA

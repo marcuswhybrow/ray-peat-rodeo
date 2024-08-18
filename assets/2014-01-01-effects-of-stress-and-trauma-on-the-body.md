@@ -7,6 +7,8 @@ source:
     - https://www.toxinless.com/eluv-140101-effects-of-stress-and-trauma-on-the-body.mp3
     - https://www.functionalps.com/blog/wp-content/uploads/2011/09/wmnfFPS_000000_000001_ultra1_335FPS1.mp3
     - https://raypeatforum.com/community/threads/eluv-radio-interview-stress-and-trauma.4648
+    - https://wiki.chadnet.org/eluv-140101-effects-of-stress-and-trauma-on-the-body.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/eluv-140101-effects-of-stress-and-trauma-on-the-body.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=dEd-OmoHszg

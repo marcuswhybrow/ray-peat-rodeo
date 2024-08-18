@@ -6,6 +6,7 @@ source:
   url: https://www.youtube.com/watch?v=HNTgD6djJtE
   mirrors:
     - https://raypeatforum.com/community/threads/jodellefit-20-july-2019.29977
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-20072019-thyroid-hypothyroidism-and-diet-lifestyle-exercise-to-fix-it.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

@@ -3,7 +3,10 @@ source:
   series: Politics & Science
   title: Nuclear Disaster
   url: https://www.youtube.com/watch?v=VdWR0I3M2zM
-  # also https://www.toxinless.com/polsci-110316-nuclear-disaster.mp3
+  mirrors: 
+    - https://www.toxinless.com/polsci-110316-nuclear-disaster.mp3
+    - https://wiki.chadnet.org/polsci-110316-nuclear-disaster.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-110316-nuclear-disaster.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=VdWR0I3M2zM

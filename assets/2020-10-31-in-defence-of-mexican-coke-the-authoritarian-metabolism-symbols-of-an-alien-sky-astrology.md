@@ -4,6 +4,9 @@ source:
   episode: 38
   title: In Defense of Mexican Coke | The Authoritarian Metabolism | Symbols of an Alien Sky | Astrology
   url: https://www.youtube.com/watch?v=LKsogI7Hu9E
+  mirrors:
+    - https://wiki.chadnet.org/LKsogI7Hu9E.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2338%EF%BC%9A%20In%20Defense%20of%20Mexican%20Coke%20%EF%BD%9C%20The%20Authoritarian%20Metabolism%20%EF%BD%9C%20Symbols%20of%20an%20Alien%20Sky%20%EF%BD%9C%20Astrology%20%5BLKsogI7Hu9E%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=LKsogI7Hu9E

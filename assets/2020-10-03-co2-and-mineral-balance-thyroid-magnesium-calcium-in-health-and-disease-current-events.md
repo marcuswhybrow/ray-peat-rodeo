@@ -4,6 +4,9 @@ source:
   episode: 36
   title: CO2 and Mineral Balance | Thyroid | Magnesium | Calcium in Health and Disease | Current Events
   url: https://www.youtube.com/watch?v=74oLBrVddFs
+  mirrors:
+    - https://wiki.chadnet.org/74oLBrVddFs.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2336%EF%BC%9A%20CO2%20and%20Mineral%20Balance%20%EF%BD%9C%20Thyroid%20%EF%BD%9C%20Magnesium%20%EF%BD%9C%20Calcium%20in%20Health%20and%20Disease%20%EF%BD%9C%20Current%20Events%20%5B74oLBrVddFs%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=74oLBrVddFs

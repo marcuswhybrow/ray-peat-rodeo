@@ -215,7 +215,11 @@ templ RenderAsset(asset *Asset) {
 					<span class="block text-green-800">
 						This is <em>{ asset.GetFriendlyKindWithArticle() }</em>
 						{ asset.GetAssociationWithRayPeat() }
-						from { asset.Date[:4] }. 
+						if asset.Date[:4] == "0000" {
+							date unknown.
+						} else {
+							from { asset.Date[:4] }. 
+						}
 						<br/>
 					</span>
 					<span class="block text-green-800 mt-2">

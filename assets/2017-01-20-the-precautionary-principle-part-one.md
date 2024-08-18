@@ -1,9 +1,13 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: The Precautionary Principle (Part 1)
+  title: The Precautionary Principle Part One
   url: https://www.youtube.com/watch?v=KdkAj1upMBs
-  # aslo https://www.toxinless.com/kmud-170120-the-precautionary-principle.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-170120-the-precautionary-principle.mp3
+    - https://wiki.chadnet.org/kmud-170120-the-precautionary-principle.mp3
+    - https://askyourherbdoctor.com/audio/2017%20The%20Precautionary%20Principle%20Q&A%20January%202017.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-170120-the-precautionary-principle.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=KdkAj1upMBs

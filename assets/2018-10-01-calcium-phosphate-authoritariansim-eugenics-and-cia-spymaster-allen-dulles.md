@@ -4,6 +4,9 @@ source:
   episode: 34
   title: Calcium, Phosphate, Authoritarianism, Eugenics & CIA Spymaster Allen Dulles
   url: https://www.youtube.com/watch?v=qA9YrebN5zY
+  mirrors:
+    - https://wiki.chadnet.org/qA9YrebN5zY.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Calcium%2C%20Phosphate%2C%20Authoritarianism%2C%20Eugenics%20%26%20CIA%20Spymaster%20Allen%20Dulles%20with%20Ray%20Peat%20%5BGE%20%2334%5D%20%5BqA9YrebN5zY%5D.vtt
   kind: audio
 transcription:
   kind: auto-generated

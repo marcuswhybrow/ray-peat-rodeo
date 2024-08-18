@@ -4,6 +4,9 @@ source:
   episode: 82
   title: "What's More Toxic: PUFA or Endotoxin? Euphoria | Addiction | Meaningful Work | Current Events"
   url: https://www.youtube.com/watch?v=U2f0WOaTmu4
+  mirrors:
+    - https://wiki.chadnet.org/U2f0WOaTmu4.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2382%EF%BC%9A%20What's%20More%20Toxic%EF%BC%9A%20PUFA%20or%20Endotoxin%EF%BC%9F%20%EF%BD%9C%20Euphoria%20%EF%BD%9C%20Addiction%20%EF%BD%9C%20Meaningful%20Work%20%EF%BD%9C%20Current%20Events%20%5BU2f0WOaTmu4%5D.vtt
   kind: video
 transcription:
   kind: auto-generated

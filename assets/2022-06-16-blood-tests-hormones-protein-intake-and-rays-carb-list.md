@@ -6,6 +6,7 @@ source:
   url: https://www.youtube.com/watch?v=495CtgExBXE
   mirrors:
     - https://raypeatforum.com/community/threads/dr-ray-peat-blood-tests-hormones-protein-intake-rays-carb-list-jodellefit.46793
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-16062022-blood-tests-hormones-protein-intake-and-ray-s-carb-list.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

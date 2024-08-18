@@ -3,6 +3,10 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Oxygen Saturation, Lactic Acid, Thyroid, Vaccines, PUFAs
   url: https://www.toxinless.com/orn-200120-oxygen-saturation-lactic-acid-thyroid-vaccines-pufas.mp3
+  mirrors:
+    - https://wiki.chadnet.org/746757790.mp3 
+    - https://soundcloud.com/oneradionetwork/ray-peat-honest-and-uncensored-january-20-2020
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/01.20.20%20Ray%20Peat%20Honest%20and%20Uncensored%2C%20January%2020%2C%202020%20%5B746757790%5D.vtt
   kind: audio
 transcription:
   date: "2024-04-18"

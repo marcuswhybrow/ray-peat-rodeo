@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Nitric Oxide
   url: https://www.youtube.com/watch?v=D34CrlP5ZIc
-  # also https://www.toxinless.com/kmud-141121-nitric-oxide.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-141121-nitric-oxide.mp3
+    - https://wiki.chadnet.org/kmud-141121-nitric-oxide.mp3
+    - https://askyourherbdoctor.com/audio/2014%20Nitric%20Oxide,%20Other%20Topics%20Nov%202014.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-141121-nitric-oxide.vtt
   kind: audio
 transcription:
   author: Sheila

@@ -3,6 +3,9 @@ source:
   series: East West
   title: Serotonin and Endotoxin
   url: https://www.toxinless.com/ewh-110825-serotonin-and-endotoxin.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-110825-serotonin-and-endotoxin.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-110825-serotonin-and-endotoxin.vtt
   kind: audio
 completion:
   content: true

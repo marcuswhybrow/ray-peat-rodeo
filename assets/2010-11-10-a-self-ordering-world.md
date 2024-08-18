@@ -3,6 +3,9 @@ source:
   series: Politics & Science
   title: A Self Ordering World
   url: https://www.toxinless.com/polsci-101110-self-ordering-world.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-101110-self-ordering-world.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-101110-self-ordering-world.vtt
   kind: audio
 completion:
   content: true

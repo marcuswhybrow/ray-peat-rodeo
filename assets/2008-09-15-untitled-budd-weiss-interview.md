@@ -3,6 +3,8 @@ source:
   series: Budd Weiss
   title: Untitled Budd Weiss Interview
   url: https://www.functionalps.com/blog/wp-content/uploads/2011/09/Audio.-Bud-Weiss-Ray-Peat.-September-15-2008.mp3
+  mirrors:
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Buteyko%20Breathing%20-%20Bud%20Weiss%2C%202008-09-15.vtt
   kind: audio
 completion:
   content: true

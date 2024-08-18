@@ -4,6 +4,9 @@ source:
   episode: 24
   title: Immunity and Scientism | Pandemic Hobbyists | Eugenics Philanthropy | Killer Austerity
   url: https://www.youtube.com/watch?v=QxsdHJuvyck
+  mirrors:
+    - https://wiki.chadnet.org/QxsdHJuvyck.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2324%EF%BC%9A%20Immunity%20and%20Scientism%20%EF%BD%9C%20Pandemic%20Hobbyists%20%EF%BD%9C%20Eugenics%20Philanthropy%20%EF%BD%9C%20Killer%20Austerity%20%5BQxsdHJuvyck%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=QxsdHJuvyck

@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Progesterone, Estrogen, Strokes, Milk, Sugars
   url: https://www.toxinless.com/orn-191119-progesterone-estrogen-strokes-milk-sugars.mp3
+  mirrors:
+    - https://wiki.chadnet.org/715603975.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/11.19.19%20Hormones%2C%20Thyroid%20and%20Much%20much%20more%2C%20November%2019%2C%202019%20%5B715603975%5D.vtt
   kind: audio
 completion:
   content: true

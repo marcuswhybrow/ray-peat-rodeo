@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: "Rheumatoid Arthritis: Arthopathy & Alternative Treatments"
   url: https://www.youtube.com/watch?v=qwEY0br2SEE
-  # also https://www.toxinless.com/kmud-161021-rheumatoid-arthritis.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-161021-rheumatoid-arthritis.mp3
+    - https://wiki.chadnet.org/kmud-161021-rheumatoid-arthritis.mp3
+    - https://askyourherbdoctor.com/audio/2016%20Rheumatism%20Rheumatoid%20Arthritis%20Q&A%20October%202016.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-161021-rheumatoid-arthritis.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=qwEY0br2SEE

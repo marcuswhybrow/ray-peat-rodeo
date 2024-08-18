@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Aging and Energy Reversal
   url: https://www.youtube.com/watch?v=DEdDTAyZuJU
-  # also https://www.toxinless.com/kmud-131220-aging-and-energy-reversal.mp3
+  mirrors:
+    - https://www.toxinless.com/kmud-131220-aging-and-energy-reversal.mp3
+    - https://wiki.chadnet.org/kmud-131220-aging-and-energy-reversal.mp3
+    - https://askyourherbdoctor.com/audio/2013%20Aging%20and%20Energy%20Dec%202013.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-131220-aging-and-energy-reversal.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=DEdDTAyZuJU

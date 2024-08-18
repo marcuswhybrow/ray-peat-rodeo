@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Health of the Human Body
   url: https://www.toxinless.com/orn-190319-health-of-the-human-body.mp3
+  mirrors:
+    - https://wiki.chadnet.org/592705542.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/03.19.19%20Top%20Health%20Researcher%20on%20Point%2C%20March%2019%2C%202019%20%5B592705542%5D.vtt
   kind: audio
 completion:
   content: true

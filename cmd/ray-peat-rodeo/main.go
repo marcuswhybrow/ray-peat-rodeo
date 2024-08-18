@@ -6,27 +6,30 @@ import (
 	"log"
 	"os"
 	"slices"
+	"strings"
+	"sync"
 	"time"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/blog"
 	rprCatalog "github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
-	// "github.com/marcuswhybrow/ray-peat-rodeo/internal/check"
+	"github.com/marcuswhybrow/ray-peat-rodeo/internal/check"
+
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 )
 
 func main() {
-	// if len(os.Args) >= 2 {
-	// 	subcommand := os.Args[1]
-	// 	switch subcommand {
-	// 	case "check":
-	// 		check.Check()
-	// 		return
-	// 	default:
-	// 		fmt.Printf("'%v' is not a valid subcommand. Try: check\n", subcommand)
-	// 		return
-	// 	}
-	// }
+	if len(os.Args) >= 2 {
+		subcommand := os.Args[1]
+		switch subcommand {
+		case "check":
+			check.Check()
+			return
+		default:
+			fmt.Printf("'%v' is not a valid subcommand. Try: check\n", subcommand)
+			return
+		}
+	}
 
 	start := time.Now()
 
@@ -70,9 +73,10 @@ func main() {
 	// It's nice to redirect old URL's to the new ones.
 	// N.B. this data is currently collected, but not acted upon
 	redirections := map[string][]*rprCatalog.Asset{}
+	redirectionsMutex := sync.RWMutex{}
 
 	utils.Parallel(catalog.Assets, func(file *rprCatalog.Asset) error {
-		file.Write()
+		err := file.WriteHtml()
 		if err != nil {
 			return fmt.Errorf("Failed to render file '%v': %v", file.Path, err)
 		}
@@ -82,7 +86,9 @@ func main() {
 			if !ok {
 				existing = []*rprCatalog.Asset{}
 			}
+			redirectionsMutex.Lock()
 			redirections[prevPath] = append(existing, file)
+			redirectionsMutex.Unlock()
 		}
 		return nil
 	})
@@ -116,10 +122,42 @@ func main() {
 		log.Fatal("Failed to write blog:", err)
 	}
 
+	// Stats
+
+	statsPage, _ := utils.MakePage("stats")
+	missing := map[*rprCatalog.Asset][]int{}
+	prefixes := []string{
+		"https://wiki.chadnet.org",
+		"https://www.toxinless.com",
+		"https://github.com/0x2447196/raypeatarchive",
+		"https://expulsia.com",
+	}
+	for _, asset := range catalog.Assets {
+		allFound := true
+		results := []int{}
+		for _, prefix := range prefixes {
+			foundCount := 0
+			for _, url := range asset.GetAllURLsUnescaped() {
+				if strings.HasPrefix(url, prefix) {
+					foundCount += 1
+				}
+			}
+			results = append(results, foundCount)
+			if foundCount == 0 {
+				allFound = false
+			}
+		}
+		if !allFound {
+			missing[asset] = results
+		}
+	}
+	component := Stats(prefixes, missing)
+	component.Render(context.Background(), statsPage)
+
 	// 🏠 Homepage
 
 	indexPage, _ := utils.MakePage(".")
-	component := Index(catalog.Assets, latestFile, progress, blogPosts[0])
+	component = Index(catalog.Assets, latestFile, progress, blogPosts[0])
 	component.Render(context.Background(), indexPage)
 
 	err = catalog.HttpCache.Write()

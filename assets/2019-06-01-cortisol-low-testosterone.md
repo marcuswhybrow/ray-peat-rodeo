@@ -3,6 +3,9 @@ source:
   series: Jodellefit
   title: Cortisol, Low Testosterone
   url: https://www.toxinless.com/jf-190601-cortisol-low-testosterone.mp3
+  mirrors:
+    - https://wiki.chadnet.org/jf-190601-cortisol-low-testosterone.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-190601-cortisol-low-testosterone.vtt
   kind: audio
 completion:
   content: true

@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: "Authoritarianism: Freedom of Expression, Religion & Assembly"
   url: https://www.youtube.com/watch?v=J7fCjpZyGgo
-  # also https://www.toxinless.com/kmud-160617-authoritarianism.mp3
+  mirrors:
+    - https://www.toxinless.com/kmud-160617-authoritarianism.mp3
+    - https://wiki.chadnet.org/kmud-160617-authoritarianism.mp3
+    - https://askyourherbdoctor.com/audio/2016%20Authoritarianism%20Digestion%20Circulation%20Q&A%20June%202016.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-160617-authoritarianism.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=J7fCjpZyGgo

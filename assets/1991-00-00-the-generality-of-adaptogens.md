@@ -1,18 +1,14 @@
 ---
 source:
+  kind: paper
   series: Townsend Letter for Doctors & Patients
+  edition: 930
+  locator: 100
   title: The Generality of Adaptogens
-  url: https://www.toxinless.com/ray-peat-the-generality-of-adaptogens.pdf
+  url: https://wiki.chadnet.org/the-generality-of-adaptogens.pdf
   mirrors:
+    - https://www.toxinless.com/ray-peat-the-generality-of-adaptogens.pdf
     - https://wiki.chadnet.org/files/the-generality-of-adaptogens.pdf
-  kind: article
-# wayback machine earliest date is 2021-10-28
-
-completion:
-  content: false
-  content-verified: false
-  mentions: false
-  issues: false
-  notes: false
-  timestamps: false
+    - https://expulsia.com/health/peat-index/generality.pdf
+    - https://github.com/0x2447196/raypeatarchive/blob/main/documents/newsletters/the-generality-of-adaptogens.txt
 ---

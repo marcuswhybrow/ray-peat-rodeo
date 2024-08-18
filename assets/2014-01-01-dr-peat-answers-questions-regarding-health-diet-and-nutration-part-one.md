@@ -1,8 +1,13 @@
 ---
 source:
   series: Patrick Timpone's One Radio Network
-  title: Dr. Peat Answers Questions Regarding Health, Diet and Nutrition Part 1
+  title: Dr. Peat Answers Questions Regarding Health, Diet and Nutrition Part One
   url: https://www.toxinless.com/orn-140101-nutrition-1.mp3
+  mirrors:
+    - https://wiki.chadnet.org/318921534.mp3
+    - https://soundcloud.com/oneradionetwork/010114_peat_ray_nutritiion_one
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/orn-140101-nutrition-1.vtt
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/01.01.14_peat_ray_nutritiion_one%20%5B318921534%5D.vtt
   kind: audio
 completion:
   content: true

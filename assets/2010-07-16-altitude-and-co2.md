@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Altitude and CO2
   url: https://www.youtube.com/watch?v=Aes7DnsTuHA
-  # also https://www.toxinless.com/kmud-100716-altitude.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-100716-altitude.mp3
+    - https://www.toxinless.com/kmud-100716-altitude.mp3
+    - https://askyourherbdoctor.com/audio/2010%20Altitude%20and%20CO2%20Jul%202010.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-100716-altitude.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=Aes7DnsTuHA

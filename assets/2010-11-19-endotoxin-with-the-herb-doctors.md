@@ -3,6 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Endotoxin
   url: https://www.functionalps.com/blog/wp-content/uploads/2011/09/add-Kmud_Endotoxins_kmud_101119_190000fritalk.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-101119-endotoxins.mp3
+    - https://askyourherbdoctor.com/audio/2010%20Endotoxin%20Nov%202010.mp3
+    - https://www.toxinless.com/kmud-101119-endotoxins.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-101119-endotoxins.vtt
   kind: audio
   duration: 58:30
 transcription:

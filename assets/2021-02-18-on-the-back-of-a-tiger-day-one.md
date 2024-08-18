@@ -3,6 +3,9 @@ source:
   series: Perceive Think Act Films
   title: On the Back of a Tiger, Day One
   url: https://www.youtube.com/watch?v=jqhlIOt5sUw
+  mirrors:
+    - https://wiki.chadnet.org/Z3yVUELD2ZA.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Dr.%20Ray%20Peat%2C%20Day%20One%EF%BC%9A%20Full%20Interview%20from%20On%20the%20Back%20of%20a%20Tiger%20%5BjqhlIOt5sUw%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=jqhlIOt5sUw

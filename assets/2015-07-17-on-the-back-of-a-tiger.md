@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: On The Back of a Tiger
   url: https://www.youtube.com/watch?v=kuG11gE6HgQ
-  # also https://www.toxinless.com/kmud-150717-on-the-back-of-a-tiger.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-150717-on-the-back-of-a-tiger.mp3
+    - https://wiki.chadnet.org/kmud-150717-on-the-back-of-a-tiger.mp3
+    - https://askyourherbdoctor.com/audio/2015%20On%20The%20Back%20of%20a%20Tiger%20Film%20Jul%202015.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-150717-on-the-back-of-a-tiger.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=kuG11gE6HgQ

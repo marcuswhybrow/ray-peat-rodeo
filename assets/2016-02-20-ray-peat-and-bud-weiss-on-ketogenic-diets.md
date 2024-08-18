@@ -3,6 +3,8 @@ source:
   series: Bud Weiss
   title: Ray Peat and Bud Weiss on Ketogenic Diets
   url: https://www.youtube.com/watch?v=5g8jDAXIsY0
+  mirrors:
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Ray%20Peat%20and%20Bud%20Weiss%20on%20Ketogenic%20Diets.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=5g8jDAXIsY0

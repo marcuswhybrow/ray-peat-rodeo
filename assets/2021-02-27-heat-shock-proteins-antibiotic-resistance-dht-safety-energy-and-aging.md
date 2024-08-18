@@ -4,6 +4,9 @@ source:
   episode: 51
   title: Heat Shock Proteins | Antibiotic Resistance | DHT Safety | Energy and Aging
   url: https://www.youtube.com/watch?v=5sop_zLMZ34
+  mirrors:
+    - https://wiki.chadnet.org/5sop_zLMZ34.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2351%EF%BC%9A%20Heat%20Shock%20Proteins%20%EF%BD%9C%20Antibiotic%20Resistance%20%EF%BD%9C%20DHT%20Safety%20%EF%BD%9C%20Energy%20and%20Aging%20with%20Ray%20Peat%2C%20PhD%20%5B5sop_zLMZ34%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=5sop_zLMZ34

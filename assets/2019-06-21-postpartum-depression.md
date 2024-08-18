@@ -3,6 +3,9 @@ source:
   series: Ask Your Herb Doctor
   title: Postpartum Depression
   url: https://www.toxinless.com/kmud-190621-postpartum-depression.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-190621-postpartum-depression.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-190621-postpartum-depression.vtt
   kind: audio
 completion:
   content: true

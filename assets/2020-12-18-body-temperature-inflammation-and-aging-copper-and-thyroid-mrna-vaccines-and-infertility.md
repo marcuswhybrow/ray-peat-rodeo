@@ -4,6 +4,9 @@ source:
   episode: 43
   title: Body Temperature, Inflammation, and Aging | Copper and Thyroid | mRNA Vaccines and Infertility
   url: https://www.youtube.com/watch?v=bHKWkqrYqAY
+  mirrors:
+    - https://wiki.chadnet.org/bHKWkqrYqAY.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2343%EF%BC%9A%20Body%20Temperature%2C%20Inflammation%2C%20and%20Aging%20%EF%BD%9C%20Copper%20and%20Thyroid%20%EF%BD%9C%20mRNA%20Vaccines%20and%20Infertility%20%5BbHKWkqrYqAY%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=bHKWkqrYqAY

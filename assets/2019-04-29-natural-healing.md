@@ -3,6 +3,10 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Natural Healing
   url: https://www.toxinless.com/orn-190429-natural-healing.mp3
+  mirrors:
+    - https://wiki.chadnet.org/613401165.mp3
+    - https://soundcloud.com/oneradionetwork/ray-peat-live-april-29-2019
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/04.29.19%20Ray%20Peat%20Live%2C%20April%2029%2C%202019%20%5B613401165%5D.vtt
   kind: audio
 completion:
   content: true

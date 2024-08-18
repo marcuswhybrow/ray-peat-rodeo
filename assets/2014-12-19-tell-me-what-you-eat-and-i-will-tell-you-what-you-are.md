@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Tell Me What You Eat & I Will Tell You What You Are
   url: https://www.youtube.com/watch?v=CxsSVCclRyI
-  # also https://www.toxinless.com/kmud-141219-you-are-what-you-eat.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-141219-you-are-what-you-eat.mp3
+    - https://wiki.chadnet.org/kmud-141219-you-are-what-you-eat.mp3
+    - https://askyourherbdoctor.com/audio/2014%20You%20Are%20What%20You%20Eat%20Dec%202014.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-141219-you-are-what-you-eat.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=CxsSVCclRyI

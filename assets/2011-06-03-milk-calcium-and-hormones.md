@@ -3,6 +3,9 @@ source:
   series: East West
   title: Milk, Calcium and Hormones
   url: https://www.toxinless.com/ewh-110603-milk-calcium-and-hormones.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-110603-milk-calcium-and-hormones.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-110603-milk-calcium-and-hormones.vtt
   kind: audio
 completion:
   content: true

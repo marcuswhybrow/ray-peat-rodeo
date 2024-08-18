@@ -3,7 +3,12 @@ source:
   series: Ask Your Herb Doctor
   title: Cancer Treatment
   url: https://www.youtube.com/watch?v=4RzhS1pHs8c
-  # also  https://www.toxinless.com/kmud-120217-cancer-treatment.mp3
+  mirrors:
+    - https://www.toxinless.com/kmud-120217-cancer-treatment.mp3
+    - https://www.toxinless.com/kmud-120217-cancer-treatment-partial-transcript.doc
+    - https://wiki.chadnet.org/kmud-120217-cancer-treatment.mp3
+    - https://askyourherbdoctor.com/audio/2012%20Cancer%20Treatment%20Feb%202012.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-120217-cancer-treatment.vtt
   kind: audio
 transcription:
   url: https://www.toxinless.com/kmud-120217-cancer-treatment-partial-transcript.doc

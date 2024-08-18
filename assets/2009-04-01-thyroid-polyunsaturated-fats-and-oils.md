@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Thyroid, Polyunsaturated Fats and Oils
   url: https://www.youtube.com/watch?v=7OBcXWdfx0w
-  # also https://www.toxinless.com/kmud-090401-thyroid-polyunsaturated-fats-and-oils.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-090401-thyroid-polyunsaturated-fats-and-oils.mp3
+    - https://wiki.chadnet.org/kmud-090401-thyroid-polyunsaturated-fats-and-oils.mp3
+    - https://askyourherbdoctor.com/audio/2009%20Thyroid,%20Polyunsaturated%20Fats%20and%20Oils%20Part%204%20Apr%202009.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-090401-thyroid-polyunsaturated-fats-and-oils.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=7OBcXWdfx0w

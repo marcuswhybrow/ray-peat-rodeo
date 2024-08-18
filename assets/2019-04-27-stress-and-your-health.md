@@ -3,6 +3,9 @@ source:
   series: Jodellefit
   title: Stress and Your Health
   url: https://www.toxinless.com/jf-190427-stress-health.mp3
+  mirrors:
+    - https://wiki.chadnet.org/jf-190427-stress-health.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-190427-stress-health.vtt
   kind: audio
 completion:
   content: true

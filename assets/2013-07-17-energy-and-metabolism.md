@@ -3,6 +3,9 @@ source:
   series: East West
   title: Energy and Metabolism
   url: https://www.toxinless.com/ewh-130717-energy-and-metabolism.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-130717-energy-and-metabolism.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-130717-energy-and-metabolism.vtt
   kind: audio
 completion:
   content: true

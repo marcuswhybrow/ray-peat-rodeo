@@ -3,6 +3,8 @@ source:
   series: Butter Living Podcast
   title: A New Landscape of Life and Learning
   url: https://www.youtube.com/watch?v=CI5xhBtrj6Y
+  mirrors:
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/blp-200426-a-new-landscape-of-life-and-learning.vtt
   kind: audio
 transcription:
   author: Marcus Whybrow

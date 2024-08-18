@@ -10,6 +10,9 @@ source:
   series: Your Own Health And Fitness
   title: Thyroid/Progesterone and Diet
   url: https://www.toxinless.com/yohaf-961112-thyroid-progesterone-and-diet.mp3
+  mirrors:
+    - https://wiki.chadnet.org/yohaf-961112-thyroid-progesterone-and-diet.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/yohaf-961112-thyroid-progesterone-and-diet.vtt
   kind: audio
 completion:
   content: true

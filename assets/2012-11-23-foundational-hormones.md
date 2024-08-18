@@ -3,7 +3,10 @@ source:
   series: World Puja
   title: Foundational Hormones
   url: https://www.youtube.com/watch?v=0YjNyy7z4DM
-  # also https://www.toxinless.com/wp-121123-foundational-hormones.mp3
+  mirrors:
+    - https://wiki.chadnet.org/wp-121123-foundational-hormones.mp3
+    - https://www.toxinless.com/wp-121123-foundational-hormones.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/wp-121123-foundational-hormones.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=0YjNyy7z4DM

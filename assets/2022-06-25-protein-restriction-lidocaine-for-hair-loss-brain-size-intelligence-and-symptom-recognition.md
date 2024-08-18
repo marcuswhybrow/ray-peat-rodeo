@@ -4,6 +4,9 @@ source:
   episode: 85
   title: Protein Restriction. Lidocaine for Hair Loss? Brain Size, Intelligence & Symptom Recognition
   url: https://www.youtube.com/watch?v=zZCgpw6_sRA
+  mirrors:
+    - https://wiki.chadnet.org/zZCgpw6_sRA.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2385%EF%BC%9A%20Protein%20Restriction%20%EF%BD%9C%20Lidocaine%20for%20Hair%20Loss%EF%BC%9F%20%EF%BD%9C%20Brain%20Size%2C%20Intelligence%20%26%20Symptom%20Recognition%20%5BzZCgpw6_sRA%5D.vtt
   kind: video
 transcription:
   kind: auto-generated

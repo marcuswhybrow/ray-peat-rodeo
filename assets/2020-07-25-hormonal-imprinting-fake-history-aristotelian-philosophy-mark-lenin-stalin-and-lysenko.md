@@ -4,6 +4,9 @@ source:
   episode: 32
   title: Hormonal Imprinting | Fake History | Aristotelian Philosophy | Marx, Lenin, Stalin, and Lysenko
   url: https://www.youtube.com/watch?v=famOF8GYlbg
+  mirrors:
+    - https://wiki.chadnet.org/famOF8GYlbg.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2332%EF%BC%9A%20Hormonal%20Imprinting%20%EF%BD%9C%20Fake%20History%20%EF%BD%9C%20Aristotelian%20Philosophy%20%EF%BD%9C%20Marx%2C%20Lenin%2C%20Stalin%2C%20and%20Lysenko%20%5BfamOF8GYlbg%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=famOF8GYlbg

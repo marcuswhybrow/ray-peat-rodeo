@@ -3,6 +3,9 @@ source:
   title: Organizing the Panic
   series: Ray Peat Insight
   url: https://raypeatinsight.wordpress.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
+  mirrors:
+    - http://web.archive.org/web/20160321100221/http://raypeatinsight.com/2015/01/29/organizing-the-panic-an-interview-with-dr-ray-peat/
+    - https://github.com/0x2447196/raypeatarchive/blob/main/documents/raypeatinsight.wordpress.com/organizing-the-panic.md
   kind: text
 added:
   date: 2023-02-22

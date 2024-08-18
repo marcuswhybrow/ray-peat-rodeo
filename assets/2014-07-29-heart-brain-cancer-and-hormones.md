@@ -10,6 +10,9 @@ source:
   series: Your Own Health And Fitness
   title: Heart, Brain, Cancer, and Hormones
   url: https://www.toxinless.com/yohaf-140729-heart-brain-cancer-and-hormones.mp3
+  mirrors:
+    - https://wiki.chadnet.org/yohaf-140729-heart-brain-cancer-and-hormones.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/yohaf-140729-heart-brain-cancer-and-hormones.vtt
   kind: audio
 completion:
   content: true

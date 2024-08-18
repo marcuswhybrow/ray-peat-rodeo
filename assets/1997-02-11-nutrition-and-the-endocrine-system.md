@@ -10,6 +10,9 @@ source:
   series: Your Own Health And Fitness
   title: Nutrition and the Endocrine System
   url: https://www.toxinless.com/yohaf-970211-nutrition-and-the-endocrine-system.mp3
+  mirrors:
+    - https://wiki.chadnet.org/yohaf-970211-nutrition-and-the-endocrine-system.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/yohaf-970211-nutrition-and-the-endocrine-system.vtt
   kind: audio
 completion:
   content: true

@@ -6,6 +6,8 @@ source:
   mirrors: 
     - https://www.toxinless.com/jf-191112-listener-qa.mp3
     - https://raypeatforum.com/community/threads/jodellefit-ray-peat-q-a.31576
+    - https://wiki.chadnet.org/jf-191112-listener-qa.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-191112-listener-qa.vtt
   kind: audio
 completion:
   content: true

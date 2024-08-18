@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Cellular Repair
   url: https://www.youtube.com/watch?v=D1KDzPKNxc8
-  # also (https://www.toxinless.com/kmud-120615-cellular-repair.mp3
+  mirrors:
+    - https://www.toxinless.com/kmud-120615-cellular-repair.mp3
+    - https://wiki.chadnet.org/kmud-120615-cellular-repair.mp3
+    - https://askyourherbdoctor.com/audio/2012%20Cellular%20Repair%20Jun%202012.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-120615-cellular-repair.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=D1KDzPKNxc

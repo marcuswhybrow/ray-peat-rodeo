@@ -1,7 +1,10 @@
 ---
 source:
-  url: https://wiki.chadnet.org/files/arthritis-autoimmunity-and-aging.pdf
+  url: https://wiki.chadnet.org/arthritis-autoimmunity-and-aging.pdf
   title: Arthritis, Autoimmunity, & Aging
   kind: newsletter
-  series: Townsend Letter for Doctors & Patients
+  series: Raymond Peat
+  mirrors:
+    - https://expulsia.com/health/peat-index/November%202016%20-%20Ray%20Peat's%20Newsletter%20.pdf
+    - https://github.com/0x2447196/raypeatarchive/blob/main/documents/newsletters/arthritis-autoimmunity-and-aging.txt
 ---

@@ -3,6 +3,9 @@ source:
   series: Ask Your Herb Doctor
   title: Pollution
   url: https://www.toxinless.com/kmud-190517-pollution.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-190517-pollution.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-190517-pollution.vtt
   kind: audio
 completion:
   content: true

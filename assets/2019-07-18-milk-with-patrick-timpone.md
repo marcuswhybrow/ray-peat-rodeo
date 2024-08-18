@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Milk
   url: https://www.toxinless.com/orn-190718-milk.mp3
+  mirrors:
+    - https://wiki.chadnet.org/653210912.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/07.18.19%20Deep%20Research%20in%20Healh%2C%20July%2018%2C%202019%20%5B653210912%5D.vtt
   kind: audio
 completion:
   content: true

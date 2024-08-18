@@ -4,6 +4,9 @@ source:
   episode: 31
   title: Safe Supplements
   url: https://www.youtube.com/watch?v=PuSfV43Quuo
+  mirrors:
+    - https://wiki.chadnet.org/PuSfV43Quuo.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Safe%20Supplements%20with%20Ray%20Peat%20%5BGenerative%20Energy%20%2331%5D%20%5BPuSfV43Quuo%5D.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=PuSfV43Quuo

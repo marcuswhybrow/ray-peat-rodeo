@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Memory, Cognition and Nutrition
   url: https://www.youtube.com/watch?v=c-XQcMhAQYM
-  # also https://www.toxinless.com/kmud-140516-memory-cognition-and-nutrition.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-140516-memory-cognition-and-nutrition.mp3
+    - https://wiki.chadnet.org/kmud-140516-memory-cognition-and-nutrition.mp3
+    - https://askyourherbdoctor.com/audio/2014%20Cognition%20and%20Memory%20May%202014.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-140516-memory-cognition-and-nutrition.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=c-XQcMhAQYM

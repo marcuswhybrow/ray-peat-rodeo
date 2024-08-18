@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Nitric Oxide, Nitrates, Nitrites, and Fluoride
   url: https://www.youtube.com/watch?v=RRyDs_9DDoM
-  # also https://www.toxinless.com/kmud-151218-nitric-oxide-nitrates-nitrites-fluoride.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-151218-nitric-oxide-nitrates-nitrites-fluoride.mp3
+    - https://wiki.chadnet.org/kmud-151218-nitric-oxide-nitrates-nitrites-fluoride.mp3
+    - https://askyourherbdoctor.com/audio/2015%20Fluoride.mp3 # higher quality
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-151218-nitric-oxide-nitrates-nitrites-fluoride.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=RRyDs_9DDoM

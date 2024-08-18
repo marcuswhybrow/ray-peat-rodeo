@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: A Plethora of Wide-Randing Questions
   url: https://www.toxinless.com/orn-191015-plethora-of-wide-ranging-questions.mp3
+  mirrors:
+    - https://wiki.chadnet.org/696513319.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/10.15.19%20Deep%20Research%20into%20Health%2C%20October%2015%2C%202019%20%5B696513319%5D.vtt
   kind: audio
 completion:
   content: true

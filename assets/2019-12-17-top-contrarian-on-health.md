@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Top Contrarian on Health
   url: https://www.toxinless.com/orn-191217-top-contrarian-on-health.mp3
+  mirrors:
+    - https://wiki.chadnet.org/729743395.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/12.17.19%20The%20Nation's%20Top%20Contrarian%20on%20Health%2C%20December%2017%2C%202019%20%5B729743395%5D.vtt
   kind: audio
 completion:
   content: true

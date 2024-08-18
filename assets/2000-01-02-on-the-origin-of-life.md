@@ -3,7 +3,10 @@ source:
   series: Politics & Science
   title: On The Origin of Life
   url: https://www.youtube.com/watch?v=YhyJTLe8SNc
-  # also https://www.toxinless.com/polsci-000102-origin-of-life.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-000102-origin-of-life.mp3
+    - https://www.toxinless.com/polsci-000102-origin-of-life.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-000102-origin-of-life.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=YhyJTLe8SNc

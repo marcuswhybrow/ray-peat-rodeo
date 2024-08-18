@@ -3,6 +3,9 @@ source:
   series: Ray Peat Insight
   title: Mind-Body Connection
   url: https://raypeatinsight.wordpress.com/2013/06/06/raypeat-interviews-revisited/
+  mirrors:
+    - http://web.archive.org/web/20160404173506/http://raypeatinsight.com/2013/06/06/raypeat-interviews-revisited
+    - https://github.com/0x2447196/raypeatarchive/blob/main/documents/raypeatinsight.wordpress.com/ray-peat-interviews-revisited.md
   kind: text
 added:
   date: 2023-02-22

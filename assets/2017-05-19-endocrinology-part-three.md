@@ -1,9 +1,13 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Endocrinology (Part 3)
+  title: Endocrinology Part Three
   url: https://www.youtube.com/watch?v=AsuSit7exNE
-  # also https://www.toxinless.com/kmud-170519-endocrinology-part3.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-170519-endocrinology-part3.mp3
+    - https://wiki.chadnet.org/kmud-170519-endocrinology-part3.mp3
+    - https://askyourherbdoctor.com/audio/2017%20Endocrinology%20Part%203%20Q&A%20May%202017.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-170519-endocrinology-part3.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=AsuSit7exNE

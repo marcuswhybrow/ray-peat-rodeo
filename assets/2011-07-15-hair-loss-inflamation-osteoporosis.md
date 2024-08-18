@@ -3,6 +3,10 @@ source:
   series: Ask Your Herb Doctor
   title: Hair Loss, Inflamation, Osteoporosis
   url: https://www.toxinless.com/kmud-110715-hair-loss-inflammation-osteoporosis.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-110715-hair-loss-inflammation-osteoporosis.mp3
+    - https://askyourherbdoctor.com/audio/Hair-Loss,%20Osteoporosis.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-110715-hair-loss-inflammation-osteoporosis.vtt
   kind: audio
 completion:
   content: true

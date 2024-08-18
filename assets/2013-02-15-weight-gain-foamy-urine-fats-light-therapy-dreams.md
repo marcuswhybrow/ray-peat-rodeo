@@ -5,6 +5,10 @@ source:
   url: https://www.toxinless.com/kmud-130215-weight-gain.mp3
   mirrors:
     - https://www.youtube.com/watch?v=xcHLZSBTcCc
+    - https://wiki.chadnet.org/kmud-130215-weight-gain.mp3
+    - https://askyourherbdoctor.com/audio/2013%20Weight%20Gain,%20Foamy%20Urine,%20Fats,%20Light%20Therapy,%20Dreams%20Feb%202013.mp3
+    - https://www.toxinless.com/kmud-130215-weight-gain-transcription.doc
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-130215-weight-gain.vtt
   kind: audio
 transcription:
   url: https://www.toxinless.com/kmud-130215-weight-gain-transcription.doc

@@ -36,7 +36,8 @@ func (t *MentionHTMLRenderer) renderCitation(w util.BufWriter, source []byte, no
         hx-swap="innerHTML"
         hx-select=".hx-select"
         data-mention-id="{{ .Mention.ID }}"
-        class="mention relative"
+        class="mention relative cursor-pointer"
+        onclick="void(0)"
         _="
           on mousemove
             trigger closeAllPopups(exception: my @data-mention-id) on .open-popup

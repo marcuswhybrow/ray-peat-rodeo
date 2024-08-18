@@ -4,6 +4,9 @@ source:
   episode: 80
   title: World War 3 | Heavy Metals | Progesterone for Hair Loss | T3 to T4 Thyroid Ratio
   url: https://www.youtube.com/watch?v=LDWVtsqEOF0
+  mirrors:
+    - https://wiki.chadnet.org/LDWVtsqEOF0.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2380%EF%BC%9A%20World%20War%203%20%EF%BD%9C%20Heavy%20Metals%20%EF%BD%9C%20Progesterone%20for%20Hair%20Loss%20%EF%BD%9C%20T3%20to%20T4%20Thyroid%20Ratio%20with%20Ray%20Peat%20%5BLDWVtsqEOF0%5D.vtt
   kind: video
 transcription:
   kind: auto-generated

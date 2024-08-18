@@ -3,8 +3,13 @@ source:
   series: Politics & Science
   title: Fundraiser
   url: https://www.youtube.com/watch?v=TQPkMb95NdE
-  # also https://www.toxinless.com/polsci-120222-fundraiser-1.mp3
-  # and https://www.toxinless.com/polsci-120222-fundraiser-2.mp3
+  mirrors:
+    - https://www.toxinless.com/polsci-120222-fundraiser-1.mp3
+    - https://www.toxinless.com/polsci-120222-fundraiser-2.mp3
+    - https://wiki.chadnet.org/polsci-120222-fundraiser-1.mp3
+    - https://wiki.chadnet.org/polsci-120222-fundraiser-2.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-120222-fundraiser-1.vtt
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-120222-fundraiser-2.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=TQPkMb95NdE

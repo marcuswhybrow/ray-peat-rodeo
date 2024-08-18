@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: The Ten Most Toxic Things In Our Food
   url: https://www.youtube.com/watch?v=aS3hGHHjeMQ
-  # also https://www.toxinless.com/kmud-090901-the-ten-most-toxic-things-in-our-food.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-090901-the-ten-most-toxic-things-in-our-food.mp3
+    - https://wiki.chadnet.org/kmud-090901-the-ten-most-toxic-things-in-our-food.mp3
+    - https://askyourherbdoctor.com/audio/2009%20The%20Ten%20Most%20Toxic%20Things%20In%20Our%20Food%20Sept%202009.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-090901-the-ten-most-toxic-things-in-our-food.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=aS3hGHHjeMQ

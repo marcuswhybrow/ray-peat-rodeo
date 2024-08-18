@@ -1,8 +1,12 @@
 ---
 source:
-    series: Ray Peat's Website
+    series: Raymond Peat
     url: http://raypeat.com/articles/articles/william-blake.shtml
     title: Can Art Instruct Science? William Blake as Biological Visionary
+    mirrors:
+        - https://wiki.chadnet.org/can-art-instruct-science-william-blake-as-biological-visionary
+        - https://expulsia.com/health/peat-index/artscience.html
+        - https://github.com/0x2447196/raypeatarchive/blob/main/documents/raypeat.com/william-blake.md
     kind: article
 added:
     author: Marcus Whybrow

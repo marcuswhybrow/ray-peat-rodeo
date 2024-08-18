@@ -4,6 +4,9 @@ source:
   episode: 41
   title: Body Temperature | mRNA Vaccines | Vernadsky's Evolution | The CIA's Weaponized Culture
   url: https://www.youtube.com/watch?v=DchRbk3E-SI
+  mirrors:
+    - https://wiki.chadnet.org/DchRbk3E-SI.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2341%EF%BC%9A%20Body%20Temperature%20%EF%BD%9C%20mRNA%20Vaccines%20%EF%BD%9C%20Vernadsky's%20Evolution%20%EF%BD%9C%20The%20CIA's%20Weaponized%20Culture%20%5BDchRbk3E-SI%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=DchRbk3E-SI

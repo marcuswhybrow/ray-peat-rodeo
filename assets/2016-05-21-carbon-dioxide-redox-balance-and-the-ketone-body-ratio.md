@@ -4,6 +4,9 @@ source:
   episode: 26
   title: Carbon Dioxide, Redox Balance, and The Ketone Body Ratio
   url: https://www.youtube.com/watch?v=3AI46HYJ3ro
+  mirrors:
+    - https://wiki.chadnet.org/3AI46HYJ3ro.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Carbon%20Dioxide%2C%20Redox%20Balance%2C%20and%20The%20Ketone%20Body%20Ratio%20with%20Ray%20Peat%20%20%5BGenerative%20Energy%20%2326%5D%20%5B3AI46HYJ3ro%5D.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=3AI46HYJ3ro

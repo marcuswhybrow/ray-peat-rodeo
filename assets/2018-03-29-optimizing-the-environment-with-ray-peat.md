@@ -4,6 +4,9 @@ source:
   episode: 33
   title: Optimizing The Environment
   url: https://www.youtube.com/watch?v=enNGb3c1NKk
+  mirrors:
+    - https://wiki.chadnet.org/enNGb3c1NKk.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Optimizing%20The%20Environment%20with%20Ray%20Peat%20%5BGenerative%20Energy%20%2333%5D%20%5BenNGb3c1NKk%5D.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=enNGb3c1NKk

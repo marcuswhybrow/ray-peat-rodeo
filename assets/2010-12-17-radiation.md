@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Radiation
   url: https://www.youtube.com/watch?v=mNOzr30pGjw
-  # also https://www.toxinless.com/kmud-101217-radiation.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-101217-radiation.mp3
+    - https://wiki.chadnet.org/kmud-101217-radiation.mp3
+    - https://askyourherbdoctor.com/audio/2010%20Radiation%20Dec%202010.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-101217-radiation.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=mNOzr30pGjw

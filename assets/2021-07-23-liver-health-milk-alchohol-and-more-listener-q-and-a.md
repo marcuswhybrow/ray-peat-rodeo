@@ -6,6 +6,7 @@ source:
   url: https://www.youtube.com/watch?v=CTvB9lDk5PM
   mirrors:
     - https://raypeatforum.com/community/threads/jodellefit-ray-peat-interview.28702
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-26072021-liver-health-milk-alcohol-and-more-listener-q-and-a.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

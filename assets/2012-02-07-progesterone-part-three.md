@@ -3,7 +3,10 @@ source:
   series: Politics & Science
   title: Progesterone Part 3
   url: https://www.youtube.com/watch?v=1QuHb2hT8Ho
-  # also https://www.toxinless.com/polsci-120207-progesterone-3.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-120207-progesterone-3.mp3
+    - https://www.toxinless.com/polsci-120207-progesterone-3.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-120207-progesterone-3.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=1QuHb2hT8Ho

@@ -6,6 +6,7 @@ source:
   url: https://www.youtube.com/watch?v=ectFSs9nEcw
   mirrors:
     - https://raypeatforum.com/community/threads/jodelle-fit-dr-ray-peat-q-a-how-to-sleep-better-sleep-solutions-supplements.32847
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-19022020-q-and-a-how-to-sleep-better-sleep-solutions-and-supplements.vtt
 transcription:
   date: "2024-04-30"
   author: Whisper AI

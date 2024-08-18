@@ -92,7 +92,7 @@ func NewCatalog(assetsPath string) *Catalog {
 	}
 
 	utils.Parallel(filePaths, func(filePath string) error {
-		err := catalog.NewAsset(filePath)
+		_, err := catalog.NewAsset(filePath)
 		if err != nil {
 			return fmt.Errorf("Failed to retrieve file '%v': %v", filePath, err)
 		}
@@ -104,10 +104,10 @@ func NewCatalog(assetsPath string) *Catalog {
 	return catalog
 }
 
-func (c *Catalog) NewAsset(filePath string) error {
+func (c *Catalog) NewAsset(filePath string) (*Asset, error) {
 	asset, err := NewAsset(filePath, c.MarkdownParser, c.HttpCache, c.AvatarPaths)
 	if err != nil {
-		return fmt.Errorf("Failed to instantiate file: %v", err)
+		return nil, fmt.Errorf("Failed to instantiate file: %v", err)
 	}
 
 	// Catalog is designed to handle asynchronous workloads
@@ -146,13 +146,9 @@ func (c *Catalog) NewAsset(filePath string) error {
 		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][asset] = mentions
 	}
 
-	for series, assets := range c.BySeries {
-		fmt.Println("S:", series, len(assets))
-	}
-
 	c.Mutex.Unlock()
 
-	return nil
+	return asset, nil
 }
 
 func (c *Catalog) WriteMentionPages() error {
@@ -198,7 +194,6 @@ func (c *Catalog) WritePopups() error {
 
 func (c *Catalog) WriteSeriesPages() error {
 	for series, assets := range c.BySeries {
-		fmt.Println("Series:", series)
 		f, _ := utils.MakePage(series)
 		component := SeriesPage(assets[0].FrontMatter.Source.Series, assets)
 		err := component.Render(context.Background(), f)

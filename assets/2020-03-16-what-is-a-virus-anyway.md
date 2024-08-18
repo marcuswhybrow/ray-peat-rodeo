@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: What is a Virus Anyway?
   url: https://www.toxinless.com/orn-200316-what-is-a-virus-anyway.mp3
+  mirrors:
+    - https://wiki.chadnet.org/777346411.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/03.16.20%20What%20is%20a%20Virus%20Anyway%2C%20March%2016%2C%202020%20%5B777346411%5D.vtt
   kind: audio
 transcription:
   date: "2024-04-17"

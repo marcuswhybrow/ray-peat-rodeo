@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Energy Production, Diabetes and Saturated Fats
   url: https://www.youtube.com/watch?v=0cXp2klzPcQ
-  # also https://www.toxinless.com/kmud-111118-energy-production-diabetes-saturated-fats.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-111118-energy-production-diabetes-saturated-fats.mp3
+    - https://wiki.chadnet.org/kmud-111118-energy-production-diabetes-saturated-fats.mp3
+    - https://askyourherbdoctor.com/audio/2011%20Metabolic%20Energy%20Nov%202011.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-111118-energy-production-diabetes-saturated-fats.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=0cXp2klzPcQ

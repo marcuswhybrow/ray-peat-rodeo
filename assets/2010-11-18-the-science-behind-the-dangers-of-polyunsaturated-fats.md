@@ -3,6 +3,9 @@ source:
   series: East West
   title: The Science Behind The Dangers of Polyunsaturated Fats
   url: https://www.toxinless.com/ewh-101118-the-science-behind-the-dangers-of-polyunsaturated-fats.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-101118-the-science-behind-the-dangers-of-polyunsaturated-fats.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-101118-the-science-behind-the-dangers-of-polyunsaturated-fats.vtt
   kind: audio
 completion:
   content: true

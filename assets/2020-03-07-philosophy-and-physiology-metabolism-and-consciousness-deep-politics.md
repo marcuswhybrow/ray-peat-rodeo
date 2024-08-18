@@ -4,6 +4,9 @@ source:
   episode: 19
   title: Philosophy and Physiology | Metabolism and Consciousness | Deep Politics
   url: https://www.youtube.com/watch?v=PF27zr95Lhg
+  mirrors:
+    - https://wiki.chadnet.org/PF27zr95Lhg.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/%2319%EF%BC%9A%20Philosophy%20and%20Physiology%20%EF%BD%9C%20Metabolism%20and%20Consciousness%20%EF%BD%9C%20Deep%20Politics%20%EF%BD%9C%20Ray%20Peat%20%5BPF27zr95Lhg%5D.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=PF27zr95Lhg

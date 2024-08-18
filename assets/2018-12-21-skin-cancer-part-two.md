@@ -1,8 +1,12 @@
 ---
 source:
   series: Ask Your Herb Doctor
-  title: Skin Cancer Part 2
+  title: Skin Cancer Part Two
   url: https://www.selftestable.com/kmud-181221-skin-cancer-2.mp3
+  mirrors:
+    - https://wiki.chadnet.org/kmud-181221-skin-cancer-2.mp3
+    - https://askyourherbdoctor.com/audio/2018%20Dec%2021%202018%20Skincancer2.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-181221-skin-cancer-2.vtt
   kind: audio
 completion:
   content: true

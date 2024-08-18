@@ -3,7 +3,10 @@ source:
   series: Politics & Science
   title: Thyroid and Regeneration
   url: https://www.youtube.com/watch?v=6mjmyFrllFI
-  # url https://www.toxinless.com/polsci-080911-thyroid-and-regeneration.mp3
+  mirrors:
+    - https://www.toxinless.com/polsci-080911-thyroid-and-regeneration.mp3
+    - https://wiki.chadnet.org/polsci-080911-thyroid-and-regeneration.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-080911-thyroid-and-regeneration.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=6mjmyFrllFI

@@ -5,7 +5,9 @@ source:
   title: Oral Absorption of Progesterone
   url: https://www.toxinless.com/ray-peat-letter-to-the-editor-oral-absorption-of-progesterone.pdf
   mirrors:
-    - https://wiki.chadnet.org/files/oral-absorption-of-progesterone.pdf
+    - https://wiki.chadnet.org/oral-absorption-of-progesterone.pdf
+    - https://expulsia.com/health/peat-index/oral.pdf
+    - https://github.com/0x2447196/raypeatarchive/blob/main/documents/newsletters/oral-absorption-of-progesterone.txt
   kind: newsletter
 completion:
   content: true

@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Digestion and Emotion
   url: https://www.youtube.com/watch?v=vr9rktGm1Mg
-  # also https://www.toxinless.com/kmud-150116-digestion-and-emotion.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-150116-digestion-and-emotion.mp3
+    - https://wiki.chadnet.org/kmud-150116-digestion-and-emotion.mp3
+    - https://askyourherbdoctor.com/audio/2015%20Digestion%20and%20Emotion%20Jan%202015.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-150116-digestion-and-emotion.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=vr9rktGm1Mg

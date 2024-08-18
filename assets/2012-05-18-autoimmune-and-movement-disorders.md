@@ -3,6 +3,9 @@ source:
   series: Politics & Science
   title: Autoimmune and Movement Disorders
   url: https://www.toxinless.com/polsci-120518-autoimmune-and-movement.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-120518-autoimmune-and-movement.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-120518-autoimmune-and-movement.vtt
   kind: audio
 completion:
   content: true

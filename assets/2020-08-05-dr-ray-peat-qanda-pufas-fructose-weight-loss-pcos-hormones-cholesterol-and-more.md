@@ -3,6 +3,9 @@ source:
   series: Strong Sistas
   title: "Dr Ray Peat Q&A | PUFAS, fructose, weight loss, PCOS, hormones, cholesterol, & more"
   url: https://www.youtube.com/watch?v=96AFY50-J4A
+  mirrors:
+    - https://wiki.chadnet.org/96AFY50-J4A.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Dr%20Ray%20Peat%20Q%26A%20%EF%BD%9C%20PUFAS%2C%20fructose%2C%20weight%20loss%2C%20PCOS%2C%20hormones%2C%20cholesterol%2C%20%26%20more%20%5B96AFY50-J4A%5D.vtt
   kind: video
 transcription:
   kind: auto-generated

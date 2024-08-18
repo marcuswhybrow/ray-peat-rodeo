@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Food Additives
   url: https://www.youtube.com/watch?v=uxdLc6sntsQ
-  # also https://www.toxinless.com/kmud-091001-food-additives.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-091001-food-additives.mp3
+    - https://wiki.chadnet.org/kmud-091001-food-additives.mp3
+    - https://askyourherbdoctor.com/audio/2009%20Food%20Additives%20Oct%202009.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-091001-food-additives.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=uxdLc6sntsQ

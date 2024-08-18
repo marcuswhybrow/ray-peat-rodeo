@@ -3,6 +3,9 @@ source:
   series: East West
   title: Questions & Answers II
   url: https://www.toxinless.com/ewh-111215-q-and-a-2.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-111215-q-and-a-2.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-111215-q-and-a-2.vtt
   kind: audio
 completion:
   content: true

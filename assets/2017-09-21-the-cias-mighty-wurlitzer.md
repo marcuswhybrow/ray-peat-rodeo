@@ -4,6 +4,9 @@ source:
   episode: 32
   title: The CIA's Mighty Wurlitzer
   url: https://www.youtube.com/watch?v=TtTiDVWVlQc
+  mirrors:
+    - https://wiki.chadnet.org/TtTiDVWVlQc.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/The%20CIA's%20Mighty%20Wurlitzer%20with%20Ray%20Peat%20%5BGenerative%20Energy%20%2332%5D%20%5BTtTiDVWVlQc%5D.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=TtTiDVWVlQc

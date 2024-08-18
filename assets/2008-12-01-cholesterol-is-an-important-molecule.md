@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Cholesterol is an Important Molecule
   url: https://www.youtube.com/watch?v=HaSjxiuqKI4
-  # also https://www.toxinless.com/kmud-081201-cholesterol-is-an-important-molecule.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-081201-cholesterol-is-an-important-molecule.mp3
+    - https://wiki.chadnet.org/kmud-081201-cholesterol-is-an-important-molecule.mp3
+    - https://askyourherbdoctor.com/audio/2008%20Cholesterol%20is%20an%20Important%20Molecule%20Part%203%20Dec%202008.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-081201-cholesterol-is-an-important-molecule.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=HaSjxiuqKI4

@@ -3,9 +3,14 @@ source:
   series: Source Nutritional Show
   title: Brain and Tissue
   url: https://www.youtube.com/watch?v=qZiPRYEtVtw
-  # also https://www.youtube.com/watch?v=rL282hEbYfQ (no captions)
-  # also https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-1.mp3
-  # and  https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-2.mp3
+  mirrors:
+    - https://www.youtube.com/watch?v=rL282hEbYfQ (no captions)
+    - https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-1.mp3
+    - https://www.toxinless.com/sourcenutritional-120512-brain-and-tissue-2.mp3
+    - https://wiki.chadnet.org/sourcenutritional-120512-brain-and-tissue-1.mp3
+    - https://wiki.chadnet.org/sourcenutritional-120512-brain-and-tissue-2.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/sourcenutritional-120512-brain-and-tissue-1.vtt
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/sourcenutritional-120512-brain-and-tissue-2.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=qZiPRYEtVtw

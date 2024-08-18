@@ -18,6 +18,7 @@ import (
 	gparser "github.com/yuin/goldmark/parser"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
+	"gopkg.in/yaml.v3"
 
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/cache"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
@@ -199,8 +200,30 @@ func (a *Asset) IsComplete() bool {
 		c.Mentions && c.Issues && c.Notes && c.Timestamps
 }
 
+// Writes the asset state to the asset markdown file path
+func (a *Asset) WriteMarkdown() error {
+	err := os.MkdirAll(filepath.Dir(a.Path), 0755)
+	if err != nil {
+		log.Fatalf("Failed to create directories whilst attempting to write asset '%v': %v", a.Path, err)
+	}
+
+	file, _ := os.Create(a.Path)
+	yamlBytes, err := yaml.Marshal(a.FrontMatter)
+	if err != nil {
+		log.Fatalf("Failed to marshal YAML frontmatter for asset '%v': %v", a.Path, err)
+	}
+
+	bodyStr := fmt.Sprintf("---\n%v\n---\n\n%v", yamlBytes, a.Markdown)
+	_, err = file.Write([]byte(bodyStr))
+	if err != nil {
+		log.Fatalf("Failed to write to asset '%v': %v", a.Path, err)
+	}
+
+	return nil
+}
+
 // Writes file to f.outPath
-func (a *Asset) Write() error {
+func (a *Asset) WriteHtml() error {
 	file, _ := utils.MakeFile(a.OutPath)
 
 	err := RenderAsset(a).Render(context.Background(), file)
@@ -282,6 +305,32 @@ func (a *Asset) GetSpeakers() []ast.Speaker {
 
 func (a *Asset) GetSourceURL() string {
 	return a.FrontMatter.Source.Url
+}
+
+func (a *Asset) GetAllURLsUnescaped() []string {
+	urls := []string{a.FrontMatter.Source.Url}
+	urls = append(urls, a.FrontMatter.Source.Mirrors...)
+
+	unescaped := []string{}
+	for _, u := range urls {
+		result, err := url.QueryUnescape(u)
+		if err != nil {
+			log.Fatalf("Failed to unescape asset url '%v': %v", u, err)
+		}
+		unescaped = append(unescaped, result)
+	}
+
+	return unescaped
+}
+
+func (a *Asset) GetAllUnescapedURLsWithPrefix(prefix string) []string {
+	urls := []string{}
+	for _, u := range a.GetAllURLsUnescaped() {
+		if strings.HasPrefix(u, prefix) {
+			urls = append(urls, u)
+		}
+	}
+	return urls
 }
 
 func (a *Asset) RegisterIssue(id int) {

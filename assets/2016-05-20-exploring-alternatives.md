@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Exploring Alternatives
   url: https://www.youtube.com/watch?v=qbNIeuojUk0
-  # also https://www.toxinless.com/kmud-160520-exploring-alternatives.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-160520-exploring-alternatives.mp3
+    - https://wiki.chadnet.org/kmud-160520-exploring-alternatives.mp3
+    - https://askyourherbdoctor.com/audio/2016%20Exploring%20Alternatives%20Q&A%20May%202016.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-160520-exploring-alternatives.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=qbNIeuojUk0

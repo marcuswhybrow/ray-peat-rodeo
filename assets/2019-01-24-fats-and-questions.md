@@ -3,6 +3,11 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Fats and Questions
   url: https://www.toxinless.com/orn-190124-fats-and-questions.mp3
+  mirrors:
+    - https://wiki.chadnet.org/564150933.mp3
+    - https://soundcloud.com/oneradionetwork/ray-peat-on-thryroid-and-more-january-24-2019
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/orn-190124-fats-and-questions.vtt
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/01.24.19%20Ray%20Peat%20on%20Thryroid%20and%20More%2C%20January%2024%2C%202019%20%5B564150933%5D.vtt
   kind: audio
 completion:
   content: true

@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Thyroid, Metabolism and Coconut Oil
   url: https://www.youtube.com/watch?v=gda19JUrTL8
-  # also https://www.toxinless.com/kmud-080801-thyroid-metabolism-and-coconut-oil.mp3
+  mirrors:
+    - https://www.toxinless.com/kmud-080801-thyroid-metabolism-and-coconut-oil.mp3
+    - https://wiki.chadnet.org/kmud-080801-thyroid-metabolism-and-coconut-oil.mp3
+    - https://askyourherbdoctor.com/audio/2008%20Thyroid,%20Metabolism%20and%20Coconut%20Oil%20Part%202%20Aug%202008.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-080801-thyroid-metabolism-and-coconut-oil.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=gda19JUrTL8

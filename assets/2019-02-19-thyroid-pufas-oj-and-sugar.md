@@ -3,6 +3,10 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Thyroid, PUFAs, OJ, and Sugar
   url: https://www.toxinless.com/orn-190219-thyroid-pufas-oj-sugar.mp3
+  mirrors:
+    - https://wiki.chadnet.org/578138142.mp3
+    - https://soundcloud.com/oneradionetwork/ray-peat-on-healing-the-body-february-19-2020?in=theedgecontent/sets/ray-peat
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/02.19.19%20Ray%20Peat%20on%20Healing%20The%20Body%2C%20February%2019%2C%202019%20%5B578138142%5D.vtt
   kind: audio
 completion:
   content: true

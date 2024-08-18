@@ -3,8 +3,14 @@ source:
   series: Gary Null
   title: Thyroid Function
   url: https://www.youtube.com/watch?v=x6bxGBR1Sqs
-  # also https://www.functionalps.com/blog/wp-content/uploads/2011/09/NPRraypeatinterview1996.mp3
-  # also https://180degreehealth.com/thyroid-deficiency-and-common-health-problems/
+  mirrors:
+    - https://www.functionalps.com/blog/wp-content/uploads/2011/09/NPRraypeatinterview1996.mp3
+    - https://180degreehealth.com/thyroid-deficiency-and-common-health-problems/
+    - https://wiki.chadnet.org/garynull-960101-thyroid-function-npr-thyroid-interview.mp3
+    - https://wiki.chadnet.org/1996-gary-null-thyroid-deficiency-common-health-problems-transcript
+    - https://www.toxinless.com/garynull-960101-thyroid-function-npr-thyroid-interview.mp3
+    - https://www.toxinless.com/garynull-thyroid-transcript.doc
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/garynull-960101-thyroid-function-npr-thyroid-interview.vtt
   kind: audio
   duration: 58:30
 transcription:

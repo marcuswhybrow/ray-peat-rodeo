@@ -3,7 +3,11 @@ source:
   series: Ask Your Herb Doctor
   title: Learned Helplessness, Nervous System and Thyroid Questionnaire
   url: https://www.youtube.com/watch?v=5pXdGi8hwcM
-  # also https://www.toxinless.com/kmud-130920-learned-helplessness-nervous-system-thyroid-questionaire.mp3
+  mirrors: 
+    - https://www.toxinless.com/kmud-130920-learned-helplessness-nervous-system-thyroid-questionaire.mp3
+    - https://wiki.chadnet.org/kmud-130920-learned-helplessness-nervous-system-thyroid-questionaire.mp3
+    - https://askyourherbdoctor.com/audio/2013%20Learned%20Helplessness,%20Nervous%20System,%20Stress,%20Thyroid%20Sept%202013.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-130920-learned-helplessness-nervous-system-thyroid-questionaire.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=5pXdGi8hwcM

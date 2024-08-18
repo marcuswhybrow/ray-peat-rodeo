@@ -3,7 +3,10 @@ source:
   series: Rainmaking Time
   title: Life Supporting Substances
   url: https://www.youtube.com/watch?v=DJQF-fPIwBg
-  # also https://www.toxinless.com/rainmaking-110704-life-supporting-substances.mp3
+  mirrors:
+    - https://www.toxinless.com/rainmaking-110704-life-supporting-substances.mp3
+    - https://wiki.chadnet.org/rainmaking-110704-life-supporting-substances.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/rainmaking-110704-life-supporting-substances.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=DJQF-fPIwBg

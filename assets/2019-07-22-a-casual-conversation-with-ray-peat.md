@@ -6,6 +6,8 @@ source:
   mirrors: 
     - https://www.toxinless.com/blp-190722-a-casual-conversation-with-ray-peat.mp3
     - https://raypeatforum.com/community/threads/a-casual-conversation-with-ray-peat.29970/
+    - https://wiki.chadnet.org/blp-190722-a-casual-conversation-with-ray-peat.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/blp-190722-a-casual-conversation-with-ray-peat.vtt
   kind: audio
 completion:
   content: true

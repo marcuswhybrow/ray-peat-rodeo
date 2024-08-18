@@ -3,6 +3,8 @@ source:
   series: Bud Weiss
   title: Ray Peat, Bud Weiss, and Misha Sakharoff on CO2, Keto, etc.
   url: https://www.youtube.com/watch?v=xrJpYb4cbsY
+  mirrors:
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/Ray%20Peat%2C%20Bud%20Weiss%2C%20and%20Misha%20Sakharoff%20on%20CO2%2C%20Keto%2C%20etc.vtt
   kind: video
 transcription:
   url: https://www.youtube.com/watch?v=xrJpYb4cbsY

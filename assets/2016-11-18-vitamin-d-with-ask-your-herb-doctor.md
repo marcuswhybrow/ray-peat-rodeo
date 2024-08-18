@@ -5,6 +5,9 @@ source:
   url: https://www.youtube.com/watch?v=GOu_PdIWVPc
   mirrors:
     - https://www.toxinless.com/kmud-161118-vitamin-d.mp3
+    - https://wiki.chadnet.org/kmud-161118-vitamin-d.mp3
+    - https://askyourherbdoctor.com/audio/2016%20Vitamin%20D%20November%202016.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/kmud-161118-vitamin-d.vtt
   kind: audio
 transcription:
   url: https://www.youtube.com/watch?v=GOu_PdIWVPc

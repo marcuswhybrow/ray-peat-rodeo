@@ -3,6 +3,9 @@ source:
   series: Jodellefit
   title: Insulin Resistance, Vegans, Low Cortisol, Bone Broth, and Coconut
   url: https://www.toxinless.com/jf-200116-insulin-resistance-vegans-low-cortisol.mp3
+  mirrors:
+    - https://wiki.chadnet.org/jf-200116-insulin-resistance-vegans-low-cortisol.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-200116-insulin-resistance-vegans-low-cortisol.vtt
   kind: audio
 transcription:
   date: "2024-04-18"

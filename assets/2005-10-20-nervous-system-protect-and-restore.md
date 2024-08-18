@@ -3,6 +3,10 @@ source:
   series: Silicon Valley Health Institute
   title: Nervous System Protect & Restore
   url: https://www.youtube.com/watch?v=mdLHWFJI2y0
+  mirrors:
+    - https://wiki.chadnet.org/mdLHWFJI2y0.mp3
+    - https://youtu.be/mdLHWFJI2y0
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/(2005-10)%20Ray%20Peat%20-%20Nervous%20System%20Protect%20%26%20Restore%20%5BmdLHWFJI2y0%5D.vtt
   kind: video
 transcription:
   url: https://raypeatforum.com/community/threads/protection-and-restoration-of-the-nervous-system-2005-conference.11318/

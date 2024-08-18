@@ -6,6 +6,8 @@ source:
   kind: audio
   mirrors:
     - https://raypeatforum.com/community/threads/jodellefit-how-to-fix-your-digestion-poop.30729
+    - https://wiki.chadnet.org/jf-190910-how-to-fix-your-digestion-poop.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/jf-190910-how-to-fix-your-digestion-poop.vtt
 completion:
   content: true
   content-verified: false

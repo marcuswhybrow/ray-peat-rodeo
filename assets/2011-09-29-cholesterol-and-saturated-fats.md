@@ -3,6 +3,9 @@ source:
   series: East West
   title: Cholesterol and Saturated Fats
   url: https://www.toxinless.com/ewh-110929-cholesterol-and-saturated-fats.mp3
+  mirrors:
+    - https://wiki.chadnet.org/ewh-110929-cholesterol-and-saturated-fats.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/ewh-110929-cholesterol-and-saturated-fats.vtt
   kind: audio
 completion:
   content: true

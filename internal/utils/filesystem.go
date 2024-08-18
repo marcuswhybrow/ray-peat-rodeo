@@ -46,6 +46,7 @@ func MakePage(outPath string) (*os.File, string) {
 
 var BuiltFiles []string
 var builtFilesMutex sync.RWMutex
+var writeFileMutex sync.Mutex
 
 // Convenience function to output file
 func MakeFile(outPath string) (*os.File, string) {
@@ -82,7 +83,9 @@ func MakeFile(outPath string) (*os.File, string) {
 	BuiltFiles = append(BuiltFiles, buildPath)
 	builtFilesMutex.Unlock()
 
+	writeFileMutex.Lock()
 	f, err := os.Create(buildPath)
+	writeFileMutex.Unlock()
 	if err != nil {
 		log.Panicf("Failed to create file '%v': %v", buildPath, err)
 	}

@@ -3,6 +3,9 @@ source:
   series: Patrick Timpone's One Radio Network
   title: Vitamin D, Thyroid, Evolving Consciously
   url: https://www.toxinless.com/orn-190820-vitamin-d-thyroid-evolving-consciously.mp3
+  mirrors:
+    - https://wiki.chadnet.org/668670851.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/08.20.19%20Super%20Health%20Researcher%2C%20August%2020%2C%202019%20%5B668670851%5D.vtt
   kind: audio
 completion:
   content: true

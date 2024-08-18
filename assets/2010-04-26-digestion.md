@@ -3,6 +3,9 @@ source:
   series: Politics & Science
   title: Digestion
   url: https://www.toxinless.com/polsci-100426-digestion.mp3
+  mirrors:
+    - https://wiki.chadnet.org/polsci-100426-digestion.mp3
+    - https://github.com/0x2447196/raypeatarchive/blob/main/transcripts/polsci-100426-digestion.vtt
   kind: audio
 completion:
   content: true
