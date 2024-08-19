@@ -223,10 +223,10 @@ func (a *Asset) WriteMarkdown() error {
 }
 
 // Writes file to f.outPath
-func (a *Asset) WriteHtml() error {
+func (a *Asset) WriteHtml(catalog *Catalog) error {
 	file, _ := utils.MakeFile(a.OutPath)
 
-	err := RenderAsset(a).Render(context.Background(), file)
+	err := Peruse(a, catalog).Render(context.Background(), file)
 	if err != nil {
 		return fmt.Errorf("Failed to render template: %v", err)
 	}

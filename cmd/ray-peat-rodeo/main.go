@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/blog"
+	// "github.com/marcuswhybrow/ray-peat-rodeo/internal/blog"
 	rprCatalog "github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/check"
 
@@ -76,7 +76,7 @@ func main() {
 	redirectionsMutex := sync.RWMutex{}
 
 	utils.Parallel(catalog.Assets, func(file *rprCatalog.Asset) error {
-		err := file.WriteHtml()
+		err := file.WriteHtml(catalog)
 		if err != nil {
 			return fmt.Errorf("Failed to render file '%v': %v", file.Path, err)
 		}
@@ -110,17 +110,15 @@ func main() {
 
 	slices.SortFunc(completedAssets, rprCatalog.SortAssetsByDateAdded)
 
-	progress := float32(len(completedAssets)) / float32(len(catalog.Assets))
+	// var latestFile *rprCatalog.Asset = nil
+	// if len(completedAssets) > 0 {
+	// 	latestFile = completedAssets[0]
+	// }
 
-	var latestFile *rprCatalog.Asset = nil
-	if len(completedAssets) > 0 {
-		latestFile = completedAssets[0]
-	}
-
-	blogPosts, err := blog.Write(catalog)
-	if err != nil {
-		log.Fatal("Failed to write blog:", err)
-	}
+	// blogPosts, err := blog.Write(catalog)
+	// if err != nil {
+	// 	log.Fatal("Failed to write blog:", err)
+	// }
 
 	// Stats
 
@@ -157,7 +155,7 @@ func main() {
 	// 🏠 Homepage
 
 	indexPage, _ := utils.MakePage(".")
-	component = Index(catalog.Assets, latestFile, progress, blogPosts[0])
+	component = Index(catalog)
 	component.Render(context.Background(), indexPage)
 
 	err = catalog.HttpCache.Write()

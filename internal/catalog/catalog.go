@@ -37,6 +37,9 @@ type Catalog struct {
 	BySeries          map[string][]*Asset
 	Assets            []*Asset
 	Mutex             sync.RWMutex
+	SeriesToSlugs     map[string]string
+	Kinds             []string
+	Speakers          []string
 }
 
 func NewCatalog(assetsPath string) *Catalog {
@@ -89,6 +92,9 @@ func NewCatalog(assetsPath string) *Catalog {
 		ByMentionablePart: ByPart[ByPart[ByAsset[Mentions]]]{},
 		BySeries:          map[string][]*Asset{},
 		Assets:            []*Asset{},
+		SeriesToSlugs:     map[string]string{},
+		Kinds:             []string{},
+		Speakers:          []string{},
 	}
 
 	utils.Parallel(filePaths, func(filePath string) error {
@@ -100,6 +106,11 @@ func NewCatalog(assetsPath string) *Catalog {
 	})
 
 	slices.SortFunc(catalog.Assets, SortAssetsByDate)
+
+	slices.Sort(catalog.Kinds)
+	catalog.Kinds = slices.Compact(catalog.Kinds)
+	slices.Sort(catalog.Speakers)
+	catalog.Speakers = slices.Compact(catalog.Speakers)
 
 	return catalog
 }
@@ -116,6 +127,13 @@ func (c *Catalog) NewAsset(filePath string) (*Asset, error) {
 
 	c.Assets = append(c.Assets, asset)
 	c.BySeries[asset.GetSeriesSlug()] = append(c.BySeries[asset.GetSeriesSlug()], asset)
+	c.SeriesToSlugs[asset.FrontMatter.Source.Series] = asset.GetSeriesSlug()
+	if asset.FrontMatter.Source.Kind != "" {
+		c.Kinds = append(c.Kinds, asset.FrontMatter.Source.Kind)
+	}
+	for _, speaker := range asset.Speakers {
+		c.Speakers = append(c.Speakers, speaker.GetName())
+	}
 
 	for mentionable, mentions := range asset.Mentionables {
 		for existingMentionable, existingByFile := range c.ByMentionable {

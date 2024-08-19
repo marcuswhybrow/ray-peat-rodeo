@@ -1,10 +1,5 @@
 package global
 
-import (
-	"time"
-	"github.com/marcuswhybrow/ray-peat-rodeo/internal/search"
-)
-
 func gitHubLink() string {
 	return GITHUB_LINK
 }
@@ -27,18 +22,6 @@ templ Base(title string) {
 			<script src="https://unpkg.com/htmx.org@1.9.6"></script>
 			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
 			<script>
-        window.addEventListener('DOMContentLoaded', (event) => {
-          new PagefindUI({
-            element: '#pagefind',
-            highlightParam: 'highlight',
-            showSubResults: true,
-            showImages: false,
-            translations: {
-              placeholder: 'Search Ray Peat Rodeo',
-            }
-          });
-        });
-
         function relativeDate(origStr) {
           let buildDate = Date.parse(origStr);
           let delta = Date.now() - buildDate;
@@ -68,13 +51,170 @@ templ Base(title string) {
         }
       </script>
 			<script type="module">
-        await import('/pagefind/pagefind-highlight.js');
-        new PagefindHighlight({ highlightParam: 'highlight' });
+        const pagefind = import("/pagefind/pagefind.js").then(async (pf) => {
+          await pf.options({
+            highlightParam: 'highlight',
+            excerptLength: 60,
+          });
+          return pf;
+        });
+
+        document.addEventListener("DOMContentLoaded", async () => {
+          const assets = document.getElementById("assets");
+          const filtersElm = document.getElementById("rpr-search-filters");
+          const input = document.getElementById("rpr-search-input");
+
+          const search = async debounce => {
+            let query = input.value;
+            const pf = await pagefind;
+
+            const activeFilters = filtersElm.querySelectorAll(".active");
+            let finalFilters = {};
+            for (const f of activeFilters) {
+              const group = f.getAttribute("data-filter-group");
+              const id = f.getAttribute("data-filter-id");
+              finalFilters[group] = [id, ...(finalFilters[group] || [])];
+            }
+
+            // Tells pagefind to search anyway
+            if (query === "") {
+              query = null;
+            }
+
+            const result = await pf.debouncedSearch(query, {
+              filters: finalFilters,
+            }, debounce);
+
+            console.log("searched", result);
+
+            // User is still typing
+            if (result === null) return;
+
+            // Update filter display
+            for (const [group, options] of Object.entries(result.filters)) {
+              for (const [option, count] of Object.entries(options)) {
+                const countId = `${group}/${option}/count`.replaceAll(" ", "-");
+                const countElm = document.getElementById(countId);
+                countElm.textContent = count;
+
+                const filterId = `${group}/${option}`.replaceAll(" ", "-");
+                const filterElm = document.getElementById(filterId);
+                if (count == 0) {
+                  filterElm.classList.add("no-results");
+                } else {
+                  filterElm.classList.remove("no-results");
+                }
+              }
+            }
+
+            // No results
+            if (query === "") {
+              console.log("resetting");
+              for (const asset of assets.children) {
+                asset.classList.add("hit");
+                asset.classList.remove("has-excerpt");
+              }
+            }
+
+            if (result.results.length === 0) return;
+
+            const data = await Promise.all(result.results.map(r => r.data()));
+
+            for (const asset of assets.children) {
+              asset.classList.remove("hit");
+              asset.classList.remove("has-excerpt");
+            }
+
+            for (const d of data) {
+              const asset = document.getElementById(d.raw_url);
+              if (asset === null) continue;
+              asset.classList.add("hit");
+              if (query !== null) {
+                asset.classList.add("has-excerpt");
+                const excerpt = asset.getElementsByClassName("excerpt")[0];
+                let newExcerpts = [];
+                for (const subResult of d.sub_results) {
+                  console.log(subResult);
+                  const elem = document.createElement("div");
+                  elem.innerHTML = subResult.excerpt;
+                  newExcerpts.push(elem);
+                }
+                excerpt.replaceChildren(...newExcerpts);
+              }
+            }
+          };
+
+          input.addEventListener("keyup", event => {
+            search(300);
+          });
+
+          const pf = await pagefind;
+          const filters = await pf.filters();
+
+          for (const [name, options] of Object.entries(filters)) {
+            const heading = document.createElement("h3");
+            heading.textContent = name;
+            filtersElm.appendChild(heading);
+
+            const list = document.createElement("ul");
+            for (const [option, count] of Object.entries(options)) {
+              const li = document.createElement("li");
+
+              li.append(`${option} (`);
+              const spanCount = document.createElement("span");
+              spanCount.id = `${name}/${option}/count`.replaceAll(" ", "-");
+              spanCount.textContent = count;
+              li.append(spanCount);
+              li.append(")");
+
+              li.id = `${name}/${option}`.replaceAll(" ", "-");
+              li.className = `
+                text-xs inline-block bg-slate-100 rounded mr-2 mb-2
+                text-slate-600 px-2 py-1
+                [&.no-results:not(.active)]:bg-slate-50 [&.no-results:not(.active)]:text-slate-400
+                [&.active]:bg-slate-400
+              `;
+              li.setAttribute("data-filter-group", name);
+              li.setAttribute("data-filter-id", option);
+              li.addEventListener("click", event => {
+                li.classList.toggle("active");
+                search(0);
+              });
+
+              list.appendChild(li);
+            }
+            filtersElm.appendChild(list);
+          }
+
+          let params = new URLSearchParams(document.location.search);
+          const handleParam = (paramName, filterGroup) => {
+            const param = params.get(paramName);
+            if (param === null) return;
+            const paramList = param.split(",");
+            if (paramList.length === 1 && paramList[0] === "") return;
+            for (const i in paramList) {
+              const id = `${filterGroup}/${paramList[i]}`;
+              console.log("id", id);
+              const elem = document.getElementById(id);
+              elem.click(); // assumes click adds the .active class
+            }
+          };
+
+          handleParam("publisher", "Author");
+          handleParam("medium", "Medium");
+          handleParam("todo", "Todo");
+          handleParam("has-issues", "Has-Issues");
+        });
+
+        import('/pagefind/pagefind-highlight.js').then(() => {
+          new PagefindHighlight({
+            highlightParam: 'highlight' 
+          });
+        })
       </script>
 		</head>
 		<body
 			class="
-        pt-20
         scrollbar
         scrollbar-thumb-purple-300
         scrollbar-track-pink-50
@@ -90,75 +230,16 @@ templ Base(title string) {
         end
 
         on keydown[key=='/'] 
-          if #search matches .hidden then 
-            send openSearch to me
+          if #rpr-search-input does not match <:focus/>
+            focus() the #rpr-search-input
+            select() the #rpr-search-input
             halt the event
           end
 
         on keydown[key=='Escape'] send closeSearch to me
-
-        on toggleSearch
-          if #search matches .hidden then
-            send openSearch to me
-          else
-            send closeSearch to me
-          end
-
-        on openSearch
-          remove .hidden from #search
-          add .overflow-hidden to body
-          focus() the first .pagefind-ui__search-input 
-
-        on closeSearch
-          add .hidden to #search
-          remove .overflow-hidden from body
       "
 		>
-			<div class="sticky top-0 bg-white/90 backdrop-blur-sm z-30 w-full">
-				<div class="max-w-screen-sm mx-auto text-center">
-					<div class="inline-block relative">
-						<a href="/" class="py-2 inline-block mx-auto no-underline opacity-30 text-black text-3xl font-light uppercase tracking-widest hover:opacity-60">Ray Peat Rodeo</a>
-						<style>input[type="checkbox"]:checked~div{display:block}</style>
-						<img
-							class="transition-all inline-block absolute w-6 h-6 top-[15px] -right-14 opacity-60 hover:opacity-100 cursor-pointer hover:drop-shadow"
-							title="Search (Press '/')"
-							src="/assets/images/magnifying-glass-icon.svg"
-							_="on click trigger openSearch"
-						/>
-					</div>
-					<div class="h-px bg-gradient-to-r from-slate-200/0 via-slate-200 to-slate-200/0"></div>
-				</div>
-			</div>
 			{ children... }
-			<footer class="max-w-screen-sm mx-auto px-8">
-				<div class="flex mb-16 flex-col">
-					<div class="flex-auto border-t-8 border-gray-100 pt-8 mb-8">
-						<p class="mb-2">
-							<a
-								href="https://github.com/sponsors/marcuswhybrow"
-								class="font-bold hover:underline"
-							>Support Ray Peat Rodeo</a>
-							on GitHub Sponsors
-						</p>
-						<p class="mb-2">
-							<a
-								class="font-bold hover:underline"
-								href={ GITHUB_LINK }
-							>Star the project</a> on GitHub.
-						</p>
-						<p class="mb-2">
-							<a class="font-bold hover:underline" href="/blog">Blog</a> { "for" } project updates.
-						</p>
-						<p>
-							Written in Golang. Last updated 
-							<span _="install RelativeDate">
-								{ time.Now().Format("2006-01-02") }
-							</span>
-						</p>
-					</div>
-				</div>
-			</footer>
-			@search.Pagefind()
 		</body>
 	</html>
 }
