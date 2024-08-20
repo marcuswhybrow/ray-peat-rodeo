@@ -150,36 +150,39 @@ templ Base(title string) {
           for (const [name, options] of Object.entries(filters)) {
             const heading = document.createElement("h3");
             heading.textContent = name;
-            filtersElm.appendChild(heading);
+            heading.className = `
+              text-xs inline-block uppercase mr-2 mb-2 pr-2 py-1
+            `;
+            filtersElm.append(document.createElement("br"));
+            filtersElm.append(heading);
 
-            const list = document.createElement("ul");
             for (const [option, count] of Object.entries(options)) {
-              const li = document.createElement("li");
+              const elem = document.createElement("span");
 
-              li.append(`${option} (`);
+              elem.append(`${option} (`);
               const spanCount = document.createElement("span");
               spanCount.id = `${name}/${option}/count`.replaceAll(" ", "-");
               spanCount.textContent = count;
-              li.append(spanCount);
-              li.append(")");
+              elem.append(spanCount);
+              elem.append(")");
 
-              li.id = `${name}/${option}`.replaceAll(" ", "-");
-              li.className = `
+              elem.id = `${name}/${option}`.replaceAll(" ", "-");
+              elem.className = `
                 text-xs inline-block bg-slate-100 rounded mr-2 mb-2
                 text-slate-600 px-2 py-1
+                cursor-pointer
                 [&.no-results:not(.active)]:bg-slate-50 [&.no-results:not(.active)]:text-slate-400
                 [&.active]:bg-slate-400
               `;
-              li.setAttribute("data-filter-group", name);
-              li.setAttribute("data-filter-id", option);
-              li.addEventListener("click", event => {
-                li.classList.toggle("active");
+              elem.setAttribute("data-filter-group", name);
+              elem.setAttribute("data-filter-id", option);
+              elem.addEventListener("click", event => {
+                elem.classList.toggle("active");
                 search(0);
               });
 
-              list.appendChild(li);
+              filtersElm.appendChild(elem);
             }
-            filtersElm.appendChild(list);
           }
 
           let params = new URLSearchParams(document.location.search);
@@ -189,9 +192,11 @@ templ Base(title string) {
             const paramList = param.split(",");
             if (paramList.length === 1 && paramList[0] === "") return;
             for (const i in paramList) {
+              if (paramList[i] === null) continue;
+              if (paramList[i] === "") continue;
               const id = `${filterGroup}/${paramList[i]}`;
-              console.log("id", id);
               const elem = document.getElementById(id);
+              if (elem === null) continue;
               elem.click(); // assumes click adds the .active class
             }
           };
@@ -201,12 +206,24 @@ templ Base(title string) {
           handleParam("todo", "Todo");
           handleParam("has-issues", "Has-Issues");
 
-          const searchParam = params.get("search");
-          input.value = searchParam;
-          if (searchParam) {
+          (() => {
+            const searchParam = params.get("search");
+            input.value = searchParam;
+            if (searchParam === null) return;
+            if (searchParam === "") return;
             // hacky, deserves using custom events.
             input.dispatchEvent(new Event("keyup"));
-          }
+          })();
+
+          (() => {
+            const assetId = window.location.pathname;
+            if (!assetId.endsWith("/")) assetId += "/";
+            const assetElem = document.getElementById(assetId);
+            if (assetElem === null) return;
+
+            // This needs it's own event
+            assetElem.classList.add("clicked");
+          })();
         });
 
         import('/pagefind/pagefind-highlight.js').then(() => {
