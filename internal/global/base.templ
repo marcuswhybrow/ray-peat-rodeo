@@ -85,8 +85,6 @@ templ Base(title string) {
               filters: finalFilters,
             }, debounce);
 
-            console.log("searched", result);
-
             // User is still typing
             if (result === null) return;
 
@@ -109,14 +107,13 @@ templ Base(title string) {
 
             // No results
             if (query === "") {
-              console.log("resetting");
               for (const asset of assets.children) {
                 asset.classList.add("hit");
                 asset.classList.remove("has-excerpt");
               }
             }
 
-            if (result.results.length === 0) return;
+            // if (result.results.length === 0) return;
 
             const data = await Promise.all(result.results.map(r => r.data()));
 
@@ -134,7 +131,6 @@ templ Base(title string) {
                 const excerpt = asset.getElementsByClassName("excerpt")[0];
                 let newExcerpts = [];
                 for (const subResult of d.sub_results) {
-                  console.log(subResult);
                   const elem = document.createElement("div");
                   elem.innerHTML = subResult.excerpt;
                   newExcerpts.push(elem);
@@ -204,6 +200,13 @@ templ Base(title string) {
           handleParam("medium", "Medium");
           handleParam("todo", "Todo");
           handleParam("has-issues", "Has-Issues");
+
+          const searchParam = params.get("search");
+          input.value = searchParam;
+          if (searchParam) {
+            // hacky, deserves using custom events.
+            input.dispatchEvent(new Event("keyup"));
+          }
         });
 
         import('/pagefind/pagefind-highlight.js').then(() => {
