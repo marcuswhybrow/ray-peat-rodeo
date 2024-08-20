@@ -1,5 +1,6 @@
 ---
 source:
+  kind: audio
   url: https://www.youtube.com/watch?v=H0oWFJFO1gU
   mirrors: 
     - https://wiki.chadnet.org/H0oWFJFO1gU.mp3

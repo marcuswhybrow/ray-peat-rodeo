@@ -1,5 +1,6 @@
 ---
 source:
+  kind: audio
   series: Butter Living Podcast
   title: Biology, Health & Humanness 
   mirrors: 
