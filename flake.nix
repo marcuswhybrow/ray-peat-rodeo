@@ -56,6 +56,10 @@
             --minify \
             --output ./build/assets/tailwind.css
           cp -r ./web/static/* ./build/assets
+
+          # mkdir --parents ./build/assets/static/scripts
+          # cp ${self.packages.${system}.ufuzzy}/src/uFuzzy.js ./build/assets/static/scripts/uFuzzy.js
+
           mv ./build $out
         '';
 
@@ -132,6 +136,50 @@
         rm -r "$tmp_dir_json"
       '';
 
+      # https://github.com/leeoniya/uFuzzy
+      ufuzzy = pkgs.fetchFromGitHub {
+        owner = "leeoniya";
+        repo = "uFuzzy";
+        rev = "1.0.14";
+        hash = "sha256-g70bBIYc2CWMXVGKKXd1EgcomOJ0CnS3wTYAQWQS0fg=";
+      };
+
+      # https://github.com/GoogleChromeLabs/text-fragments-polyfill
+      text-fragments-polyfill = pkgs.fetchFromGitHub {
+        owner = "GoogleChromeLabs";
+        repo = "text-fragments-polyfill";
+        rev = "53375fea08665bac009bb0aa01a030e065c3933d"; # 2024-01-09
+        hash = "sha256-iKIuA10f/oDPj0AVUZOSuI7z+YpHsL1SUVal/hdBBOM=";
+      };
+
+      set-zero-timeout = pkgs.fetchFromGitHub {
+        owner = "shahyar";
+        repo = "setZeroTimeout-js";
+        rev = "5547e33b873d535ebd69f489be7102912e889eaf";
+        hash = "sha256-K42Tz3xN6lf2XKeLlNUSVAGt3hcQZRoNItf71i88z3o=";
+      };
+
+      copy-assets = pkgs.writeShellScriptBin "copy-assets" ''
+        echo "Copying ./web/static"
+        mkdir --parents ./build/assets
+        cp -rf ./web/static/* ./build/assets
+
+        echo "Copying uFuzzy"
+        mkdir --parents ./build/assets/static/scripts
+        cp -f ${self.packages.${system}.ufuzzy}/dist/uFuzzy.iife.min.js \
+          ./build/assets/scripts
+
+        echo "Copying text-fragments-polyfill"
+        mkdir --parents ./build/assets/scripts/text-fragments-polyfill
+        cp -f ${self.packages.${system}.text-fragments-polyfill}/src/* \
+        ./build/assets/scripts/text-fragments-polyfill
+
+        echo "Copying setZeroTimeout.js"
+        mkdir --parents ./build/assets/scripts 
+        cp -f ${self.packages.${system}.set-zero-timeout}/setZeroTimeout.min.js \
+          ./build/assets/scripts
+      '';
+
       default = build;
     };
 
@@ -198,8 +246,11 @@
         # transcribe and update assets with a `source.url` in the frontmatter.
         inputs.self.packages.x86_64-linux.transcribe
 
+        # Allows modd to copy assets from nix packages
+        inputs.self.packages.x86_64-linux.copy-assets
+
         # Get text for PDF assets that don't have it
-        ocrmypdf
+        # ocrmypdf
       ];
     };
   });

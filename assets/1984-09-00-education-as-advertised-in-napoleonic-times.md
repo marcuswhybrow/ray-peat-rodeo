@@ -1,9 +1,7 @@
 ---
 source:
-  kind: paper
-  series: New Series
-  edition: 3
-  locator: 
+  kind: article
+  series: Raymond Peat
   title: Education as Advertised in Napoleonic Times
   url: https://x.com/T3MaxxiAlt/status/1617587358395961344
   mirrors:

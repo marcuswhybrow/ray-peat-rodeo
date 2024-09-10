@@ -22,24 +22,10 @@ func (r *TimecodeHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegist
 func (t *TimecodeHTMLRenderer) renderTimecode(w util.BufWriter, source []byte, node gmAst.Node, entering bool) (gmAst.WalkStatus, error) {
 	timecode := node.(*ast.Timecode)
 
-	linkClass := "text-sm px-2 py-1 rounded-md "
-	if ast.IsPrimarySpeaker(timecode) {
-		linkClass += "is-not-ray bg-gray-300 hover:bg-gray-500 text-gray-50"
-	} else {
-		linkClass += "is-ray bg-sky-300 hover:bg-sky-500 text-sky-50"
-	}
-
 	if entering {
-		w.WriteString(`<span class="timecode text-right lg:absolute lg:right-[calc(100%+24px)]">`)
-		w.WriteString(fmt.Sprintf(
-			`<a href="%v" class="%v">`,
-			timecode.ExternalURL,
-			linkClass,
-		))
-		w.WriteString(timecode.Terse())
+		w.WriteString(fmt.Sprintf(`<rpr-timecode external-url="%v" time="%v" primary="%v">`, timecode.ExternalURL, timecode.Terse(), ast.IsPrimarySpeaker(timecode)))
 	} else {
-		w.WriteString("</a>")
-		w.WriteString("</span>")
+		w.WriteString("</rpr-timecode>")
 	}
 
 	return gmAst.WalkContinue, nil

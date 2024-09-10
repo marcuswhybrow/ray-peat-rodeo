@@ -16,38 +16,38 @@ added:
   date: 2023-10-04
   author: Marcus Whybrow
 speakers:
-  H: Host
+  H: -Host
   RP: Ray Peat
-  A1: First Audience Member (Male)
-  A2: Second Audience Member (Male)
-  A3: Third Audience Member (Male)
-  A4: Fourth Audience Member (Male)
-  A5: Fith Audience Member (Male)
-  A6: Sixth Audience Member (Male)
-  A7: Seventh Audience Member (Female)
-  A8: Eighth Audience Member (Male)
-  A9: Ninth Audience Member (Male)
-  A10: Tenth Audience Member (Male)
-  A11: Eleventh Audience Member (Male)
-  A12: Twelth Audience Member (Male)
-  A13: Thirteenth Audience Member (Male)
-  A14: Fourteenth Audience Member (Male)
-  A15: Fifteenth Audience Member (Male)
-  A16: Sixteenth Audience Member (Male)
-  A17: Seventeenth Audience Member (Male)
-  A18: Eighteenth Audience Member (Male)
-  A19: Nineteenth Audience Member (Female)
-  A20: Twentieth Audience Member (Male)
-  A21: Twenty-First Audience Member (Male)
-  A22: Twenty-Second Audience Member (Male)
-  A23: Twenty-Third Audience Member (Female)
-  A24: Twenty-Forth Audience Member (Male)
-  A25: Male
-  A26: Male
-  A27: Male
-  A28: (Female)
-  A29: Unknown
-  A30: Unknown
+  A1: -First Audience Member (Male)
+  A2: -Second Audience Member (Male)
+  A3: -Third Audience Member (Male)
+  A4: -Fourth Audience Member (Male)
+  A5: -Fith Audience Member (Male)
+  A6: -Sixth Audience Member (Male)
+  A7: -Seventh Audience Member (Female)
+  A8: -Eighth Audience Member (Male)
+  A9: -Ninth Audience Member (Male)
+  A10: -Tenth Audience Member (Male)
+  A11: -Eleventh Audience Member (Male)
+  A12: -Twelth Audience Member (Male)
+  A13: -Thirteenth Audience Member (Male)
+  A14: -Fourteenth Audience Member (Male)
+  A15: -Fifteenth Audience Member (Male)
+  A16: -Sixteenth Audience Member (Male)
+  A17: -Seventeenth Audience Member (Male)
+  A18: -Eighteenth Audience Member (Male)
+  A19: -Nineteenth Audience Member (Female)
+  A20: -Twentieth Audience Member (Male)
+  A21: -Twenty-First Audience Member (Male)
+  A22: -Twenty-Second Audience Member (Male)
+  A23: -Twenty-Third Audience Member (Female)
+  A24: -Twenty-Forth Audience Member (Male)
+  A25: -Male
+  A26: -Male
+  A27: -Male
+  A28: -(Female)
+  A29: -Unknown
+  A30: -Unknown
 completion:
   timestamps: true
   notes: true

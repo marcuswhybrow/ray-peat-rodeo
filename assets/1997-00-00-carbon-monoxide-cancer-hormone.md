@@ -1,7 +1,7 @@
 ---
 source:
   kind: paper
-  series: Townsend Letter For Doctors & Patients
+  series: Townsend Letter for Doctors & Patients
   edition:
   locator:
   title: "Ray Peat's Newsletter: Carbon Monoxide: Cancer Hormone?"

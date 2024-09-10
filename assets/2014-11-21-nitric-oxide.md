@@ -20,10 +20,10 @@ added:
 speakers:
   AM: Andrew Murray
   RP: Ray Peat
-  E: Sound Engineer
-  C1: First Caller (Male)
-  C2: Second Caller (Male)
-  C3: Third Caller (Female)
+  E: -Sound Engineer
+  C1: -First Caller (Male)
+  C2: -Second Caller (Male)
+  C3: -Third Caller (Female)
 completion:
   timestamps: true
   notes: true

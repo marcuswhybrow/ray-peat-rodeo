@@ -48,6 +48,7 @@ type Speaker interface {
 	GetName() string
 	GetAvatarPath() string
 	GetIsPrimarySpeaker() bool
+	GetIsFilterable() bool
 }
 
 type Speakers []Speaker

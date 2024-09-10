@@ -64,69 +64,12 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
 		utterance := node.(*ast.Utterance)
 
 		t, err := template.New("openUtterance").Parse(`
-      <div 
-        title="{{ .Utterance.Speaker.GetName }}"
-        class="
-          utterance
-          font-sans relative first:mt-0 relative
-
-          {{ if .Utterance.Speaker.GetIsPrimarySpeaker }}
-            is-ray ml-1 mr-16
-          {{ else }} 
-            ml-16 mr-1
-          {{ end }}
-
-          {{ if .IsShort }}
-            retort -mt-4 [.is-short+&>.name]
-          {{ else }} 
-            mt-4
-          {{ end }}
-        "
+      <rpr-utterance 
+        {{ if .Utterance.Speaker.GetName }}by="{{ .Utterance.Speaker.GetName }}"{{ end }}
+        {{ if .Utterance.Speaker.GetAvatarPath }}avatar="{{ .Utterance.Speaker.GetAvatarPath }}"{{ end }}
+        {{ if .Utterance.Speaker.GetIsPrimarySpeaker }}primary="true"{{ end }}
+        {{ if .IsShort }}short="true"{{ end }}
       >
-        {{ if not .IsShort }}
-          {{ if .Utterance.Speaker.GetAvatarPath }}
-            <div class="speaker-avatar w-8 h-8 rounded-full inline-bock shadow float-left mr-4 mb-0 overflow-hidden absolute -left-12 -top-1">
-              <div class="w-[9999px]">
-                <img
-                  class="h-8"
-                  src="{{ .Utterance.Speaker.GetAvatarPath }}"
-                  alt="{{ .Utterance.Speaker.GetName }}"
-                />
-              </div>
-            </div>
-          {{ end }}
-          <div 
-            class="
-              speaker-name
-              text-sm mt-8 mb-4 block
-
-              {{ if .Utterance.Speaker.GetIsPrimarySpeaker }} 
-                text-gray-400
-              {{ else }} 
-                text-sky-400
-              {{ end }}
-            "
-          >{{ .Utterance.Speaker.GetName }}</div>
-        {{ end }}
-
-        <div 
-          class="
-            utterance-body
-            p-8 rounded shadow [&>p]:mb-6 [&>*:last-child]:mb-0 [&>blockquote]:pl-4 [&>blockquote]:text-sm 
-
-            {{ if .IsShort }} 
-              inline-block
-            {{ else }}
-              block
-            {{ end }}
-
-            {{ if .Utterance.Speaker.GetIsPrimarySpeaker }} 
-              text-gray-900 bg-gray-100
-            {{ else }} 
-              text-sky-900 bg-gradient-to-br from-sky-100 to-blue-200
-            {{ end }}
-          "
-        >
     `)
 
 		if err != nil {
@@ -134,12 +77,12 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
 		}
 
 		t.Execute(w, map[string]interface{}{
-			"IsShort":    isShort(utterance, source),
-			"ShowAvatar": showAvatar(utterance, source),
-			"Utterance":  utterance,
+			"IsShort":   isShort(utterance, source),
+			"Utterance": utterance,
 		})
 	} else {
-		_, _ = w.WriteString("</div></div>")
+		// _, _ = w.WriteString("</div></div>")
+		_, _ = w.WriteString("</rpr-utterance>")
 	}
 
 	return gast.WalkContinue, nil

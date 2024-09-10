@@ -10,74 +10,59 @@ templ Base(title string) {
 		<head>
 			<title>
 				if len(title) > 0 {
-					{ title }
+					{ title + " - Ray Peat Rodeo" }
 				} else {
 					{ "Ray Peat Rodeo" }
 				}
 			</title>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="stylesheet" href="/assets/tailwind.css"/>
-			<script src="/pagefind/pagefind-ui.js" type="text/javascript"></script>
-			<script src="https://unpkg.com/htmx.org@1.9.6"></script>
-			<script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
-			<script type="text/javascript">
-        function relativeDate(origStr) {
-          let buildDate = Date.parse(origStr);
-          let delta = Date.now() - buildDate;
-
-          let hours = Math.floor(delta / (60 * 60 * 1000));
-          if (hours < 24) {
-            return 'today';
-          }
-
-          let days = Math.floor(delta / (24 * 60 * 60 * 1000));
-          if (days == 1) {
-            return 'today';
-          } else if (days == 2) {
-            return 'yesterday';
-          } else if (days < 7) {
-            return days + ' days ago';
-          }
-
-          let weeks = Math.floor(delta / (7 * 24 * 60 * 60 * 1000));
-          if (weeks == 1) {
-            return 'a week ago';
-          } else if (weeks <= 16) {
-            return weeks + ' weeks ago';
-          }
-
-          return origStr
+			<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png"/>
+			<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png"/>
+			<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png"/>
+			<link rel="manifest" href="/assets/images/favicons/site.webmanifest"/>
+			<!-- <link rel="stylesheet" href="/assets/tailwind.css"/> -->
+			<!-- <script src="https://unpkg.com/htmx.org@2.0.2"></script> -->
+			<!-- <script src="https://unpkg.com/hyperscript.org@0.9.12"></script> -->
+			<script src="/assets/scripts/uFuzzy.iife.min.js"></script>
+			<script src="/assets/scripts/relative-date.js"></script>
+			<script src="/assets/scripts/setZeroTimeout.min.js"></script>
+			<script src="/assets/components/rpr-pin.js"></script>
+			<script src="/assets/components/rpr-asset-excerpt.js"></script>
+			<script src="/assets/components/rpr-asset.js"></script>
+			<script src="/assets/components/rpr-deck.js"></script>
+			<script src="/assets/components/rpr-contributor.js"></script>
+			<script src="/assets/components/rpr-pins.js"></script>
+			<script src="/assets/components/rpr-utterance.js"></script>
+			<script src="/assets/components/rpr-issue.js"></script>
+			<script src="/assets/components/rpr-sidenote.js"></script>
+			<script src="/assets/components/rpr-new-issue.js"></script>
+			<script src="/assets/components/rpr-timecode.js"></script>
+			<script src="/assets/components/rpr-search.js"></script>
+			<script src="/assets/components/rpr-layout.js"></script>
+			<script src="/assets/components/rpr-ad.js"></script>
+			<script type="module">
+        if (!('fragmentDirective' in document)) {
+          import('https://unpkg.com/text-fragments-polyfill');
         }
       </script>
-			<script type="module" src="/assets/static/scripts/search.js"></script>
+			<style>
+        ::-webkit-scrollbar {
+          width: 8px;
+          background: white;
+        }
+        ::-webkit-scrollbar:hover {
+          background: #fafafa;
+          width: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: #ddd;
+          border-radius: 0.25rem;
+        }
+      </style>
 		</head>
-		<body
-			class="
-        scrollbar
-        scrollbar-thumb-purple-300
-        scrollbar-track-pink-50
-      "
-			_="
-        behavior RelativeDate
-          on load 
-            set buildDate to my innerHTML then
-            set result to call relativeDate(buildDate)
-            set my innerHTML to result
-            show me with *opacity
-          end
-        end
-
-        on keydown[key=='/'] 
-          if #rpr-search-input does not match <:focus/>
-            focus() the #rpr-search-input
-            select() the #rpr-search-input
-            halt the event
-          end
-
-        on keydown[key=='Escape'] send closeSearch to me
-      "
-		>
+		<body>
 			{ children... }
 		</body>
 	</html>

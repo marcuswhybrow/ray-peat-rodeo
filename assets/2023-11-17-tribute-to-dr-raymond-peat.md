@@ -11,17 +11,17 @@ added:
   date: 2024-04-18
   author: Marcus Whybrow
 speakers:
-  E: Engineer
+  E: -Engineer
   AM: Andrew Murray
   SJM: Sarah Johannesen Murray
   W: Wanita
-  F: Female Caller
-  M: Marine County (Male)
-  C: San Francisco (Female)
+  F: -Female Caller
+  M: -Marine County (Male)
+  C: -San Francisco (Female)
   B: Brendon
   KM: Kathy Miller
-  MC: Mendocino County (Female)
-  FC: Final Caller (Male)
+  MC: -Mendocino County (Female)
+  FC: -Final Caller (Male)
 primarySpeakers: [E, AM, SJM]
 completion:
   timestamps: true

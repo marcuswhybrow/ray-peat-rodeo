@@ -20,11 +20,11 @@ completion:
   notes: false
   timestamps: true
 speakers:
-  E: Engineer
+  E: -Engineer
   AM: Andrew Murray
   SJM: Sarah Johannesen Murray
   RP: Ray Peat
-  G: First Caller (Male, Garberville, California)
+  G: -First Caller (Male, Garberville, California)
 ---
 
 E: [0:00] Alright, 7 o'clock, straight up. You are listening to Redwood Community Radio KMUD Garberville, 91.1 FM in HD1, KMUE Eureka 88.1 FM in HD1, KLAI Laytonville 90.3 FM, on the web KMUD.org and in Shelter Cove, we're at 99.5 on FM Translator K258BQ. 

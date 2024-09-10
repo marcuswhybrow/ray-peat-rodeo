@@ -2,9 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"slices"
 	"strings"
 	"sync"
@@ -76,7 +78,7 @@ func main() {
 	redirectionsMutex := sync.RWMutex{}
 
 	utils.Parallel(catalog.Assets, func(file *rprCatalog.Asset) error {
-		err := file.WriteHtml(catalog)
+		err := file.WriteHtml(catalog, false)
 		if err != nil {
 			return fmt.Errorf("Failed to render file '%v': %v", file.Path, err)
 		}
@@ -163,7 +165,47 @@ func main() {
 		log.Fatal("Failed to write HTTP cache:", err)
 	}
 
+	// JSON
+	searchData := []SearchAsset{}
+	for _, asset := range catalog.Assets {
+		contributors := []SearchContributor{}
+		for _, contributor := range asset.GetFilterableSpeakers() {
+			contributors = append(contributors, SearchContributor{
+				Name:   contributor.GetName(),
+				Avatar: contributor.GetAvatarPath(),
+			})
+		}
+		searchData = append(searchData, SearchAsset{
+			Path:         asset.UrlAbsPath,
+			Title:        asset.FrontMatter.Source.Title,
+			Series:       asset.FrontMatter.Source.Series,
+			Kind:         asset.FrontMatter.Source.Kind,
+			Date:         asset.Date,
+			Contributors: contributors,
+		})
+	}
+
+	b, err := json.Marshal(searchData)
+	err = os.WriteFile(path.Join(global.BUILD_OUTPUT, "search.json"), b, 0755)
+	if err != nil {
+		log.Fatal("Failed to write search JSON:", err)
+	}
+
 	// 🏁 Done
 
 	fmt.Printf("\nFinished in %v.\n", time.Since(start))
+}
+
+type SearchContributor struct {
+	Avatar string
+	Name   string
+}
+
+type SearchAsset struct {
+	Path         string
+	Title        string
+	Series       string
+	Kind         string
+	Date         string
+	Contributors []SearchContributor
 }

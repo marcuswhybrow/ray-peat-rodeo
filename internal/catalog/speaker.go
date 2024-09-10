@@ -5,6 +5,7 @@ type Speaker struct {
 	Name             string
 	AvatarPath       string
 	IsPrimarySpeaker bool
+	IsFilterable     bool
 }
 
 // Implements ast.Speaker interface
@@ -23,4 +24,8 @@ func (s *Speaker) GetAvatarPath() string {
 
 func (s *Speaker) GetIsPrimarySpeaker() bool {
 	return s.IsPrimarySpeaker
+}
+
+func (s *Speaker) GetIsFilterable() bool {
+	return s.IsFilterable
 }

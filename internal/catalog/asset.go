@@ -14,6 +14,8 @@ import (
 
 	"github.com/gernest/front"
 	"github.com/mitchellh/mapstructure"
+	"github.com/tdewolff/minify/v2"
+	"github.com/tdewolff/minify/v2/html"
 	"github.com/yuin/goldmark"
 	gparser "github.com/yuin/goldmark/parser"
 	"golang.org/x/text/cases"
@@ -155,11 +157,18 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 			isPrimarySpeaker = slices.Contains(frontMatter.PrimarySpeakers, id)
 		}
 
+		isFilterable := true
+		if strings.HasPrefix(name, "-") {
+			name = name[1:]
+			isFilterable = false
+		}
+
 		speakers = append(speakers, &Speaker{
 			ID:               id,
 			Name:             name,
 			AvatarPath:       avatarPaths.Get(name),
 			IsPrimarySpeaker: isPrimarySpeaker,
+			IsFilterable:     isFilterable,
 		})
 	}
 
@@ -223,14 +232,20 @@ func (a *Asset) WriteMarkdown() error {
 }
 
 // Writes file to f.outPath
-func (a *Asset) WriteHtml(catalog *Catalog) error {
+func (a *Asset) WriteHtml(catalog *Catalog, minifyHTML bool) error {
 	file, _ := utils.MakeFile(a.OutPath)
-
-	err := Peruse(a, catalog).Render(context.Background(), file)
+	buf := new(bytes.Buffer)
+	err := Peruse(a, catalog, true).Render(context.Background(), buf)
 	if err != nil {
 		return fmt.Errorf("Failed to render template: %v", err)
 	}
-
+	if minifyHTML {
+		m := minify.New()
+		m.AddFunc("text/html", html.Minify)
+		m.Minify("text/html", file, buf)
+	} else {
+		buf.WriteTo(file)
+	}
 	return nil
 }
 
@@ -299,6 +314,16 @@ func (a *Asset) GetSpeakers() []ast.Speaker {
 	speakers := make([]ast.Speaker, len(a.Speakers))
 	for i, s := range a.Speakers {
 		speakers[i] = s
+	}
+	return speakers
+}
+
+func (a *Asset) GetFilterableSpeakers() []ast.Speaker {
+	speakers := []ast.Speaker{}
+	for _, speaker := range a.GetSpeakers() {
+		if speaker.GetIsFilterable() {
+			speakers = append(speakers, speaker)
+		}
 	}
 	return speakers
 }
