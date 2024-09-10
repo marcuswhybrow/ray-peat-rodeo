@@ -64,11 +64,6 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
         #pins {
           margin-bottom: 1rem;
         }
-        #sidebar-icon {
-          height: 2.2rem;
-          opacity: 0.3;
-          cursor: pointer;
-        }
       </style>
       <div id="header">
         <form>
@@ -80,7 +75,6 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
             autocomplete="off"
             value="${this.#query}"
           />
-          <img id="sidebar-icon" src="/assets/images/interface-layout-left-sidebar-icon.svg" />
         </form>
         <rpr-pins id="pins"></rpr-pins>
       </div>
@@ -95,23 +89,12 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
     this.focus = () => input.focus();
     this.select = () => input.select();
 
-    const icon = this.shadowRoot.querySelector("#sidebar-icon");
-    icon.addEventListener("click", event => {
-      this.dispatchEvent(new CustomEvent("sidebar", {
-        bubbles: true,
-        detail: false
-      }));
-    });
-    icon.addEventListener("keydown", event => {
-      if (event.key === "Enter") icon.click();
-    });
-
     window.addEventListener("keydown", event => {
       if (event.key === "/") {
         if (this !== document.activeElement) {
           this.dispatchEvent(new CustomEvent("sidebar", {
             bubbles: true,
-            detail: true,
+            detail: "open",
           }));
           input.focus();
           input.select();

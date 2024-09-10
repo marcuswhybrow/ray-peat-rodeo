@@ -27,12 +27,6 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
           border-radius: 0.25rem;
         }
 
-        :host(:not([sidebar="true"])) .side {
-          display: none;
-        }
-        :host(:not([sidebar="true"])) .main {
-          padding-left: 0;
-        }
 
         .side { 
           height: 100vh;
@@ -41,20 +35,41 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
           position: fixed;
           top: 0;
           left: 0;
-        }
-        .side .inner {
           padding: 0 2rem 2rem;
+          box-sizing: border-box;
+          transition: 200ms ease-in-out;
+        }
+        :host(:not([sidebar="true"])) .side {
+          transform: translateX(-100%);
+        }
+
+        .side rpr-search {
           margin-bottom: 8rem;
         }
-
-        .main {
-          padding-left: 33%;
+        rpr-toolbar {
+          position: fixed;
+          bottom: 2rem;
+          left: 2rem;
+          width: calc(33% - 4rem);
+          transition: 300ms;
+          transition-timing-function: ease-in-out;
         }
-        .main .inner {
-          padding: 2rem;
+        :host(:not([sidebar="true"])) rpr-toolbar {
+          transform: translateX(calc(50vw - 50%));
         }
 
-        #sidebar-icon {
+        .main::slotted(*) {
+          padding-left: calc(33% + 2rem);
+          padding-right: 2rem;
+          padding-top: 2rem;
+          padding-bottom: 2rem;
+          transition: 300ms ease-in-out;
+        }
+        :host(:not([sidebar="true"])) .main::slotted(*) {
+          padding-left: 2rem;
+        }
+
+        .sidebar-icon {
           position: fixed;
           top: 1rem;
           left: 1rem;
@@ -62,27 +77,20 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
           opacity: 0.4;
           cursor: pointer;
         }
-        :host([sidebar="true"]) #sidebar-icon {
+        :host([sidebar="true"]) .sidebar-icon {
           display: none;
         }
+
       </style>
       <div class="side">
-        <div class="inner">
-          <slot name="side"></slot>
-        </div>
+				<rpr-search></rpr-search>
       </div>
 
-      <div class="main">
-        <div class="inner">
-          <slot name="main"></slot>
-        </div>
-      </div>
+      <slot class="main"></slot>
 
-      <div id="advertisement">
-        <slot name="advertisement"></slot>
-      </div>
+      <!-- <rpr-ad></rpr-ad> -->
 
-      <img id="sidebar-icon" src="/assets/images/interface-layout-left-sidebar-icon.svg" />
+      <rpr-toolbar></rpr-toolbar>
     `;
 
     this.shadowRoot.addEventListener("pick", async event => {
@@ -100,7 +108,24 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
     });
 
     this.shadowRoot.addEventListener("sidebar", event => {
-      this.sidebar = event.detail;
+      switch (event.detail) {
+        case "open":
+          this.sidebar = true;
+          break;
+        case "close":
+          this.sidebar = false;
+          break;
+        case "toggle":
+          this.sidebar = !this.sidebar;
+          break;
+      }
+    });
+
+    this.shadowRoot.addEventListener("search", () => {
+      this.sidebar = true;
+      const search = this.shadowRoot.querySelector("rpr-search");
+      search.focus();
+      search.select();
     });
 
     const params = new URLSearchParams(window.location.search);
@@ -109,22 +134,12 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
     } else {
       this.sidebar = true;
     }
-
-    const icon = this.shadowRoot.querySelector("#sidebar-icon");
-    icon.addEventListener("click", event => {
-      this.sidebar = true;
-    });
-    icon.addEventListener("keyup", event => {
-      if (event.key === "Enter") icon.click();
-    });
-
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case "sidebar":
         this.#sidebar = newValue === "true";
-
         break;
     }
   }
