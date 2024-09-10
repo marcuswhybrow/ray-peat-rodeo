@@ -71,7 +71,7 @@ type Asset struct {
 	Mentionables ByMentionable[Mentions]
 
 	// A list of GitHub issues referenced in this asset's markdown.
-	Issues []int
+	Issues []*Issue
 
 	// A list of Speaker's derrvied from this asset's frontmatter.
 	Speakers []*Speaker
@@ -358,8 +358,13 @@ func (a *Asset) GetAllUnescapedURLsWithPrefix(prefix string) []string {
 	return urls
 }
 
-func (a *Asset) RegisterIssue(id int) {
-	a.Issues = append(a.Issues, id)
+func (a *Asset) RegisterIssue(id int, title string) {
+	issue := &Issue{
+		Id:    id,
+		Title: title,
+		Url:   global.GitHubIssueLink(id),
+	}
+	a.Issues = append(a.Issues, issue)
 }
 
 func (a *Asset) GetSlug() string {
@@ -565,4 +570,10 @@ func unencode(filePath string) string {
 		log.Panicf("Failed to unescape path '%v': %v", filePath, err)
 	}
 	return str
+}
+
+type Issue struct {
+	Id    int
+	Title string
+	Url   string
 }

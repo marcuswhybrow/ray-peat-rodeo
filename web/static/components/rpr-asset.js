@@ -8,9 +8,12 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
   #title = null;
   #kind = null;
   #series = null;
+  #issues = [];
+  #showIssues = null;
 
   static observedAttributes = [
-    "date", "title", "kind", "active", "has-matches", "path", "series"
+    "date", "title", "kind", "active", "has-matches", "path", "series", "issues",
+    "show-issues"
   ];
 
   constructor() {
@@ -31,7 +34,8 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
           letter-spacing: 0.025em;
           margin-bottom: 1rem;
         }
-        :host([active="true"]) {
+        :host([active="true"]) #title,
+        :host([active="true"]) #stats {
           color: #292524 !important;
           text-shadow: 0 0 1px #292524;
         }
@@ -65,6 +69,29 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
         #results > div:first-child {
           margin-top: 0;
         }
+        
+        .issues {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          margin: 0;
+          padding: 0.25rem 0 0 0rem;
+        }
+        :host(:not([show-issues="true"])) .issues {
+          display: none;
+        }
+        .issues td {
+          vertical-align: top;
+        }
+        .issues td:first-child {
+          padding-right: 0.5rem;
+        }
+        .issues a {
+          color: #444;
+        }
+        .issues a:hover {
+          color: #000;
+        }
       </style>
       <span id="title">${this.title}</span>
       <div id="stats">
@@ -73,24 +100,20 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
       </div>
       <div id="results">
       </div>
+      <table class="issues"></table>
     `;
 
     this.addEventListener("click", event => {
       this.dispatchEvent(new CustomEvent("pick", {
         bubbles: true,
-        detail: this, 
+        detail: {
+          asset: this, 
+          issue: null,
+        }
       }));
     });
-
-    this.addEventListener("keyup", event => {
-      switch(event.key) {
-        case "Enter":
-          this.dispatchEvent(new CustomEvent("pick", {
-            bubbles: true,
-            detail: this,
-          }));
-          break;
-      }
+    this.addEventListener("keyup", () => {
+      if (event.key === "Enter") this.click();
     });
   }
 
@@ -119,6 +142,40 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
       case "series":
         this.#series = newValue;
         this.shadowRoot.querySelector("#series").textContent = newValue;
+        break;
+      case "issues":
+        this.#issues = JSON.parse(newValue);
+        const elements = [];
+        for (const issue of this.issues) {
+          const a = document.createElement("a");
+          a.href = this.path + "#issue-" + issue.Id;
+          a.textContent = issue.Title;
+          a.addEventListener("click", e => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.dispatchEvent(new CustomEvent("pick", {
+              bubbles: true,
+              detail: {
+                asset: this,
+                issue: issue.Id,
+              },
+            }));
+          });
+
+          const left = document.createElement("td");
+          left.textContent = `#${issue.Id}`;
+
+          const right = document.createElement("td");
+          right.replaceChildren(a);
+
+          const tr = document.createElement("tr");
+          tr.replaceChildren(left, right);
+          elements.push(tr);
+        }
+        this.shadowRoot.querySelector(".issues").replaceChildren(...elements);
+        break;
+      case "show-issues":
+        this.#showIssues = newValue === "true";
         break;
     }
   };
@@ -177,6 +234,22 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
 
   set series(newValue) {
     this.setAttribute("series", newValue);
+  }
+
+  get issues() {
+    return this.#issues;
+  }
+
+  set issues(newValue) {
+    this.setAttribute("issues", JSON.stringify(newValue));
+  }
+
+  get showIssues() {
+    return this.#showIssues;
+  }
+
+  set showIssues(newValue) {
+    this.setAttribute("show-issues", newValue);
   }
 
   deriveActive() {

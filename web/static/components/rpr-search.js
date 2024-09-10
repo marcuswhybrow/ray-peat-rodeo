@@ -130,6 +130,7 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
         a.series = asset.Series;
         a.date = asset.Date;
         a.kind = asset.Kind;
+        a.issues = asset.Issues;
         a.tabIndex = tabIndex++;
 
         if (a.deriveActive()) {
@@ -138,6 +139,7 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
 
         a.addEventListener("pick", async event => {
           const response = await fetch(a.path);
+          const issue = event.detail.issue;
 
           if (!response.ok) {
             console.error(`Failed to fetch ${a.path}`);
@@ -149,7 +151,13 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
           const grabbed = doc.querySelector("#reading-pane");
           const replace = document.querySelector("#reading-pane");
           replace.replaceWith(grabbed);
-          window.scrollTo({ top: 0, behavior: "instant" });
+
+          if (issue === null) {
+            window.scrollTo({ top: 0, behavior: "instant" });
+          } else {
+            const issueBubble = document.querySelector(`#issue-${issue}`);
+            window.scrollTo({ top: issueBubble.offsetTop, behavior: "instant" });
+          }
 
           let link = a.path; 
           if (window.location.search) link += window.location.search;
@@ -413,9 +421,10 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
     if (this.query === "") {
       sort["date"] = "desc";
     }
+    const filters = await this.filters;
     const result = await (await pagefind).search(
       forceQuery,
-      { filters: this.filters, sort }
+      { filters, sort }
     );
 
     if (searchCount !== this.#searchCount) {
@@ -435,6 +444,9 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
       const key = data.raw_url.replace(trailingSlashes, "");
       const asset = assets[key];
       asset.tabIndex = tabIndex++;
+
+      asset.showIssues = filters.hasOwnProperty("Issues")
+        && filters["Issues"].includes("Has Issues");
 
       if (asset.active) {
         activeAsset = asset;
@@ -544,6 +556,7 @@ window.customElements.define("rpr-search", class Search extends HTMLElement {
 
     for (const asset of assets) {
       asset.replaceResults();
+      asset.showIssues = false;
     }
 
     return assets;

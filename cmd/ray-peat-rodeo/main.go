@@ -168,6 +168,7 @@ func main() {
 	// JSON
 	searchData := []SearchAsset{}
 	for _, asset := range catalog.Assets {
+
 		contributors := []SearchContributor{}
 		for _, contributor := range asset.GetFilterableSpeakers() {
 			contributors = append(contributors, SearchContributor{
@@ -175,6 +176,16 @@ func main() {
 				Avatar: contributor.GetAvatarPath(),
 			})
 		}
+
+		issues := []SearchIssue{}
+		for _, issue := range asset.Issues {
+			issues = append(issues, SearchIssue{
+				Id:    issue.Id,
+				Title: issue.Title,
+				Url:   issue.Url,
+			})
+		}
+
 		searchData = append(searchData, SearchAsset{
 			Path:         asset.UrlAbsPath,
 			Title:        asset.FrontMatter.Source.Title,
@@ -182,6 +193,7 @@ func main() {
 			Kind:         asset.FrontMatter.Source.Kind,
 			Date:         asset.Date,
 			Contributors: contributors,
+			Issues:       issues,
 		})
 	}
 
@@ -208,4 +220,11 @@ type SearchAsset struct {
 	Kind         string
 	Date         string
 	Contributors []SearchContributor
+	Issues       []SearchIssue
+}
+
+type SearchIssue struct {
+	Id    int
+	Title string
+	Url   string
 }

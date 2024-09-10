@@ -20,15 +20,16 @@ window.customElements.define("rpr-deck", class Deck extends HTMLElement {
     `;
 
     this.shadowRoot.addEventListener("pick", event => {
+      const asset = event.detail.asset;
       const current = this.shadowRoot.querySelector(`[active="true"]`);
-      if (current !== event.detail) {
+      if (current !== asset) {
         if (current !== null) {
           current.active = false;
         }
-        event.detail.active = true;
+        asset.active = true;
         this.dispatchEvent(new CustomEvent("pick", {
           bubbles: true,
-          detail: event.detail,
+          detail: asset,
         }));
       }
     });

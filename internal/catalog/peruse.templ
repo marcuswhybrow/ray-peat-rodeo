@@ -125,13 +125,13 @@ templ Peruse(asset *Asset, catalog *Catalog, pagefind bool) {
 									data-state="Todo"
 								}
 								if asset.HasIssues() {
-									data-has-issues="Yes"
+									data-has-issues="Has Issues"
 								} else {
-									data-has-issues="No"
+									data-has-issues="No Issues"
 								}
 								data-medium={ asset.GetFriendlyKind() }
 								data-issue-count={ fmt.Sprint(asset.IssueCount()) }
-								data-pagefind-filter="Has Issues[data-has-issues], State[data-state], Medium[data-medium]"
+								data-pagefind-filter="Issues[data-has-issues], State[data-state], Medium[data-medium]"
 							>
 								<a href={ templ.SafeURL(asset.UrlAbsPath) }>{ asset.FrontMatter.Source.Title }</a>
 							</h1>

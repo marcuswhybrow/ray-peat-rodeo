@@ -36,7 +36,7 @@ type Asset interface {
 	GetMarkdown() []byte
 	GetPath() string
 	RegisterMention(mention *Mention)
-	RegisterIssue(id int)
+	RegisterIssue(id int, title string)
 	GetSlug() string
 	GetPermalink() string
 	GetSpeakers() []Speaker
