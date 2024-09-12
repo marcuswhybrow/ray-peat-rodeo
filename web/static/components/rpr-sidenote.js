@@ -1,12 +1,13 @@
-window.customElements.define("rpr-sidenote", class extends HTMLElement {
-  #id = null;
+class Sidenode extends HTMLElement {
+  /** @type {string} */
+  #sidenoteId
 
   static observedAttributes = ["sidenote-id"];
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         label {
           counter-increment: sidenote;
@@ -65,28 +66,27 @@ window.customElements.define("rpr-sidenote", class extends HTMLElement {
     `;
   }
 
-  connectedCallback() {
-
-  }
-
-  disconnectedCallback() {
-
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    switch(name) {
+  /**
+  * @param {string} name
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
+    switch (name) {
       case "sidenote-id":
-        this.#id = newValue;
+        this.#sidenoteId = newValue;
         this.setAttribute("id", `sidenote-${newValue}`);
         break;
     }
   }
 
-  set id(newValue) {
+  set sidenoteId(newValue) {
     this.setAttribute("sidenote-id", newValue);
   }
 
-  get id() {
-    return this.#id;
+  get sidenoteId() {
+    return this.#sidenoteId;
   }
-});
+}
+
+customElements.define("rpr-sidenote", Sidenode);

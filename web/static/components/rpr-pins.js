@@ -1,13 +1,27 @@
-window.customElements.define("rpr-pins", class extends HTMLElement {
-  #pinned = null;
-  #unpinned = null;
+class Pins extends HTMLElement {
+
+  /** @type {Number} */
   #tabIndexStart = 2;
-  #tabIndexEnd = null;
+
+  /** @type {Number} */
+  #tabIndexEnd = 2
+
+  /** @type {Pin[]} */
+  #pinned = [];
+
+  /** @type {Pin[]} */
+  #unpinned = [];
+
+  /** @type {HTMLElement} */
+  #pinnedElement
+
+  /** @type {HTMLElement} */
+  #unpinnedElement
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host(*) {
           display: flex;
@@ -20,7 +34,7 @@ window.customElements.define("rpr-pins", class extends HTMLElement {
           flex-direction: row;
           flex-wrap: wrap;
           justify-content: left; 
-          gap: 0.25rem;
+          gap: 0.5rem;
         }
 
         #pinned {
@@ -28,37 +42,45 @@ window.customElements.define("rpr-pins", class extends HTMLElement {
           flex-direction: row;
           flex-wrap: wrap;
           justify-content: left;
-          gap: 0.25rem;
+          gap: 0.5rem;
         }
       </style>
       <div id="unpinned"></div>
       <div id="pinned"></div>
     `;
-    this.#pinned = this.shadowRoot.querySelector("#pinned");
-    this.#unpinned = this.shadowRoot.querySelector("#unpinned");
+
+    this.#pinnedElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#pinned"));
+    this.#unpinnedElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#unpinned"));
   }
 
-  connectedCallback() {
-  }
-
+  /**
+  * @param {...Pin} pins
+  */
   replacePinned(...pins) {
-    this.#pinned.replaceChildren(...pins);
+    this.#pinned = pins;
+    this.#pinnedElement.replaceChildren(...pins);
     this.#recalculateTabIndexes();
   }
 
+  /**
+  * @param {...Pin} pins
+  */
   replaceUnpinned(...pins) {
-    this.#unpinned.replaceChildren(...pins);
+    this.#unpinned = pins;
+    this.#unpinnedElement.replaceChildren(...pins);
     this.#recalculateTabIndexes();
   }
 
   #recalculateTabIndexes() {
     let tabIndex = this.#tabIndexStart;
-    for (const pin of this.#unpinned.children) pin.tabIndex = tabIndex++;
-    for (const pin of this.#pinned.children) pin.tabIndex = tabIndex++;
+    for (const pin of this.#unpinned) pin.tabIndex = tabIndex++;
+    for (const pin of this.#pinned) pin.tabIndex = tabIndex++;
     this.#tabIndexEnd = tabIndex;
   }
 
   get tabIndexEnd() {
     return this.#tabIndexEnd;
   }
-});
+}
+
+customElements.define("rpr-pins", Pins);

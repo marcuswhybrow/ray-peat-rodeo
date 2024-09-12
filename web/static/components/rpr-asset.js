@@ -1,25 +1,103 @@
-window.customElements.define("rpr-asset", class extends HTMLElement {
-  #weight = null;
-  #excerpts = [];
-  #elements = {};
-  #active = false;
-  #path = null;
-  #date = null;
-  #title = null;
-  #kind = null;
-  #series = null;
-  #issues = [];
-  #showIssues = null;
 
+/**
+ * @typedef {object} PickEventDetail
+ * @property {Asset} asset 
+ * @property {Number|null} issue
+ */
+
+/**
+  * @typedef {object} PickEvent
+  * @property {PickEventDetail} detail
+  */
+
+/**
+  * @typedef {"audio"|"video"|"text"|"dissertation"|"book"|"patent"|"thesis"|"article"} Kind
+  */
+
+/**
+ * @typedef {object} IssueData
+ * @property {Number} Id
+ * @property {string} Title
+ * @property {string} Url
+ */
+
+
+/**
+ * @typedef {object} PagefindSubResult
+ * @property {string} excerpt
+ */
+
+/**
+ * Asset title and stats, with contextual annotations for search results and 
+ * issues.
+ */
+class Asset extends HTMLElement {
+
+  /** 
+   * Is this asset styled to appear as the active asset?
+   *
+   * @type {Boolean} 
+   */
+  #active
+
+  /** 
+   * The URL for this asset.
+   *
+   * @type {string} 
+   */
+  #path
+
+  /** 
+   * The "YYYY-MM-DD" date the asset's source was created.
+   *
+   * @type {string} 
+   */
+  #date
+
+  /** 
+   * The asset's capitalised title.
+   *
+   * @type {string} 
+   */
+  #title
+
+  /** 
+   * The kind of this asset such as audio, video or article.
+   *
+   * @type {Kind} 
+   */
+  #kind
+
+  /** 
+   * The published of this asset's source, such as "Some Podcast".
+   *
+   * @type {string} */
+  #series
+
+  /** 
+   * Aa list of GitHub issues callouts in this asset's content.
+   *
+   * @type {IssueData[]} 
+   */
+  #issues = [];
+
+  /** 
+   * Should the asset display any issue callouts it has?
+   *
+   * @type {Boolean} 
+   */
+  #showIssues
+
+  /** Attributes that trigger {@link attributeChangedCallback} */
   static observedAttributes = [
-    "date", "title", "kind", "active", "has-matches", "path", "series", "issues",
-    "show-issues"
+    "date", "title", "kind", "active", "has-matches", "path", "series",
+    "issues", "show-issues"
   ];
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host(*) {
           font-size: 0.75rem;
@@ -98,40 +176,56 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
         <span id="date">${this.date}</span>
         <span id="series">${this.series}</span>
       </div>
-      <div id="results">
-      </div>
+      <div id="results"></div>
       <table class="issues"></table>
     `;
 
-    this.addEventListener("click", event => {
+    const asset = this;
+
+    this.addEventListener("click", () => {
       this.dispatchEvent(new CustomEvent("pick", {
         bubbles: true,
-        detail: {
-          asset: this, 
+        detail: /** @type {PickEventDetail} */ ({
+          asset: asset,
           issue: null,
-        }
+        })
       }));
     });
-    this.addEventListener("keyup", () => {
+
+    this.addEventListener("keyup", event => {
       if (event.key === "Enter") this.click();
     });
   }
 
-  connectedCallback() {
+  /**
+   * Assumes the element {@link selector} returns an element.
+   *
+   * @param {string} selector
+   * @returns {Element}
+   */
+  #assume(selector) {
+    const element = this.shadowRoot?.querySelector(selector);
+    if (!element) {
+      throw new Error(`Failed to select "${selector}".`);
+    } else {
+      return element;
+    }
   }
 
-  disonnectedCallback() {
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
+  /**
+  * @param {string} name 
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case "title":
         this.#title = newValue;
-        this.shadowRoot.querySelector("#title").textContent = newValue;
+        this.#assume("#title").textContent = newValue;
         break;
       case "date":
         this.#date = newValue;
-        this.shadowRoot.querySelector("#date").textContent = newValue;
+        this.#assume("#date").textContent = newValue;
         break;
       case "active":
         this.#active = newValue === "true";
@@ -141,7 +235,7 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
         break;
       case "series":
         this.#series = newValue;
-        this.shadowRoot.querySelector("#series").textContent = newValue;
+        this.#assume("#series").textContent = newValue;
         break;
       case "issues":
         this.#issues = JSON.parse(newValue);
@@ -172,7 +266,7 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
           tr.replaceChildren(left, right);
           elements.push(tr);
         }
-        this.shadowRoot.querySelector(".issues").replaceChildren(...elements);
+        this.#assume(".issues").replaceChildren(...elements);
         break;
       case "show-issues":
         this.#showIssues = newValue === "true";
@@ -180,16 +274,12 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
     }
   };
 
-  get excerpts() {
-    return this.#excerpts;
-  }
-
   get active() {
     return this.#active;
   }
 
   set active(newValue) {
-    this.setAttribute("active", newValue);
+    this.setAttribute("active", newValue.toString());
   }
 
   get date() {
@@ -249,9 +339,10 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
   }
 
   set showIssues(newValue) {
-    this.setAttribute("show-issues", newValue);
+    this.setAttribute("show-issues", newValue.toString());
   }
 
+  /** This this to {@link active} if current URL matches {@link path}. */
   deriveActive() {
     const currentPath = window.location.pathname.replace(/\/+$/, "");
     if (this.path === currentPath) {
@@ -261,6 +352,11 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
     return false;
   }
 
+  /**
+   * Repalce visible Pagefind results. To clear pass no arguments.
+   *
+   * @param {...PagefindSubResult} pagefindSubResult
+   */
   replaceResults(...pagefindSubResult) {
     const elements = [];
     for (const psr of pagefindSubResult) {
@@ -268,6 +364,8 @@ window.customElements.define("rpr-asset", class extends HTMLElement {
       result.innerHTML = psr.excerpt;
       elements.push(result);
     }
-    this.shadowRoot.querySelector("#results").replaceChildren(...elements);
+    this.#assume("#results").replaceChildren(...elements);
   }
-});
+}
+
+customElements.define("rpr-asset", Asset);

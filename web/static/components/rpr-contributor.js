@@ -1,13 +1,27 @@
-window.customElements.define("rpr-contributor", class extends HTMLElement {
-  static observedAttributes = [ "avatar", "name" ];
+class Contributor extends HTMLElement {
+  static observedAttributes = ["avatar", "name"];
 
-  #avatar = null;
-  #name = null;
+  /** 
+   * Absolute path to the avatar image for the person speaking or writing.
+   *
+   * @type {string} 
+   */
+  #avatar
+
+  /** 
+   * Full name of the person speaking or writing.
+   *
+   * @type {string} 
+   */
+  #name
+
+  /** @type {HTMLImageElement} */
+  #avatarElement
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host(*) {
           display: inline-block;
@@ -27,17 +41,24 @@ window.customElements.define("rpr-contributor", class extends HTMLElement {
       </style>
       <span><img /></span>
     `;
+
+    this.#avatarElement = /** @type {HTMLImageElement} */ (shadowRoot.querySelector("img"));
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  /**
+  * @param {string} name
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case "avatar":
         this.#avatar = newValue;
-        this.shadowRoot.querySelector("img").src = newValue;
+        this.#avatarElement.src = newValue;
         break;
       case "name":
         this.#name = newValue;
-        this.shadowRoot.querySelector("img").title = newValue;
+        this.#avatarElement.title = newValue;
         break;
     }
   }
@@ -57,4 +78,6 @@ window.customElements.define("rpr-contributor", class extends HTMLElement {
   get name() {
     return this.#name;
   }
-});
+}
+
+customElements.define("rpr-contributor", Contributor);

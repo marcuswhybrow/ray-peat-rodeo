@@ -24,11 +24,11 @@ templ Base(title string) {
 			<!-- <link rel="stylesheet" href="/assets/tailwind.css"/> -->
 			<!-- <script src="https://unpkg.com/htmx.org@2.0.2"></script> -->
 			<!-- <script src="https://unpkg.com/hyperscript.org@0.9.12"></script> -->
+			<link rel="stylesheet" href="/assets/global.css"/>
 			<script src="/assets/scripts/uFuzzy.iife.min.js"></script>
 			<script src="/assets/scripts/relative-date.js"></script>
 			<script src="/assets/scripts/setZeroTimeout.min.js"></script>
 			<script src="/assets/components/rpr-pin.js"></script>
-			<script src="/assets/components/rpr-asset-excerpt.js"></script>
 			<script src="/assets/components/rpr-asset.js"></script>
 			<script src="/assets/components/rpr-deck.js"></script>
 			<script src="/assets/components/rpr-contributor.js"></script>
@@ -42,6 +42,8 @@ templ Base(title string) {
 			<script src="/assets/components/rpr-layout.js"></script>
 			<script src="/assets/components/rpr-ad.js"></script>
 			<script src="/assets/components/rpr-toolbar.js"></script>
+			<script src="/assets/components/rpr-advanced-search.js"></script>
+			<script src="/assets/components/rpr-ray-peat.js"></script>
 			<script type="module">
         if (!('fragmentDirective' in document)) {
           import('https://unpkg.com/text-fragments-polyfill');
@@ -60,6 +62,10 @@ templ Base(title string) {
         ::-webkit-scrollbar-thumb {
           background: #ddd;
           border-radius: 0.25rem;
+        }
+
+        body {
+          padding: 1rem;
         }
       </style>
 		</head>

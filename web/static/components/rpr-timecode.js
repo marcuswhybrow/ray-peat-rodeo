@@ -1,13 +1,19 @@
-window.customElements.define("rpr-timecode", class extends HTMLElement {
-  #externalUrl = null;
-  #time = null;
+class Timecode extends HTMLElement {
+  /** @type {string} */
+  #externalUrl
+
+  /** @type {string} */
+  #time
+
+  /** @type {HTMLAnchorElement} */
+  #linkElement
 
   static observedAttributes = ["external-url", "time"];
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         #timecode {
           text-align: right;
@@ -38,17 +44,24 @@ window.customElements.define("rpr-timecode", class extends HTMLElement {
         <a id="link" href=""></a>
       </span>
     `;
+
+    this.#linkElement = /** @type {HTMLAnchorElement} */ (shadowRoot.querySelector("#link"));
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  /** 
+  * @param {string} name
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case "external-url":
         this.#externalUrl = newValue;
-        this.shadowRoot.querySelector("#link").href = newValue;
+        this.#linkElement.href = newValue;
         break;
       case "time":
         this.#time = newValue;
-        this.shadowRoot.querySelector("#link").textContent = newValue;
+        this.#linkElement.textContent = newValue;
         break;
     }
   }
@@ -68,4 +81,6 @@ window.customElements.define("rpr-timecode", class extends HTMLElement {
   set time(newValue) {
     this.setAttribute("time", newValue);
   }
-});
+}
+
+customElements.define("rpr-timecode", Timecode);

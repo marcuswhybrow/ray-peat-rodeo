@@ -1,8 +1,8 @@
-window.customElements.define("rpr-ad", class Ad extends HTMLElement {
+class Ad extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host(*) {
           position: fixed;
@@ -46,12 +46,6 @@ window.customElements.define("rpr-ad", class Ad extends HTMLElement {
       </div>
     `;
   }
+}
 
-  connectedCallback() {
-
-  }
-
-  attributeChangedCallback(name, oldName, newName) {
-
-  }
-});
+customElements.define("rpr-ad", Ad);

@@ -98,7 +98,40 @@ templ Peruse(asset *Asset, catalog *Catalog, pagefind bool) {
 						<div style="display: none">
 							<ul>
 								for _, speaker := range asset.GetFilterableSpeakers() {
-									<li data-pagefind-filter="Contributor">{ speaker.GetName() }</li>
+									<li data-pagefind-filter="Participant">{ speaker.GetName() }</li>
+								}
+							</ul>
+							<ul>
+								for _, domain := range asset.GetMirrorDomains() {
+									<li data-pagefind-filter="Also On">{ domain }</li>
+								}
+							</ul>
+							<ul>
+								if asset.FrontMatter.Completion.Issues {
+									<li data-pagefind-filter="Completion">Issues</li>
+								}
+								if asset.FrontMatter.Completion.Content {
+									<li data-pagefind-filter="Completion">Content</li>
+								}
+								if asset.FrontMatter.Completion.Mentions {
+									<li data-pagefind-filter="Completion">Mentions</li>
+								}
+								if asset.FrontMatter.Completion.Timestamps {
+									<li data-pagefind-filter="Completion">Timestamps</li>
+								}
+								if asset.FrontMatter.Completion.ContentVerified {
+									<li data-pagefind-filter="Completion">Content Verified</li>
+								}
+								if asset.FrontMatter.Completion.SpeakersIdentified {
+									<li data-pagefind-filter="Completion">Speakers Identified</li>
+								}
+								if asset.FrontMatter.Completion.Notes {
+									<li data-pagefind-filter="Completion">Notes</li>
+								}
+							</ul>
+							<ul>
+								for mentionable, _ := range asset.Mentionables {
+									<li data-pagefind-filter="Mention">{ mentionable.AsSignature() }</li>
 								}
 							</ul>
 						</div>
@@ -253,7 +286,7 @@ templ Peruse(asset *Asset, catalog *Catalog, pagefind bool) {
 								</td>
 							</tr>
 							<tr>
-								<td>Contributors</td>
+								<td>Participants</td>
 								<td>
 									if len(asset.Speakers) == 0 {
 										-

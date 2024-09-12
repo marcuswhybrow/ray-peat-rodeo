@@ -1,24 +1,40 @@
-window.customElements.define("rpr-pin", class extends HTMLElement {
-  #elements = {};
-  #key = null
-  #value = null;
-  #pinned = false;
-  #matches = [];
+class Pin extends HTMLElement {
 
-  static observedAttributes = [ "pinned", "matches", "value", "key" ];
+  /** @type {string} */
+  #key
+
+  /** @type {string} */
+  #value
+
+  /** @type {Boolean} */
+  #pinned
+
+  /** @type {[Number, Number][]} */
+  #highlights = [];
+
+  /** @type {HTMLElement} */
+  #keyElement
+
+  /** @type {HTMLElement} */
+  #valueElement
+
+  /** attributes that trigger {@link attributeChangedCallback}. */
+  static observedAttributes = ["pinned", "matches", "value", "key"];
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host(*) {
           border: 1px solid #E2E8F0;
-          border-radius: 0.25rem;
-          padding: 0.25rem 0.5rem;
+          border-radius: 1rem;
+          padding: 0.25rem 0.75rem;
           position: relative;
+
           display: inline-flex;
           flex-direction: row;
+
           justify-content: left;
           justify-items: center;
           cursor: pointer;
@@ -30,19 +46,25 @@ window.customElements.define("rpr-pin", class extends HTMLElement {
           display: none;
         }
         :host([pinned="true"]) {
-          background: rgb(203 213 225);
+          background: #eee;
+          border: 1px solid transparent;
         }
         #value {
           color: rgb(51, 65, 85);
-          letter-spacing: 0.05em;
+          letter-spacing: 0.07em;
           font-size: 0.875rem;
-          line-height: 1.125rem;
+          line-height: 0.9rem;
+        }
+        :host([pinned="true"]) #value {
+          color: #666;
         }
         #key {
           color: rgb(148 163 184);
           margin-right: 0.5rem;
-          font-size: 0.875rem;
+          font-size: 0.6rem;
+          letter-spacing: 0.2em;
           line-height: 1.125rem;
+          text-transform: uppercase;
         }
         #unpin {
           position: absolute;
@@ -70,6 +92,9 @@ window.customElements.define("rpr-pin", class extends HTMLElement {
       <span id="value">${this.#value}</span>
       <span id="unpin"><span>X</span></span>
     `;
+
+    this.#keyElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#key"));
+    this.#valueElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#value"));
   }
 
   connectedCallback() {
@@ -92,30 +117,36 @@ window.customElements.define("rpr-pin", class extends HTMLElement {
   }
 
   set pinned(p) {
-    this.setAttribute("pinned", p);
+    this.setAttribute("pinned", p.toString());
   }
 
   get pinned() {
     return this.#pinned;
   }
 
-  set matches(matches) {
-    this.setAttribute("matches", matches.flat(Infinity).join(","));
+  set highlights(newValue) {
+    this.setAttribute("matches", newValue.flat(Infinity).join(","));
   }
 
-  get matches() {
-    return this.#matches;
+  get highlights() {
+    return this.#highlights;
   }
 
-  hasMatches() {
-    return this.#matches.length >= 1
+  hasHighlights() {
+    return this.#highlights.length >= 1
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+
+  /**
+  * @param {string} name
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case "pinned":
         this.#pinned = newValue === "true";
-        this.dispatchEvent(new CustomEvent(this.pinned ? "pinned" : "unpinned", { 
+        this.dispatchEvent(new CustomEvent(this.pinned ? "pinned" : "unpinned", {
           bubbles: true,
           detail: {
             key: this.#key,
@@ -126,35 +157,37 @@ window.customElements.define("rpr-pin", class extends HTMLElement {
         break;
       case "matches":
         const numbers = newValue.split(",").map(x => Number(x));
+
+        /** @type {[Number, Number][]} */
         const matches = [];
         for (let i = 0; i + 1 < numbers.length; i += 2) {
-          matches.push([numbers[i], numbers[i+1]]);
+          matches.push([numbers[i], numbers[i + 1]]);
         }
-        this.#matches = matches;
+        this.#highlights = matches;
         this.reflowValue();
         break;
       case "value":
         this.#value = newValue;
-        this.shadowRoot.querySelector("#value").textContent = newValue;
+        this.#valueElement.textContent = newValue;
         this.reflowValue();
         break;
       case "key":
         this.#key = newValue;
-        this.shadowRoot.querySelector("#key").textContent = newValue;
+        this.#keyElement.textContent = this.key;
         this.reflowValue();
         break;
     }
   }
 
   reflowValue() {
-    if (this.#pinned || !this.hasMatches()) {
-      this.shadowRoot.querySelector("#value").textContent = this.value;
+    if (this.#pinned || !this.hasHighlights()) {
+      this.#valueElement.textContent = this.value;
       return;
     }
 
     let pointer = 0;
     const fragment = new DocumentFragment();
-    for (const [start, end] of this.matches) {
+    for (const [start, end] of this.highlights) {
       if (start > pointer) {
         fragment.append(this.#value.substring(pointer, start));
       }
@@ -166,6 +199,8 @@ window.customElements.define("rpr-pin", class extends HTMLElement {
       pointer = end;
     }
     fragment.append(this.#value.substring(pointer));
-    this.shadowRoot.querySelector("#value").replaceChildren(fragment);
+    this.#valueElement.replaceChildren(fragment);
   }
-});
+}
+
+customElements.define("rpr-pin", Pin);

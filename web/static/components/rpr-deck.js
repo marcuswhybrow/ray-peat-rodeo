@@ -1,10 +1,10 @@
-window.customElements.define("rpr-deck", class Deck extends HTMLElement {
-  #cards = null;
+class Deck extends HTMLElement {
+  #stageElement
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         #stage {
           display: flex;
@@ -19,9 +19,18 @@ window.customElements.define("rpr-deck", class Deck extends HTMLElement {
       <div id="stage"></div>
     `;
 
-    this.shadowRoot.addEventListener("pick", event => {
+    this.#stageElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#stage"));
+
+    /**
+      * @type {(event: Event) => void}
+      * @param {PickEvent} event
+      */
+    function pickHandler(event) {
+      /** @type {Asset|null} */
+      const current = shadowRoot.querySelector(`[active="true"]`);
+
       const asset = event.detail.asset;
-      const current = this.shadowRoot.querySelector(`[active="true"]`);
+
       if (current !== asset) {
         if (current !== null) {
           current.active = false;
@@ -29,25 +38,28 @@ window.customElements.define("rpr-deck", class Deck extends HTMLElement {
         asset.active = true;
         this.dispatchEvent(new CustomEvent("pick", {
           bubbles: true,
-          detail: asset,
+          detail: event.detail,
         }));
       }
-    });
+
+    }
+
+    shadowRoot.addEventListener("pick", pickHandler);
   }
 
+  /** 
+  * @param {...HTMLElement} elements
+  */
   append(...elements) {
-    this.shadowRoot.querySelector("#stage").append(...elements);
+    this.#stageElement.append(...elements);
   }
 
+  /** 
+  * @param {...HTMLElement} elements
+  */
   replace(...elements) {
-    this.shadowRoot.querySelector("#stage").replaceChildren(...elements);
+    this.#stageElement.replaceChildren(...elements);
   }
+}
 
-  get cards() {
-    return this.#cards;
-  }
-
-  set cards(newValue) {
-    this.#cards = newValue;
-  }
-});
+customElements.define("rpr-deck", Deck);

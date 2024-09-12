@@ -1,17 +1,27 @@
-window.customElements.define("rpr-layout", class Layout extends HTMLElement {
+
+/**
+  * @typedef {object} SidebarEvent
+  * @property {"open"|"close"|"toggle"} detail
+  */
+
+/**
+ * A main content area with a togglable sidebar. Handles the picking of new 
+ * {@link Asset|Assets} by fetching it's content and updaing the DOM.
+ */
+class Layout extends HTMLElement {
+  /** Is the sidebar visible? */
   #sidebar = true;
 
+  /** Attributes which trigger {@link attributeChangedCallback} */
   static observedAttributes = ["sidebar"];
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-  }
-
-  connectedCallback() {
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
-        :host(rpr-sidebar) {
+        :host(*) {
+          display: block;
         }
 
         ::-webkit-scrollbar {
@@ -27,20 +37,33 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
           border-radius: 0.25rem;
         }
 
-
         .side { 
-          height: 100vh;
-          width: 33%;
-          overflow-y: scroll;
+          background: white;
+          width: calc(33% - 3rem);
           position: fixed;
-          top: 0;
-          left: 0;
-          padding: 0 2rem 2rem;
-          box-sizing: border-box;
+          top: 1.5rem;
+          left: 1.5rem;
+          height: calc(100vh - 3rem);
+
+          padding: 0 2rem 0 2rem;
+          // box-shadow: 0 0 20px #ddd;
+
           transition: 200ms ease-in-out;
+          overflow-y: scroll;
+          border-radius: 0.25rem;
         }
         :host(:not([sidebar="true"])) .side {
-          transform: translateX(-100%);
+          transform: translateX(calc(-100% + 1rem));
+        }
+        .side::after {
+          content: "";
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 8rem;
+          background: linear-gradient(180deg, transparent 0%, white 100%);
+          pointer-events: none;
         }
 
         .side rpr-search {
@@ -55,18 +78,20 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
           transition-timing-function: ease-in-out;
         }
         :host(:not([sidebar="true"])) rpr-toolbar {
-          transform: translateX(calc(50vw - 50%));
+          /* transform: translateX(calc(50vw - 50%)); */
+          display: none;
         }
 
         .main::slotted(*) {
-          padding-left: calc(33% + 2rem);
-          padding-right: 2rem;
-          padding-top: 2rem;
-          padding-bottom: 2rem;
+          background: white;
+          margin-left: calc(33% + 3rem);
           transition: 300ms ease-in-out;
+          border-radius: 0.25rem;
+
+          display: block;
         }
         :host(:not([sidebar="true"])) .main::slotted(*) {
-          padding-left: 2rem;
+          margin-left: 4rem;
         }
 
         .sidebar-icon {
@@ -83,51 +108,78 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
 
       </style>
       <div class="side">
-				<rpr-search></rpr-search>
+        <rpr-search></rpr-search>
       </div>
 
       <slot class="main"></slot>
-
-      <!-- <rpr-ad></rpr-ad> -->
-
-      <rpr-toolbar></rpr-toolbar>
     `;
 
-    this.shadowRoot.addEventListener("pick", async event => {
-      const asset = event.detail;
+    const search = /** @type {Search} */ (shadowRoot.querySelector("rpr-search"));
+    const readingPane = /** @type {HTMLDivElement} */ (shadowRoot.querySelector("#reading-pane"));
+    const sideElement = /** @type {HTMLElement} */ (shadowRoot.querySelector(".side"));
+    const parser = new DOMParser();
+
+    sideElement.addEventListener("click", () => {
+      if (!this.sidebar) {
+        this.sidebar = true;
+      }
+    });
+
+    /**
+     * @type {(event: Event) => Promise<void>}
+     * @param {PickEvent} event
+      */
+    async function pickHandler(event) {
+      const asset = event.detail.asset;
       const response = await fetch(asset.path);
       if (!response.ok) {
         console.error(`Failed to fetch asset ${asset.path}`);
         return;
       }
       const doc = parser.parseFromString(await response.text(), "text/html");
-      const newPane = doc.querySelector("#reading-pane");
-      document.querySelector("#reading-pane").replaceWith(newPane);
-      window.scrollTo(0,0);
-      history.pushState({}, "", asset.path);
-    });
 
-    this.shadowRoot.addEventListener("sidebar", event => {
+      const newPane = doc.querySelector("#reading-pane");
+      if (!newPane) {
+        console.error("Failed to find #reading-pane in fetched content");
+        return
+      }
+
+      readingPane.replaceChildren(newPane);
+      window.scrollTo(0, 0);
+      history.pushState({}, "", asset.path);
+    }
+    shadowRoot.addEventListener("pick", pickHandler);
+
+    const layout = this;
+
+    /**
+     * @function
+     * @type {(event: Event) => void}
+     * @param {SidebarEvent} event
+     */
+    function sidebarHandler(event) {
       switch (event.detail) {
         case "open":
-          this.sidebar = true;
+          layout.sidebar = true;
           break;
         case "close":
-          this.sidebar = false;
+          layout.sidebar = false;
           break;
         case "toggle":
-          this.sidebar = !this.sidebar;
+          layout.sidebar = !layout.sidebar;
           break;
       }
-    });
+    }
+    shadowRoot.addEventListener("sidebar", sidebarHandler);
 
-    this.shadowRoot.addEventListener("search", () => {
+    shadowRoot.addEventListener("search", () => {
       this.sidebar = true;
-      const search = this.shadowRoot.querySelector("rpr-search");
       search.focus();
       search.select();
     });
+  }
 
+  connectedCallback() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("sidebar") === "false") {
       this.sidebar = false;
@@ -136,7 +188,12 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
     }
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  /**
+   * @param {string} name 
+   * @param {string} _oldValue
+   * @param {string} newValue
+   */
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case "sidebar":
         this.#sidebar = newValue === "true";
@@ -144,12 +201,16 @@ window.customElements.define("rpr-layout", class Layout extends HTMLElement {
     }
   }
 
+  /** Set the visibility of the sidebar */
   set sidebar(newValue) {
-    this.setAttribute("sidebar", newValue);
+    this.setAttribute("sidebar", newValue.toString());
   }
 
+  /** Is the sidebar visible? */
   get sidebar() {
     return this.#sidebar;
   }
 
-});
+}
+
+customElements.define("rpr-layout", Layout);

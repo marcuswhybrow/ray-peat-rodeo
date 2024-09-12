@@ -1,13 +1,28 @@
-window.customElements.define("rpr-issue", class extends HTMLElement {
-  #id = null;
-  #url = null;
-  #title = null;
+class Issue extends HTMLElement {
+
+  /** @type {Number} */
+  #issueId
+
+  /** @type {string} */
+  #url
+
+  /** @type {string} */
+  #title
+
+  /** @type {HTMLElement} */
+  #idElement
+
+  /** @type {HTMLElement} */
+  #titleElement
+
+  /** @type {HTMLAnchorElement} */
+  #issueElement
 
   static observedAttributes = ["issue-id", "url", "title"];
   constructor() {
     super();
-    this.attachShadow({ mode: "open" })
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" })
+    shadowRoot.innerHTML = `
       <style>
         #issue {
           z-index: 10;
@@ -18,7 +33,7 @@ window.customElements.define("rpr-issue", class extends HTMLElement {
           padding: 1rem;
           box-shadow: 0 20px 25px -5px rgb(133 77 14 / 0.2), 0 8px 10px -6px rgb(133 77 14 / 0.1);
           border-radius: 0.375rem;
-          background: linear-gradient(135deg, rgb(254, 240, 138) 10%, rgb(253, 230, 138) 100%);
+          background: linear-gradient(135deg, var(--yellow-200) 10%, var(--amber-200) 100%);
           float: right;
           clear: right;
           font-size: 0.875rem;
@@ -33,10 +48,10 @@ window.customElements.define("rpr-issue", class extends HTMLElement {
         #issue:hover {
           transform: translate(0, 0.25rem); 
           box-shadow: 0 25px 50px -12px rgb(202 138 4 / 0.4);
-          background: linear-gradient(135deg, rgb(254, 249, 195) 70%, rgb(253, 230, 138) 100%);
+          background: linear-gradient(135deg, var(--yellow-100) 70%, var(--amber-200) 100%);
         }
         #heading {
-          color: rgb(113, 63, 18);
+          color: var(--yellow-900);
           font-weight: 700;
           margin-right: 0.125rem;
         }
@@ -49,7 +64,7 @@ window.customElements.define("rpr-issue", class extends HTMLElement {
           margin-right: 0.125rem;
         }
         #title {
-          color: rgb(133, 77, 14);
+          color: var(--yellow-800);
         }
       </style>
       <a id="issue">
@@ -57,40 +72,41 @@ window.customElements.define("rpr-issue", class extends HTMLElement {
         <span id="title"></span>
       </a>
     `;
+
+    this.#idElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#id"));
+    this.#titleElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#title"));
+    this.#issueElement = /** @type {HTMLAnchorElement} */ (shadowRoot.querySelector("#issue"));
   }
 
-  connectedCallback() {
-
-  }
-
-  disonnectedCallback() {
-
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    switch(name) {
+  /**
+  * @param {string} name
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
+    switch (name) {
       case "issue-id":
-        this.#id = newValue;
+        this.#issueId = parseInt(newValue);
         this.setAttribute("id", `issue-${newValue}`);
-        this.shadowRoot.querySelector("#id").textContent = newValue;
+        this.#idElement.textContent = newValue;
         break;
       case "url":
         this.#url = newValue;
-        this.shadowRoot.querySelector("#issue").href = newValue;
+        this.#issueElement.href = newValue;
         break;
       case "title":
         this.#title = newValue;
-        this.shadowRoot.querySelector("#title").textContent = newValue;
+        this.#titleElement.textContent = newValue;
         break;
     }
   }
 
-  set id(newValue) {
-    this.setAttribute("issue-id", newValue);
+  set issueId(newValue) {
+    this.setAttribute("issue-id", newValue.toString());
   }
 
-  get id() {
-    return this.#id
+  get issueId() {
+    return this.#issueId
   }
 
   set url(newValue) {
@@ -108,4 +124,6 @@ window.customElements.define("rpr-issue", class extends HTMLElement {
   get title() {
     return this.#title;
   }
-})
+}
+
+customElements.define("rpr-issue", Issue);

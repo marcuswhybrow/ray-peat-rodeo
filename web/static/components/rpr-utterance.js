@@ -1,15 +1,49 @@
-window.customElements.define("rpr-utterance", class extends HTMLElement {
-  #by = null;
-  #avatar = null;
-  #primary = false;
-  #short = false;
+class Utterance extends HTMLElement {
+  /**
+   * Full name of the person uttering this utterance.
+   *
+   * @type {string} 
+   */
+  #by
+
+  /** 
+   * Absolute path to the avatar image for this person.
+   *
+   * @type {string} 
+   */
+  #avatar
+
+  /** 
+   * Is the person speaking a "primary" speaker?
+   *
+   * @type {Boolean} 
+   */
+  #primary
+
+  /** 
+   * Should this utterance be displyed as a short utterance? The avatar and 
+   * byline will be hidden, the width may shrink, and it will overlap with 
+   * the previous utterance.
+   *
+   * @type {Boolean} 
+   */
+  #short
+
+  /** @type {HTMLElement} */
+  #nameElement
+
+  /** @type {HTMLElement} */
+  #contentElement
+
+  /** @type {HTMLImageElement} */
+  #avatarImgElement
 
   static observedAttributes = ["by", "avatar", "primary", "short"];
 
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host(:first) #utterance {
           margin-top: 0;
@@ -69,10 +103,10 @@ window.customElements.define("rpr-utterance", class extends HTMLElement {
           display: block;
         }
         :host([primary="true"]) #name {
-          color: #9CA3AF;
+          color: var(--gray-400);
         }
         :host(:not([primary="true"])) #name {
-          color: #38BDF8;
+          color: var(--sky-400);
         }
         #content {
           padding: 2rem;
@@ -92,12 +126,12 @@ window.customElements.define("rpr-utterance", class extends HTMLElement {
           line-height: 1rem;
         }
         :host([primary="true"]) #content {
-          color: #111827;
-          background: #F3F4F6;
+          color: var(--gray-900);
+          background: var(--gray-100);
         }
         :host(:not([primary="true"])) #content {
-          color: #0C4A6E;
-          background: linear-gradient(135deg, rgb(224, 242, 254) 0%, rgb(191, 219, 254) 100%);
+          color: var(--sky-900);
+          background: linear-gradient(135deg, var(--sky-100) 0%, var(--blue-200) 100%);
         }
         :host([short="true"]) #content {
           display: inline-block;
@@ -112,34 +146,33 @@ window.customElements.define("rpr-utterance", class extends HTMLElement {
             <img src="" alt="" />
           </div>
         </div>
-        <div id="name" data-pagefind-ignore></div>
+        <div id="name"></div>
         <div id="content">
           <slot></slot>
         </div>
       </div>
     `;
+
+    this.#nameElement = /** @type {HTMLElement} */ (shadowRoot.querySelector("#name"));
+    this.#avatarImgElement = /** @type {HTMLImageElement} */ (shadowRoot.querySelector("#avatar img"));
   }
 
-  connectedCallback() {
-
-  }
-
-  disonnectedCallback() {
-
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
+  /**
+  * @param {string} name
+  * @param {string} _oldValue
+  * @param {string} newValue
+  */
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case "by":
         this.#by = newValue;
-        this.shadowRoot.querySelector("#name").textContent = newValue;
-        const img = this.shadowRoot.querySelector("#avatar img");
-        img.alt = newValue;
-        img.title = newValue;
+        this.#nameElement.textContent = newValue;
+        this.#avatarImgElement.alt = newValue;
+        this.#avatarImgElement.title = newValue;
         break;
       case "avatar":
         this.#avatar = newValue;
-        this.shadowRoot.querySelector("#avatar img").src = newValue;
+        this.#avatarImgElement.src = newValue;
         break;
       case "primary":
         this.#primary = newValue === "true";
@@ -167,7 +200,7 @@ window.customElements.define("rpr-utterance", class extends HTMLElement {
   }
 
   set primary(newValue) {
-    this.setAttribute("primary", newValue);
+    this.setAttribute("primary", newValue.toString());
   }
 
   get primary() {
@@ -175,10 +208,12 @@ window.customElements.define("rpr-utterance", class extends HTMLElement {
   }
 
   set short(newValue) {
-    this.setAttribute("short", newValue);
+    this.setAttribute("short", newValue.toString());
   }
 
   get short() {
     return this.#short;
   }
-});
+}
+
+customElements.define("rpr-utterance", Utterance);

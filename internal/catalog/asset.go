@@ -292,6 +292,25 @@ func (a *Asset) GetAssociationWithRayPeat() string {
 	}
 }
 
+func (a *Asset) GetMirrorDomains() []string {
+	domains := []string{}
+	for _, mirror := range a.FrontMatter.Source.Mirrors {
+		u, err := url.Parse(mirror)
+		if err != nil {
+			log.Fatal("Invalid Mirror URL", mirror, "for asset", a.Path)
+		}
+		domains = append(domains, u.Hostname())
+	}
+	if len(a.FrontMatter.Source.Url) > 0 {
+		u, err := url.Parse(a.FrontMatter.Source.Url)
+		if err != nil {
+			log.Fatal("Invalid URL", a.FrontMatter.Source.Url, "for asset", a.Path)
+		}
+		domains = append(domains, u.Hostname())
+	}
+	return domains
+}
+
 // Implement ast.File interface
 
 // Returns the raw source markdown (without any file frontmatter)

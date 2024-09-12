@@ -1,8 +1,12 @@
-window.customElements.define("rpr-new-issue", class extends HTMLElement {
+class NewIssue extends HTMLElement {
+
+  /** @type {HTMLAnchorElement} */
+  #newIssueElement
+
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = `
+    const shadowRoot = this.attachShadow({ mode: "open" });
+    shadowRoot.innerHTML = `
       <style>
         :host([show="true"]) {
           display: block;
@@ -83,9 +87,14 @@ window.customElements.define("rpr-new-issue", class extends HTMLElement {
       </a>
     `;
 
-    "mouseup touchend".split(" ").forEach(e => window.addEventListener(e, event => {
-      const newIssue = this.shadowRoot.querySelector("#new-issue");
+    this.#newIssueElement = /** @type {HTMLAnchorElement} */ (shadowRoot.querySelector("#new-issue"));
+
+    "mouseup touchend".split(" ").forEach(e => window.addEventListener(e, () => {
       const selection = window.getSelection();
+      if (!selection) {
+        return;
+      }
+
       const selectedText = selection.toString();
       const gap = 16;
 
@@ -96,11 +105,21 @@ window.customElements.define("rpr-new-issue", class extends HTMLElement {
         if (!selection.isCollapsed) {
           this.style.display = "block";
           const selRect = selection.getRangeAt(0).getBoundingClientRect();
-          const articleRect = document.querySelector("article").getBoundingClientRect();
-          newIssue.style.top = (selRect.bottom + gap - articleRect.top) + "px";
-          newIssue.style.left = (selRect.left - articleRect.left) + "px";
+          const articleElement = document.querySelector("article");
+          if (!articleElement) {
+            return;
+          }
+          const articleRect = articleElement.getBoundingClientRect();
 
-          const assetTitle = document.querySelector("h1").textContent;
+          this.#newIssueElement.style.top = (selRect.bottom + gap - articleRect.top) + "px";
+          this.#newIssueElement.style.left = (selRect.left - articleRect.left) + "px";
+
+          const titleElement = document.querySelector("h1");
+          if (!titleElement) {
+            return;
+          }
+
+          const assetTitle = titleElement.textContent;
           const assetLink = `https://raypeat.rodeo${window.location.pathname}`;
           const title = encodeURIComponent(`Issue with "${assetTitle}"`);
           const body = encodeURIComponent(`
@@ -108,7 +127,7 @@ window.customElements.define("rpr-new-issue", class extends HTMLElement {
 <blockquote>${selectedText}</blockquote>
 <p>[consider describing the issue here]</p>
           `);
-          newIssue.href = `mailto:contact@raypeat.rodeo?subject=${title}&body=${body}`;
+          this.#newIssueElement.href = `mailto:contact@raypeat.rodeo?subject=${title}&body=${body}`;
         } else {
           this.style.display = "none";
         }
@@ -116,15 +135,6 @@ window.customElements.define("rpr-new-issue", class extends HTMLElement {
     }));
 
   }
+}
 
-  connectedCallback() {
-
-  }
-
-  disconnectedCallback() {
-
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-  }
-});
+customElements.define("rpr-new-issue", NewIssue);
