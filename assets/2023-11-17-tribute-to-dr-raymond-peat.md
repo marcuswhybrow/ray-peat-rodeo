@@ -60,6 +60,8 @@ So from January, this year, {January, 2023.} we've continued doing radio shows a
 
 So it's a tribute to Dr Peat, and we sent out a kind of broadcast flyer to people if they wanted to share any of their anecdotal history. And that's basically what the whole show's about for this next hour. So people are invited to call in any point in time from now on. We welcome any of you who've been touched by his philosophy and his approach to medicine. And the number here is 707 923 3911. 
 
+## Wanita Remembers Ray Peat [5:23]
+
 [5:23] So the lines are now open. I see there is already a caller. So let's take this first caller. Caller you're on the air. Where you from? What's your question, or what's your, what would you like to share?
 
 W: Hi this is Wanita from Reno. I was seen by [[Gambi, Dr|a doctor]] that was a friend of [[Peat, Raymond|Dr Peat]] and he recommended some of [[Peat, Raymond|Dt Peat's]] material to me years and years ago. Did you want me to give you more details?
@@ -182,6 +184,8 @@ So just going back to the very beginning of what we, yeah, what we found in 2008
 
 But but nobody knew [[Peat, Raymond|Dr Peat]]! I mean, you couldn't find anything. If you Googled [[Peat, Raymond|Dr Peat]] you wouldn't find a thing. 
 
+## Female Caller [17:05]
+
 [17:05] So let me take this next caller. Caller you're on the air. Where you from and what have you got to share?
 
 F: Hey Andrew. 
@@ -278,7 +282,7 @@ And as I got to know [[Peat, Ray|Ray]] and [[Katherine|Katherine]] I realised it
 
 AM: Yep.
 
-F: So, you know, I know oftentimes people don't know that much about, you know, [[Peat, Raymond|Rays's]] personal life or [[Katherine|Katherine]] or anything, but he really had a good life.
+F: So, you know, I know oftentimes people don't know that much about, you know, [[Peat, Raymond|Ray's]] personal life or [[Katherine|Katherine]] or anything, but he really had a good life.
 
 AM: [23:16] Yeah, I never met anybody, I think, who has just given so much and, yeah, he was just so passionate about it that I think _all_ the time [[Peat, Raymond|he]] was by his computer and he was searching stuff, and he was, you know, he was just like a bookworm, an old fashioned bookworm, you know, with a head in a book.
 
@@ -385,11 +389,15 @@ F: Yeah, yeah.
 AM: That's the bottom line. He was not at all financially motivated I can– be assured of that. can
 Well thank you so much for calling in and sharing. I just want to make sure that people that are waiting get a chance to share also, but thanks so much for saying what you've said about [[Peat, Raymond|him]] and remembrance of him.
 
+## Ray Peat's Website [31:27]
+
 E: [31:27] So, a caller would like the _spelling_ of [[Peat, Raymond|Dr Peat's]] last name so that they can find stuff online.
 
 SJM: Okay, it's– well his website is [[Peat, Raymond > https://raypeat.com | www.raypeat.com]] and that's "R A Y," and then the name is Peat: "P E A T,"–like peat, moss– ".com". So, "PEAT." "RAY PEAT."
 
 And now that we're talking about his website, it is in the process of being updated. And you can't order books or newsletters on the website at the moment, but you _can_ now email [[Peat, Raymond > raypeatpublishing@gmail.com]] to order books and order [[Peat, Raymond > Newsletter | newsletters]]. And please remember all of this copyright material is protected, and please respect the copyright, because, he's dead, but his copyright is not.
+
+## Herbs To Thicken The Blood [31:27]
 
 E: And, I foolishly said I'd ask a quick, easy herb question for you guys. Well, maybe easy cos you're a smart group of people: "blood coagulant herbs." Someone had an operation or something and they want herbs that will thicken the blood.
 
@@ -420,6 +428,8 @@ SJM: Yes, [[Fermentation|fermented foods]] do have some [[Vitamin K2|vitamin K2]
 AM: But as [inaudible] said, there's one milligram per drop [[Vitamin K2|K2]] product by a well-known manufacturer, so– can easily be found on the internet, folks. So, if you type in "1 milligram per drop [[Vitamin K|vitamin K]]" and you expressly look for one milligram per drop you'll find a good company. It's not cheap but it's very alternative and one drop will buffer the effects of a 325 milligram [[Acetylsalicylic Acid|aspirin]] tablet in terms of its, you know, blood thinning quote unquote–
 
 SJM: That will help [[Coagulant|thicken your blood]] if you want to say it like that. If aspirin [[Anticoagulant|thins your blood]] you can take [[Vitamin K2|vitamin K2]] to help [[Coagulant|thicken your blood]] but it doesn't really thicken your blood because it's, like I said [[Amphoterism|amphoteric]] so it helps keep it regulated, and the company is [[Thorn Research|Thorn Research]]. It does come in [[Medium-Chain Triglyceride|MCT oil]] which a _lot_ of people are allergic to [[Medium-Chain Triglyceride|MCT oil]] even in the one or two drops daily, so you have to use about four times as much topically if you need one drop. So you'd have to use four drops topically rubbed on the inner part of your arm or your inner thighs.
+
+## San Francisco [35:24]
 
 AM: [35:24] Okay, so we have a couple of callers waiting here. Let's take this next caller. 
 
@@ -454,6 +464,8 @@ AM: Haha.
 C: and I'm just so grateful that [[Peat, Raymond|he]] was blessed to have [[Katherine|Katherine]] in his life, because I don't think he would have done nearly what he accomplished without her.
 
 AM: Yep, it takes two to tango. Well thank you so much for your call. 
+
+## Marine County [38:45]
 
 [38:45] I think we have another caller here waiting on the line. So for people that are listening it's a tribute to [[Peat, Raymond|Dr Peat]], it's the first year of his anniversary of his passing, Thanksgiving 2022. The number's 707 923 3911, if people are listening, they want to share their experiences with recommendations that they took from him and how their lives improved thereof then please go ahead and call 923 3911. So let's take this next caller.
 
@@ -519,6 +531,7 @@ So, just to go back over the, some of the history with [[Peat, Raymond|Dr Peat]]
 
 So, whilst that may have been perceived as some kind of a benefit, the [[Toxin|Toxic]] effect of it was the _reason_ why somebody felt like they were getting better. So, to the detriment of their [[Metabolism|metabolic rate]] and their metabolism in general it was just perceived as being a good thing, but he brought out the science {#51} of how dangerous it was and actually to get to the bottom of someone's [[Psoriasis|psoriasis]] or their [[Dermatitis|eczema]] as a matter of fact to be the best way of approaching it. 
 
+## Brendon [44:04]
 
 [44:04] So, let's just take this next caller.
 
@@ -574,7 +587,9 @@ SJM: Yeah, we have a client who has been taking thyroid for 15 years and they ju
 
 AM: I'm mean [[Peat, Raymond|he'd]] always said that the body could just continue manufacturing [[Thyroid Hormone|thyroid hormone]] and that taking supplementation would not block your [[Thyroid|thyroid]] from doing anything again. So it was always there in the background.
 
-[46:44] So there's two more callers lined up. Let's hope that the call wuality is better, because I can barely make out what people are saying here. Hopefully that's not the way it comes over to people listening, and hopefully on the audio live stream it's not that way either.
+[46:44] So there's two more callers lined up. Let's hope that the call quality is better, because I can barely make out what people are saying here. Hopefully that's not the way it comes over to people listening, and hopefully on the audio live stream it's not that way either.
+
+## Kathy Miller [46:44]
 
 But let's take this next caller.  Caller where you from and what would you like to share?
 
@@ -611,6 +626,8 @@ AM: Yeah, and lots of the causes were later on revealed, were either [[Mechanica
 KM: Okay. All right, well thank you. 
 
 AM: Yeah, you're welcome. 
+
+## Mendocino County [50:24]
 
 [50:24] So let's take another caller. Caller you're on the air. Where you from and what would you like to share.
 
@@ -651,6 +668,8 @@ AM: All right, got four four minutes folks. So, otherwise I will just carry on e
 Okay. So, as I said we did 136 radio shows with [[Peat, Raymond|Dr Peat]] and I know he probably did 10 times that with the group of other peoples that– he did [[Politics & Science|Science and Politics Show]] he did other shows with other radio hosts all across the country. 
 
 And things that [[Peat, Raymond|he]] came up with– he had a very different approach to [[Cancer|cancer]] as a kind of Hot Topic. But, for example, using [[Iodine|iodine]] topically on [[Cancer|precancerous]] tissues. Things like [[Actinic Keratosis|actinic keratosis]] and other, quote unquote, suspicious skin lesions. Had some very personal very successful effects with that, as also treating [[Basal-Cell Carcinoma|basal-cell carcinoma's]] with [[Dry Ice|dry ice]] and or [[Progesterone|progesterone]] pre-treatment, [[Caffeine|caffeine]], [[Acetylsalicylic Acid|aspirin]] and those kind of other compounds that he had a small kind of formula for, that I used personally, and definitely worked.
+
+## Final Caller [54:51]
 
 [54:51] Let's take the next caller. Caller you're on the air and I think you've got about three minutes before we need to give out details and wrap up the show.
 

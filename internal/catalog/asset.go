@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"slices"
 	"strings"
+	"time"
 
 	"github.com/gernest/front"
 	"github.com/mitchellh/mapstructure"
@@ -75,6 +76,26 @@ type Asset struct {
 
 	// A list of Speaker's derrvied from this asset's frontmatter.
 	Speakers []*Speaker
+
+	Sections []*AssetSection
+}
+
+type AssetTimecode struct {
+	Hours   int
+	Minutes int
+	Seconds int
+}
+
+func (t *AssetTimecode) ToString() string {
+	return fmt.Sprintf("%02d:%02d:%02d", t.Hours, t.Minutes, t.Seconds)
+}
+
+type AssetSection struct {
+	ID       string
+	Level    int
+	Prefix   []string
+	Title    string
+	Timecode *AssetTimecode
 }
 
 type AssetFrontMatterSource struct {
@@ -115,6 +136,7 @@ type AssetFrontMatter struct {
 }
 
 func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cache.HTTPCache, avatarPaths *AvatarPaths) (*Asset, error) {
+	tStart := time.Now()
 	fileName := filepath.Base(assetPath)
 	fileStem := strings.TrimSuffix(fileName, filepath.Ext(assetPath))
 
@@ -124,6 +146,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	}
 
 	// 🔗 Details
+	tDetails := time.Now()
 
 	id := fileStem[11:]
 	urlAbsPath := "/" + id
@@ -132,6 +155,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	outPath := path.Join(id, "index.html")
 
 	// 📄 FrontMatter
+	tFrontMatter := time.Now()
 
 	matter := front.NewMatter()
 	matter.Handle("---", front.YAMLHandler)
@@ -147,6 +171,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	}
 
 	// 👨👱 Speakers & Avatars
+	tSpeakers := time.Now()
 
 	speakers := []*Speaker{}
 	for id, name := range frontMatter.Speakers {
@@ -188,6 +213,7 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 	}
 
 	// 🖥 HTML
+	tHTML := time.Now()
 
 	parserContext := gparser.NewContext()
 	parserContext.Set(ast.AssetKey, asset)
@@ -199,6 +225,16 @@ func NewAsset(assetPath string, markdownParser goldmark.Markdown, httpCache *cac
 		return nil, fmt.Errorf("Failed to parse markdown: %v", err)
 	}
 	asset.Html = html.Bytes()
+
+	log.Printf(
+		"Preamble %v, Details %v, FrontMatter %v, Speakers & Avatars %v, HTML %v",
+		tDetails.Sub(tStart).Milliseconds(),
+		tFrontMatter.Sub(tDetails).Milliseconds(),
+		tSpeakers.Sub(tFrontMatter).Milliseconds(),
+		tHTML.Sub(tSpeakers).Milliseconds(),
+		time.Since(tHTML).Milliseconds(),
+	)
+
 	return asset, nil
 }
 
@@ -311,6 +347,23 @@ func (a *Asset) GetMirrorDomains() []string {
 	return domains
 }
 
+func (a *Asset) GetLocations() []string {
+	locations := []string{}
+	locations = append(locations, a.FrontMatter.Source.Url)
+	locations = append(locations, a.FrontMatter.Source.Mirrors...)
+	return locations
+}
+
+func (a *Asset) AcceptsTimecodes() bool {
+	switch a.FrontMatter.Source.Kind {
+	case "audio":
+		return true
+	case "video":
+		return true
+	}
+	return false
+}
+
 // Implement ast.File interface
 
 // Returns the raw source markdown (without any file frontmatter)
@@ -327,6 +380,43 @@ func (a *Asset) RegisterMention(mention *ast.Mention) {
 	a.Mentions = append(a.Mentions, mention)
 	mention.Position = len(a.Mentions)
 	a.Mentionables[mention.Mentionable] = append(a.Mentionables[mention.Mentionable], mention)
+}
+
+func (a *Asset) RegisterSection(section *ast.Section) string {
+	timecode := (func() *AssetTimecode {
+		if !a.AcceptsTimecodes() {
+			return nil
+		}
+
+		if section.Timecode == nil {
+			log.Fatalf("Section '%v' does not specify timecode in asset %v", section.Title, a.Path)
+		}
+
+		return &AssetTimecode{
+			Hours:   section.Timecode.Hours,
+			Minutes: section.Timecode.Minutes,
+			Seconds: section.Timecode.Seconds,
+		}
+	})()
+
+	proposal := &AssetSection{
+		Level:    section.Level,
+		Title:    section.Title,
+		Prefix:   section.Prefix,
+		ID:       section.ID(),
+		Timecode: timecode,
+	}
+
+	for _, section := range a.Sections {
+		if section.ID == proposal.ID {
+			log.Fatalf(`Heading '%v' in '%v' has the ID '%v' which matches a 
+      previous section's ID. Consider making each heading's title more 
+      unique.`, proposal.Title, proposal.ID, a.Path)
+		}
+	}
+
+	a.Sections = append(a.Sections, proposal)
+	return proposal.ID
 }
 
 func (a *Asset) GetSpeakers() []ast.Speaker {

@@ -65,9 +65,11 @@ func (s *UtteranceHTMLRenderer) renderSpeaker(w util.BufWriter, source []byte, n
 
 		t, err := template.New("openUtterance").Parse(`
       <rpr-utterance 
-        {{ if .Utterance.Speaker.GetName }}by="{{ .Utterance.Speaker.GetName }}"{{ end }}
+        {{ if .Utterance.Speaker.GetID }}contributor-initials="{{ .Utterance.Speaker.GetID }}"{{ end }}
+        {{ if .Utterance.Speaker.GetName }}contributor="{{ .Utterance.Speaker.GetName }}"{{ end }}
         {{ if .Utterance.Speaker.GetAvatarPath }}avatar="{{ .Utterance.Speaker.GetAvatarPath }}"{{ end }}
         {{ if .Utterance.Speaker.GetIsPrimarySpeaker }}primary="true"{{ end }}
+        {{ if not .Utterance.Speaker.GetIsFilterable }}contributor-filterable="false"{{ end }}
         {{ if .IsShort }}short="true"{{ end }}
       >
     `)

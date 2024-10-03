@@ -69,6 +69,7 @@ func NewCatalog(assetsPath string) *Catalog {
 			extension.Speakers,
 			extension.Sidenotes,
 			extension.GitHubIssues,
+			extension.Sections,
 		),
 	)
 
@@ -135,34 +136,34 @@ func (c *Catalog) NewAsset(filePath string) (*Asset, error) {
 		c.Speakers = append(c.Speakers, speaker.GetName())
 	}
 
-	for mentionable, mentions := range asset.Mentionables {
-		for existingMentionable, existingByFile := range c.ByMentionable {
-			if mentionable.IsDuplicate(existingMentionable) {
-				if mentionable.IsMoreComplex(existingMentionable) {
-					suspect := anyValue(existingByFile)[0]
-					suggestion := mentions[0]
-					collisionPanic(suspect, suggestion)
-				} else {
-					suspect := mentions[0]
-					suggestion := anyValue(existingByFile)[0]
-					collisionPanic(suspect, suggestion)
-				}
-			}
-		}
+	// for mentionable, mentions := range asset.Mentionables {
+	// 	for existingMentionable, existingByFile := range c.ByMentionable {
+	// 		if mentionable.IsDuplicate(existingMentionable) {
+	// 			if mentionable.IsMoreComplex(existingMentionable) {
+	// 				suspect := anyValue(existingByFile)[0]
+	// 				suggestion := mentions[0]
+	// 				collisionPanic(suspect, suggestion)
+	// 			} else {
+	// 				suspect := mentions[0]
+	// 				suggestion := anyValue(existingByFile)[0]
+	// 				collisionPanic(suspect, suggestion)
+	// 			}
+	// 		}
+	// 	}
 
-		if c.ByMentionable[mentionable] == nil {
-			c.ByMentionable[mentionable] = ByAsset[Mentions]{}
-		}
-		c.ByMentionable[mentionable][asset] = mentions
+	// 	if c.ByMentionable[mentionable] == nil {
+	// 		c.ByMentionable[mentionable] = ByAsset[Mentions]{}
+	// 	}
+	// 	c.ByMentionable[mentionable][asset] = mentions
 
-		if c.ByMentionablePart[mentionable.Primary] == nil {
-			c.ByMentionablePart[mentionable.Primary] = ByPart[ByAsset[Mentions]]{}
-		}
-		if c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] == nil {
-			c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] = ByAsset[Mentions]{}
-		}
-		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][asset] = mentions
-	}
+	// 	if c.ByMentionablePart[mentionable.Primary] == nil {
+	// 		c.ByMentionablePart[mentionable.Primary] = ByPart[ByAsset[Mentions]]{}
+	// 	}
+	// 	if c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] == nil {
+	// 		c.ByMentionablePart[mentionable.Primary][mentionable.Secondary] = ByAsset[Mentions]{}
+	// 	}
+	// 	c.ByMentionablePart[mentionable.Primary][mentionable.Secondary][asset] = mentions
+	// }
 
 	c.Mutex.Unlock()
 

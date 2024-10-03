@@ -37,6 +37,7 @@ type Asset interface {
 	GetPath() string
 	RegisterMention(mention *Mention)
 	RegisterIssue(id int, title string)
+	RegisterSection(section *Section) string
 	GetSlug() string
 	GetPermalink() string
 	GetSpeakers() []Speaker

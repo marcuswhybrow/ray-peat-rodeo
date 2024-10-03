@@ -6,13 +6,14 @@ func gitHubLink() string {
 
 templ Base(title string) {
 	<!DOCTYPE html>
-	<html class="scroll-pt-24">
+	// Doesn't respect location changes must fix
+	<html>
 		<head>
 			<title>
 				if len(title) > 0 {
 					{ title + " - Ray Peat Rodeo" }
 				} else {
-					{ "Ray Peat Rodeo" }
+					Ray Peat Rodeo
 				}
 			</title>
 			<meta charset="UTF-8"/>
@@ -29,7 +30,8 @@ templ Base(title string) {
 			<script src="/assets/scripts/relative-date.js"></script>
 			<script src="/assets/scripts/setZeroTimeout.min.js"></script>
 			<script src="/assets/components/rpr-pin.js"></script>
-			<script src="/assets/components/rpr-asset.js"></script>
+			<script src="/assets/components/rpr-search-asset.js"></script>
+			<script src="/assets/components/rpr-section-list.js"></script>
 			<script src="/assets/components/rpr-deck.js"></script>
 			<script src="/assets/components/rpr-contributor.js"></script>
 			<script src="/assets/components/rpr-pins.js"></script>
@@ -44,6 +46,8 @@ templ Base(title string) {
 			<script src="/assets/components/rpr-toolbar.js"></script>
 			<script src="/assets/components/rpr-advanced-search.js"></script>
 			<script src="/assets/components/rpr-ray-peat.js"></script>
+			<script src="/assets/components/rpr-reading-bar.js"></script>
+			<script src="/assets/components/rpr-section.js"></script>
 			<script type="module">
         if (!('fragmentDirective' in document)) {
           import('https://unpkg.com/text-fragments-polyfill');
@@ -62,10 +66,6 @@ templ Base(title string) {
         ::-webkit-scrollbar-thumb {
           background: #ddd;
           border-radius: 0.25rem;
-        }
-
-        body {
-          padding: 1rem;
         }
       </style>
 		</head>

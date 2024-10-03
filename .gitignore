@@ -8,3 +8,6 @@ build
 
 /.direnv
 /node_modules
+/nodebuild
+/json
+/dist

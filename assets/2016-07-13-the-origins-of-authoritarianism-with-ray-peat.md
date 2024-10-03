@@ -39,6 +39,8 @@ DR: Hey, how are you?
 
 RP: Good!
 
+## Ray's 2003 Newsletter [1:15]
+
 DR: [1:15] Thankyou so much for doing this. I've been interested in this topic for a while and I had a chance to read through [[Peat, Raymond > Public Passivity and the Screw]]
 and—
 
@@ -51,6 +53,8 @@ RP: Was that a section in a newsletter, or what was it?
 DR: It was September 2003 and—I have it in front of me here—you kind of summarized it and you were like: I wrote this several years ago but each month there was something more topical to send out.
 
 RP: Oh, oh yeah.
+
+## Defining Authoritarianism [1:58]
 
 DR: We don't have to go strictly through that, but I was thinking, like, authoritarianism when you talk about it, it seems to be an ambiguous term to a lot of people so I thought before we got into, kind of, the weeds you could talk about what it means to you, and then your general experience with it, maybe growing up, and scientifically.
 
@@ -86,6 +90,8 @@ From the 1920s [[Reich, Wilhelm|Reich]] was saying that there's an emotional pla
 
 I think [[Reich, Wilhelm|Reich]] was essentially right, but I think it really is more than just an emotional plague, that I think it's something like a historical, intellectual, epistemological plague built into the way we believe knowledge works.
 
+## Origins of Authoritarianism [9:44]
+
 DR: [9:44] Did it originate from [[Plato]] and [[Aristotle]]? Do you see, like, a origin for this type of oppressive society?
 
 RP: Yeah. As soon as I started looking into encyclopaedias, and such, trying to find explanations, I think it goes even before [[Plato]]: [[Parmenides]] and [[Zeno of Elea|Zeno]], they were the Greek school located in southern Italy—[[Eleatics, The]]—and they argued that there is only one reality and it doesn't change, doesn't do anything, there is no movement! 
@@ -97,6 +103,8 @@ And [[Plato]] essentially gave in to the [[Parmenides]] school of thinking, that
 And [[Aristotle]] really acknowledged some of the reality of [[Heraclitus]]. [[Heraclitus]] said ‘everything flows’, exactly polar opposite of [[Plato]] and [[Parmenides]] that nothing moves. [[Heraclitus]] said ‘that's what it is, everything is moving’ and reason, meaning, steers everything through everything. So it wasn't a jumbled random movement it was a developmental process which, as a whole, is steered by meaning. 
 
 [[Aristotle]] tried to formalize this using some of the concepts of [[Plato]] by putting it into a sensible scheme in which he had different kinds of causality including the ‘final cause principle’ which is that things are moved according to meaning, or intention. The universality of motion has no randomness and everything is meaningful, everything can be seen in terms of the first cause and the final cause and the various causes, consisting of their nature. So that for [[Aristotle]] laws were derived from the nature of things they weren't in some other eternal world like for [[Plato]].
+
+## The Principle of Forgiveness [12:40]
 
 DR: [12:40] Well that goes back to [[Peat, Raymond > Public Passivity and the Screw | the newsletter]]. You say laws were written in the past and since the past isn't accessible it's almost as though a foreign power ruled from a distant imperial capital. Maybe this goes back to your writing on [[Blake, William|Blake]], and you say that that's a representation of the _past_, and it's trying to retain the past into the current view of things. Is that the problem with not only these laws but politics maybe in general?
 
@@ -116,9 +124,13 @@ DR: [16:11] You mentioned Psychopaths before and in the KMUD interview, {#24} an
 
 RP: Yeah I think that’s his name.
 
+## Wilhelm Reich [16:40]
+
 DR: You mentioned [[Reich, Wilhelm|Reich]] before, and the connection with [[Dalí, Salvador|Dalí]] and the persistence of memory and [[Dalí, Salvador|Dalí's]] shift, integrating himself into the fascist culture. And you mentioned it started in about 1945. I was curious just to unpack that and your thoughts on the [[Central Intelligence Agency|CIA]], and the Dulles brothers, {[[Dulles, Allen]] was the 5th Director of Central Intelligence during the time his brother [[Dulles, John Foster]] was the 52nd United States Secretary of State.} and anything else you had to say about it.
 
 RP: Well 20th century history pretty much involved the Dulles brothers. They were working with [[Hitler, Adolf|Hitler]] with the fascist [[German Reich|Germans]] right from the beginning. And one of them was declared to be an enemy agent, and the [[German Reich|German Government]] had put their [[United States of America|American]] properties in his name, and so the [[United States of America|US Government]], to confiscate the [[United States of America|U.S.]] properties, identified him as an illegal foreign agent. But that didn't take away from their prestige or power, because— you know [[Roosevelt, Franklin Delano|Roosevelt]] himself was a great admirer of [[Mussolini, Benito Amilcare Andrea|Mussolini]], even after he took office he was saying what a great statesman [[Mussolini, Benito Amilcare Andrea|Mussolini]] was. And so fascism wasn't a bad word until they needed to go to war on the side of [[United Kingdom of Great Britain and Northern Ireland|England]] to save the [[United Kingdom of Great Britain and Northern Ireland|British]] Empire because [[Hitler, Adolf|Hitler]] had double-crossed the West and he wanted to knock out [[United Kingdom of Great Britain and Northern Ireland|England]] and take their empire, where the West had figured that he would take over the [[Union of Soviet Socialist Republics|Soviet Union]] and then they would—the [[Union of Soviet Socialist Republics|British]] Empire and the [[United States of America|American]] Empire—could expand.
+
+## Is Authoritarianism A Disease? [18:04]
 
 DR: [18:04] Well going back to saying the Dulles brothers shaped the current predicament were in, do you see authoritarianism as a pathology? Like, this is basically a sickness, and people are imposing their sickness. Is that a good way of looking at it?
 

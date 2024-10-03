@@ -12,15 +12,15 @@ import (
 	"sync"
 	"time"
 
-	// "github.com/marcuswhybrow/ray-peat-rodeo/internal/blog"
 	rprCatalog "github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/check"
-
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
 )
 
 func main() {
+	// tStart := time.Now()
+
 	if len(os.Args) >= 2 {
 		subcommand := os.Args[1]
 		switch subcommand {
@@ -44,6 +44,10 @@ func main() {
 	fmt.Printf("Source: \"%v\"\n", workDir)
 	fmt.Printf("Output: \"%v\"\n", global.BUILD_OUTPUT)
 
+	if err := os.RemoveAll(global.BUILD_OUTPUT); err != nil {
+		log.Fatalf("Failed to clean output directory: %v", err)
+	}
+
 	if err := os.MkdirAll(global.BUILD_OUTPUT, os.ModePerm); err != nil {
 		log.Fatalf("Failed to create output directory: %v", err)
 	}
@@ -54,6 +58,8 @@ func main() {
 	// }
 
 	// 🗃 Catalog
+
+	// log.Printf("Preamble", time.Since(tStart))
 
 	fmt.Println("\n[Files]")
 	fmt.Printf("Source \"%v\"\n", global.ASSETS)
@@ -70,6 +76,8 @@ func main() {
 	fmt.Printf("Found %v markdown files of which %v are completed.\n", len(allAssets), len(completedAssets))
 
 	// 📝 Write files
+
+	// log.Printf("Catalog", time.Since(tStart))
 
 	// When an asset filename changes, it's URL changes.
 	// It's nice to redirect old URL's to the new ones.
@@ -95,22 +103,26 @@ func main() {
 		return nil
 	})
 
-	err = catalog.WriteMentionPages()
-	if err != nil {
-		log.Fatal("Failed to build mention pages:", err)
+	// err = catalog.WriteMentionPages()
+	// if err != nil {
+	// 	log.Fatal("Failed to build mention pages:", err)
 
-	}
-	err = catalog.WritePopups()
-	if err != nil {
-		log.Fatal("Failed to build mention popup page:", err)
+	// }
+	// err = catalog.WritePopups()
+	// if err != nil {
+	// 	log.Fatal("Failed to build mention popup page:", err)
 
-	}
-	err = catalog.WriteSeriesPages()
-	if err != nil {
-		log.Fatal("Failed to build asset series pages:", err)
-	}
+	// }
+	// err = catalog.WriteSeriesPages()
+	// if err != nil {
+	// 	log.Fatal("Failed to build asset series pages:", err)
+	// }
+
+	// log.Printf("Write Files", time.Since(tStart))
 
 	slices.SortFunc(completedAssets, rprCatalog.SortAssetsByDateAdded)
+
+	// log.Printf("Sort Files", time.Since(tStart))
 
 	// var latestFile *rprCatalog.Asset = nil
 	// if len(completedAssets) > 0 {
@@ -154,16 +166,32 @@ func main() {
 	component := Stats(prefixes, missing)
 	component.Render(context.Background(), statsPage)
 
+	// log.Printf("Stats", time.Since(tStart))
+
 	// 🏠 Homepage
 
 	indexPage, _ := utils.MakePage(".")
 	component = Index(catalog)
 	component.Render(context.Background(), indexPage)
 
+	// log.Printf("Homepage", time.Since(tStart))
+
+	// Ray Peat Page
+
+	rayPeatPage, _ := utils.MakePage("ray-peat")
+	component = RayPeatPage()
+	component.Render(context.Background(), rayPeatPage)
+
+	// log.Printf("Ray Peat Page", time.Since(tStart))
+
+	// Catalog cache
+
 	err = catalog.HttpCache.Write()
 	if err != nil {
 		log.Fatal("Failed to write HTTP cache:", err)
 	}
+
+	// log.Printf("Catalog Cache", time.Since(tStart))
 
 	// JSON
 	searchData := []SearchAsset{}
@@ -186,6 +214,29 @@ func main() {
 			})
 		}
 
+		sections := []SearchSection{}
+		for _, section := range asset.Sections {
+			timecode := (func() *SearchTimecode {
+				if section.Timecode == nil {
+					return nil
+				}
+
+				return &SearchTimecode{
+					Hours:   section.Timecode.Hours,
+					Minutes: section.Timecode.Minutes,
+					Seconds: section.Timecode.Seconds,
+				}
+			})()
+
+			sections = append(sections, SearchSection{
+				Title:    section.Title,
+				Prefix:   section.Prefix,
+				Level:    section.Level,
+				ID:       section.ID,
+				Timecode: timecode,
+			})
+		}
+
 		searchData = append(searchData, SearchAsset{
 			Path:         asset.UrlAbsPath,
 			Title:        asset.FrontMatter.Source.Title,
@@ -194,6 +245,7 @@ func main() {
 			Date:         asset.Date,
 			Contributors: contributors,
 			Issues:       issues,
+			Sections:     sections,
 		})
 	}
 
@@ -203,9 +255,13 @@ func main() {
 		log.Fatal("Failed to write search JSON:", err)
 	}
 
+	// log.Printf("JSON", time.Since(tStart))
+
 	// 🏁 Done
 
 	fmt.Printf("\nFinished in %v.\n", time.Since(start))
+
+	// log.Printf("Done", time.Since(tStart))
 }
 
 type SearchContributor struct {
@@ -221,10 +277,25 @@ type SearchAsset struct {
 	Date         string
 	Contributors []SearchContributor
 	Issues       []SearchIssue
+	Sections     []SearchSection
 }
 
 type SearchIssue struct {
 	Id    int
 	Title string
 	Url   string
+}
+
+type SearchSection struct {
+	Prefix   []string
+	Title    string
+	Level    int
+	ID       string
+	Timecode *SearchTimecode
+}
+
+type SearchTimecode struct {
+	Hours   int
+	Minutes int
+	Seconds int
 }

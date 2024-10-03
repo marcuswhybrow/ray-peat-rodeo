@@ -2,371 +2,218 @@
 package catalog
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/global"
 	"github.com/marcuswhybrow/ray-peat-rodeo/internal/utils"
-	"net/url"
+	"log"
 	"strings"
 )
 
 templ Peruse(asset *Asset, catalog *Catalog, pagefind bool) {
 	@global.Base(asset.FrontMatter.Source.Title) {
 		<rpr-layout>
-			<div id="reading-pane">
-				<style>
-          article {
-            font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 16px;
-            line-height: 1.5rem;
-          }
-          h1 {
-            font-weight: 700;
-            font-size: 1.875rem;
-            line-height: 2.25rem;
-            letter-spacing: 0.025em;
-            margin-top: 0;
-            text-align: center;
-          }
-          h1 a {
-            color: rgba(74, 4, 78, 0.9);
-            text-decoration: none;
-          }
-          h1 a:hover {
-            color: rgba(74, 4, 78, 1);
-            text-decoration: underline;
-          }
-          #details {
-            text-align: center;
-          }
-          #details a {
-            color: rgba(112, 26, 117, 0.7);
-            letter-spacing: 0.05em;
-            text-decoration: none;
-            margin-right: 1rem;
-          }
-          #details a:hover {
-            text-decoration: underline;
-            color: rgba(112, 26, 117, 1);
-          }
-
-          article footer {
-            border: 1px solid #eee;
-            border-radius: 1rem;
-            margin: 8rem 4rem 4rem;
-          }
-          article footer table {
-            width: 100%;
-          }
-          article footer table td {
-            border-bottom: 1px solid #eee;
-            font-size: 0.875rem;
-            line-height: 1rem;
-            padding: 0.5rem 1rem;
-            color: #78716C;
-            vertical-align: top;
-          }
-          article footer table td:first-child {
-            width: 33%;
-          }
-          article footer table tr:last-child td {
-            border-bottom: none;
-          }
-          article footer table ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-          }
-          article footer a {
-            color: #78716C;
-            word-break: break-word;
-          }
-          article footer a:visited {
-            color: #57534E;
-          }
-        </style>
-				<article
-					style="padding: 2rem; position: relative"
-					if pagefind {
-						data-pagefind-body
-					}
-				>
-					<rpr-new-issue></rpr-new-issue>
-					<header class="max-w-3xl mx-auto">
-						<div style="display: none">
-							<ul>
-								for _, speaker := range asset.GetFilterableSpeakers() {
-									<li data-pagefind-filter="Participant">{ speaker.GetName() }</li>
-								}
-							</ul>
-							<ul>
-								for _, domain := range asset.GetMirrorDomains() {
-									<li data-pagefind-filter="Also On">{ domain }</li>
-								}
-							</ul>
-							<ul>
-								if asset.FrontMatter.Completion.Issues {
-									<li data-pagefind-filter="Completion">Issues</li>
-								}
-								if asset.FrontMatter.Completion.Content {
-									<li data-pagefind-filter="Completion">Content</li>
-								}
-								if asset.FrontMatter.Completion.Mentions {
-									<li data-pagefind-filter="Completion">Mentions</li>
-								}
-								if asset.FrontMatter.Completion.Timestamps {
-									<li data-pagefind-filter="Completion">Timestamps</li>
-								}
-								if asset.FrontMatter.Completion.ContentVerified {
-									<li data-pagefind-filter="Completion">Content Verified</li>
-								}
-								if asset.FrontMatter.Completion.SpeakersIdentified {
-									<li data-pagefind-filter="Completion">Speakers Identified</li>
-								}
-								if asset.FrontMatter.Completion.Notes {
-									<li data-pagefind-filter="Completion">Notes</li>
-								}
-							</ul>
-							<ul>
-								for mentionable, _ := range asset.Mentionables {
-									<li data-pagefind-filter="Mention">{ mentionable.AsSignature() }</li>
-								}
-							</ul>
-						</div>
-						<div class="text-center mb-16 mt-16">
-							<p id="details" data-pagefind-ignore>
-								<a
-									class="text-fuchsia-900/70 tracking-wider hover:underline hover:text-fuchsia-950"
-									href={ templ.SafeURL(asset.FrontMatter.Source.Url) }
-									data-pagefind-sort="date"
-								>
-									{ asset.Date }
-								</a>
-								<a
-									data-pagefind-filter="Publisher"
-									class="text-fuchsia-900/80 rounded bg-white/20 py-1 px-4 ml-4 tracking-wide hover:underline"
-									href={ templ.SafeURL(asset.UrlAbsPath + "?Publisher=" + url.QueryEscape(asset.FrontMatter.Source.Series)) }
-								>{ asset.FrontMatter.Source.Series }</a>
-							</p>
-							<h1
-								id="title"
-								if asset.IsComplete() {
-									data-state="Complete"
-								} else {
-									data-state="Todo"
-								}
-								if asset.HasIssues() {
-									data-has-issues="Has Issues"
-								} else {
-									data-has-issues="No Issues"
-								}
-								data-medium={ asset.GetFriendlyKind() }
-								data-issue-count={ fmt.Sprint(asset.IssueCount()) }
-								data-pagefind-filter="Issues[data-has-issues], State[data-state], Medium[data-medium]"
-							>
-								<a href={ templ.SafeURL(asset.UrlAbsPath) }>{ asset.FrontMatter.Source.Title }</a>
-							</h1>
-						</div>
-					</header>
-					<main
-						style="counter-reset:sidenote"
-						class="mb-32 max-w-2xl mx-auto relative"
-					>
-						<style>
-            mark {
-              background-color: #fef08a
-            }
-            p {
-              margin-bottom: 16px;
-            }
-            blockquote {
-              padding-left: 16px;
-              border-left: 2px solid lightgray;
-              font-size: 1.1rem;
-              font-style: italic;
-              line-height: 2rem;
-              margin: 24px 0;
-            }
-
-            h2 {
-              font-weight: bold;
-              font-size: 2rem;
-              margin-top: 96px;
-              margin-bottom: 12px;
-            }
-
-          </style>
-						<!-- Content -->
-						<div class="relative">
-							@utils.Unsafe(string(asset.Html))
-						</div>
-						if !asset.FrontMatter.Completion.Content {
-							<div data-pagefind-ignore class="mr-16 mb-32">
-								<!-- Message -->
-								<div class="rounded shadow p-8 bg-gradient-to-b from-gray-50 to-gray-100 text-gray-900 mb-8">
-									<p>
-										if asset.FrontMatter.Source.Url != "" {
-											This { strings.ToLower(asset.GetFriendlyKind()) } is 
-											<a
-												href={ templ.URL(asset.FrontMatter.Source.Url) }
-												class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
-											>available on { utils.UrlHostname(asset.FrontMatter.Source.Url) }</a>,
-											but hasn't yet been added to Ray Peat Rodeo.
-											if asset.FrontMatter.Transcription.Url != "" {
-												See too, this
-												<a
-													href={ templ.URL(asset.FrontMatter.Transcription.Url) }
-													class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
-													target="_blank"
-												>existing transcript</a>.
-											}
-										} else {
-											This { strings.ToLower(asset.GetFriendlyKind()) } is missing from Ray Peat Rodeo.
-											if asset.FrontMatter.Transcription.Url != "" {
-												However, there is an 
-												<a
-													href={ templ.URL(asset.FrontMatter.Transcription.Url) }
-													class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
-													target="_blank"
-												>existing transcript</a>
-											}
-										}
-										If you're familiar with Markdown, you can 
-										<a
-											href={ templ.URL(asset.GitHubEditUrl) }
-											class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
-											target="_blank"
-										>edit this page</a> via a GitHub account, and submit your 
-										changes as a pull request. Or
-										<a
-											href={ global.SPONSOR_LINK }
-											class="font-bold text-gray-800 underline decoration-2 hover:decoration-4"
-											target="_blank"
-										>Support me on GitHub Sponsors</a> { "if" } you like 😊.
-									</p>
-								</div>
-							</div>
-						}
-					</main>
-					<footer>
-						<table>
-							<tr>
-								<td>Title</td>
-								<td>{ asset.FrontMatter.Source.Title }</td>
-							</tr>
-							<tr>
-								<td>Kind</td>
-								<td>{ asset.FrontMatter.Source.Kind }</td>
-							</tr>
-							<tr>
-								<td>Series</td>
-								<td>{ asset.FrontMatter.Source.Series }</td>
-							</tr>
-							if asset.FrontMatter.Added.Author != "" {
-								<tr>
-									<td>Added by</td>
-									<td>{ asset.FrontMatter.Added.Author }</td>
-								</tr>
-								<tr>
-									<td>Added on</td>
-									<td>{ asset.FrontMatter.Added.Date }</td>
-								</tr>
+			<article
+				if pagefind {
+					data-pagefind-body
+				}
+			>
+				<rpr-new-issue></rpr-new-issue>
+				<header>
+					<div style="display: none">
+						<ul>
+							for _, speaker := range asset.GetFilterableSpeakers() {
+								<li data-pagefind-filter="Participant">{ speaker.GetName() }</li>
 							}
+						</ul>
+						<ul>
+							for _, domain := range asset.GetMirrorDomains() {
+								<li data-pagefind-filter="Also On">{ domain }</li>
+							}
+						</ul>
+						<ul>
+							if asset.FrontMatter.Completion.Issues {
+								<li data-pagefind-filter="Completion">Issues</li>
+							}
+							if asset.FrontMatter.Completion.Content {
+								<li data-pagefind-filter="Completion">Content</li>
+							}
+							if asset.FrontMatter.Completion.Mentions {
+								<li data-pagefind-filter="Completion">Mentions</li>
+							}
+							if asset.FrontMatter.Completion.Timestamps {
+								<li data-pagefind-filter="Completion">Timestamps</li>
+							}
+							if asset.FrontMatter.Completion.ContentVerified {
+								<li data-pagefind-filter="Completion">Content Verified</li>
+							}
+							if asset.FrontMatter.Completion.SpeakersIdentified {
+								<li data-pagefind-filter="Completion">Speakers Identified</li>
+							}
+							if asset.FrontMatter.Completion.Notes {
+								<li data-pagefind-filter="Completion">Notes</li>
+							}
+						</ul>
+					</div>
+					<div>
+						<h1
+							if asset.IsComplete() {
+								data-state="Complete"
+							} else {
+								data-state="Todo"
+							}
+							if asset.HasIssues() {
+								data-has-issues="Has Issues"
+							} else {
+								data-has-issues="No Issues"
+							}
+							data-medium={ asset.GetFriendlyKind() }
+							data-issue-count={ fmt.Sprint(asset.IssueCount()) }
+							data-pagefind-filter="Issues[data-has-issues], State[data-state], Medium[data-medium]"
+						>
+							<a href={ templ.SafeURL(asset.UrlAbsPath) }>{ asset.FrontMatter.Source.Title }</a>
+						</h1>
+						<p id="details" data-pagefind-ignore>
+							<a
+								class="date"
+								href={ templ.SafeURL(asset.FrontMatter.Source.Url) }
+								data-pagefind-sort="date"
+							>
+								{ asset.Date }
+							</a>
+							<rpr-pin
+								key="Publisher"
+								value={ asset.FrontMatter.Source.Series }
+								data-pagefind-filter="Publisher[value]"
+							></rpr-pin>
+						</p>
+					</div>
+				</header>
+				<main>
+					<!-- Content -->
+					<div class="relative">
+						@utils.Unsafe(string(asset.Html))
+					</div>
+					if !asset.FrontMatter.Completion.Content {
+						<div data-pagefind-ignore>
+							<!-- Message -->
+							<div>
+								<p>
+									if asset.FrontMatter.Source.Url != "" {
+										This { strings.ToLower(asset.GetFriendlyKind()) } is 
+										<a
+											href={ templ.URL(asset.FrontMatter.Source.Url) }
+										>available on { utils.UrlHostname(asset.FrontMatter.Source.Url) }</a>,
+										but hasn't yet been added to Ray Peat Rodeo.
+										if asset.FrontMatter.Transcription.Url != "" {
+											See too, this
+											<a
+												href={ templ.URL(asset.FrontMatter.Transcription.Url) }
+												target="_blank"
+											>existing transcript</a>.
+										}
+									} else {
+										This { strings.ToLower(asset.GetFriendlyKind()) } is missing from Ray Peat Rodeo.
+										if asset.FrontMatter.Transcription.Url != "" {
+											However, there is an 
+											<a
+												href={ templ.URL(asset.FrontMatter.Transcription.Url) }
+												target="_blank"
+											>existing transcript</a>
+										}
+									}
+									If you're familiar with Markdown, you can 
+									<a
+										href={ templ.URL(asset.GitHubEditUrl) }
+										target="_blank"
+									>edit this page</a> via a GitHub account, and submit your 
+									changes as a pull request. Or
+									<a
+										href={ global.SPONSOR_LINK }
+										target="_blank"
+									>Support me on GitHub Sponsors</a> { "if" } you like 😊.
+								</p>
+							</div>
+						</div>
+					}
+				</main>
+				<footer>
+					<table
+						data-pagefind-meta="issues[data-issues], sections[data-sections]"
+						data-issues={ toJSON(asset.Issues) }
+						data-sections={ toJSON(asset.Sections) }
+					>
+						<tr>
+							<td>Title</td>
+							<td>{ asset.FrontMatter.Source.Title }</td>
+						</tr>
+						<tr>
+							<td>Kind</td>
+							<td data-pagefind-meta="source.kind">{ asset.FrontMatter.Source.Kind }</td>
+						</tr>
+						<tr>
+							<td>Series</td>
+							<td data-pagefind-meta="source.publisher">{ asset.FrontMatter.Source.Series }</td>
+						</tr>
+						if asset.FrontMatter.Added.Author != "" {
 							<tr>
-								<td>Locations</td>
-								<td>
+								<td>Added by</td>
+								<td data-pagefind-meta="added.author">{ asset.FrontMatter.Added.Author }</td>
+							</tr>
+							<tr>
+								<td>Added on</td>
+								<td data-pagefind-meta="added.date">{ asset.FrontMatter.Added.Date }</td>
+							</tr>
+						}
+						<tr>
+							<td>Locations</td>
+							<td
+								data-pagefind-meta="locations[data-locations]"
+								data-locations={ toJSON(asset.GetLocations()) }
+							>
+								<ul>
+									for _, mirror := range asset.GetLocations() {
+										<li><a href={ templ.SafeURL(mirror) }>{ mirror }</a></li>
+									}
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>Participants</td>
+							<td
+								data-pagefind-meta="participants[data-participants]"
+								data-participants={ toJSON(asset.Speakers) }
+							>
+								if len(asset.Speakers) == 0 {
+									-
+								} else {
 									<ul>
-										<li><a href={ templ.SafeURL(asset.FrontMatter.Source.Url) }>{ asset.FrontMatter.Source.Url }</a></li>
-										for _, mirror := range asset.FrontMatter.Source.Mirrors {
-											<li><a href={ templ.SafeURL(mirror) }>{ mirror }</a></li>
+										for _, contributor := range asset.Speakers {
+											<li>{ contributor.GetName() } </li>
 										}
 									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td>Participants</td>
-								<td>
-									if len(asset.Speakers) == 0 {
-										-
-									} else {
-										<ul>
-											for _, contributor := range asset.Speakers {
-												<li>{ contributor.GetName() } </li>
-											}
-										</ul>
-									}
-								</td>
-							</tr>
-							<tr>
-								<td>GitHub Edit Link</td>
-								<td><a href={ templ.SafeURL(asset.GitHubEditUrl) }>{ asset.GitHubEditUrl }</a></td>
-							</tr>
-							<tr>
-								<td>GitHub Raw Link</td>
-								<td><a href={ templ.SafeURL(asset.GithubRawUrl) }>{ asset.GithubRawUrl }</a></td>
-							</tr>
-						</table>
-					</footer>
-				</article>
-			</div>
+								}
+							</td>
+						</tr>
+						<tr>
+							<td>GitHub Edit Link</td>
+							<td><a href={ templ.SafeURL(asset.GitHubEditUrl) }>{ asset.GitHubEditUrl }</a></td>
+						</tr>
+						<tr>
+							<td>GitHub Raw Link</td>
+							<td><a href={ templ.SafeURL(asset.GithubRawUrl) }>{ asset.GithubRawUrl }</a></td>
+						</tr>
+					</table>
+				</footer>
+			</article>
 		</rpr-layout>
 	}
 }
 
-type AssetData struct {
-	Title  string
-	Date   string
-	AbsURL string
-	Kind   string
-}
-
-func assetsToJSON(assets []*Asset) []AssetData {
-	data := []AssetData{}
-	for _, asset := range assets {
-		data = append(data, AssetData{
-			Title:  asset.FrontMatter.Source.Title,
-			Date:   asset.Date,
-			AbsURL: asset.UrlAbsPath,
-			Kind:   asset.FrontMatter.Source.Kind,
-		})
+func toJSON(i any) string {
+	s, err := json.Marshal(i)
+	if err != nil {
+		log.Fatalf("Failed to marshal JSOn for %v: %v", i, err)
 	}
-	return data
-}
-
-type MapEnumeration[V any] struct {
-	Key     string
-	Index   int
-	Value   V
-	IsFirst bool
-	IsLast  bool
-}
-
-// Utility for converting a map into a slice appropriate for rendering to a
-// human readable list.
-func MapToSlice[V any](m map[string]V) []MapEnumeration[V] {
-	i := 0
-	l := len(m)
-	var results []MapEnumeration[V]
-
-	for key, value := range m {
-		results = append(results, MapEnumeration[V]{
-			Index:   i,
-			Key:     key,
-			Value:   value,
-			IsFirst: i == 0,
-			IsLast:  i == l-1,
-		})
-		i++
-	}
-
-	return results
-}
-
-// Small note in the flow of, but distinct from, speaker messages.
-templ StatusChange() {
-	<div data-pagefind-ignore class="text-sm text-gray-400 w-2/3 mx-auto text-center">
-		{ children... }
-	</div>
+	return string(s)
 }
