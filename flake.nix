@@ -31,83 +31,6 @@
       '';
     };
 
-    # packages.x86_64-linux.ray-peat-rodeo = pkgs.buildGoApplication {
-    #   name = "ray-peat-rodeo";
-    #   pwd = ./.;
-    #   src = ./.;
-    #   modules = ./gomod2nix.toml;
-
-    #   buildPhase = ''
-    #     mkdir -p $out/bin
-    #     ${pkgs.templ}/bin/templ generate
-    #     go build ./cmd/ray-peat-rodeo
-    #     mv ray-peat-rodeo $out/bin/ray-peat-rodeo
-    #   '';
-
-    #   meta = {
-    #     description = "Custom static-site-generator. Ran from this repo it consumes markdown files in `./assets` and produces HTML files in `./build`.";
-    #     maintainers = [
-    #       "Marcus Whybrow <marcus@whybrow.uk>"
-    #     ];
-    #     homepage = "https://raypeat.rodeo";
-    #   };
-    # };
-
-    # packages.x86_64-linux.build = pkgs.stdenv.mkDerivation {
-    #   pname = "build";
-    #   version = "unstable";
-    #   src = ./.;
-
-    #   buildInputs = [
-    #     inputs.tailwind-scrollbar.packages.x86_64-linux.default
-    #     pkgs.nodejs_20
-    #   ];
-
-    #   buildPhase = ''
-    #     ${inputs.self.packages.x86_64-linux.ray-peat-rodeo}/bin/ray-peat-rodeo
-    #     ${pkgs.pagefind}/bin/pagefind --site ./build
-    #     ${pkgs.nodePackages.tailwindcss}/bin/tailwindcss \
-    #       --config ./tailwind.config.js \
-    #       --minify \
-    #       --output ./build/assets/tailwind.css
-    #     cp -r ./web/static/* ./build/assets
-
-    #     # mkdir --parents ./build/assets/static/scripts
-    #     # cp ${inputs.self.packages.x86_64-linux.ufuzzy}/src/uFuzzy.js ./build/assets/static/scripts/uFuzzy.js
-
-    #     mv ./build $out
-    #   '';
-
-    #   meta = {
-    #     description = "Creates the final website deployment by running ray-peat-rodeo, pagefind static search, tailwind CSS processing, and copying raw assets into place.";
-    #     maintainers = [
-    #       "Marcus Whybrow <marcus@whybrow.uk>"
-    #     ];
-    #     homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
-    #   };
-    # };
-
-    # packages.x86_64-linux.whisper-json2md = pkgs.buildGoApplication {
-    #   name = "whisper-json2md";
-    #   pwd = ./.;
-    #   src = ./.;
-    #   modules = ./gomod2nix.toml;
-
-    #   buildPhase = ''
-    #     mkdir -p $out/bin
-    #     go build ./cmd/whisper-json2md
-    #     mv whisper-json2md $out/bin/whisper-json2md
-    #     '';
-
-    #   meta = {
-    #     description = "Takes a Whisper AI JSON file and your name and outputs markdown to stdout appropriate to append to Ray Peat Rodeo markdown file.";
-    #     homepage = "https://github.com/marcuswhybrow/ray-peat-rodeo";
-    #     maintainers = [
-    #       "Marcus Whybrow <marcus@whybrow.uk>"
-    #     ];
-    #   };
-    # };
-
     packages.x86_64-linux.transcribe = pkgs.writeScriptBin "transcribe" /* bash */ ''
       set -o xtrace
 
@@ -217,9 +140,6 @@
         # Dev tools to watch the files system and rerun (above) commands
         pkgs.modd 
 
-        # Dev HTTP server with auto page reload on file changes
-        pkgs.devd 
-
         # AI transcription of audio files
         pkgs.openai-whisper
 
@@ -228,29 +148,12 @@
 
         inputs.self.packages.x86_64-linux.copy-static
 
-        # Custom tool to convert Whisper JSON output to our markdown format
-        # inputs.self.packages.x86_64-linux.whisper-json2md
-
         # Convenience bash script using yt-dlp, whisper & whisper-json2md to 
         # transcribe and update assets with a `source.url` in the frontmatter.
         # inputs.self.packages.x86_64-linux.transcribe
 
         # Get text for PDF assets that don't have it
         # pkgs.ocrmypdf
-
-        (pkgs.writeShellScriptBin "dev" ''
-          ${pkgs.inotify-tools}/bin/inotifywait \
-            --monitor \
-            --recursive \
-            --event create \
-            --event close_write . | 
-          while read -r dir action file; do
-            since="$(timeout 0.1s cat)"
-            x="$(printf "$dir\n$(printf "$since" | awk -F' ' '{print $1}')")"
-            y=$(printf "$x" | awk '!x[$0]++')
-            echo "$y"
-          done
-        '')
       ];
     };
   };

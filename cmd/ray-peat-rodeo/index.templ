@@ -1,7 +1,0 @@
-package main
-
-import rprCatalog "github.com/marcuswhybrow/ray-peat-rodeo/internal/catalog"
-
-templ Index(catalog *rprCatalog.Catalog) {
-	@rprCatalog.Peruse(catalog.Assets[0], catalog, false)
-}
